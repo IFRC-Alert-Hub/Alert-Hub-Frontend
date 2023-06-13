@@ -20,6 +20,7 @@ import {
   secondNavBarItems,
 } from "./NavItemItems";
 import RoundButton from "./../../RoundButton";
+import TimeComponent from "./TimeComponent";
 
 const App = () => {
   const location = useLocation();
@@ -33,13 +34,7 @@ const App = () => {
           }}
         >
           <Container maxWidth="md">
-            <Typography
-              variant="h6"
-              textAlign={"center"}
-              textTransform={"uppercase"}
-            >
-              Monday, 8 June 2023 9:00AM CET
-            </Typography>
+            <TimeComponent />
           </Container>
         </Toolbar>
       </AppBar>
