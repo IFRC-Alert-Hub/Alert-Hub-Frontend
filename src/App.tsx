@@ -3,6 +3,7 @@ import ResponsiveAppBar from "./components/global/Navigation Bar/Navbar";
 import { Routes, Route } from "react-router-dom";
 import Home from "./scenes/Home";
 import About from "./scenes/About";
+import Resources from "./scenes/Resources";
 import { theme } from "./theme";
 
 function App() {
@@ -15,6 +16,7 @@ function App() {
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/about" element={<About />} />
+              <Route path="/resources" element={<Resources />} />
             </Routes>
           </Box>
         </CssBaseline>
