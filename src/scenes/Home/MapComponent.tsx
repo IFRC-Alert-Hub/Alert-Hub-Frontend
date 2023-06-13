@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, MutableRefObject } from "react";
+import React, { useEffect, MutableRefObject } from "react";
 import mapboxgl, { Map as MapboxMap } from "mapbox-gl";
 
 type MapProps = {
