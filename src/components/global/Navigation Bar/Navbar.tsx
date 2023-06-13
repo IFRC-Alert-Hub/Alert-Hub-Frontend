@@ -19,14 +19,19 @@ import {
   firstNavBarItems,
   secondNavBarItems,
 } from "./NavItemItems";
-import RoundButton from "../RoundButton";
+import RoundButton from "./../../RoundButton";
 
 const App = () => {
   const location = useLocation();
   return (
     <div>
       <AppBar position="static" sx={{ backgroundColor: "#E6E7EB" }}>
-        <Toolbar sx={{ minHeight: "fit-content !important" }}>
+        <Toolbar
+          sx={{
+            minHeight: "fit-content !important",
+            padding: "0px !important",
+          }}
+        >
           <Container maxWidth="md">
             <Typography
               variant="h6"
@@ -44,8 +49,13 @@ const App = () => {
         color="primary"
         sx={{ borderBottom: "2px solid #f5333f" }}
       >
-        <Container maxWidth="xl">
-          <Toolbar>
+        <Container maxWidth="lg">
+          <Toolbar
+            sx={{
+              paddingLeft: "0px !important",
+              paddingRight: "0px !important",
+            }}
+          >
             <IconButton
               color="inherit"
               aria-label="open drawer"
@@ -136,8 +146,8 @@ const App = () => {
       </AppBar>
       <Hidden mdDown>
         <AppBar position="static" color="primary">
-          <Container maxWidth="xl">
-            <Toolbar>
+          <Container maxWidth="lg">
+            <Toolbar sx={{ padding: "0px !important" }}>
               <Box
                 sx={{
                   display: { xs: "none", sm: "none", md: "block", lg: "block" },
