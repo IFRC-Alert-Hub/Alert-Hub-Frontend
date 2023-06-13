@@ -1,4 +1,4 @@
-import { Box, CssBaseline, ThemeProvider, Toolbar } from "@mui/material";
+import { Box, CssBaseline, ThemeProvider } from "@mui/material";
 import ResponsiveAppBar from "./components/global/Navbar";
 import { Routes, Route } from "react-router-dom";
 import Home from "./scenes/Home";
