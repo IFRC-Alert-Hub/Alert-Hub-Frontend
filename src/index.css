@@ -9,3 +9,8 @@ body,
   width: 100%;
   font-family: "Poppins", sans-serif;
 }
+
+.map-container {
+  height: 500px;
+}
+

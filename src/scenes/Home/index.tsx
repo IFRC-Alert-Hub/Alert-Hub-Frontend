@@ -1,5 +1,6 @@
 import { Box, Container, Grid, Typography } from "@mui/material";
 import TitleHeader from "../../components/TitleHeader";
+import Map from "./Map";
 
 const Home = () => {
   return (
@@ -35,6 +36,7 @@ const Home = () => {
         rightTitle={"View all alerts"}
         rightLinkURL={"/View all alerts"}
       />
+      <Map zoom={1} />;
     </Container>
   );
 };
