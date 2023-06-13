@@ -1,26 +1,33 @@
-import { Box, Grid, List, ListItem, Typography } from "@mui/material";
+import {
+  Box,
+  Container,
+  Grid,
+  List,
+  ListItem,
+  Typography,
+} from "@mui/material";
 import TitleHeader from "../../components/TitleHeader";
 
 const About = () => {
   return (
     <>
-      {/* <Header title={"About"}></Header> */}
       <Box
         sx={{
           minHeight: "555px",
           background:
-            "url(https://go-user-library.ifrc.org/static/media/homepage_bg.59a1f73d.png) no-repeat 0",
+            "url(https://go-user-library.ifrc.org/static/media/homepage_bg.59a1f73d.png) no-repeat center bottom",
           backgroundSize: "cover",
           padding: 0,
         }}
       >
-        <Box
+        <Container
           sx={{
-            padding: "150px",
+            padding: "120px 50px", // Adjusted padding values
             "@media (max-width:1200px)": {
-              padding: "50px", // Remove padding for screens smaller than 600px
+              padding: "50px",
             },
           }}
+          maxWidth="lg"
         >
           <Grid container spacing={2}>
             <Grid
@@ -31,7 +38,7 @@ const About = () => {
               sx={{
                 paddingRight: "120px",
                 "@media (max-width:1400px)": {
-                  paddingRight: "50px", // Remove padding for screens smaller than 600px
+                  paddingRight: "50px",
                 },
               }}
             >
@@ -64,20 +71,13 @@ const About = () => {
                 src={
                   "https://go-user-library.ifrc.org/static/media/laptop.54818dce.png"
                 }
-                width={"400px"}
-              ></img>
+                width={"100%"} // Adjusted image width to fill the grid item
+              />
             </Grid>
           </Grid>
-        </Box>
+        </Container>
       </Box>
-      <Box
-        sx={{
-          padding: "0 150px 0 150px",
-          "@media (max-width:1200px)": {
-            padding: "10px", // Remove padding for screens smaller than 600px
-          },
-        }}
-      >
+      <Container maxWidth="lg">
         <TitleHeader title={"The Problem"} />
         <Typography variant="subtitle1">
           Every year, millions of people are killed, injured, displaced or made
@@ -162,7 +162,7 @@ const About = () => {
           feeds and it is the responsibility of Alert Hub users to identify
           redundant sources of hazard alert information.
         </Typography>
-      </Box>
+      </Container>
     </>
   );
 };

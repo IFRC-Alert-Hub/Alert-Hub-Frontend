@@ -1,5 +1,5 @@
 import { Box, CssBaseline, ThemeProvider } from "@mui/material";
-import ResponsiveAppBar from "./components/global/Navbar";
+import ResponsiveAppBar from "./components/global/Navigation Bar/Navbar";
 import { Routes, Route } from "react-router-dom";
 import Home from "./scenes/Home";
 import About from "./scenes/About";
