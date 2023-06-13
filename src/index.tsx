@@ -4,7 +4,7 @@ import "./index.css";
 import App from "./App";
 import { BrowserRouter } from "react-router-dom";
 import "mapbox-gl/dist/mapbox-gl.css";
-import mapboxgl, { Map as MapboxMap } from "mapbox-gl";
+import mapboxgl from "mapbox-gl";
 
 mapboxgl.accessToken =
   "pk.eyJ1IjoiZ28taWZyYyIsImEiOiJja3E2bGdvb3QwaXM5MnZtbXN2eGtmaWgwIn0.llipq3Spc_PPA2bLjPwIPQ";
