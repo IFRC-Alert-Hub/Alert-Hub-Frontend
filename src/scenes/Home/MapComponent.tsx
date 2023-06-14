@@ -52,7 +52,7 @@ const MapComponent: React.FC<MapProps> = ({
         mapRef.current = null;
       }
     };
-  }, []);
+  }, [lat, lng, mapRef, mapContainerRef, zoom]);
 
   useEffect(() => {
     if (!mapRef.current || polygonDataLoaded || polygons.length === 0) {
@@ -91,7 +91,7 @@ const MapComponent: React.FC<MapProps> = ({
 
       setPolygonDataLoaded(true);
     });
-  }, [polygonDataLoaded, polygons]);
+  }, [polygonDataLoaded, polygons, mapRef]);
 
   useEffect(() => {
     if (!mapRef.current || pinDataLoaded) {
@@ -141,7 +141,7 @@ const MapComponent: React.FC<MapProps> = ({
 
       setPinDataLoaded(true);
     });
-  }, [pinDataLoaded, pins]);
+  }, [pinDataLoaded, pins, mapRef]);
 
   return <div ref={mapContainerRef} className="map-container" />;
 };
