@@ -5,6 +5,7 @@ import Home from "./scenes/Home";
 import About from "./scenes/About";
 import Resources from "./scenes/Resources";
 import { theme } from "./theme";
+import Login from "./scenes/Login";
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
               <Route path="/" element={<Home />} />
               <Route path="/about" element={<About />} />
               <Route path="/resources" element={<Resources />} />
+              <Route path="/login" element={<Login />} />
             </Routes>
           </Box>
         </CssBaseline>
