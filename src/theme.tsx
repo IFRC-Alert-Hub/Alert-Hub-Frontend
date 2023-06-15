@@ -47,4 +47,49 @@ export const theme: Theme = createTheme({
       color: "#000000",
     },
   },
+  components: {
+    MuiTextField: {
+      styleOverrides: {
+        root: {
+          "& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline":
+            {
+              borderColor: "#f5333f",
+            },
+        },
+      },
+    },
+    MuiFormLabel: {
+      styleOverrides: {
+        root: {
+          color: "black",
+        },
+      },
+    },
+    MuiInputLabel: {
+      styleOverrides: {
+        root: {
+          "&.Mui-focused": {
+            color: "#5A5A5A",
+          },
+        },
+      },
+    },
+
+    MuiCheckbox: {
+      styleOverrides: {
+        root: {
+          "&.MuiCheckbox-root.Mui-checked": {
+            color: "#f5333f",
+          },
+        },
+      },
+    },
+    MuiLink: {
+      styleOverrides: {
+        root: {
+          color: "#000000",
+        },
+      },
+    },
+  },
 });

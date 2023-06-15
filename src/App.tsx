@@ -6,6 +6,7 @@ import About from "./scenes/About";
 import Resources from "./scenes/Resources";
 import { theme } from "./theme";
 import Login from "./scenes/Login";
+import Footer from "./components/Footer";
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
               <Route path="/login" element={<Login />} />
             </Routes>
           </Box>
+          <Footer />
         </CssBaseline>
       </ThemeProvider>
     </div>

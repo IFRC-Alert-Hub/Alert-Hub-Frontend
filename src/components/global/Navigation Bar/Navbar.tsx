@@ -8,6 +8,12 @@ import {
   Avatar,
   Box,
   Button,
+  List,
+  Divider,
+  ListItem,
+  ListItemButton,
+  ListItemText,
+  Drawer,
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import { Link, useLocation } from "react-router-dom";
@@ -21,9 +27,55 @@ import {
 } from "./NavItemItems";
 import RoundButton from "./../../RoundButton";
 import TimeComponent from "./TimeComponent";
+import { useState } from "react";
 
-const App = () => {
+const NavbarComponent = (props: any) => {
   const location = useLocation();
+
+  const { window } = props;
+  const [mobileOpen, setMobileOpen] = useState(false);
+
+  const handleDrawerToggle = () => {
+    setMobileOpen((prevState) => !prevState);
+  };
+  const drawer = (
+    <Box onClick={handleDrawerToggle} sx={{ textAlign: "center" }}>
+      <Typography variant="h6" sx={{ my: 2 }}>
+        Alert Hub
+      </Typography>
+      <Divider />
+      <List>
+        {firstNavBarItems.map((item) => (
+          <Link
+            to={item.path}
+            style={{ textDecoration: "none", color: "inherit" }}
+          >
+            <ListItem key={item.name} disablePadding>
+              <ListItemButton sx={{ textAlign: "center" }}>
+                <ListItemText primary={item.name}>{item.name}</ListItemText>
+              </ListItemButton>
+            </ListItem>
+          </Link>
+        ))}
+        {secondNavBarItems.map((item) => (
+          <Link
+            to={item.path}
+            style={{ textDecoration: "none", color: "inherit" }}
+          >
+            <ListItem key={item.name} disablePadding>
+              <ListItemButton sx={{ textAlign: "center" }}>
+                <ListItemText primary={item.name}>{item.name}</ListItemText>
+              </ListItemButton>
+            </ListItem>
+          </Link>
+        ))}
+      </List>
+    </Box>
+  );
+
+  const container =
+    window !== undefined ? () => window().document.body : undefined;
+
   return (
     <div>
       <AppBar position="static" sx={{ backgroundColor: "#E6E7EB" }}>
@@ -55,7 +107,7 @@ const App = () => {
               color="inherit"
               aria-label="open drawer"
               edge="start"
-              // onClick={handleDrawerToggle}
+              onClick={handleDrawerToggle}
               sx={{
                 mr: 2,
                 display: { xs: "block", sm: "block", md: "none", lg: "none" },
@@ -70,7 +122,7 @@ const App = () => {
                 sx={{
                   verticalAlign: "middle",
                   height: "2.2rem",
-                  width: "auto",
+                  width: "6.25rem",
                   display: { xs: "block", sm: "block" },
                 }}
                 variant="square"
@@ -236,8 +288,28 @@ const App = () => {
           </Container>
         </AppBar>
       </Hidden>
+      <Box component="nav">
+        <Drawer
+          container={container}
+          variant="temporary"
+          open={mobileOpen}
+          onClose={handleDrawerToggle}
+          ModalProps={{
+            keepMounted: true, // Better open performance on mobile.
+          }}
+          sx={{
+            display: { xs: "block", sm: "none" },
+            "& .MuiDrawer-paper": {
+              boxSizing: "border-box",
+              width: "240px",
+            },
+          }}
+        >
+          {drawer}
+        </Drawer>
+      </Box>
     </div>
   );
 };
 
-export default App;
+export default NavbarComponent;
