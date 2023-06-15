@@ -41,6 +41,16 @@ const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
 const Login = () => {
   return (
     <Container maxWidth="lg" sx={{ paddingTop: "30px" }}>
+      <Typography
+        variant="h1"
+        textAlign={"center"}
+        fontWeight={"bold"}
+        paddingBottom={"15px"}
+        textTransform={"capitalize"}
+        letterSpacing={"1.6px"}
+      >
+        Login
+      </Typography>
       <Grid
         container
         component="main"
@@ -59,7 +69,6 @@ const Login = () => {
               display: "flex",
               flexDirection: "column",
               alignItems: "center",
-              padding: "20px",
               backgroundColor: "white",
               borderRadius: "20px",
             }}
@@ -67,8 +76,13 @@ const Login = () => {
             <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
               <LockOutlinedIcon />
             </Avatar>
-            <Typography component="h1" variant="h5">
-              Sign in
+            <Typography component="h1" variant="h3" textAlign={"center"}>
+              Welcome Back
+            </Typography>
+            <Typography component="h1" variant="h5" textAlign={"center"}>
+              If you are staff, member or volunteer of the Red Cross Red
+              Crescent Movement (National Societies, the IFRC and the ICRC)
+              login with you email and password.{" "}
             </Typography>
             <Box
               component="form"
@@ -104,15 +118,24 @@ const Login = () => {
                 type="submit"
                 fullWidth
                 variant="contained"
-                sx={{ mt: 3, mb: 2 }}
+                sx={{
+                  color: "#fff",
+                  outline: "red",
+                  textTransform: "capitalize",
+                  padding: "0px ",
+                  borderRadius: "10px",
+                  backgroundColor: "#f5333f",
+                  "&:hover": {
+                    backgroundColor: "#f5333f",
+                  },
+                  fontSize: "14px",
+                }}
               >
-                Sign In
+                Login
               </Button>
               <Grid container>
                 <Grid item xs>
-                  <Link href="#" variant="body2">
-                    Forgot password?
-                  </Link>
+                  <Link href="#">Forgot password?</Link>
                 </Grid>
                 <Grid item>
                   <Link href="#" variant="body2">
