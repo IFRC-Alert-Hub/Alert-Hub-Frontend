@@ -13,3 +13,8 @@ body,
 .map-container {
   height: 600px;
 }
+
+.mapboxgl-popup-content {
+  width: max-content;
+  height: max-content;
+}
