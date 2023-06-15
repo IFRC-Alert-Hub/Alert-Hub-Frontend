@@ -1,5 +1,9 @@
 import React, { useEffect, useState } from "react";
 import mapboxgl, { Map as MapboxMap } from "mapbox-gl";
+import { createRoot } from "react-dom/client";
+import PopupComponent from "./PopupComponent";
+import { ThemeProvider } from "@mui/material";
+import { theme } from "../../theme";
 
 type Pin = {
   coordinates: number[];
@@ -99,6 +103,10 @@ const MapComponent: React.FC<MapProps> = ({
     }
 
     mapRef.current.on("load", () => {
+      const popup = new mapboxgl.Popup({
+        closeButton: false,
+        closeOnClick: true,
+      });
       pins.forEach((pin, index) => {
         const sourceId = `pin-source-${index}`;
 
@@ -133,6 +141,28 @@ const MapComponent: React.FC<MapProps> = ({
             "circle-opacity": 0.4,
           },
         });
+        mapRef.current?.on(
+          "click",
+          `inner_circle-${index}`,
+          (e: mapboxgl.MapMouseEvent & mapboxgl.EventData) => {
+            console.log("hello");
+            const coordinates = e.features[0].geometry.coordinates;
+            const popupNode = document.createElement("div");
+
+            const popupComponent = (
+              <ThemeProvider theme={theme}>
+                <PopupComponent />
+              </ThemeProvider>
+            );
+
+            createRoot(popupNode).render(popupComponent);
+
+            popup
+              .setLngLat(coordinates)
+              .setDOMContent(popupNode)
+              .addTo(mapRef.current!);
+          }
+        );
       });
 
       setPinDataLoaded(true);
