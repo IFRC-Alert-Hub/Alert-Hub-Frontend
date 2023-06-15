@@ -83,7 +83,7 @@ const MapComponent: React.FC<MapProps> = ({
             source: sourceId,
             paint: {
               "fill-color": polygon.color,
-              "fill-opacity": 0.5,
+              "fill-opacity": 0.8,
             },
           });
         }
@@ -101,7 +101,6 @@ const MapComponent: React.FC<MapProps> = ({
     mapRef.current.on("load", () => {
       pins.forEach((pin, index) => {
         const sourceId = `pin-source-${index}`;
-        const layerId = `pin-layer-${index}`;
 
         mapRef.current?.addSource(sourceId, {
           type: "geojson",
@@ -116,30 +115,28 @@ const MapComponent: React.FC<MapProps> = ({
         });
 
         mapRef.current?.addLayer({
-          id: `${layerId}-blur`,
-          type: "circle",
-          source: sourceId,
-          paint: {
-            "circle-radius": 10,
-            "circle-color": pin.color,
-            "circle-opacity": 0.2,
-            "circle-blur": 1,
-          },
-        });
-
-        mapRef.current?.addLayer({
-          id: layerId,
+          id: `inner_circle-${index}`,
           type: "circle",
           source: sourceId,
           paint: {
             "circle-radius": 7,
             "circle-color": pin.color,
-            "circle-opacity": 0.7,
+          },
+        });
+        mapRef.current?.addLayer({
+          id: `outer_circle-${index}`,
+          type: "circle",
+          source: sourceId,
+          paint: {
+            "circle-radius": 13,
+            "circle-color": pin.color,
+            "circle-opacity": 0.4,
           },
         });
       });
 
       setPinDataLoaded(true);
+      console.log(mapRef.current?.getStyle().layers);
     });
   }, [pinDataLoaded, pins, mapRef]);
 

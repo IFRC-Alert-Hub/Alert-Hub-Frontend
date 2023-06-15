@@ -12,7 +12,7 @@ const Footer = () => {
       >
         <Container maxWidth="lg">
           <Grid container spacing={2} justifyContent="center">
-            <Grid item xs={12} md={4}>
+            <Grid item xs={12} md={3}>
               <Typography
                 variant="h4"
                 component="div"
@@ -39,7 +39,7 @@ const Footer = () => {
               </Typography>
             </Grid>
 
-            <Grid item xs={12} md={2}>
+            <Grid item xs={12} md={3}>
               <Typography
                 variant="h4"
                 component="div"
@@ -111,7 +111,7 @@ const Footer = () => {
                 margin={"0 0 24px"}
                 textTransform={"uppercase"}
               >
-                Footer Helpful Links
+                Helpful Links
               </Typography>
 
               <Link

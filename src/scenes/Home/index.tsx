@@ -3,6 +3,10 @@ import TitleHeader from "../../components/TitleHeader";
 import MapComponent from "./MapComponent";
 import { useRef } from "react";
 
+export const ExtremeThreatColour = "#f5333f";
+export const ModerateThreatColour = "#ff9e00";
+export const OtherAlertsColour = "#95BF6E";
+
 const Home = () => {
   const mapContainerRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<mapboxgl.Map | null>(null);
@@ -100,7 +104,7 @@ const Home = () => {
         [-67.13734, 45.13745],
       ],
 
-      color: "#FFA500",
+      color: ExtremeThreatColour,
     },
     {
       coordinates: [
@@ -134,7 +138,7 @@ const Home = () => {
         [-111.97247757707605, 33.405141431812496],
       ],
 
-      color: "#00ff00",
+      color: OtherAlertsColour,
     },
   ];
   return (
@@ -176,9 +180,9 @@ const Home = () => {
         mapRef={mapRef}
         polygons={polygonCoordinates}
         pins={[
-          { coordinates: [-73.98571, 40.748817], color: "#ff0000" },
-          { coordinates: [-74.006, 40.7128], color: "#00ff00" },
-          { coordinates: [-73.993, 40.7392], color: "#0000ff" },
+          { coordinates: [-90.98571, 40.748817], color: ExtremeThreatColour },
+          { coordinates: [-74.006, 40.7128], color: ModerateThreatColour },
+          { coordinates: [-23.993, 40.7392], color: OtherAlertsColour },
         ]}
       />
     </Container>
