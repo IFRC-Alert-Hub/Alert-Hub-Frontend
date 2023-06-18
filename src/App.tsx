@@ -12,18 +12,17 @@ function App() {
   return (
     <div className="app">
       <ThemeProvider theme={theme}>
-        <CssBaseline>
-          <ResponsiveAppBar></ResponsiveAppBar>
-          <Box component="main">
-            <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/about" element={<About />} />
-              <Route path="/resources" element={<Resources />} />
-              <Route path="/login" element={<Login />} />
-            </Routes>
-          </Box>
-          <Footer />
-        </CssBaseline>
+        <CssBaseline />
+        <ResponsiveAppBar />
+        <Box component="main">
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/about" element={<About />} />
+            <Route path="/resources" element={<Resources />} />
+            <Route path="/login" element={<Login />} />
+          </Routes>
+        </Box>
+        <Footer />
       </ThemeProvider>
     </div>
   );
