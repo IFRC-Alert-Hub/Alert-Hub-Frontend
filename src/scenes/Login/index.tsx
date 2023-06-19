@@ -71,6 +71,7 @@ const Login = () => {
               alignItems: "center",
               backgroundColor: "white",
               borderRadius: "20px",
+              padding: "1rem",
             }}
           >
             <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
