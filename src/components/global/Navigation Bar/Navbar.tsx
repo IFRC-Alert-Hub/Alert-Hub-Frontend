@@ -28,6 +28,7 @@ import {
 import RoundButton from "./../../RoundButton";
 import TimeComponent from "./TimeComponent";
 import { useState } from "react";
+import "../../../index.css";
 
 const NavbarComponent = (props: any) => {
   const location = useLocation();
@@ -77,7 +78,7 @@ const NavbarComponent = (props: any) => {
     window !== undefined ? () => window().document.body : undefined;
 
   return (
-    <div>
+    <div className="header">
       <AppBar position="static" sx={{ backgroundColor: "#E6E7EB" }}>
         <Toolbar
           sx={{
