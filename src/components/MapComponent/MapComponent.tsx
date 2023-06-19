@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
-import mapboxgl, { Map as MapboxMap } from "mapbox-gl";
+import mapboxgl, { Map as MapboxMap, LngLatBoundsLike } from "mapbox-gl";
 import { createRoot } from "react-dom/client";
 import PopupComponent from "./PopupComponent";
 import { ThemeProvider } from "@mui/material";
 import { theme } from "../../theme";
+import turfBbox from "@turf/bbox";
 
 const getPolygonCenter = (coordinates: number[][]): [number, number] => {
   const centroid: [number, number] = coordinates.reduce(
@@ -24,7 +25,11 @@ type Pin = {
   coordinates: number[];
   color: string;
 };
-
+type Coordinate = [number, number];
+type Bbox = {
+  type: string;
+  coordinates: number[][][];
+};
 type MapProps = {
   lng?: number;
   lat?: number;
@@ -33,6 +38,7 @@ type MapProps = {
   mapRef: React.MutableRefObject<MapboxMap | null>;
   polygons?: Polygon[];
   pins?: Pin[];
+  boundingRegionCoordinates?: Bbox;
 };
 
 type Polygon = {
@@ -48,9 +54,25 @@ const MapComponent: React.FC<MapProps> = ({
   mapRef,
   polygons = [],
   pins = [],
+  boundingRegionCoordinates = {},
 }) => {
   const [polygonDataLoaded, setPolygonDataLoaded] = useState(false);
   const [pinDataLoaded, setPinDataLoaded] = useState(false);
+
+  useEffect(() => {
+    if (
+      !mapRef.current ||
+      Object.keys(boundingRegionCoordinates).length === 0
+    ) {
+      return;
+    }
+    const mapBoundingBox = turfBbox(boundingRegionCoordinates);
+    const [minX, minY, maxX, maxY] = mapBoundingBox;
+
+    mapRef.current!.fitBounds([minX, minY, maxX, maxY] as LngLatBoundsLike, {
+      padding: { top: 10, bottom: 25, left: 15, right: 5 },
+    });
+  });
 
   useEffect(() => {
     if (!mapRef.current) {

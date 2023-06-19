@@ -19,9 +19,21 @@ export const HazardTypeDropdownItems = [
   { name: "Hazard Type 3", path: "/hazard-type/2", exact: false },
 ];
 
-export const AwarenessLevelDropdownItems = [
-  { name: "Awareness Level 1", path: "/awareness-level/0", exact: false },
-  { name: "Awareness Level 2", path: "/awareness-level/1", exact: false },
-  { name: "Awareness Level 3", path: "/awareness-level/2", exact: false },
+export const UrgencyLevelDropdownItems = [
+  { name: "Immediate", path: "/urgency-level/immediate", exact: false },
+  { name: "Expected", path: "/urgency-level/expected", exact: false },
 ];
 
+export const SeverityLevelDropdownItems = [
+  { name: "Extreme", path: "/severity-level/immediate", exact: false },
+  { name: "Severe", path: "/severity-level/expected", exact: false },
+];
+
+export const CertaintyLevelDropdownItems = [
+  { name: "Observed", path: "/certainty-level/observed", exact: false },
+  {
+    name: "Likely",
+    path: "/certainty-level/likely",
+    exact: false,
+  },
+];
