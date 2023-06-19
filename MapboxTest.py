@@ -1,5 +1,6 @@
 import requests
 
+
 def get_country_from_coordinates(latitude, longitude):
     url = f"https://api.mapbox.com/geocoding/v5/mapbox.places/{longitude},{latitude}.json"
     params = {
