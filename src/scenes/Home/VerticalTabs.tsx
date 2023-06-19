@@ -3,6 +3,8 @@ import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
+import testData from "./TestData";
+import { Button, Divider, Snackbar } from "@mui/material";
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -60,8 +62,9 @@ export default function VerticalTabs() {
         flexGrow: 1,
         bgcolor: "background.paper",
         display: "flex",
-        height: 250,
-        width: 400,
+        height: 280,
+        width: 550,
+        borderRadius: "5px !important",
       }}
     >
       <Tabs
@@ -76,18 +79,69 @@ export default function VerticalTabs() {
           "& .Mui-selected": {
             color: "#f6343f !important",
           },
+          width: "150px",
         }}
       >
-        <Tab label="Item One" {...a11yProps(0)} />
-        <Tab label="Item Two" {...a11yProps(1)} />
-        <Tab label="Item Three" {...a11yProps(2)} />
-        <Tab label="Item Four" {...a11yProps(3)} />
-        <Tab label="Item Five" {...a11yProps(4)} />
-        <Tab label="Item Six" {...a11yProps(5)} />
-        <Tab label="Item Seven" {...a11yProps(6)} />
+        {testData.map((item, index) => (
+          <Tab
+            key={index}
+            label={item.AlertBody.info.event}
+            {...a11yProps(index)}
+          />
+        ))}
       </Tabs>
-      <div style={{ overflowY: "auto", maxWidth: "300px" }} ref={tabPanelRef}>
-        <TabPanel value={value} index={0}>
+      <div style={{ overflowY: "auto", width: "400px" }} ref={tabPanelRef}>
+        {testData.map((item, index) => (
+          <TabPanel value={value} index={index}>
+            <Typography variant="h5" fontWeight={500} paddingBottom={"10px"}>
+              {item.AlertBody.info.headline}
+            </Typography>
+            <Typography variant="body2">
+              <span style={{ fontWeight: "bold" }}>Language: </span>
+              {item.AlertBody.info["language"]
+                ? item.AlertBody.info.language
+                : "N/A"}
+            </Typography>
+            <Typography variant="body2">
+              <span style={{ fontWeight: "bold" }}>Expires: </span>
+              {item.AlertBody.info["expires"]
+                ? item.AlertBody.info.expires
+                : "N/A"}
+            </Typography>
+
+            <Typography variant="body2">
+              <span style={{ fontWeight: "bold" }}>Severity: </span>
+              {item.AlertBody.info.severity}{" "}
+            </Typography>
+
+            <Typography variant="body2">
+              <span style={{ fontWeight: "bold" }}>Certainty: </span>
+              {item.AlertBody.info["certainty"]
+                ? item.AlertBody.info.certainty
+                : "N/A"}
+            </Typography>
+
+            <Typography variant="body2">
+              <span style={{ fontWeight: "bold" }}>Urgency: </span>
+              {item.AlertBody.info["urgency"]
+                ? item.AlertBody.info.urgency
+                : "N/A"}
+            </Typography>
+
+            <Typography variant="body2">
+              <span style={{ fontWeight: "bold" }}>Effective: </span>
+              {item.AlertBody.info["effective"]
+                ? item.AlertBody.info.effective
+                : "N/A"}
+            </Typography>
+
+            <Typography variant="body2">
+              <span style={{ fontWeight: "bold" }}>Description: </span>
+              {item.AlertBody.info.description}{" "}
+            </Typography>
+          </TabPanel>
+        ))}
+        {/* <TabPanel value={value} index={0}>
           <Typography variant="h3">Avertissement De PLUIE Modéré</Typography>
           1. Lorem Ipsum is simply dummy text of the printing and typesetting
           industry. Lorem Ipsum has been the industry's standard dummy text ever
@@ -182,7 +236,7 @@ export default function VerticalTabs() {
           the release of Letraset sheets containing Lorem Ipsum passages, and
           more recently with desktop publishing software like Aldus PageMaker
           including versions of Lorem Ipsum.
-        </TabPanel>
+        </TabPanel> */}
       </div>
     </Box>
   );

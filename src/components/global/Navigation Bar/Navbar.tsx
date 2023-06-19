@@ -279,7 +279,7 @@ const NavbarComponent = (props: any) => {
                   disableFocusRipple
                 >
                   <CustomNavItemDropdown
-                    NavItemTitle="Awarness Level"
+                    NavItemTitle="Awareness Level"
                     DropdownItems={AwarenessLevelDropdownItems}
                   />
                 </Button>

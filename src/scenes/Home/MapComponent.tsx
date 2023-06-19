@@ -5,6 +5,21 @@ import PopupComponent from "./PopupComponent";
 import { ThemeProvider } from "@mui/material";
 import { theme } from "../../theme";
 
+const getPolygonCenter = (coordinates: number[][]): [number, number] => {
+  const centroid: [number, number] = coordinates.reduce(
+    (sum: [number, number], current: number[]) => {
+      sum[0] += current[0];
+      sum[1] += current[1];
+      return sum;
+    },
+    [0, 0]
+  );
+  centroid[0] /= coordinates.length;
+  centroid[1] /= coordinates.length;
+
+  return centroid;
+};
+
 type Pin = {
   coordinates: number[];
   color: string;
@@ -44,6 +59,8 @@ const MapComponent: React.FC<MapProps> = ({
         style: "mapbox://styles/go-ifrc/cki7aznup3hqz19rxliv3naf4",
         center: [lng, lat],
         zoom: zoom,
+        scrollZoom: false, // Disable scroll zooming
+        dragPan: true, // Disable drag panning
       });
 
       mapRef.current.addControl(new mapboxgl.FullscreenControl(), "top-left");
@@ -64,6 +81,10 @@ const MapComponent: React.FC<MapProps> = ({
     }
 
     mapRef.current.on("load", () => {
+      const popup = new mapboxgl.Popup({
+        closeButton: true,
+        closeOnClick: true,
+      });
       polygons.forEach((polygon, index) => {
         if (polygon.coordinates && polygon.coordinates.length > 0) {
           const sourceId = `polygon-source-${index}`;
@@ -90,6 +111,31 @@ const MapComponent: React.FC<MapProps> = ({
               "fill-opacity": 0.8,
             },
           });
+
+          mapRef.current?.on(
+            "click",
+            layerId,
+            (e: mapboxgl.MapMouseEvent & mapboxgl.EventData) => {
+              console.log("hello");
+              const coordinates = getPolygonCenter(
+                e.features[0].geometry.coordinates[0]
+              );
+              const popupNode = document.createElement("div");
+
+              const popupComponent = (
+                <ThemeProvider theme={theme}>
+                  <PopupComponent />
+                </ThemeProvider>
+              );
+
+              createRoot(popupNode).render(popupComponent);
+
+              popup
+                .setLngLat(coordinates)
+                .setDOMContent(popupNode)
+                .addTo(mapRef.current!);
+            }
+          );
         }
       });
 
@@ -104,7 +150,7 @@ const MapComponent: React.FC<MapProps> = ({
 
     mapRef.current.on("load", () => {
       const popup = new mapboxgl.Popup({
-        closeButton: false,
+        closeButton: true,
         closeOnClick: true,
       });
       pins.forEach((pin, index) => {
@@ -147,7 +193,21 @@ const MapComponent: React.FC<MapProps> = ({
           (e: mapboxgl.MapMouseEvent & mapboxgl.EventData) => {
             console.log("hello");
             const coordinates = e.features[0].geometry.coordinates;
+            console.log("Point: ", coordinates);
             const popupNode = document.createElement("div");
+
+            // const reverseGeocode = async () => {
+            //   const response = await fetch(
+            //     `https://api.mapbox.com/geocoding/v5/mapbox.places/${coordinates[0]},${coordinates[1]}.json?types=country&access_token=${mapboxgl.accessToken}`
+            //   );
+            //   const data = await response.json();
+
+            //   if (data.features.length > 0) {
+            //     console.log("Country: ", data.features[0].text);
+            //   }
+            // };
+
+            // reverseGeocode();
 
             const popupComponent = (
               <ThemeProvider theme={theme}>
