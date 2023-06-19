@@ -25,7 +25,6 @@ type Pin = {
   coordinates: number[];
   color: string;
 };
-type Coordinate = [number, number];
 type Bbox = {
   type: string;
   coordinates: number[][][];
