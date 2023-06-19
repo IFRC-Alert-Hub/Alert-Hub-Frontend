@@ -1,6 +1,6 @@
 import { Box, Container, Grid, Typography } from "@mui/material";
 import TitleHeader from "../../components/TitleHeader";
-import MapComponent from "./MapComponent";
+import MapComponent from "../../components/MapComponent/MapComponent";
 import { useRef } from "react";
 
 export const ExtremeThreatColour = "#f5333f";
