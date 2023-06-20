@@ -23,14 +23,14 @@ jobs:
       uses: docker/login-action@v2
       with:
         registry: https://alerthubregistry.azurecr.io/
-        username: ${{ secrets.AzureAppService_ContainerUsername_d17105f8cc294b1fa10e956415cfc6e1 }}
-        password: ${{ secrets.AzureAppService_ContainerPassword_6c090a01173248cb84200c461b61acf9 }}
+        username: ${{ secrets.AzureAppService_ContainerUsername_cbf15a7de91446bfb63e27f4632dfe8c }}
+        password: ${{ secrets.AzureAppService_ContainerPassword_f9de2dc99a0b46afae96638552c416a9 }}
 
     - name: Build and push container image to registry
       uses: docker/build-push-action@v3
       with:
         push: true
-        tags: alerthubregistry.azurecr.io/${{ secrets.AzureAppService_ContainerUsername_d17105f8cc294b1fa10e956415cfc6e1 }}/alerthubregistry/alert-hub-frontend:${{ github.sha }}
+        tags: alerthubregistry.azurecr.io/${{ secrets.AzureAppService_ContainerUsername_cbf15a7de91446bfb63e27f4632dfe8c }}/alerthubregistry/alerthubregistry/alert-hub-frontend:${{ github.sha }}
         file: ./Dockerfile
 
   deploy:
@@ -47,5 +47,5 @@ jobs:
       with:
         app-name: 'alert-hub-frontend'
         slot-name: 'production'
-        publish-profile: ${{ secrets.AzureAppService_PublishProfile_ad578cc81bd14bddb1b6471b09e3f28b }}
-        images: 'alerthubregistry.azurecr.io/${{ secrets.AzureAppService_ContainerUsername_d17105f8cc294b1fa10e956415cfc6e1 }}/alerthubregistry/alert-hub-frontend:${{ github.sha }}'
+        publish-profile: ${{ secrets.AzureAppService_PublishProfile_c6a7940d2af94f0990b4480131fda046 }}
+        images: 'alerthubregistry.azurecr.io/${{ secrets.AzureAppService_ContainerUsername_cbf15a7de91446bfb63e27f4632dfe8c }}/alerthubregistry/alerthubregistry/alert-hub-frontend:${{ github.sha }}'
