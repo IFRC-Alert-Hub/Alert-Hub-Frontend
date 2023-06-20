@@ -19,7 +19,7 @@ import MenuIcon from "@mui/icons-material/Menu";
 import { Link, useLocation } from "react-router-dom";
 import CustomNavItemDropdown from "./CustomNavItemDropdown";
 import {
-  AwarenessLevelDropdownItems,
+  UrgencyLevelDropdownItems,
   HazardTypeDropdownItems,
   RegionsDropdownItems,
   firstNavBarItems,
@@ -280,8 +280,8 @@ const NavbarComponent = (props: any) => {
                   disableFocusRipple
                 >
                   <CustomNavItemDropdown
-                    NavItemTitle="Awareness Level"
-                    DropdownItems={AwarenessLevelDropdownItems}
+                    NavItemTitle="Urgency Level"
+                    DropdownItems={UrgencyLevelDropdownItems}
                   />
                 </Button>
               </Box>
