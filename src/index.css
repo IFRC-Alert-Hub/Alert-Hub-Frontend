@@ -54,6 +54,8 @@ body,
   background-color: black !important;
 }
 
+/* || ALERT CARD */
+
 .alert-card-text {
   margin: 0;
   display: -webkit-box;
@@ -75,4 +77,17 @@ body,
   border-radius: 10px;
   align-items: center;
   justify-content: center;
+}
+
+/* || CAROUSEL ARROW */
+
+.slick-prev,
+.slick-next {
+  height: 30px !important;
+  width: 30px !important;
+}
+
+.slick-prev:before,
+.slick-next:before {
+  color: #000000 !important;
 }
