@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 
 import FilterableTableComponent from "./TableComponent";
 import TitleHeader from "../../components/TitleHeader";

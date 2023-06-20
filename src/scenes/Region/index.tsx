@@ -1,7 +1,6 @@
 import { Box, Container, Typography } from "@mui/material";
 import { useParams } from "react-router-dom";
 import TitleHeader from "../../components/TitleHeader";
-import AlertCard from "../../components/AlertCard";
 import MapComponent from "../../components/MapComponent/MapComponent";
 import { useRef } from "react";
 import CardCarousel from "../../components/Card/CardCarousel";
