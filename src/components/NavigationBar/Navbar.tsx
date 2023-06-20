@@ -25,10 +25,9 @@ import {
   firstNavBarItems,
   secondNavBarItems,
 } from "./NavItemItems";
-import RoundButton from "./../../RoundButton";
+import RoundButton from "../RoundButton";
 import TimeComponent from "./TimeComponent";
 import { useState } from "react";
-import "../../../index.css";
 
 const NavbarComponent = (props: any) => {
   const location = useLocation();
