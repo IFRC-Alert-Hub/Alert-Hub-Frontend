@@ -1,40 +1,137 @@
-import { Card, Grid } from "@mui/material";
+import { Box, Card, Grid, Typography } from "@mui/material";
 
-const cardInfo = {
-  title: "Flood Warning issured March 2023",
-  updatedTime: "JUNE 8, 2023",
-  country: "United States",
-  severity: "Extreme",
-  event: "Flood Warning",
-  intruction:
-    "When facing a flood, it is crucial to stay calm and vigilant. Seek higher ground, away from the flood's source, and avoid walking or driving through floodwaters. Follow evacuation orders promptly, disconnect electrical appliances, and store important documents and valuables in waterproof containers. Stay informed through local news and official channels, and offer assistance to those in need if it is safe to do so. Contact emergency services if immediate help is required. Prioritizing personal safety and following official instructions are key during a flood.",
-};
+interface CardInfo {
+  title: string;
+  updatedTime: string;
+  country: string;
+  severity: string;
+  event: string;
+  instruction: string;
+}
 
-const AlertCard = () => {
+interface AlertCardProps {
+  cardInfo: CardInfo;
+}
+
+const AlertCard: React.FC<AlertCardProps> = ({ cardInfo }) => {
   return (
-    <Card sx={{ maxWidth: 400 }}>
+    <Card
+      sx={{
+        maxWidth: 380,
+        border: "1px solid rgba(0,0,0,.05)",
+        borderRadius: "0.25rem 0.25rem",
+        boxShadow: "0 2px 10px 0 rgba(0,0,0,.08)",
+      }}
+    >
       <Grid container>
         <Grid
           item
           xs={12}
-          sx={{ padding: "15px", borderBottom: "1px solid rgba(0,0,0,.05)" }}
+          sx={{
+            padding: "15px",
+            borderBottom: "1px solid rgba(0,0,0,.05)",
+          }}
         >
-          <span className="alert-card-title">{cardInfo.title}</span>
-          <span className="alert-card-time">
+          <Typography
+            variant="h4"
+            fontWeight="500"
+            sx={{
+              display: "block",
+              paddingBottom: "0.2rem",
+              maxWidth: "auto",
+              overflow: "hidden",
+              textOverflow: "ellipsis",
+              whiteSpace: "nowrap",
+            }}
+          >
+            {cardInfo.title}
+          </Typography>
+          <Typography
+            variant="h6"
+            sx={{
+              color: "#919191",
+              display: "block",
+              whiteSpace: "nowrap",
+            }}
+          >
             LAST UPDATED: {cardInfo.updatedTime}
-          </span>
+          </Typography>
         </Grid>
         <Grid
           item
           xs={6}
-          sx={{ padding: "15px", borderRight: "1px solid rgba(0,0,0,.05)" }}
+          sx={{
+            padding: "15px",
+            borderRight: "1px solid rgba(0,0,0,.05)",
+          }}
         >
-          <span className="alert-card-title">Country</span>
-          <p className="alert-card-p">{cardInfo.country}</p>
-          <span className="alert-card-title">Severity</span>
-          <p className="alert-card-p">{cardInfo.severity}</p>
-          <span className="alert-card-title">Event</span>
-          <p className="alert-card-p">{cardInfo.event}</p>
+          <Typography
+            variant="h6"
+            sx={{
+              display: "block",
+              whiteSpace: "nowrap",
+              fontWeight: "500",
+            }}
+          >
+            Country
+          </Typography>
+          <Typography
+            variant="h6"
+            fontSize="0.7rem"
+            fontWeight={300}
+            sx={{
+              display: "block",
+              whiteSpace: "nowrap",
+              margin: "0px 0px 1rem",
+            }}
+          >
+            {cardInfo.country}
+          </Typography>
+
+          <Typography
+            variant="h6"
+            sx={{
+              display: "block",
+              whiteSpace: "nowrap",
+              fontWeight: "500",
+            }}
+          >
+            Severity
+          </Typography>
+          <Typography
+            variant="h6"
+            fontSize="0.7rem"
+            fontWeight={300}
+            sx={{
+              display: "block",
+              whiteSpace: "nowrap",
+              margin: "0px 0px 1rem",
+            }}
+          >
+            {cardInfo.severity}
+          </Typography>
+
+          <Typography
+            variant="h6"
+            sx={{
+              display: "block",
+              whiteSpace: "nowrap",
+              fontWeight: "500",
+            }}
+          >
+            Event
+          </Typography>
+          <Typography
+            variant="h6"
+            fontSize="0.7rem"
+            fontWeight={300}
+            sx={{
+              display: "block",
+              whiteSpace: "nowrap",
+            }}
+          >
+            {cardInfo.event}
+          </Typography>
         </Grid>
         <Grid
           item
@@ -44,8 +141,24 @@ const AlertCard = () => {
             borderLeft: "1px solid rgba(0,0,0,.05)",
           }}
         >
-          <span className="alert-card-title">Instructions</span>
-          <p className="alert-card-text">{cardInfo.intruction}</p>
+          <Typography
+            variant="h6"
+            sx={{
+              display: "block",
+              whiteSpace: "nowrap",
+              fontWeight: "500",
+            }}
+          >
+            Instructions
+          </Typography>
+          <Typography
+            variant="h6"
+            fontSize="0.7rem"
+            fontWeight={300}
+            className="alert-card-text"
+          >
+            {cardInfo.instruction}
+          </Typography>
         </Grid>
         <Grid
           item
@@ -55,7 +168,7 @@ const AlertCard = () => {
             borderTop: "1px solid rgba(0,0,0,.05)",
           }}
         >
-          <div className="alert-tag">Ongoing</div>
+          <Box className="alert-tag">Ongoing</Box>
         </Grid>
       </Grid>
     </Card>
