@@ -98,6 +98,36 @@ const regionItems = [
   },
 ];
 
+const cardData = [
+  {
+    title: "Flood Warning issured March 2023",
+    updatedTime: "JUNE 8, 2023",
+    country: "United States",
+    severity: "Extreme",
+    event: "Flood Warning",
+    instruction:
+      "When facing a flood, it is crucial to stay calm and vigilant. Seek higher ground, away from the flood's source, and avoid walking or driving through floodwaters. Follow evacuation orders promptly, disconnect electrical appliances, and store important documents and valuables in waterproof containers. Stay informed through local news and official channels, and offer assistance to those in need if it is safe to do so. Contact emergency services if immediate help is required. Prioritizing personal safety and following official instructions are key during a flood.",
+  },
+  {
+    title: "Flood Warning issured March 2024",
+    updatedTime: "JUNE 8, 2023",
+    country: "United States",
+    severity: "Extreme",
+    event: "Flood Warning",
+    instruction:
+      "When facing a flood, it is crucial to stay calm and vigilant. Seek higher ground, away from the flood's source, and avoid walking or driving through floodwaters. Follow evacuation orders promptly, disconnect electrical appliances, and store important documents and valuables in waterproof containers. Stay informed through local news and official channels, and offer assistance to those in need if it is safe to do so. Contact emergency services if immediate help is required. Prioritizing personal safety and following official instructions are key during a flood.",
+  },
+  {
+    title: "Flood Warning issured March 2025",
+    updatedTime: "JUNE 8, 2023",
+    country: "United States",
+    severity: "Extreme",
+    event: "Flood Warning",
+    instruction:
+      "When facing a flood, it is crucial to stay calm and vigilant. Seek higher ground, away from the flood's source, and avoid walking or driving through floodwaters. Follow evacuation orders promptly, disconnect electrical appliances, and store important documents and valuables in waterproof containers. Stay informed through local news and official channels, and offer assistance to those in need if it is safe to do so. Contact emergency services if immediate help is required. Prioritizing personal safety and following official instructions are key during a flood.",
+  },
+];
+
 const Region = () => {
   const mapContainerRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<mapboxgl.Map | null>(null);
@@ -120,7 +150,7 @@ const Region = () => {
       </Box>
       <TitleHeader title="ONGOING EXTREME ALERTS" />
       <Box margin={"15px 0px"}>
-        <AlertCard />
+        <AlertCard cardInfo={cardData[0]} />
       </Box>
       <TitleHeader title="ALL ONGOING ALERTS" />
       <MapComponent

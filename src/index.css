@@ -54,33 +54,7 @@ body,
   background-color: black !important;
 }
 
-/* || ALERT CARD */
-.alert-card-title {
-  font-size: 14px;
-  font-weight: bold;
-  display: block;
-  padding-bottom: 0.2em;
-}
-
-.alert-card-time {
-  font-size: 0.5rem;
-  color: #919191;
-  display: block;
-  white-space: nowrap;
-}
-
-.alert-card-p {
-  font-size: 0.5rem;
-  margin: 0px 0px 1rem;
-}
-
-.alert-card-p:last-child {
-  font-size: 0.5rem;
-  margin: 0px;
-}
-
 .alert-card-text {
-  font-size: 0.5rem;
   margin: 0;
   display: -webkit-box;
   -webkit-line-clamp: 7;
