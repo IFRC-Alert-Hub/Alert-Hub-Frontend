@@ -119,8 +119,10 @@ const Region = () => {
         </Typography>
       </Box>
       <TitleHeader title="ONGOING EXTREME ALERTS" />
-      <AlertCard />
-
+      <Box margin={"15px 0px"}>
+        <AlertCard />
+      </Box>
+      <TitleHeader title="ALL ONGOING ALERTS" />
       <MapComponent
         mapContainerRef={mapContainerRef}
         mapRef={mapRef}
