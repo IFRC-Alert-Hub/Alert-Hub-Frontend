@@ -81,7 +81,6 @@ const AlertCard: React.FC<AlertCardProps> = ({ cardInfo }) => {
             fontWeight={300}
             sx={{
               display: "block",
-              whiteSpace: "nowrap",
               margin: "0px 0px 1rem",
             }}
           >
@@ -104,7 +103,6 @@ const AlertCard: React.FC<AlertCardProps> = ({ cardInfo }) => {
             fontWeight={300}
             sx={{
               display: "block",
-              whiteSpace: "nowrap",
               margin: "0px 0px 1rem",
             }}
           >
@@ -125,10 +123,7 @@ const AlertCard: React.FC<AlertCardProps> = ({ cardInfo }) => {
             variant="h6"
             fontSize="0.7rem"
             fontWeight={300}
-            sx={{
-              display: "block",
-              whiteSpace: "nowrap",
-            }}
+            sx={{ display: "block" }}
           >
             {cardInfo.event}
           </Typography>
