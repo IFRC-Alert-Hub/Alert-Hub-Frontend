@@ -9,6 +9,7 @@ import Login from "./scenes/Login";
 import Footer from "./components/Footer";
 import Region from "./scenes/Region";
 import "./index.css";
+import AllAlerts from "./scenes/AllAlerts";
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
               <Route path="/resources" element={<Resources />} />
               <Route path="/login" element={<Login />} />
               <Route path="/regions/:id" element={<Region />} />
+              <Route path="/alerts/all" element={<AllAlerts />} />
             </Routes>
           </Box>
           <Footer />
