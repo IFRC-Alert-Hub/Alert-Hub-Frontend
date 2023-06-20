@@ -7,7 +7,6 @@ import {
   TableBody,
   MenuItem,
   Menu,
-  Typography,
   Button,
 } from "@mui/material";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
@@ -83,11 +82,10 @@ const FilterableTableComponent: React.FC = () => {
                 "&:hover": { backgroundColor: "transparent !important" },
                 "&:focus": { backgroundColor: "transparent !important" },
                 backgroundColor: "transparent !important",
+                textTransform: "capitalize",
               }}
             >
-              <Typography variant="h6" textTransform="capitalize">
-                {filters["name"] || "Name"}
-              </Typography>
+              {filters["name"] || "Name"}
             </Button>
             <Menu
               elevation={0}
