@@ -1,7 +1,7 @@
 import { Box, Container, Typography } from "@mui/material";
 import { useParams } from "react-router-dom";
 import TitleHeader from "../../components/TitleHeader";
-import CountryTable from "./CountryTable";
+import AlertCard from "./AlertCard";
 import MapComponent from "../../components/MapComponent/MapComponent";
 import { useRef } from "react";
 
@@ -118,9 +118,11 @@ const Region = () => {
           {region?.label}
         </Typography>
       </Box>
-      <TitleHeader title="COUNTRIES" />
-      <CountryTable />
-
+      <TitleHeader title="ONGOING EXTREME ALERTS" />
+      <Box margin={"15px 0px"}>
+        <AlertCard />
+      </Box>
+      <TitleHeader title="ALL ONGOING ALERTS" />
       <MapComponent
         mapContainerRef={mapContainerRef}
         mapRef={mapRef}
