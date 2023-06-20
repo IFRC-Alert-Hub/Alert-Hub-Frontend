@@ -17,7 +17,8 @@ const AlertCard: React.FC<AlertCardProps> = ({ cardInfo }) => {
   return (
     <Card
       sx={{
-        maxWidth: 380,
+        margin: "12px",
+        // maxWidth: 380,
         border: "1px solid rgba(0,0,0,.05)",
         borderRadius: "0.25rem 0.25rem",
         boxShadow: "0 2px 10px 0 rgba(0,0,0,.08)",
@@ -59,7 +60,7 @@ const AlertCard: React.FC<AlertCardProps> = ({ cardInfo }) => {
         </Grid>
         <Grid
           item
-          xs={6}
+          xs={4.5}
           sx={{
             padding: "15px",
             borderRight: "1px solid rgba(0,0,0,.05)",
@@ -130,10 +131,9 @@ const AlertCard: React.FC<AlertCardProps> = ({ cardInfo }) => {
         </Grid>
         <Grid
           item
-          xs={6}
+          xs={7.5}
           sx={{
             padding: "15px",
-            borderLeft: "1px solid rgba(0,0,0,.05)",
           }}
         >
           <Typography
