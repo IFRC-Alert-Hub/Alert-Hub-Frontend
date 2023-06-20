@@ -4,7 +4,6 @@ import TitleHeader from "../../components/TitleHeader";
 import MapComponent from "../../components/MapComponent/MapComponent";
 import { useRef } from "react";
 import CardCarousel from "../../components/Card/CardCarousel";
-
 const regionItems = [
   {
     name: 0,

@@ -11,41 +11,41 @@ on:
 
 jobs:
   build:
-    runs-on: 'ubuntu-latest'
+    runs-on: "ubuntu-latest"
 
     steps:
-    - uses: actions/checkout@v2
+      - uses: actions/checkout@v2
 
-    - name: Set up Docker Buildx
-      uses: docker/setup-buildx-action@v2
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
 
-    - name: Log in to registry
-      uses: docker/login-action@v2
-      with:
-        registry: https://alerthubregistry.azurecr.io/
-        username: ${{ secrets.AzureAppService_ContainerUsername_2fe07e90fedb4ba2a32c0d9daf6e1343 }}
-        password: ${{ secrets.AzureAppService_ContainerPassword_3e8f17e893f642319efff5626a8cb0e6 }}
+      - name: Log in to registry
+        uses: docker/login-action@v2
+        with:
+          registry: https://alerthubregistry.azurecr.io/
+          username: ${{ secrets.AzureAppService_ContainerUsername_2fe07e90fedb4ba2a32c0d9daf6e1343 }}
+          password: ${{ secrets.AzureAppService_ContainerPassword_3e8f17e893f642319efff5626a8cb0e6 }}
 
-    - name: Build and push container image to registry
-      uses: docker/build-push-action@v3
-      with:
-        push: true
-        tags: alerthubregistry.azurecr.io/${{ secrets.AzureAppService_ContainerUsername_2fe07e90fedb4ba2a32c0d9daf6e1343 }}/alert-hub-frontend:${{ github.sha }}
-        file: ./Dockerfile
+      - name: Build and push container image to registry
+        uses: docker/build-push-action@v3
+        with:
+          push: true
+          tags: alerthubregistry.azurecr.io/${{ secrets.AzureAppService_ContainerUsername_2fe07e90fedb4ba2a32c0d9daf6e1343 }}/alert-hub-frontend:${{ github.sha }}
+          file: ./Dockerfile
 
   deploy:
     runs-on: ubuntu-latest
     needs: build
     environment:
-      name: 'production'
+      name: "production"
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
 
     steps:
-    - name: Deploy to Azure Web App
-      id: deploy-to-webapp
-      uses: azure/webapps-deploy@v2
-      with:
-        app-name: 'alert-hub-frontend'
-        slot-name: 'production'
-        publish-profile: ${{ secrets.AzureAppService_PublishProfile_32e738dc6f6d4f7e9b5e3a0c4caff47c }}
-        images: 'alerthubregistry.azurecr.io/${{ secrets.AzureAppService_ContainerUsername_2fe07e90fedb4ba2a32c0d9daf6e1343 }}/alert-hub-frontend:${{ github.sha }}'
+      - name: Deploy to Azure Web App
+        id: deploy-to-webapp
+        uses: azure/webapps-deploy@v2
+        with:
+          app-name: "alert-hub-frontend"
+          slot-name: "production"
+          publish-profile: ${{ secrets.AzureAppService_PublishProfile_32e738dc6f6d4f7e9b5e3a0c4caff47c }}
+          images: "alerthubregistry.azurecr.io/${{ secrets.AzureAppService_ContainerUsername_2fe07e90fedb4ba2a32c0d9daf6e1343 }}/alert-hub-frontend:${{ github.sha }}"
