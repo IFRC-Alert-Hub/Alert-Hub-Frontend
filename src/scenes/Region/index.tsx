@@ -1,7 +1,7 @@
 import { Box, Container, Typography } from "@mui/material";
 import { useParams } from "react-router-dom";
 import TitleHeader from "../../components/TitleHeader";
-import CountryTable from "./CountryTable";
+import AlertCard from "./AlertCard";
 
 const regionItems = [
   {
@@ -49,8 +49,8 @@ const Region = () => {
           {region?.name}
         </Typography>
       </Box>
-      <TitleHeader title="COUNTRIES" />
-      <CountryTable />
+      <TitleHeader title="ONGOING EXTREME ALERTS" />
+      <AlertCard />
     </Container>
   );
 };
