@@ -10,6 +10,8 @@ import Footer from "./components/Footer";
 import Region from "./scenes/Region";
 import "./index.css";
 import AllAlerts from "./scenes/AllAlerts";
+import Profile from "./scenes/Profile";
+import Subscription from "./scenes/Subscription";
 
 function App() {
   return (
@@ -26,6 +28,11 @@ function App() {
               <Route path="/login" element={<Login />} />
               <Route path="/regions/:id" element={<Region />} />
               <Route path="/alerts/all" element={<AllAlerts />} />
+
+              <Route path="/account/">
+                <Route path="profile" element={<Profile />} />
+                <Route path="subscription" element={<Subscription />} />
+              </Route>
             </Routes>
           </Box>
           <Footer />
