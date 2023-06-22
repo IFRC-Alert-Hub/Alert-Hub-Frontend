@@ -1,13 +1,13 @@
 import { Button, Menu, MenuItem, TableCell } from "@mui/material";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import React from "react";
-import { initialFilters } from "./Data";
+import { headCells } from "./Data";
 interface DropdownFilterProps {
   setSelected: React.Dispatch<React.SetStateAction<readonly string[]>>;
   TableCellTitle: string;
   menuItems: string[];
-  filters: typeof initialFilters;
-  setFilters: React.Dispatch<React.SetStateAction<typeof initialFilters>>;
+  filters: typeof headCells;
+  setFilters: React.Dispatch<React.SetStateAction<typeof headCells>>;
 }
 
 const DropdownFilter = (props: DropdownFilterProps) => {

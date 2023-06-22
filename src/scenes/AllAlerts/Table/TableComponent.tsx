@@ -12,7 +12,7 @@ import {
 } from "@mui/material";
 
 import { getComparator, stableSort } from "./Sorting";
-import { Data, initialFilters, rows } from "./Data";
+import { Data, headCells, rows } from "./Data";
 import { EnhancedTableToolbar } from "./EnhancedTableToolbar";
 import { EnhancedTableHead } from "./EnhancedTableHead";
 
@@ -25,22 +25,28 @@ export default function EnhancedTable() {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
 
-  const [filters, setFilters] = React.useState(initialFilters);
+  const [filters, setFilters] = React.useState(headCells);
 
-  const getProperty = (object: any, key: string) => {
+  const getProperty = (object: any, key: string | undefined) => {
+    if (key === undefined) {
+      return undefined;
+    }
+
     return key
       .split(".")
-      .reduce((obj: any, property: string) => obj[property], object);
+      .reduce((obj: any, property: string) => obj?.[property], object);
   };
-
   const filteredRows = React.useMemo(() => {
     let filteredData = rows;
 
     filters.forEach((filter) => {
-      if (filter.selectedFilter && filter.selectedFilter !== "All") {
-        filteredData = filteredData.filter(
-          (row) => getProperty(row, filter.filterKey) === filter.selectedFilter
-        );
+      if (filter.isDropdownFilter) {
+        if (filter.selectedFilter && filter.selectedFilter !== "All") {
+          filteredData = filteredData.filter(
+            (row) =>
+              getProperty(row, filter.filterKey) === filter.selectedFilter
+          );
+        }
       }
     });
 
