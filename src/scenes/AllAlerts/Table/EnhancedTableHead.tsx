@@ -8,11 +8,9 @@ import {
   TableRow,
   TableSortLabel,
   Checkbox,
-  MenuItem,
-  Menu,
-  Button,
 } from "@mui/material";
 import React from "react";
+import DropdownFilter from "./DropdownFilter";
 type Order = "asc" | "desc";
 
 interface EnhancedTableProps {
@@ -41,22 +39,9 @@ const EnhancedTableHead = (props: EnhancedTableProps) => {
     setSelectedFilter,
     setSelected,
   } = props;
-  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
 
   const [sortedColumn, setSortedColumn] = React.useState("");
 
-  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handleFilterClick = (value: string) => {
-    setSelectedFilter(value);
-    setAnchorEl(null);
-    setSelected([]);
-  };
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
   const createSortHandler =
     (property: keyof Data) => (event: React.MouseEvent<unknown>) => {
       onRequestSort(event, property);
@@ -77,57 +62,14 @@ const EnhancedTableHead = (props: EnhancedTableProps) => {
             }}
           />
         </TableCell>
-        <TableCell sx={{ textAlign: "center" }}>
-          <Button
-            id="demo-customized-button"
-            aria-controls={anchorEl ? "demo-customized-menu" : undefined}
-            aria-haspopup="true"
-            variant="contained"
-            disableElevation
-            disableRipple
-            onClick={handleClick}
-            endIcon={<KeyboardArrowDownIcon sx={{ color: "#f5333f" }} />}
-            sx={{
-              padding: "0px",
-              borderRadius: "0px",
-              borderBottom: "1px solid transparent",
-              "&:hover": { backgroundColor: "transparent !important" },
-              "&:focus": { backgroundColor: "transparent !important" },
-              backgroundColor: "transparent !important",
-              textTransform: "capitalize",
-            }}
-          >
-            {selectedFilter === "All" ? "Regions" : selectedFilter || "Regions"}
-          </Button>
-          <Menu
-            elevation={0}
-            anchorOrigin={{
-              vertical: "bottom",
-              horizontal: "left",
-            }}
-            transformOrigin={{
-              vertical: "top",
-              horizontal: "left",
-            }}
-            id="demo-customized-menu"
-            anchorEl={anchorEl}
-            open={Boolean(anchorEl)}
-            onClick={handleClose}
-          >
-            <MenuItem onClick={() => handleFilterClick("All")}>
-              All Regions
-            </MenuItem>
-            <MenuItem onClick={() => handleFilterClick("Europe")}>
-              Europe
-            </MenuItem>
-            <MenuItem onClick={() => handleFilterClick("Africa")}>
-              Africa
-            </MenuItem>
-            <MenuItem onClick={() => handleFilterClick("America")}>
-              America
-            </MenuItem>
-          </Menu>
-        </TableCell>
+        <DropdownFilter
+          selectedFilter={selectedFilter}
+          TableCellTitle={"Region"}
+          setSelectedFilter={setSelectedFilter}
+          setSelected={setSelected}
+          menuItems={["Europe", "Africa", "America"]}
+        ></DropdownFilter>
+
         {headCells.map((headCell) => (
           <TableCell
             key={headCell.id}
