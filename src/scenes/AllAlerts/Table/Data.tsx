@@ -2,41 +2,10 @@ interface Data {
   country: string;
   event: string;
   sender: string;
-  effective: string;
-  expires: string;
+  effective: Date;
+  expires: Date;
 }
-const initialFilters = [
-  {
-    selectedFilter: "All",
-    title: "Region",
-    filterKey: "region",
-    menuItems: [
-      "Africa",
-      "America",
-      "Asia Pacific",
-      "Europe",
-      "Middle East & North East",
-    ],
-  },
-  {
-    selectedFilter: "All",
-    title: "Urgency",
-    filterKey: "urgency",
-    menuItems: ["Future", "Past", "Unknown"],
-  },
-  {
-    selectedFilter: "All",
-    title: "Severity",
-    filterKey: "severity",
-    menuItems: ["Moderate", "Minor", "Unknown"],
-  },
-  {
-    selectedFilter: "All",
-    title: "Certainty",
-    filterKey: "certainty",
-    menuItems: ["Possible", "Unlikely", "Unknown"],
-  },
-];
+
 const rows = [
   {
     region: "Asia Pacific",
@@ -48,7 +17,7 @@ const rows = [
     sender:
       "https://feeds.meteoalarm.org/feeds/meteoalarm-legacy-atom-australia",
     effective: "2023-06-23T22:59:59+00:00",
-    expires: "2023-06-25T22:59:59+00:00",
+    expires: "19/06/20",
   },
   {
     region: "Europe",
@@ -59,7 +28,7 @@ const rows = [
     certainty: "Unlikely",
     sender: "https://feeds.meteoalarm.org/feeds/meteoalarm-legacy-atom-belgium",
     effective: "2023-06-22T18:59:59+00:00",
-    expires: "2023-06-23T18:59:59+00:00",
+    expires: "23/06/23",
   },
   {
     region: "Africa",
@@ -70,7 +39,7 @@ const rows = [
     certainty: "Likely",
     sender: "https://feeds.meteoalarm.org/feeds/meteoalarm-legacy-atom-nigeria",
     effective: "2023-06-24T00:59:59+00:00",
-    expires: "2023-06-26T00:59:59+00:00",
+    expires: "19/06/22",
   },
   {
     region: "America",
@@ -81,7 +50,7 @@ const rows = [
     certainty: "Possible",
     sender: "https://feeds.meteoalarm.org/feeds/meteoalarm-legacy-atom-usa",
     effective: "2023-06-22T12:59:59+00:00",
-    expires: "2023-06-23T12:59:59+00:00",
+    expires: "19/06/21",
   },
   {
     region: "Middle East & North East",
@@ -92,15 +61,20 @@ const rows = [
     certainty: "Unlikely",
     sender: "https://feeds.meteoalarm.org/feeds/meteoalarm-legacy-atom-israel",
     effective: "2023-06-25T14:59:59+00:00",
-    expires: "2023-06-27T14:59:59+00:00",
+    expires: "19/06/23",
   },
 ];
 
 interface HeadCell {
-  disablePadding: boolean;
-  id: keyof Data;
-  label: string;
-  numeric: boolean;
+  disablePadding?: boolean;
+  id?: keyof Data;
+  label?: string;
+  numeric?: boolean;
+  isDropdownFilter?: boolean;
+  selectedFilter?: string | undefined;
+  title?: string;
+  filterKey?: string;
+  menuItems?: string[];
 }
 
 const headCells: HeadCell[] = [
@@ -109,32 +83,72 @@ const headCells: HeadCell[] = [
     numeric: false,
     disablePadding: true,
     label: "Country",
+    isDropdownFilter: false,
   },
   {
     id: "event",
     numeric: true,
     disablePadding: false,
     label: "Event",
+    isDropdownFilter: false,
   },
+
   {
     id: "sender",
     numeric: true,
     disablePadding: false,
     label: "Sender",
+    isDropdownFilter: false,
   },
   {
     id: "effective",
     numeric: true,
     disablePadding: false,
     label: "Effective",
+    isDropdownFilter: false,
   },
   {
     id: "expires",
     numeric: true,
     disablePadding: false,
     label: "Expires",
+    isDropdownFilter: false,
+  },
+  {
+    selectedFilter: "All",
+    title: "Region",
+    filterKey: "region",
+    menuItems: [
+      "Africa",
+      "America",
+      "Asia Pacific",
+      "Europe",
+      "Middle East & North East",
+    ],
+    isDropdownFilter: true,
+  },
+  {
+    selectedFilter: "All",
+    title: "Urgency",
+    filterKey: "urgency",
+    menuItems: ["Future", "Past", "Unknown"],
+    isDropdownFilter: true,
+  },
+  {
+    selectedFilter: "All",
+    title: "Severity",
+    filterKey: "severity",
+    menuItems: ["Moderate", "Minor", "Unknown"],
+    isDropdownFilter: true,
+  },
+  {
+    selectedFilter: "All",
+    title: "Certainty",
+    filterKey: "certainty",
+    menuItems: ["Possible", "Unlikely", "Unknown"],
+    isDropdownFilter: true,
   },
 ];
 
 export type { Data };
-export { rows, headCells, initialFilters };
+export { rows, headCells };

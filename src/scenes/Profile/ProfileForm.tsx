@@ -1,47 +1,142 @@
-import { Box, Grid, TextField } from "@mui/material";
+import { Box, Button, Grid, TextField } from "@mui/material";
+import { useState } from "react";
 
-const ProfileForm = () => {
+interface UserType {
+  id: string;
+  avatar: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  contactNumber: string;
+}
+
+type PropsType = {
+  user: UserType;
+  setUser: React.Dispatch<React.SetStateAction<UserType>>;
+  editStatus: boolean;
+  setEditStatus: React.Dispatch<React.SetStateAction<boolean>>;
+};
+
+const ProfileForm = ({
+  user,
+  setUser,
+  editStatus,
+  setEditStatus,
+}: PropsType) => {
+  const [prevUser, setPrevUser] = useState(user);
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setUser({
+      ...user,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  const handleCancel = () => {
+    setUser(prevUser);
+    setEditStatus(true);
+  };
+
+  const handleSubmit = () => {
+    setPrevUser(user);
+    console.log(user);
+    setEditStatus(true);
+  };
+
   return (
     <Box
       component="form"
       noValidate
       autoComplete="off"
-      sx={{ margin: "50px 0px 0px 30px" }}
+      className="form-box"
+      onSubmit={(e) => e.preventDefault()}
     >
       <Grid container>
         <Grid item xs={12} sm={6}>
+          <label className="form-label" htmlFor="firstName">
+            FIRST NAME
+          </label>
           <TextField
-            label="FIRST NAME"
-            id="first name"
+            id="firstName"
+            name="firstName"
             size="small"
             className="form-text-field"
-            disabled
+            value={user.firstName}
+            disabled={editStatus}
+            onChange={handleInputChange}
           />
         </Grid>
         <Grid item xs={12} sm={6}>
+          <label className="form-label" htmlFor="lastName">
+            LAST NAME
+          </label>
           <TextField
-            label="LAST NAME"
-            id="last name"
+            id="lastName"
+            name="lastName"
             size="small"
             className="form-text-field"
+            value={user.lastName}
+            disabled={editStatus}
+            onChange={handleInputChange}
           />
         </Grid>
         <Grid item xs={12}>
+          <label className="form-label" htmlFor="email">
+            EMAIL ADDRESS
+          </label>
           <TextField
-            label="EMAIL ADDRESS"
             id="email"
+            name="email"
             size="small"
             className="form-text-field"
+            value={user.email}
+            disabled={editStatus}
+            onChange={handleInputChange}
           />
         </Grid>
         <Grid item xs={12}>
+          <label className="form-label" htmlFor="contactNumber">
+            PHONE NUMBER
+          </label>
           <TextField
-            label="CONTECT NUMBER"
-            id="contact number"
+            id="contactNumber"
+            name="contactNumber"
             size="small"
             className="form-text-field"
+            value={user.contactNumber}
+            disabled={editStatus}
+            onChange={handleInputChange}
           />
         </Grid>
+
+        {editStatus ? (
+          <div></div>
+        ) : (
+          <Grid
+            item
+            xs={12}
+            display="flex"
+            justifyContent="flex-end"
+            paddingRight="30px"
+          >
+            <Button
+              variant="outlined"
+              color="error"
+              sx={{ marginRight: "10px" }}
+              onClick={handleCancel}
+            >
+              Cancel
+            </Button>
+            <Button
+              type="submit"
+              variant="contained"
+              color="error"
+              onClick={handleSubmit}
+            >
+              Submit
+            </Button>
+          </Grid>
+        )}
       </Grid>
     </Box>
   );
