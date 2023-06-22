@@ -1,115 +1,98 @@
 interface Data {
-  calories: number;
-  carbs: number;
-  fat: number;
-  name: string;
-  protein: number;
+  country: string;
+  event: string;
+  sender: string;
+  effective: string;
+  expires: string;
 }
-
+const initialFilters = [
+  {
+    selectedFilter: "All",
+    title: "Region",
+    filterKey: "region",
+    menuItems: [
+      "Africa",
+      "America",
+      "Asia Pacific",
+      "Europe",
+      "Middle East & North East",
+    ],
+  },
+  {
+    selectedFilter: "All",
+    title: "Urgency",
+    filterKey: "urgency",
+    menuItems: ["Future", "Past", "Unknown"],
+  },
+  {
+    selectedFilter: "All",
+    title: "Severity",
+    filterKey: "severity",
+    menuItems: ["Moderate", "Minor", "Unknown"],
+  },
+  {
+    selectedFilter: "All",
+    title: "Certainty",
+    filterKey: "certainty",
+    menuItems: ["Possible", "Unlikely", "Unknown"],
+  },
+];
 const rows = [
   {
-    region: "Europe",
-    name: "Cupcake",
-    calories: 305,
-    fat: 3.7,
-    carbs: 67,
-    protein: 4.3,
+    region: "Asia Pacific",
+    country: "Australia",
+    event: "Red thunderstorm warning",
+    severity: "Moderate",
+    urgency: "Future",
+    certainty: "Likely",
+    sender:
+      "https://feeds.meteoalarm.org/feeds/meteoalarm-legacy-atom-australia",
+    effective: "2023-06-23T22:59:59+00:00",
+    expires: "2023-06-25T22:59:59+00:00",
   },
   {
     region: "Europe",
-    name: "Donut",
-    calories: 452,
-    fat: 25,
-    carbs: 51,
-    protein: 4.9,
-  },
-  {
-    region: "Europe",
-    name: "Eclair",
-    calories: 262,
-    fat: 16,
-    carbs: 24,
-    protein: 6,
-  },
-  {
-    region: "Europe",
-    name: "Frozen yoghurt",
-    calories: 159,
-    fat: 6,
-    carbs: 24,
-    protein: 4,
+    country: "Belgium",
+    event: "Yellow snow squall warning",
+    severity: "Minor",
+    urgency: "Past",
+    certainty: "Unlikely",
+    sender: "https://feeds.meteoalarm.org/feeds/meteoalarm-legacy-atom-belgium",
+    effective: "2023-06-22T18:59:59+00:00",
+    expires: "2023-06-23T18:59:59+00:00",
   },
   {
     region: "Africa",
-    name: "Gingerbread",
-    calories: 356,
-    fat: 16,
-    carbs: 49,
-    protein: 3.9,
-  },
-  {
-    region: "Africa",
-    name: "Honeycomb",
-    calories: 408,
-    fat: 3.2,
-    carbs: 87,
-    protein: 6.5,
-  },
-  {
-    region: "Africa",
-    name: "Ice cream sandwich",
-    calories: 237,
-    fat: 9,
-    carbs: 37,
-    protein: 4.3,
-  },
-  {
-    region: "Africa",
-    name: "Jelly Bean",
-    calories: 375,
-    fat: 0,
-    carbs: 94,
-    protein: 0,
-  },
-  {
-    region: "Middle East",
-    name: "KitKat",
-    calories: 518,
-    fat: 26,
-    carbs: 65,
-    protein: 7,
-  },
-  {
-    region: "Africa",
-    name: "Lollipop",
-    calories: 392,
-    fat: 0.2,
-    carbs: 98,
-    protein: 0,
-  },
-  {
-    region: "Europe",
-    name: "Marshmallow",
-    calories: 318,
-    fat: 0,
-    carbs: 81,
-    protein: 2,
-  },
-  {
-    region: "Europe",
-    name: "Nougat",
-    calories: 360,
-    fat: 19,
-    carbs: 9,
-    protein: 37,
+    country: "Nigeria",
+    event: "Yellow heavy rain warning",
+    severity: "Moderate",
+    urgency: "Future",
+    certainty: "Likely",
+    sender: "https://feeds.meteoalarm.org/feeds/meteoalarm-legacy-atom-nigeria",
+    effective: "2023-06-24T00:59:59+00:00",
+    expires: "2023-06-26T00:59:59+00:00",
   },
   {
     region: "America",
-    name: "Oreo",
-    calories: 437,
-    fat: 18,
-    carbs: 63,
-    protein: 4,
+    country: "United States",
+    event: "Red tornado warning",
+    severity: "Major",
+    urgency: "Past",
+    certainty: "Possible",
+    sender: "https://feeds.meteoalarm.org/feeds/meteoalarm-legacy-atom-usa",
+    effective: "2023-06-22T12:59:59+00:00",
+    expires: "2023-06-23T12:59:59+00:00",
+  },
+  {
+    region: "Middle East & North East",
+    country: "Israel",
+    event: "Yellow dust storm warning",
+    severity: "Minor",
+    urgency: "Unknown",
+    certainty: "Unlikely",
+    sender: "https://feeds.meteoalarm.org/feeds/meteoalarm-legacy-atom-israel",
+    effective: "2023-06-25T14:59:59+00:00",
+    expires: "2023-06-27T14:59:59+00:00",
   },
 ];
 
@@ -122,36 +105,36 @@ interface HeadCell {
 
 const headCells: HeadCell[] = [
   {
-    id: "name",
+    id: "country",
     numeric: false,
     disablePadding: true,
-    label: "Dessert (100g serving)",
+    label: "Country",
   },
   {
-    id: "calories",
+    id: "event",
     numeric: true,
     disablePadding: false,
-    label: "Calories",
+    label: "Event",
   },
   {
-    id: "fat",
+    id: "sender",
     numeric: true,
     disablePadding: false,
-    label: "Fat (g)",
+    label: "Sender",
   },
   {
-    id: "carbs",
+    id: "effective",
     numeric: true,
     disablePadding: false,
-    label: "Carbs (g)",
+    label: "Effective",
   },
   {
-    id: "protein",
+    id: "expires",
     numeric: true,
     disablePadding: false,
-    label: "Protein (g)",
+    label: "Expires",
   },
 ];
 
 export type { Data };
-export { rows, headCells };
+export { rows, headCells, initialFilters };
