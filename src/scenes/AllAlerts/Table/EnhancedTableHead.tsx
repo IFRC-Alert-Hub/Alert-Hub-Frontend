@@ -23,8 +23,7 @@ interface EnhancedTableProps {
   order: Order;
   orderBy: string;
   rowCount: number;
-  selectedFilter: string | null;
-  setSelectedFilter: React.Dispatch<React.SetStateAction<string | null>>;
+
   setSelected: React.Dispatch<React.SetStateAction<readonly string[]>>;
   filters: typeof initialFilters;
   setFilters: React.Dispatch<React.SetStateAction<typeof initialFilters>>;
@@ -37,8 +36,6 @@ const EnhancedTableHead = (props: EnhancedTableProps) => {
     numSelected,
     rowCount,
     onRequestSort,
-    selectedFilter,
-    setSelectedFilter,
     setSelected,
     filters,
     setFilters,

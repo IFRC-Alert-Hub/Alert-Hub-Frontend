@@ -24,7 +24,6 @@ export default function EnhancedTable() {
   const [selected, setSelected] = React.useState<readonly string[]>([]);
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
-  const [selectedFilter, setSelectedFilter] = React.useState<string | null>("");
 
   const [filters, setFilters] = React.useState(initialFilters);
 
@@ -46,7 +45,7 @@ export default function EnhancedTable() {
     });
 
     return filteredData;
-  }, [filters, rows]);
+  }, [filters]);
 
   const visibleRows = React.useMemo(
     () =>
@@ -126,8 +125,6 @@ export default function EnhancedTable() {
               onSelectAllClick={handleSelectAllClick}
               onRequestSort={handleRequestSort}
               rowCount={filteredRows.length}
-              selectedFilter={selectedFilter}
-              setSelectedFilter={setSelectedFilter}
               setSelected={setSelected}
               filters={filters}
               setFilters={setFilters}
