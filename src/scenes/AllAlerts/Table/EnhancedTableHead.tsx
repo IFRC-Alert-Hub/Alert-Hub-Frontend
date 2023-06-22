@@ -1,6 +1,6 @@
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
-import { Data, headCells } from "./Data";
+import { Data, headCells, initialFilters } from "./Data";
 import {
   Box,
   TableCell,
@@ -26,6 +26,8 @@ interface EnhancedTableProps {
   selectedFilter: string | null;
   setSelectedFilter: React.Dispatch<React.SetStateAction<string | null>>;
   setSelected: React.Dispatch<React.SetStateAction<readonly string[]>>;
+  filters: typeof initialFilters;
+  setFilters: React.Dispatch<React.SetStateAction<typeof initialFilters>>;
 }
 const EnhancedTableHead = (props: EnhancedTableProps) => {
   const {
@@ -38,6 +40,8 @@ const EnhancedTableHead = (props: EnhancedTableProps) => {
     selectedFilter,
     setSelectedFilter,
     setSelected,
+    filters,
+    setFilters,
   } = props;
 
   const [sortedColumn, setSortedColumn] = React.useState("");
@@ -62,13 +66,15 @@ const EnhancedTableHead = (props: EnhancedTableProps) => {
             }}
           />
         </TableCell>
-        <DropdownFilter
-          selectedFilter={selectedFilter}
-          TableCellTitle={"Region"}
-          setSelectedFilter={setSelectedFilter}
-          setSelected={setSelected}
-          menuItems={["Europe", "Africa", "America"]}
-        ></DropdownFilter>
+        {filters.map((item) => (
+          <DropdownFilter
+            TableCellTitle={item.title}
+            setSelected={setSelected}
+            menuItems={item.menuItems}
+            filters={filters}
+            setFilters={setFilters}
+          ></DropdownFilter>
+        ))}
 
         {headCells.map((headCell) => (
           <TableCell
