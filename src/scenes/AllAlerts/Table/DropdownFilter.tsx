@@ -1,30 +1,30 @@
 import { Button, Menu, MenuItem, TableCell } from "@mui/material";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import React from "react";
+import { initialFilters } from "./Data";
 interface DropdownFilterProps {
-  selectedFilter: string | null;
-  setSelectedFilter: React.Dispatch<React.SetStateAction<string | null>>;
   setSelected: React.Dispatch<React.SetStateAction<readonly string[]>>;
   TableCellTitle: string;
   menuItems: string[];
+  filters: typeof initialFilters;
+  setFilters: React.Dispatch<React.SetStateAction<typeof initialFilters>>;
 }
 
 const DropdownFilter = (props: DropdownFilterProps) => {
-  const {
-    selectedFilter,
-    setSelectedFilter,
-    setSelected,
-    TableCellTitle,
-    menuItems,
-  } = props;
+  const { setSelected, TableCellTitle, menuItems, filters, setFilters } = props;
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
   };
 
   const handleFilterClick = (value: string) => {
-    setSelectedFilter(value);
+    const updatedFilters = filters.map((filter) => {
+      if (filter.title === TableCellTitle) {
+        return { ...filter, selectedFilter: value };
+      }
+      return filter;
+    });
+    setFilters(updatedFilters);
     setAnchorEl(null);
     setSelected([]);
   };
@@ -54,9 +54,13 @@ const DropdownFilter = (props: DropdownFilterProps) => {
             textTransform: "capitalize",
           }}
         >
-          {selectedFilter === "All"
+          {filters
+            .filter((filter) => filter.title === TableCellTitle)
+            .map((filter) => filter.selectedFilter)[0] === "All"
             ? TableCellTitle
-            : selectedFilter || TableCellTitle}
+            : filters
+                .filter((filter) => filter.title === TableCellTitle)
+                .map((filter) => filter.selectedFilter)[0] || TableCellTitle}
         </Button>
         <Menu
           elevation={0}

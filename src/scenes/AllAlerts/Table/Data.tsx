@@ -2,14 +2,29 @@ interface Data {
   calories: number;
   carbs: number;
   fat: number;
-  name: string;
+  country: string;
   protein: number;
 }
-
+const initialFilters = [
+  {
+    id: 1,
+    selectedFilter: "All",
+    title: "Region",
+    filterKey: "region",
+    menuItems: ["Europe", "Africa", "America"],
+  },
+  {
+    id: 2,
+    selectedFilter: "All",
+    title: "Country",
+    filterKey: "country",
+    menuItems: ["USA", "Canada", "Australia"],
+  },
+];
 const rows = [
   {
     region: "Europe",
-    name: "Cupcake",
+    country: "Cupcake",
     calories: 305,
     fat: 3.7,
     carbs: 67,
@@ -17,7 +32,7 @@ const rows = [
   },
   {
     region: "Europe",
-    name: "Donut",
+    country: "Donut",
     calories: 452,
     fat: 25,
     carbs: 51,
@@ -25,7 +40,7 @@ const rows = [
   },
   {
     region: "Europe",
-    name: "Eclair",
+    country: "Eclair",
     calories: 262,
     fat: 16,
     carbs: 24,
@@ -33,7 +48,7 @@ const rows = [
   },
   {
     region: "Europe",
-    name: "Frozen yoghurt",
+    country: "Frozen yoghurt",
     calories: 159,
     fat: 6,
     carbs: 24,
@@ -41,7 +56,7 @@ const rows = [
   },
   {
     region: "Africa",
-    name: "Gingerbread",
+    country: "Gingerbread",
     calories: 356,
     fat: 16,
     carbs: 49,
@@ -49,7 +64,7 @@ const rows = [
   },
   {
     region: "Africa",
-    name: "Honeycomb",
+    country: "Honeycomb",
     calories: 408,
     fat: 3.2,
     carbs: 87,
@@ -57,7 +72,7 @@ const rows = [
   },
   {
     region: "Africa",
-    name: "Ice cream sandwich",
+    country: "Ice cream sandwich",
     calories: 237,
     fat: 9,
     carbs: 37,
@@ -65,7 +80,7 @@ const rows = [
   },
   {
     region: "Africa",
-    name: "Jelly Bean",
+    country: "Jelly Bean",
     calories: 375,
     fat: 0,
     carbs: 94,
@@ -73,7 +88,7 @@ const rows = [
   },
   {
     region: "Middle East",
-    name: "KitKat",
+    country: "KitKat",
     calories: 518,
     fat: 26,
     carbs: 65,
@@ -81,7 +96,7 @@ const rows = [
   },
   {
     region: "Africa",
-    name: "Lollipop",
+    country: "USA",
     calories: 392,
     fat: 0.2,
     carbs: 98,
@@ -89,7 +104,7 @@ const rows = [
   },
   {
     region: "Europe",
-    name: "Marshmallow",
+    country: "Marshmallow",
     calories: 318,
     fat: 0,
     carbs: 81,
@@ -97,7 +112,7 @@ const rows = [
   },
   {
     region: "Europe",
-    name: "Nougat",
+    country: "Nougat",
     calories: 360,
     fat: 19,
     carbs: 9,
@@ -105,7 +120,7 @@ const rows = [
   },
   {
     region: "America",
-    name: "Oreo",
+    country: "Oreo",
     calories: 437,
     fat: 18,
     carbs: 63,
@@ -122,7 +137,7 @@ interface HeadCell {
 
 const headCells: HeadCell[] = [
   {
-    id: "name",
+    id: "country",
     numeric: false,
     disablePadding: true,
     label: "Dessert (100g serving)",
@@ -145,13 +160,7 @@ const headCells: HeadCell[] = [
     disablePadding: false,
     label: "Carbs (g)",
   },
-  {
-    id: "protein",
-    numeric: true,
-    disablePadding: false,
-    label: "Protein (g)",
-  },
 ];
 
 export type { Data };
-export { rows, headCells };
+export { rows, headCells, initialFilters };

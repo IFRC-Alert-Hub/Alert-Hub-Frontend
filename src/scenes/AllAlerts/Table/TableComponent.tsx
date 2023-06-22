@@ -12,7 +12,7 @@ import {
 } from "@mui/material";
 
 import { getComparator, stableSort } from "./Sorting";
-import { Data, rows } from "./Data";
+import { Data, initialFilters, rows } from "./Data";
 import { EnhancedTableToolbar } from "./EnhancedTableToolbar";
 import { EnhancedTableHead } from "./EnhancedTableHead";
 
@@ -24,18 +24,28 @@ export default function EnhancedTable() {
   const [selected, setSelected] = React.useState<readonly string[]>([]);
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
-  const [selectedFilter, setSelectedFilter] = React.useState<string | null>("");
+
+  const [filters, setFilters] = React.useState(initialFilters);
+
+  const getProperty = (object: any, key: string) => {
+    return key
+      .split(".")
+      .reduce((obj: any, property: string) => obj[property], object);
+  };
 
   const filteredRows = React.useMemo(() => {
-    if (selectedFilter) {
-      if (selectedFilter === "All") {
-        return rows;
-      } else {
-        return rows.filter((row) => row.region === selectedFilter);
+    let filteredData = rows;
+
+    filters.forEach((filter) => {
+      if (filter.selectedFilter && filter.selectedFilter !== "All") {
+        filteredData = filteredData.filter(
+          (row) => getProperty(row, filter.filterKey) === filter.selectedFilter
+        );
       }
-    }
-    return rows;
-  }, [selectedFilter]);
+    });
+
+    return filteredData;
+  }, [filters]);
 
   const visibleRows = React.useMemo(
     () =>
@@ -57,7 +67,7 @@ export default function EnhancedTable() {
 
   const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.checked) {
-      const newSelected = filteredRows.map((n) => n.name);
+      const newSelected = filteredRows.map((n) => n.country);
       setSelected(newSelected);
       return;
     }
@@ -115,23 +125,23 @@ export default function EnhancedTable() {
               onSelectAllClick={handleSelectAllClick}
               onRequestSort={handleRequestSort}
               rowCount={filteredRows.length}
-              selectedFilter={selectedFilter}
-              setSelectedFilter={setSelectedFilter}
               setSelected={setSelected}
+              filters={filters}
+              setFilters={setFilters}
             />
             <TableBody>
               {visibleRows.map((row, index) => {
-                const isItemSelected = isSelected(row.name);
+                const isItemSelected = isSelected(row.country);
                 const labelId = `enhanced-table-checkbox-${index}`;
 
                 return (
                   <TableRow
                     hover
-                    onClick={(event) => handleClick(event, row.name)}
+                    onClick={(event) => handleClick(event, row.country)}
                     role="checkbox"
                     aria-checked={isItemSelected}
                     tabIndex={-1}
-                    key={row.name}
+                    key={row.country}
                     selected={isItemSelected}
                     sx={{
                       cursor: "pointer",
@@ -155,7 +165,7 @@ export default function EnhancedTable() {
                       scope="row"
                       padding="none"
                     >
-                      {row.name}
+                      {row.country}
                     </TableCell>
 
                     <TableCell align="right">{row.calories}</TableCell>
