@@ -20,7 +20,7 @@ type Order = "asc" | "desc";
 
 export default function EnhancedTable() {
   const [order, setOrder] = React.useState<Order>("asc");
-  const [orderBy, setOrderBy] = React.useState<keyof Data>("calories");
+  const [orderBy, setOrderBy] = React.useState<keyof Data>("country");
   const [selected, setSelected] = React.useState<readonly string[]>([]);
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
@@ -158,20 +158,15 @@ export default function EnhancedTable() {
                         }}
                       />
                     </TableCell>
+                    <TableCell align="right">{row.country}</TableCell>
+                    <TableCell align="right">{row.event}</TableCell>
+                    <TableCell align="right">{row.sender}</TableCell>
+                    <TableCell align="right">{row.effective}</TableCell>
+                    <TableCell align="right">{row.expires}</TableCell>
                     <TableCell align="right">{row.region}</TableCell>
-                    <TableCell
-                      component="th"
-                      id={labelId}
-                      scope="row"
-                      padding="none"
-                    >
-                      {row.country}
-                    </TableCell>
-
-                    <TableCell align="right">{row.calories}</TableCell>
-                    <TableCell align="right">{row.fat}</TableCell>
-                    <TableCell align="right">{row.carbs}</TableCell>
-                    <TableCell align="right">{row.protein}</TableCell>
+                    <TableCell align="right">{row.urgency}</TableCell>
+                    <TableCell align="right">{row.severity}</TableCell>
+                    <TableCell align="right">{row.certainty}</TableCell>
                   </TableRow>
                 );
               })}

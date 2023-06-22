@@ -16,6 +16,7 @@ const DropdownFilter = (props: DropdownFilterProps) => {
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
   };
+  const [buttonSelected, setButtonSelected] = React.useState(true);
 
   const handleFilterClick = (value: string) => {
     const updatedFilters = filters.map((filter) => {
@@ -27,6 +28,7 @@ const DropdownFilter = (props: DropdownFilterProps) => {
     setFilters(updatedFilters);
     setAnchorEl(null);
     setSelected([]);
+    setButtonSelected(true);
   };
   const handleClose = () => {
     setAnchorEl(null);
@@ -52,6 +54,13 @@ const DropdownFilter = (props: DropdownFilterProps) => {
             "&:focus": { backgroundColor: "transparent !important" },
             backgroundColor: "transparent !important",
             textTransform: "capitalize",
+            color:
+              buttonSelected &&
+              filters
+                .filter((filter) => filter.title === TableCellTitle)
+                .map((filter) => filter.selectedFilter)[0] !== "All"
+                ? "red"
+                : "black",
           }}
         >
           {filters

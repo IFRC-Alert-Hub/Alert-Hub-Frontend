@@ -63,15 +63,6 @@ const EnhancedTableHead = (props: EnhancedTableProps) => {
             }}
           />
         </TableCell>
-        {filters.map((item) => (
-          <DropdownFilter
-            TableCellTitle={item.title}
-            setSelected={setSelected}
-            menuItems={item.menuItems}
-            filters={filters}
-            setFilters={setFilters}
-          ></DropdownFilter>
-        ))}
 
         {headCells.map((headCell) => (
           <TableCell
@@ -142,6 +133,15 @@ const EnhancedTableHead = (props: EnhancedTableProps) => {
               </Box>
             </TableSortLabel>
           </TableCell>
+        ))}
+        {filters.map((item) => (
+          <DropdownFilter
+            TableCellTitle={item.title}
+            setSelected={setSelected}
+            menuItems={item.menuItems}
+            filters={filters}
+            setFilters={setFilters}
+          ></DropdownFilter>
         ))}
       </TableRow>
     </TableHead>
