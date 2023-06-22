@@ -28,8 +28,12 @@ import {
 import RoundButton from "../RoundButton";
 import TimeComponent from "./TimeComponent";
 import { useState } from "react";
+import AvatarDropdown from "./AvatarDropdown";
 
 const NavbarComponent = (props: any) => {
+  // used for test login
+  const isLogin = false;
+
   const location = useLocation();
 
   const { window } = props;
@@ -150,43 +154,49 @@ const NavbarComponent = (props: any) => {
 
             <Box
               sx={{
-                display: { xs: "none", sm: "none", md: "block", lg: "block" },
+                display: { xs: "block" },
               }}
             >
-              {firstNavBarItems.map((item) => (
-                <Link
-                  to={item.path}
-                  style={{ textDecoration: "none", color: "inherit" }}
-                >
-                  <Button
-                    key={item.name}
-                    sx={{
-                      color: "#fff",
-                      padding: "0 20px",
-                      textTransform: "capitalize",
-                      borderRadius: "0px",
-                    }}
-                    disableRipple
-                    disableTouchRipple
-                    disableFocusRipple
+              <Box
+                sx={{
+                  display: { xs: "none", sm: "none", md: "inline" },
+                }}
+              >
+                {firstNavBarItems.map((item) => (
+                  <Link
+                    to={item.path}
+                    style={{ textDecoration: "none", color: "inherit" }}
                   >
-                    <Typography
-                      variant="h6"
+                    <Button
+                      key={item.name}
                       sx={{
-                        borderBottom: "1px solid transparent",
-                        ...(location.pathname === item.path && {
-                          borderBottomColor: "#f5333f",
-                          paddingBottom: "2px",
-                          marginBottom: "-2px",
-                        }),
+                        color: "#fff",
+                        padding: "0 20px",
+                        textTransform: "capitalize",
+                        borderRadius: "0px",
                       }}
+                      disableRipple
+                      disableTouchRipple
+                      disableFocusRipple
                     >
-                      {item.name}{" "}
-                    </Typography>
-                  </Button>
-                </Link>
-              ))}
-              <RoundButton />
+                      <Typography
+                        variant="h6"
+                        sx={{
+                          borderBottom: "1px solid transparent",
+                          ...(location.pathname === item.path && {
+                            borderBottomColor: "#f5333f",
+                            paddingBottom: "2px",
+                            marginBottom: "-2px",
+                          }),
+                        }}
+                      >
+                        {item.name}{" "}
+                      </Typography>
+                    </Button>
+                  </Link>
+                ))}
+              </Box>
+              {isLogin ? <AvatarDropdown /> : <RoundButton />}
             </Box>
           </Toolbar>
         </Container>
