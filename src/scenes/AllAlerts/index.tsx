@@ -1,6 +1,6 @@
 import React from "react";
 
-import FilterableTableComponent from "./TableComponent";
+import FilterableTableComponent from "./Table/TableComponent";
 import TitleHeader from "../../components/TitleHeader";
 import { Container } from "@mui/material";
 
