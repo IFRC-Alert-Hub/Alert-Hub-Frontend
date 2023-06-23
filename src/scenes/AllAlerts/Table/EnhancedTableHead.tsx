@@ -1,6 +1,6 @@
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
-import { Data, headCells } from "./Data";
+import { Data, RowsData, headCells } from "./Data";
 import {
   Box,
   TableCell,
@@ -24,7 +24,7 @@ interface EnhancedTableProps {
   orderBy: string;
   rowCount: number;
 
-  setSelected: React.Dispatch<React.SetStateAction<readonly string[]>>;
+  setSelected: React.Dispatch<React.SetStateAction<readonly RowsData[]>>;
   filters: typeof headCells;
   setFilters: React.Dispatch<React.SetStateAction<typeof headCells>>;
 }
@@ -71,6 +71,7 @@ const EnhancedTableHead = (props: EnhancedTableProps) => {
               align={"center"}
               padding={"normal"}
               sortDirection={orderBy === headCell.id ? order : false}
+              sx={{ minWidth: headCell.minWidth }}
             >
               <TableSortLabel
                 active={orderBy === headCell.id}
@@ -86,7 +87,6 @@ const EnhancedTableHead = (props: EnhancedTableProps) => {
                   backgroundColor: "transparent !important",
                   textTransform: "capitalize",
 
-                  minWidth: "auto",
                   "& .MuiTableSortLabel-icon": {
                     display: "none",
                   },
@@ -143,6 +143,7 @@ const EnhancedTableHead = (props: EnhancedTableProps) => {
                 menuItems={headCell.menuItems || []}
                 filters={filters}
                 setFilters={setFilters}
+                minWidth={headCell.minWidth}
               ></DropdownFilter>
             </>
           )
