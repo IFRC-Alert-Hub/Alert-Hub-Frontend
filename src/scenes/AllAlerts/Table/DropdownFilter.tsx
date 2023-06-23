@@ -1,17 +1,25 @@
 import { Button, Menu, MenuItem, TableCell } from "@mui/material";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import React from "react";
-import { headCells } from "./Data";
+import { RowsData, headCells } from "./Data";
 interface DropdownFilterProps {
-  setSelected: React.Dispatch<React.SetStateAction<readonly string[]>>;
+  setSelected: React.Dispatch<React.SetStateAction<readonly RowsData[]>>;
   TableCellTitle: string;
   menuItems: string[];
   filters: typeof headCells;
   setFilters: React.Dispatch<React.SetStateAction<typeof headCells>>;
+  minWidth: string;
 }
 
 const DropdownFilter = (props: DropdownFilterProps) => {
-  const { setSelected, TableCellTitle, menuItems, filters, setFilters } = props;
+  const {
+    setSelected,
+    TableCellTitle,
+    menuItems,
+    filters,
+    setFilters,
+    minWidth,
+  } = props;
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
@@ -61,6 +69,7 @@ const DropdownFilter = (props: DropdownFilterProps) => {
                 .map((filter) => filter.selectedFilter)[0] !== "All"
                 ? "red"
                 : "black",
+            minWidth: minWidth,
           }}
         >
           {filters

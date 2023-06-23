@@ -12,20 +12,40 @@ import {
 } from "@mui/material";
 
 import { getComparator, stableSort } from "./Sorting";
-import { Data, headCells, rows } from "./Data";
+import { Data, RowsData, headCells, rows } from "./Data";
 import { EnhancedTableToolbar } from "./EnhancedTableToolbar";
 import { EnhancedTableHead } from "./EnhancedTableHead";
 
 type Order = "asc" | "desc";
 
-export default function EnhancedTable() {
+interface EnhancedTableProps {
+  selectedFilter?: string;
+  filterKey?: string;
+}
+
+const EnhancedTable = (props: EnhancedTableProps) => {
+  const { selectedFilter, filterKey } = props;
   const [order, setOrder] = React.useState<Order>("asc");
   const [orderBy, setOrderBy] = React.useState<keyof Data>("country");
-  const [selected, setSelected] = React.useState<readonly string[]>([]);
+  const [selected, setSelected] = React.useState<readonly RowsData[]>([]);
   const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(5);
+  const [rowsPerPage, setRowsPerPage] = React.useState(10);
 
   const [filters, setFilters] = React.useState(headCells);
+
+  React.useEffect(() => {
+    setFilters((prevFilters) => {
+      return prevFilters.map((filter) => {
+        if (filter.filterKey === filterKey) {
+          return {
+            ...filter,
+            selectedFilter: selectedFilter,
+          };
+        }
+        return filter;
+      });
+    });
+  }, [selectedFilter, filterKey]);
 
   const getProperty = (object: any, key: string | undefined) => {
     if (key === undefined) {
@@ -73,16 +93,16 @@ export default function EnhancedTable() {
 
   const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.checked) {
-      const newSelected = filteredRows.map((n) => n.country);
+      const newSelected = filteredRows;
       setSelected(newSelected);
       return;
     }
     setSelected([]);
   };
 
-  const handleClick = (event: React.MouseEvent<unknown>, name: string) => {
+  const handleClick = (event: React.MouseEvent<unknown>, name: RowsData) => {
     const selectedIndex = selected.indexOf(name);
-    let newSelected: readonly string[] = [];
+    let newSelected: readonly RowsData[] = [];
 
     if (selectedIndex === -1) {
       newSelected = newSelected.concat(selected, name);
@@ -99,7 +119,6 @@ export default function EnhancedTable() {
 
     setSelected(newSelected);
   };
-
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
   };
@@ -111,7 +130,7 @@ export default function EnhancedTable() {
     setPage(0);
   };
 
-  const isSelected = (name: string) => selected.indexOf(name) !== -1;
+  const isSelected = (name: RowsData) => selected.indexOf(name) !== -1;
   const emptyRows =
     page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
 
@@ -137,13 +156,13 @@ export default function EnhancedTable() {
             />
             <TableBody>
               {visibleRows.map((row, index) => {
-                const isItemSelected = isSelected(row.country);
+                const isItemSelected = isSelected(row);
                 const labelId = `enhanced-table-checkbox-${index}`;
 
                 return (
                   <TableRow
                     hover
-                    onClick={(event) => handleClick(event, row.country)}
+                    onClick={(event) => handleClick(event, row)}
                     role="checkbox"
                     aria-checked={isItemSelected}
                     tabIndex={-1}
@@ -164,15 +183,15 @@ export default function EnhancedTable() {
                         }}
                       />
                     </TableCell>
-                    <TableCell align="right">{row.country}</TableCell>
-                    <TableCell align="right">{row.event}</TableCell>
-                    <TableCell align="right">{row.sender}</TableCell>
-                    <TableCell align="right">{row.effective}</TableCell>
-                    <TableCell align="right">{row.expires}</TableCell>
-                    <TableCell align="right">{row.region}</TableCell>
-                    <TableCell align="right">{row.urgency}</TableCell>
-                    <TableCell align="right">{row.severity}</TableCell>
-                    <TableCell align="right">{row.certainty}</TableCell>
+                    <TableCell align="center">{row.region}</TableCell>
+                    <TableCell align="center">{row.country}</TableCell>
+                    <TableCell align="center">{row.event}</TableCell>
+                    <TableCell align="center">{row.effective}</TableCell>
+                    <TableCell align="center">{row.expires}</TableCell>
+                    <TableCell align="center">{row.urgency}</TableCell>
+                    <TableCell align="center">{row.severity}</TableCell>
+                    <TableCell align="center">{row.certainty}</TableCell>
+                    <TableCell align="center">{row.sender}</TableCell>
                   </TableRow>
                 );
               })}
@@ -189,7 +208,7 @@ export default function EnhancedTable() {
           </Table>
         </TableContainer>
         <TablePagination
-          rowsPerPageOptions={[5, 10, 25]}
+          rowsPerPageOptions={[10, 25, 50]}
           component="div"
           count={filteredRows.length}
           rowsPerPage={rowsPerPage}
@@ -200,4 +219,6 @@ export default function EnhancedTable() {
       </Paper>
     </Box>
   );
-}
+};
+
+export default EnhancedTable;

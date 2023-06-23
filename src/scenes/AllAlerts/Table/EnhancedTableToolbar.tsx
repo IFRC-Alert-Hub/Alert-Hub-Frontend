@@ -1,10 +1,11 @@
 import FileDownloadIcon from "@mui/icons-material/FileDownload";
 import { Toolbar, Typography, IconButton, Tooltip } from "@mui/material";
 import { alpha } from "@mui/material/styles";
+import { RowsData } from "./Data";
 
 interface EnhancedTableToolbarProps {
   numSelected: number;
-  selected: readonly string[];
+  selected: readonly RowsData[];
 }
 
 const EnhancedTableToolbar = (props: EnhancedTableToolbarProps) => {

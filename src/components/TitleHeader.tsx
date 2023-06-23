@@ -6,12 +6,16 @@ interface TitleHeaderProps {
   title: string;
   rightTitle?: any;
   rightLinkURL?: any;
+  selectedFilter?: string;
+  filterKey?: string;
 }
 
 const TitleHeader: React.FC<TitleHeaderProps> = ({
   title,
   rightTitle,
   rightLinkURL,
+  selectedFilter,
+  filterKey,
 }) => {
   return (
     <Box
@@ -37,7 +41,10 @@ const TitleHeader: React.FC<TitleHeaderProps> = ({
       </Typography>
       {rightTitle ? (
         <Link
-          to={rightLinkURL}
+          to={{
+            pathname: rightLinkURL,
+          }}
+          state={{ selectedFilter: selectedFilter, filterKey: filterKey }}
           style={{ textDecoration: "none", color: "inherit" }}
         >
           {" "}
