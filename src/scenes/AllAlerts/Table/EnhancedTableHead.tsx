@@ -1,6 +1,6 @@
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
-import { Data, headCells, initialFilters } from "./Data";
+import { Data, headCells } from "./Data";
 import {
   Box,
   TableCell,
@@ -25,8 +25,8 @@ interface EnhancedTableProps {
   rowCount: number;
 
   setSelected: React.Dispatch<React.SetStateAction<readonly string[]>>;
-  filters: typeof initialFilters;
-  setFilters: React.Dispatch<React.SetStateAction<typeof initialFilters>>;
+  filters: typeof headCells;
+  setFilters: React.Dispatch<React.SetStateAction<typeof headCells>>;
 }
 const EnhancedTableHead = (props: EnhancedTableProps) => {
   const {
@@ -64,85 +64,89 @@ const EnhancedTableHead = (props: EnhancedTableProps) => {
           />
         </TableCell>
 
-        {headCells.map((headCell) => (
-          <TableCell
-            key={headCell.id}
-            align={"center"}
-            padding={"normal"}
-            sortDirection={orderBy === headCell.id ? order : false}
-          >
-            <TableSortLabel
-              active={orderBy === headCell.id}
-              direction={orderBy === headCell.id ? order : "asc"}
-              onClick={createSortHandler(headCell.id)}
-              sx={{
-                padding: "0px",
-                margin: "0px",
-                borderRadius: "0px",
-                borderBottom: "1px solid transparent",
-                "&:hover": { backgroundColor: "transparent !important" },
-                "&:focus": { backgroundColor: "transparent !important" },
-                backgroundColor: "transparent !important",
-                textTransform: "capitalize",
-
-                minWidth: "auto",
-                "& .MuiTableSortLabel-icon": {
-                  display: "none",
-                },
-              }}
+        {headCells.map((headCell) =>
+          !headCell.isDropdownFilter ? (
+            <TableCell
+              key={headCell.id}
+              align={"center"}
+              padding={"normal"}
+              sortDirection={orderBy === headCell.id ? order : false}
             >
-              <span
-                style={{
-                  color:
-                    (order === "desc" || order === "asc") &&
-                    sortedColumn === headCell.id
-                      ? "#f5333f"
-                      : "black",
-                }}
-              >
-                {headCell.label}
-              </span>
-
-              <Box
-                component="span"
+              <TableSortLabel
+                active={orderBy === headCell.id}
+                direction={orderBy === headCell.id ? order : "asc"}
+                onClick={createSortHandler(headCell.id as keyof Data)}
                 sx={{
-                  display: "flex",
-                  flexDirection: "column",
+                  padding: "0px",
+                  margin: "0px",
+                  borderRadius: "0px",
+                  borderBottom: "1px solid transparent",
+                  "&:hover": { backgroundColor: "transparent !important" },
+                  "&:focus": { backgroundColor: "transparent !important" },
+                  backgroundColor: "transparent !important",
+                  textTransform: "capitalize",
+
+                  minWidth: "auto",
+                  "& .MuiTableSortLabel-icon": {
+                    display: "none",
+                  },
                 }}
               >
-                <KeyboardArrowUpIcon
-                  fontSize="small"
-                  sx={{
+                <span
+                  style={{
                     color:
-                      order === "asc" && sortedColumn === headCell.id
+                      (order === "desc" || order === "asc") &&
+                      sortedColumn === headCell.id
                         ? "#f5333f"
                         : "black",
-                    fontSize: "0.8rem !important",
                   }}
-                />
-                <KeyboardArrowDownIcon
-                  fontSize="small"
+                >
+                  {headCell.label}
+                </span>
+
+                <Box
+                  component="span"
                   sx={{
-                    color:
-                      order === "desc" && sortedColumn === headCell.id
-                        ? "#f5333f"
-                        : "black",
-                    fontSize: "0.8rem !important",
+                    display: "flex",
+                    flexDirection: "column",
                   }}
-                />
-              </Box>
-            </TableSortLabel>
-          </TableCell>
-        ))}
-        {filters.map((item) => (
-          <DropdownFilter
-            TableCellTitle={item.title}
-            setSelected={setSelected}
-            menuItems={item.menuItems}
-            filters={filters}
-            setFilters={setFilters}
-          ></DropdownFilter>
-        ))}
+                >
+                  <KeyboardArrowUpIcon
+                    fontSize="small"
+                    sx={{
+                      color:
+                        order === "asc" && sortedColumn === headCell.id
+                          ? "#f5333f"
+                          : "black",
+                      fontSize: "0.8rem !important",
+                    }}
+                  />
+                  <KeyboardArrowDownIcon
+                    fontSize="small"
+                    sx={{
+                      color:
+                        order === "desc" && sortedColumn === headCell.id
+                          ? "#f5333f"
+                          : "black",
+                      fontSize: "0.8rem !important",
+                    }}
+                  />
+                </Box>
+              </TableSortLabel>
+            </TableCell>
+          ) : (
+            <>
+              {" "}
+              <DropdownFilter
+                TableCellTitle={headCell.title || ""}
+                setSelected={setSelected}
+                menuItems={headCell.menuItems || []}
+                filters={filters}
+                setFilters={setFilters}
+              ></DropdownFilter>
+            </>
+          )
+        )}
       </TableRow>
     </TableHead>
   );
