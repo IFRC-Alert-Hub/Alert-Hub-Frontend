@@ -9,6 +9,7 @@ import {
   TableRow,
   Paper,
   Checkbox,
+  Typography,
 } from "@mui/material";
 
 import { getComparator, stableSort } from "./Sorting";
@@ -94,6 +95,7 @@ const EnhancedTable = (props: EnhancedTableProps) => {
   const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.checked) {
       const newSelected = filteredRows;
+      console.log(filteredRows);
       setSelected(newSelected);
       return;
     }
@@ -195,6 +197,7 @@ const EnhancedTable = (props: EnhancedTableProps) => {
                   </TableRow>
                 );
               })}
+
               {emptyRows > 0 && (
                 <TableRow
                   style={{
@@ -207,6 +210,15 @@ const EnhancedTable = (props: EnhancedTableProps) => {
             </TableBody>
           </Table>
         </TableContainer>
+        {filteredRows.length === 0 ? (
+          <Typography variant="h5" textAlign={"center"}>
+            {" "}
+            🔍 No results found. Please remove some filters.
+          </Typography>
+        ) : (
+          ""
+        )}
+
         <TablePagination
           rowsPerPageOptions={[10, 25, 50]}
           component="div"

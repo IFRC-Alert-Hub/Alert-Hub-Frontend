@@ -9,6 +9,7 @@ interface DropdownFilterProps {
   filters: typeof headCells;
   setFilters: React.Dispatch<React.SetStateAction<typeof headCells>>;
   minWidth: string;
+  allMenuItemTitle: string;
 }
 
 const DropdownFilter = (props: DropdownFilterProps) => {
@@ -19,6 +20,7 @@ const DropdownFilter = (props: DropdownFilterProps) => {
     filters,
     setFilters,
     minWidth,
+    allMenuItemTitle,
   } = props;
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -96,7 +98,7 @@ const DropdownFilter = (props: DropdownFilterProps) => {
           onClick={handleClose}
         >
           <MenuItem onClick={() => handleFilterClick("All")}>
-            All {TableCellTitle}s
+            {allMenuItemTitle}
           </MenuItem>
           {menuItems.map((item) => (
             <MenuItem onClick={() => handleFilterClick(item)}>{item}</MenuItem>

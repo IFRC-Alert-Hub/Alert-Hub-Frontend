@@ -15,6 +15,7 @@ type RowsData = {
   sender: string;
   effective: string;
   expires: string;
+  [key: string]: string;
 };
 const rows: RowsData[] = [
   {
@@ -86,6 +87,8 @@ interface HeadCell {
   filterKey?: string;
   menuItems?: string[];
   minWidth: string;
+  hasFilter?: boolean;
+  allMenuItemTitle?: string;
 }
 
 const headCells: HeadCell[] = [
@@ -102,6 +105,7 @@ const headCells: HeadCell[] = [
     ],
     isDropdownFilter: true,
     minWidth: "150px",
+    allMenuItemTitle: "All Regions",
   },
   {
     id: "country",
@@ -110,6 +114,7 @@ const headCells: HeadCell[] = [
     label: "Country",
     isDropdownFilter: false,
     minWidth: "100px",
+    hasFilter: true,
   },
   {
     id: "event",
@@ -118,6 +123,7 @@ const headCells: HeadCell[] = [
     label: "Event",
     isDropdownFilter: false,
     minWidth: "150px",
+    hasFilter: true,
   },
 
   {
@@ -127,6 +133,7 @@ const headCells: HeadCell[] = [
     label: "Effective",
     isDropdownFilter: false,
     minWidth: "100px",
+    hasFilter: true,
   },
   {
     id: "expires",
@@ -135,6 +142,7 @@ const headCells: HeadCell[] = [
     label: "Expires",
     isDropdownFilter: false,
     minWidth: "100px",
+    hasFilter: true,
   },
 
   {
@@ -144,6 +152,7 @@ const headCells: HeadCell[] = [
     menuItems: ["Future", "Past", "Unknown"],
     isDropdownFilter: true,
     minWidth: "100px",
+    allMenuItemTitle: "All Urgency Types",
   },
   {
     selectedFilter: "All",
@@ -152,6 +161,7 @@ const headCells: HeadCell[] = [
     menuItems: ["Moderate", "Minor", "Unknown"],
     isDropdownFilter: true,
     minWidth: "100px",
+    allMenuItemTitle: "All Severity Types",
   },
   {
     selectedFilter: "All",
@@ -160,6 +170,7 @@ const headCells: HeadCell[] = [
     menuItems: ["Possible", "Unlikely", "Unknown"],
     isDropdownFilter: true,
     minWidth: "100px",
+    allMenuItemTitle: "All Certainty Types",
   },
   {
     id: "sender",
@@ -168,6 +179,7 @@ const headCells: HeadCell[] = [
     label: "Sender",
     isDropdownFilter: false,
     minWidth: "200px",
+    hasFilter: false,
   },
 ];
 
