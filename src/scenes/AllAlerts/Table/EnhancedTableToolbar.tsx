@@ -10,7 +10,26 @@ interface EnhancedTableToolbarProps {
 
 const EnhancedTableToolbar = (props: EnhancedTableToolbarProps) => {
   const { numSelected, selected } = props;
+  function downloadCSV() {
+    const headers = Object.keys(selected[0]);
 
+    const csvContent = [
+      headers.join(","),
+      ...selected.map((row) => headers.map((header) => row[header]).join(",")),
+    ].join("\n");
+
+    const csvData =
+      "data:text/csv;charset=utf-8," + encodeURIComponent(csvContent);
+
+    const link = document.createElement("a");
+    link.setAttribute("href", csvData);
+    link.setAttribute("download", "output.csv");
+    link.style.display = "none";
+
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  }
   return (
     <Toolbar
       sx={{
@@ -38,12 +57,7 @@ const EnhancedTableToolbar = (props: EnhancedTableToolbarProps) => {
         <></>
       )}
       {numSelected > 0 ? (
-        <Tooltip
-          title="Download"
-          onClick={(e) => {
-            console.log(selected);
-          }}
-        >
+        <Tooltip title="Download" onClick={downloadCSV}>
           <IconButton>
             <FileDownloadIcon />
           </IconButton>

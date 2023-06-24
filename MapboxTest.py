@@ -1,3 +1,4 @@
+from geopy.geocoders import MapBox
 import requests
 
 
@@ -63,3 +64,20 @@ else:
 #     print(f"Longitude: {longitude}")
 # else:
 #     print("Location not found.")
+
+
+# Initialize the Mapbox geocoder
+geocoder = MapBox(api_key='YOUR_MAPBOX_API_KEY')
+
+# NUTS3 code to geocode
+nuts3_code = 'FR718'
+
+# Geocode the NUTS3 code
+location = geocoder.geocode(nuts3_code)
+
+# Extract latitude and longitude from the geocoded location
+latitude = location.latitude
+longitude = location.longitude
+
+# Print the result
+print(f'Latitude: {latitude}, Longitude: {longitude}')

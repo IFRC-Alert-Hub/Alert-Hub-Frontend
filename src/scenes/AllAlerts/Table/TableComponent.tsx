@@ -94,6 +94,7 @@ const EnhancedTable = (props: EnhancedTableProps) => {
   const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.checked) {
       const newSelected = filteredRows;
+      console.log(filteredRows);
       setSelected(newSelected);
       return;
     }
