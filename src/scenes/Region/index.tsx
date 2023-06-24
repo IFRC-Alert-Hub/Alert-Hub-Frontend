@@ -81,7 +81,7 @@ const regionItems = [
   {
     name: 4,
     id: 4,
-    region_name: "Middle East & North Africa",
+    region_name: "Middle East & North East",
     bbox: {
       type: "Polygon",
       coordinates: [
@@ -94,7 +94,7 @@ const regionItems = [
         ],
       ],
     },
-    label: "Middle East & North Africa",
+    label: "Middle East & North East",
   },
 ];
 

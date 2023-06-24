@@ -42,18 +42,11 @@ const EnhancedTableHead = (props: EnhancedTableProps) => {
   } = props;
 
   const [sortedColumn, setSortedColumn] = React.useState("");
-  const [buttonClickedCount, setButtonClickedCount] = React.useState(1);
 
   const createSortHandler =
     (property: keyof Data) => (event: React.MouseEvent<unknown>) => {
-      setButtonClickedCount(buttonClickedCount + 1);
-
-      if (buttonClickedCount % 3 === 0) {
-        setSortedColumn("");
-      } else {
-        setSortedColumn(property);
-        onRequestSort(event, property);
-      }
+      setSortedColumn(property);
+      onRequestSort(event, property);
     };
 
   return (
