@@ -13,7 +13,7 @@ import {
 } from "@mui/material";
 
 import { getComparator, stableSort } from "./Sorting";
-import { Data, RowsData, headCells, rows } from "./Data";
+import { Data, RowsData, headCells } from "./Data";
 import { EnhancedTableToolbar } from "./EnhancedTableToolbar";
 import { EnhancedTableHead } from "./EnhancedTableHead";
 
@@ -22,10 +22,12 @@ type Order = "asc" | "desc";
 interface EnhancedTableProps {
   selectedFilter?: string;
   filterKey?: string;
+  rowsData: RowsData[];
+  setNumAlerts: (numAlerts: number) => void;
 }
 
 const EnhancedTable = (props: EnhancedTableProps) => {
-  const { selectedFilter, filterKey } = props;
+  const { selectedFilter, filterKey, rowsData, setNumAlerts } = props;
   const [order, setOrder] = React.useState<Order>("asc");
   const [orderBy, setOrderBy] = React.useState<keyof Data>("country");
   const [selected, setSelected] = React.useState<readonly RowsData[]>([]);
@@ -58,7 +60,7 @@ const EnhancedTable = (props: EnhancedTableProps) => {
       .reduce((obj: any, property: string) => obj?.[property], object);
   };
   const filteredRows = React.useMemo(() => {
-    let filteredData = rows;
+    let filteredData = rowsData;
 
     filters.forEach((filter) => {
       if (filter.isDropdownFilter) {
@@ -72,7 +74,7 @@ const EnhancedTable = (props: EnhancedTableProps) => {
     });
 
     return filteredData;
-  }, [filters]);
+  }, [filters, rowsData]);
 
   const visibleRows = React.useMemo(
     () =>
@@ -134,8 +136,11 @@ const EnhancedTable = (props: EnhancedTableProps) => {
 
   const isSelected = (name: RowsData) => selected.indexOf(name) !== -1;
   const emptyRows =
-    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
+    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rowsData.length) : 0;
 
+  React.useEffect(() => {
+    setNumAlerts(filteredRows.length);
+  }, [filteredRows, setNumAlerts]);
   return (
     <Box sx={{ width: "100%" }}>
       <Paper sx={{ width: "100%", mb: 2 }}>
@@ -168,7 +173,6 @@ const EnhancedTable = (props: EnhancedTableProps) => {
                     role="checkbox"
                     aria-checked={isItemSelected}
                     tabIndex={-1}
-                    key={row.country}
                     selected={isItemSelected}
                     sx={{
                       cursor: "pointer",
