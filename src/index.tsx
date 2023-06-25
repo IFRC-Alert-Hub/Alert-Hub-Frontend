@@ -12,7 +12,7 @@ mapboxgl.accessToken =
   "pk.eyJ1IjoiZ28taWZyYyIsImEiOiJja3E2bGdvb3QwaXM5MnZtbXN2eGtmaWgwIn0.llipq3Spc_PPA2bLjPwIPQ";
 
 const client = new ApolloClient({
-  uri: "https://cap-aggregator.azurewebsites.net/graphql",
+  uri: "https://cap-aggregator.azurewebsites.net/graphql/",
   cache: new InMemoryCache(),
 });
 const root = ReactDOM.createRoot(
