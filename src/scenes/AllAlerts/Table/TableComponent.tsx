@@ -140,7 +140,7 @@ const EnhancedTable = (props: EnhancedTableProps) => {
 
   React.useEffect(() => {
     setNumAlerts(filteredRows.length);
-  }, [filteredRows]);
+  }, [filteredRows, setNumAlerts]);
   return (
     <Box sx={{ width: "100%" }}>
       <Paper sx={{ width: "100%", mb: 2 }}>
