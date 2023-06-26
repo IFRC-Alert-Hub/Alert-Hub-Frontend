@@ -20,4 +20,4 @@ COPY . .
 CMD ["npm", "start"]
 
 # Expose port 3000 to the outside world (if needed)
-EXPOSE 8080
+EXPOSE 3000
