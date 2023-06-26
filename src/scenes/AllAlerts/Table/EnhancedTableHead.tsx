@@ -1,6 +1,6 @@
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
-import { Data, RowsData, headCells } from "./Data";
+
 import {
   Box,
   TableCell,
@@ -11,8 +11,7 @@ import {
 } from "@mui/material";
 import React from "react";
 import DropdownFilter from "./DropdownFilter";
-type Order = "asc" | "desc";
-
+import { Data, Order, RowsData, headCells } from "./Data";
 interface EnhancedTableProps {
   numSelected: number;
   onRequestSort: (
@@ -70,13 +69,11 @@ const EnhancedTableHead = (props: EnhancedTableProps) => {
               key={headCell.id}
               align={"center"}
               padding={"normal"}
-              sortDirection={orderBy === headCell.id ? order : false}
               sx={{ minWidth: headCell.minWidth }}
             >
               {headCell.hasFilter ? (
                 <TableSortLabel
                   active={orderBy === headCell.id}
-                  direction={orderBy === headCell.id ? order : "asc"}
                   onClick={createSortHandler(headCell.id as keyof Data)}
                   sx={{
                     padding: "0px",
@@ -97,7 +94,8 @@ const EnhancedTableHead = (props: EnhancedTableProps) => {
                     style={{
                       color:
                         (order === "desc" || order === "asc") &&
-                        sortedColumn === headCell.id
+                        sortedColumn === headCell.id &&
+                        orderBy !== ""
                           ? "#f5333f"
                           : "black",
                     }}
@@ -116,7 +114,9 @@ const EnhancedTableHead = (props: EnhancedTableProps) => {
                       fontSize="small"
                       sx={{
                         color:
-                          order === "asc" && sortedColumn === headCell.id
+                          order === "asc" &&
+                          sortedColumn === headCell.id &&
+                          orderBy !== ""
                             ? "#f5333f"
                             : "black",
                         fontSize: "0.8rem !important",
@@ -126,7 +126,9 @@ const EnhancedTableHead = (props: EnhancedTableProps) => {
                       fontSize="small"
                       sx={{
                         color:
-                          order === "desc" && sortedColumn === headCell.id
+                          order === "desc" &&
+                          sortedColumn === headCell.id &&
+                          orderBy !== ""
                             ? "#f5333f"
                             : "black",
                         fontSize: "0.8rem !important",
@@ -139,7 +141,8 @@ const EnhancedTableHead = (props: EnhancedTableProps) => {
                   style={{
                     color:
                       (order === "desc" || order === "asc") &&
-                      sortedColumn === headCell.id
+                      sortedColumn === headCell.id &&
+                      orderBy !== ""
                         ? "#f5333f"
                         : "black",
                   }}

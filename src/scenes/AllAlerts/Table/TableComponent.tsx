@@ -13,11 +13,12 @@ import {
 } from "@mui/material";
 
 import { getComparator, stableSort } from "./Sorting";
-import { Data, RowsData, headCells } from "./Data";
+
+import { Data, Order, RowsData, headCells } from "./Data";
+
 import { EnhancedTableToolbar } from "./EnhancedTableToolbar";
 import { EnhancedTableHead } from "./EnhancedTableHead";
-
-type Order = "asc" | "desc";
+import { Link } from "react-router-dom";
 
 interface EnhancedTableProps {
   selectedFilter?: string;
@@ -29,7 +30,7 @@ interface EnhancedTableProps {
 const EnhancedTable = (props: EnhancedTableProps) => {
   const { selectedFilter, filterKey, rowsData, setNumAlerts } = props;
   const [order, setOrder] = React.useState<Order>("asc");
-  const [orderBy, setOrderBy] = React.useState<keyof Data>("country");
+  const [orderBy, setOrderBy] = React.useState("");
   const [selected, setSelected] = React.useState<readonly RowsData[]>([]);
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
@@ -90,8 +91,17 @@ const EnhancedTable = (props: EnhancedTableProps) => {
     property: keyof Data
   ) => {
     const isAsc = orderBy === property && order === "asc";
-    setOrder(isAsc ? "desc" : "asc");
-    setOrderBy(property);
+    const isDesc = orderBy === property && order === "desc";
+
+    if (isAsc) {
+      setOrder("desc");
+      setOrderBy(property);
+    } else if (isDesc) {
+      setOrderBy("");
+    } else {
+      setOrder("asc");
+      setOrderBy(property);
+    }
   };
 
   const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -197,7 +207,10 @@ const EnhancedTable = (props: EnhancedTableProps) => {
                     <TableCell align="center">{row.urgency}</TableCell>
                     <TableCell align="center">{row.severity}</TableCell>
                     <TableCell align="center">{row.certainty}</TableCell>
-                    <TableCell align="center">{row.sender}</TableCell>
+
+                    <TableCell align="center">
+                      <Link to={row.sender}>{row.sender}</Link>
+                    </TableCell>
                   </TableRow>
                 );
               })}
@@ -215,7 +228,7 @@ const EnhancedTable = (props: EnhancedTableProps) => {
           </Table>
         </TableContainer>
         {filteredRows.length === 0 ? (
-          <Typography variant="h5" textAlign={"center"}>
+          <Typography variant="h6" textAlign={"center"} padding={"10px"}>
             {" "}
             🔍 No results found. Please remove some filters.
           </Typography>
