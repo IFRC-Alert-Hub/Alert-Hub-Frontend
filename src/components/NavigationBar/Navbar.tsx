@@ -29,6 +29,7 @@ import RoundButton from "../RoundButton";
 import TimeComponent from "./TimeComponent";
 import { useState } from "react";
 import AvatarDropdown from "./AvatarDropdown";
+import ChangeLanguageDropdownComponent from "./ChangeLanguageDropdown";
 
 const NavbarComponent = (props: any) => {
   // used for test login
@@ -48,6 +49,7 @@ const NavbarComponent = (props: any) => {
         Alert Hub
       </Typography>
       <Divider />
+
       <List>
         {firstNavBarItems.map((item) => (
           <Link
@@ -162,6 +164,7 @@ const NavbarComponent = (props: any) => {
                   display: { xs: "none", sm: "none", md: "inline" },
                 }}
               >
+                <ChangeLanguageDropdownComponent />
                 {firstNavBarItems.map((item) => (
                   <Link
                     to={item.path}
