@@ -32,7 +32,7 @@ import AvatarDropdown from "./AvatarDropdown";
 
 const NavbarComponent = (props: any) => {
   // used for test login
-  const isLogin = false;
+  const isLogin = true;
 
   const location = useLocation();
 
@@ -79,6 +79,8 @@ const NavbarComponent = (props: any) => {
 
   const container =
     window !== undefined ? () => window().document.body : undefined;
+
+  const avatarBtn = isLogin ? <AvatarDropdown /> : <RoundButton />;
 
   return (
     <div className="header">
@@ -196,7 +198,7 @@ const NavbarComponent = (props: any) => {
                   </Link>
                 ))}
               </Box>
-              {isLogin ? <AvatarDropdown /> : <RoundButton />}
+              {avatarBtn}
             </Box>
           </Toolbar>
         </Container>

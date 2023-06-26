@@ -155,3 +155,17 @@ body,
   color: inherit;
   text-decoration: none;
 }
+
+/* || SUBSCRIPTION */
+.subscription-add-btn {
+  display: flex;
+  justify-content: flex-start;
+}
+
+@media (min-width: 600px) {
+  .subscription-add-btn {
+    display: flex;
+    justify-content: flex-end;
+    align-items: flex-start;
+  }
+}
