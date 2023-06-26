@@ -172,7 +172,7 @@ const Home = () => {
       <TitleHeader
         title="ONGOING Extreme Alerts"
         rightTitle={"View all alerts"}
-        rightLinkURL={"/View all alerts"}
+        rightLinkURL={"/alerts/all"}
       />
 
       <MapComponent

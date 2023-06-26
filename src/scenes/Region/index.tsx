@@ -81,7 +81,7 @@ const regionItems = [
   {
     name: 4,
     id: 4,
-    region_name: "Middle East & North Africa",
+    region_name: "Middle East & North East",
     bbox: {
       type: "Polygon",
       coordinates: [
@@ -94,7 +94,7 @@ const regionItems = [
         ],
       ],
     },
-    label: "Middle East & North Africa",
+    label: "Middle East & North East",
   },
 ];
 
@@ -202,11 +202,23 @@ const Region = () => {
           {region?.label}
         </Typography>
       </Box>
-      <TitleHeader title="ONGOING EXTREME ALERTS" />
+      <TitleHeader
+        title="ONGOING Extreme Alerts"
+        rightTitle={"View all alerts"}
+        rightLinkURL={"/alerts/all"}
+        filterKey="region"
+        selectedFilter={region?.label}
+      />
       <Box margin={"0px 25px 25px"}>
         <CardCarousel cards={cardData} />
       </Box>
-      <TitleHeader title="ALL ONGOING ALERTS" />
+      <TitleHeader
+        title="ONGOING Extreme Alerts"
+        rightTitle={"View all alerts"}
+        rightLinkURL={"/alerts/all"}
+        filterKey="region"
+        selectedFilter={region?.label}
+      />
       <MapComponent
         mapContainerRef={mapContainerRef}
         mapRef={mapRef}

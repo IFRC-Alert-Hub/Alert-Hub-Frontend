@@ -12,6 +12,7 @@ import "./index.css";
 import AllAlerts from "./scenes/AllAlerts";
 import Profile from "./scenes/Profile";
 import Subscription from "./scenes/Subscription";
+import { DisplayAlerts } from "./API/queries/getAllAlerts";
 
 function App() {
   return (
@@ -33,6 +34,7 @@ function App() {
                 <Route path="profile" element={<Profile />} />
                 <Route path="subscription" element={<Subscription />} />
               </Route>
+              <Route path="/testAPI" element={<DisplayAlerts />} />
             </Routes>
           </Box>
           <Footer />

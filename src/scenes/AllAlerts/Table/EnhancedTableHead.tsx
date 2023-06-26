@@ -1,6 +1,6 @@
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
-import { Data, headCells } from "./Data";
+
 import {
   Box,
   TableCell,
@@ -11,8 +11,7 @@ import {
 } from "@mui/material";
 import React from "react";
 import DropdownFilter from "./DropdownFilter";
-type Order = "asc" | "desc";
-
+import { Data, Order, RowsData, headCells } from "./Data";
 interface EnhancedTableProps {
   numSelected: number;
   onRequestSort: (
@@ -24,7 +23,7 @@ interface EnhancedTableProps {
   orderBy: string;
   rowCount: number;
 
-  setSelected: React.Dispatch<React.SetStateAction<readonly string[]>>;
+  setSelected: React.Dispatch<React.SetStateAction<readonly RowsData[]>>;
   filters: typeof headCells;
   setFilters: React.Dispatch<React.SetStateAction<typeof headCells>>;
 }
@@ -45,8 +44,8 @@ const EnhancedTableHead = (props: EnhancedTableProps) => {
 
   const createSortHandler =
     (property: keyof Data) => (event: React.MouseEvent<unknown>) => {
-      onRequestSort(event, property);
       setSortedColumn(property);
+      onRequestSort(event, property);
     };
 
   return (
@@ -70,69 +69,87 @@ const EnhancedTableHead = (props: EnhancedTableProps) => {
               key={headCell.id}
               align={"center"}
               padding={"normal"}
-              sortDirection={orderBy === headCell.id ? order : false}
+              sx={{ minWidth: headCell.minWidth }}
             >
-              <TableSortLabel
-                active={orderBy === headCell.id}
-                direction={orderBy === headCell.id ? order : "asc"}
-                onClick={createSortHandler(headCell.id as keyof Data)}
-                sx={{
-                  padding: "0px",
-                  margin: "0px",
-                  borderRadius: "0px",
-                  borderBottom: "1px solid transparent",
-                  "&:hover": { backgroundColor: "transparent !important" },
-                  "&:focus": { backgroundColor: "transparent !important" },
-                  backgroundColor: "transparent !important",
-                  textTransform: "capitalize",
+              {headCell.hasFilter ? (
+                <TableSortLabel
+                  active={orderBy === headCell.id}
+                  onClick={createSortHandler(headCell.id as keyof Data)}
+                  sx={{
+                    padding: "0px",
+                    margin: "0px",
+                    borderRadius: "0px",
+                    borderBottom: "1px solid transparent",
+                    "&:hover": { backgroundColor: "transparent !important" },
+                    "&:focus": { backgroundColor: "transparent !important" },
+                    backgroundColor: "transparent !important",
+                    textTransform: "capitalize",
 
-                  minWidth: "auto",
-                  "& .MuiTableSortLabel-icon": {
-                    display: "none",
-                  },
-                }}
-              >
+                    "& .MuiTableSortLabel-icon": {
+                      display: "none",
+                    },
+                  }}
+                >
+                  <span
+                    style={{
+                      color:
+                        (order === "desc" || order === "asc") &&
+                        sortedColumn === headCell.id &&
+                        orderBy !== ""
+                          ? "#f5333f"
+                          : "black",
+                    }}
+                  >
+                    {headCell.label}
+                  </span>
+
+                  <Box
+                    component="span"
+                    sx={{
+                      display: "flex",
+                      flexDirection: "column",
+                    }}
+                  >
+                    <KeyboardArrowUpIcon
+                      fontSize="small"
+                      sx={{
+                        color:
+                          order === "asc" &&
+                          sortedColumn === headCell.id &&
+                          orderBy !== ""
+                            ? "#f5333f"
+                            : "black",
+                        fontSize: "0.8rem !important",
+                      }}
+                    />
+                    <KeyboardArrowDownIcon
+                      fontSize="small"
+                      sx={{
+                        color:
+                          order === "desc" &&
+                          sortedColumn === headCell.id &&
+                          orderBy !== ""
+                            ? "#f5333f"
+                            : "black",
+                        fontSize: "0.8rem !important",
+                      }}
+                    />
+                  </Box>
+                </TableSortLabel>
+              ) : (
                 <span
                   style={{
                     color:
                       (order === "desc" || order === "asc") &&
-                      sortedColumn === headCell.id
+                      sortedColumn === headCell.id &&
+                      orderBy !== ""
                         ? "#f5333f"
                         : "black",
                   }}
                 >
                   {headCell.label}
                 </span>
-
-                <Box
-                  component="span"
-                  sx={{
-                    display: "flex",
-                    flexDirection: "column",
-                  }}
-                >
-                  <KeyboardArrowUpIcon
-                    fontSize="small"
-                    sx={{
-                      color:
-                        order === "asc" && sortedColumn === headCell.id
-                          ? "#f5333f"
-                          : "black",
-                      fontSize: "0.8rem !important",
-                    }}
-                  />
-                  <KeyboardArrowDownIcon
-                    fontSize="small"
-                    sx={{
-                      color:
-                        order === "desc" && sortedColumn === headCell.id
-                          ? "#f5333f"
-                          : "black",
-                      fontSize: "0.8rem !important",
-                    }}
-                  />
-                </Box>
-              </TableSortLabel>
+              )}
             </TableCell>
           ) : (
             <>
@@ -143,6 +160,8 @@ const EnhancedTableHead = (props: EnhancedTableProps) => {
                 menuItems={headCell.menuItems || []}
                 filters={filters}
                 setFilters={setFilters}
+                minWidth={headCell.minWidth}
+                allMenuItemTitle={headCell.allMenuItemTitle || ""}
               ></DropdownFilter>
             </>
           )

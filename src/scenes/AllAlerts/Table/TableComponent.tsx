@@ -9,23 +9,47 @@ import {
   TableRow,
   Paper,
   Checkbox,
+  Typography,
 } from "@mui/material";
 
 import { getComparator, stableSort } from "./Sorting";
-import { Data, headCells, rows } from "./Data";
+
+import { Data, Order, RowsData, headCells } from "./Data";
+
 import { EnhancedTableToolbar } from "./EnhancedTableToolbar";
 import { EnhancedTableHead } from "./EnhancedTableHead";
+import { Link } from "react-router-dom";
 
-type Order = "asc" | "desc";
+interface EnhancedTableProps {
+  selectedFilter?: string;
+  filterKey?: string;
+  rowsData: RowsData[];
+  setNumAlerts: (numAlerts: number) => void;
+}
 
-export default function EnhancedTable() {
+const EnhancedTable = (props: EnhancedTableProps) => {
+  const { selectedFilter, filterKey, rowsData, setNumAlerts } = props;
   const [order, setOrder] = React.useState<Order>("asc");
-  const [orderBy, setOrderBy] = React.useState<keyof Data>("country");
-  const [selected, setSelected] = React.useState<readonly string[]>([]);
+  const [orderBy, setOrderBy] = React.useState("");
+  const [selected, setSelected] = React.useState<readonly RowsData[]>([]);
   const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(5);
+  const [rowsPerPage, setRowsPerPage] = React.useState(10);
 
   const [filters, setFilters] = React.useState(headCells);
+
+  React.useEffect(() => {
+    setFilters((prevFilters) => {
+      return prevFilters.map((filter) => {
+        if (filter.filterKey === filterKey) {
+          return {
+            ...filter,
+            selectedFilter: selectedFilter,
+          };
+        }
+        return filter;
+      });
+    });
+  }, [selectedFilter, filterKey]);
 
   const getProperty = (object: any, key: string | undefined) => {
     if (key === undefined) {
@@ -37,7 +61,7 @@ export default function EnhancedTable() {
       .reduce((obj: any, property: string) => obj?.[property], object);
   };
   const filteredRows = React.useMemo(() => {
-    let filteredData = rows;
+    let filteredData = rowsData;
 
     filters.forEach((filter) => {
       if (filter.isDropdownFilter) {
@@ -51,7 +75,7 @@ export default function EnhancedTable() {
     });
 
     return filteredData;
-  }, [filters]);
+  }, [filters, rowsData]);
 
   const visibleRows = React.useMemo(
     () =>
@@ -67,22 +91,32 @@ export default function EnhancedTable() {
     property: keyof Data
   ) => {
     const isAsc = orderBy === property && order === "asc";
-    setOrder(isAsc ? "desc" : "asc");
-    setOrderBy(property);
+    const isDesc = orderBy === property && order === "desc";
+
+    if (isAsc) {
+      setOrder("desc");
+      setOrderBy(property);
+    } else if (isDesc) {
+      setOrderBy("");
+    } else {
+      setOrder("asc");
+      setOrderBy(property);
+    }
   };
 
   const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.checked) {
-      const newSelected = filteredRows.map((n) => n.country);
+      const newSelected = filteredRows;
+      console.log(filteredRows);
       setSelected(newSelected);
       return;
     }
     setSelected([]);
   };
 
-  const handleClick = (event: React.MouseEvent<unknown>, name: string) => {
+  const handleClick = (event: React.MouseEvent<unknown>, name: RowsData) => {
     const selectedIndex = selected.indexOf(name);
-    let newSelected: readonly string[] = [];
+    let newSelected: readonly RowsData[] = [];
 
     if (selectedIndex === -1) {
       newSelected = newSelected.concat(selected, name);
@@ -99,7 +133,6 @@ export default function EnhancedTable() {
 
     setSelected(newSelected);
   };
-
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
   };
@@ -111,10 +144,13 @@ export default function EnhancedTable() {
     setPage(0);
   };
 
-  const isSelected = (name: string) => selected.indexOf(name) !== -1;
+  const isSelected = (name: RowsData) => selected.indexOf(name) !== -1;
   const emptyRows =
-    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
+    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rowsData.length) : 0;
 
+  React.useEffect(() => {
+    setNumAlerts(filteredRows.length);
+  }, [filteredRows, setNumAlerts]);
   return (
     <Box sx={{ width: "100%" }}>
       <Paper sx={{ width: "100%", mb: 2 }}>
@@ -137,17 +173,16 @@ export default function EnhancedTable() {
             />
             <TableBody>
               {visibleRows.map((row, index) => {
-                const isItemSelected = isSelected(row.country);
+                const isItemSelected = isSelected(row);
                 const labelId = `enhanced-table-checkbox-${index}`;
 
                 return (
                   <TableRow
                     hover
-                    onClick={(event) => handleClick(event, row.country)}
+                    onClick={(event) => handleClick(event, row)}
                     role="checkbox"
                     aria-checked={isItemSelected}
                     tabIndex={-1}
-                    key={row.country}
                     selected={isItemSelected}
                     sx={{
                       cursor: "pointer",
@@ -164,18 +199,22 @@ export default function EnhancedTable() {
                         }}
                       />
                     </TableCell>
-                    <TableCell align="right">{row.country}</TableCell>
-                    <TableCell align="right">{row.event}</TableCell>
-                    <TableCell align="right">{row.sender}</TableCell>
-                    <TableCell align="right">{row.effective}</TableCell>
-                    <TableCell align="right">{row.expires}</TableCell>
-                    <TableCell align="right">{row.region}</TableCell>
-                    <TableCell align="right">{row.urgency}</TableCell>
-                    <TableCell align="right">{row.severity}</TableCell>
-                    <TableCell align="right">{row.certainty}</TableCell>
+                    <TableCell align="center">{row.region}</TableCell>
+                    <TableCell align="center">{row.country}</TableCell>
+                    <TableCell align="center">{row.event}</TableCell>
+                    <TableCell align="center">{row.effective}</TableCell>
+                    <TableCell align="center">{row.expires}</TableCell>
+                    <TableCell align="center">{row.urgency}</TableCell>
+                    <TableCell align="center">{row.severity}</TableCell>
+                    <TableCell align="center">{row.certainty}</TableCell>
+
+                    <TableCell align="center">
+                      <Link to={row.sender}>{row.sender}</Link>
+                    </TableCell>
                   </TableRow>
                 );
               })}
+
               {emptyRows > 0 && (
                 <TableRow
                   style={{
@@ -188,8 +227,17 @@ export default function EnhancedTable() {
             </TableBody>
           </Table>
         </TableContainer>
+        {filteredRows.length === 0 ? (
+          <Typography variant="h6" textAlign={"center"} padding={"10px"}>
+            {" "}
+            🔍 No results found. Please remove some filters.
+          </Typography>
+        ) : (
+          ""
+        )}
+
         <TablePagination
-          rowsPerPageOptions={[5, 10, 25]}
+          rowsPerPageOptions={[10, 25, 50]}
           component="div"
           count={filteredRows.length}
           rowsPerPage={rowsPerPage}
@@ -200,4 +248,6 @@ export default function EnhancedTable() {
       </Paper>
     </Box>
   );
-}
+};
+
+export default EnhancedTable;
