@@ -1,3 +1,6 @@
+
+import { Order } from "./Data";
+
 const descendingComparator = <T,>(a: T, b: T, orderBy: keyof T) => {
   if (b[orderBy] < a[orderBy]) {
     return -1;
@@ -7,8 +10,6 @@ const descendingComparator = <T,>(a: T, b: T, orderBy: keyof T) => {
   }
   return 0;
 };
-
-type Order = "asc" | "desc";
 
 const getComparator = <Key extends keyof any>(
   order: Order,

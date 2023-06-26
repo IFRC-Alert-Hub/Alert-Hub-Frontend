@@ -1,3 +1,5 @@
+type Order = "asc" | "desc" | "";
+
 interface Data {
   country: string;
   event: string;
@@ -5,6 +7,7 @@ interface Data {
   effective: Date;
   expires: Date;
 }
+
 type RowsData = {
   region: string;
   country: string;
@@ -17,6 +20,7 @@ type RowsData = {
   expires: string;
   [key: string]: string;
 };
+
 const rows: RowsData[] = [
   {
     region: "Asia Pacific",
@@ -98,7 +102,7 @@ const headCells: HeadCell[] = [
     filterKey: "region",
     menuItems: [
       "Africa",
-      "America",
+      "Americas",
       "Asia Pacific",
       "Europe",
       "Middle East & North East",
@@ -178,10 +182,10 @@ const headCells: HeadCell[] = [
     disablePadding: false,
     label: "Sender",
     isDropdownFilter: false,
-    minWidth: "200px",
+    minWidth: "150px",
     hasFilter: false,
   },
 ];
 
-export type { Data, RowsData };
+export type { Data, RowsData, Order };
 export { rows, headCells };

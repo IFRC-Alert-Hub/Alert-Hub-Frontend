@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import { useQuery } from "@apollo/client";
-import { Container } from "@mui/material";
+import { CircularProgress, Container } from "@mui/material";
 import { useLocation } from "react-router-dom";
 import { RowsData } from "./Table/Data";
 import { ALL_ALERTS } from "../../API/queries/getAllAlerts";
-import FilterableTableComponent from "./Table/TableComponent";
 import TitleHeader from "../../components/TitleHeader";
+import FilterableTableComponent from "./Table/TableComponent";
 
 interface AllAlertsProps {
   selectedFilter?: string;
@@ -35,7 +35,7 @@ const AllAlerts: React.FC<AllAlertsProps> = () => {
     urgency: alert.urgency,
     certainty: alert.certainty,
     sender: alert.sender,
-    effective: modifyDateTime(alert.effective),
+    effective: modifyDateTime(alert.effective!) || "",
     expires: modifyDateTime(alert.expires),
   }));
 
@@ -43,7 +43,9 @@ const AllAlerts: React.FC<AllAlertsProps> = () => {
     <>
       <Container maxWidth="lg" sx={{ paddingTop: "30px" }}>
         <TitleHeader title={`All Alerts (${numAlerts})`} />
-        {loading && <p>Loading...</p>}
+        {loading && (
+          <CircularProgress sx={{ textAlign: "center" }} color="secondary" />
+        )}
         {error && <p>Error: {error.message}</p>}
         {!loading && !error && (
           <FilterableTableComponent

@@ -27,7 +27,7 @@ const regionItems = [
   {
     name: 1,
     id: 1,
-    region_name: "America",
+    region_name: "Americas",
     bbox: {
       type: "Polygon",
       coordinates: [
@@ -40,7 +40,7 @@ const regionItems = [
         ],
       ],
     },
-    label: "America",
+    label: "Americas",
   },
   {
     name: 2,
