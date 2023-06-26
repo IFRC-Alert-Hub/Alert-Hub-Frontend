@@ -2,6 +2,7 @@ import { Box, Container, Grid, Typography } from "@mui/material";
 import TitleHeader from "../../components/TitleHeader";
 import MapComponent from "../../components/MapComponent/MapComponent";
 import { useRef } from "react";
+import { useIntl } from "react-intl";
 
 export const ExtremeThreatColour = "#f5333f";
 export const ModerateThreatColour = "#ff9e00";
@@ -10,6 +11,8 @@ export const OtherAlertsColour = "#95BF6E";
 const Home = () => {
   const mapContainerRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<mapboxgl.Map | null>(null);
+  const { formatMessage } = useIntl();
+
   // useEffect(() => {
   //   if (!mapRef.current) return;
 
@@ -152,7 +155,7 @@ const Home = () => {
           textTransform={"capitalize"}
           letterSpacing={"1.6px"}
         >
-          IFRC Alert Hub
+          {formatMessage({ id: "home.title" })}
         </Typography>
         <Grid container justifyContent="center">
           <Grid item xs={12} sm={10} md={8} lg={6}>
@@ -162,9 +165,7 @@ const Home = () => {
               textAlign="center"
               sx={{ margin: "0 20px" }}
             >
-              IFRC GO aims to make all disaster information universally
-              accessible and useful to IFRC responders for better decision
-              making.
+              {formatMessage({ id: "home.subtitle" })}
             </Typography>
           </Grid>
         </Grid>
