@@ -4,7 +4,6 @@ import {
   setLanguage,
   Language,
 } from "../../multiLanguage/helpers/useLanguage";
-import { useIntl } from "react-intl";
 
 const ChangeLanguageDropdownComponent = () => {
   const language = getLanguage();
