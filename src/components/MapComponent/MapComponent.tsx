@@ -5,6 +5,9 @@ import PopupComponent from "./PopupComponent";
 import { ThemeProvider } from "@mui/material";
 import { theme } from "../../theme";
 import turfBbox from "@turf/bbox";
+export const ExtremeThreatColour = "#f5333f";
+export const ModerateThreatColour = "#ff9e00";
+export const OtherAlertsColour = "#95BF6E";
 
 const getPolygonCenter = (coordinates: number[][]): [number, number] => {
   const centroid: [number, number] = coordinates.reduce(
@@ -38,11 +41,46 @@ type MapProps = {
   polygons?: Polygon[];
   pins?: Pin[];
   boundingRegionCoordinates?: Bbox;
+  alerts?: AlertData[];
 };
 
 type Polygon = {
   coordinates: number[][];
   color: string;
+};
+type Region = {
+  centroid: string;
+  id: string;
+  name: string;
+  polygon: string;
+};
+type CountryType = {
+  centroid: string;
+  id: string;
+  iso: string;
+  iso3: string;
+  name: string;
+  polygon: string;
+  region: Region[];
+};
+type AlertData = {
+  areaDesc: string;
+  certainty: string;
+  country: CountryType[];
+  effective: string;
+  event: string;
+  expires: string;
+  geocodeName: string;
+  geocodeValue: string;
+  id: string;
+  identifier: string;
+  msgType: string;
+  scope: string;
+  sender: string;
+  sent: string;
+  severity: string;
+  status: string;
+  urgency: string;
 };
 
 const MapComponent: React.FC<MapProps> = ({
@@ -54,24 +92,11 @@ const MapComponent: React.FC<MapProps> = ({
   polygons = [],
   pins = [],
   boundingRegionCoordinates = {},
+  alerts = [],
 }) => {
   const [polygonDataLoaded, setPolygonDataLoaded] = useState(false);
   const [pinDataLoaded, setPinDataLoaded] = useState(false);
-
-  useEffect(() => {
-    if (
-      !mapRef.current ||
-      Object.keys(boundingRegionCoordinates).length === 0
-    ) {
-      return;
-    }
-    const mapBoundingBox = turfBbox(boundingRegionCoordinates);
-    const [minX, minY, maxX, maxY] = mapBoundingBox;
-
-    mapRef.current!.fitBounds([minX, minY, maxX, maxY] as LngLatBoundsLike, {
-      padding: { top: 10, bottom: 25, left: 15, right: 5 },
-    });
-  });
+  const [alertsLoaded, setAlertsLoaded] = useState(false);
 
   useEffect(() => {
     if (!mapRef.current) {
@@ -95,6 +120,21 @@ const MapComponent: React.FC<MapProps> = ({
       }
     };
   }, [lat, lng, mapRef, mapContainerRef, zoom]);
+
+  useEffect(() => {
+    if (
+      !mapRef.current ||
+      Object.keys(boundingRegionCoordinates).length === 0
+    ) {
+      return;
+    }
+    const mapBoundingBox = turfBbox(boundingRegionCoordinates);
+    const [minX, minY, maxX, maxY] = mapBoundingBox;
+
+    mapRef.current!.fitBounds([minX, minY, maxX, maxY] as LngLatBoundsLike, {
+      padding: { top: 10, bottom: 25, left: 15, right: 5 },
+    });
+  });
 
   useEffect(() => {
     if (!mapRef.current || polygonDataLoaded || polygons.length === 0) {
@@ -137,7 +177,6 @@ const MapComponent: React.FC<MapProps> = ({
             "click",
             layerId,
             (e: mapboxgl.MapMouseEvent & mapboxgl.EventData) => {
-              console.log("hello");
               const coordinates = getPolygonCenter(
                 e.features[0].geometry.coordinates[0]
               );
@@ -212,9 +251,7 @@ const MapComponent: React.FC<MapProps> = ({
           "click",
           `inner_circle-${index}`,
           (e: mapboxgl.MapMouseEvent & mapboxgl.EventData) => {
-            console.log("hello");
             const coordinates = e.features[0].geometry.coordinates;
-            console.log("Point: ", coordinates);
             const popupNode = document.createElement("div");
 
             // const reverseGeocode = async () => {
@@ -247,9 +284,107 @@ const MapComponent: React.FC<MapProps> = ({
       });
 
       setPinDataLoaded(true);
-      console.log(mapRef.current?.getStyle().layers);
     });
   }, [pinDataLoaded, pins, mapRef]);
+
+  const convertCoordinates = (coordinatesString: string): number[][] => {
+    const trimmedString = coordinatesString.trim();
+    return trimmedString.split(" ").map((coordinates) => {
+      const [latitude, longitude] = coordinates.split(",").map(parseFloat);
+      return [latitude, longitude];
+    });
+  };
+  useEffect(() => {
+    if (!mapRef.current || alertsLoaded || alerts.length === 0) {
+      return;
+    }
+    const countryTables = {};
+
+    mapRef.current?.on("load", () => {
+      console.log(alerts[0]);
+      const filteredAlert = alerts.map((alert: any) => ({
+        region: alert.country?.region?.name,
+        country: alert.country?.name,
+        event: alert.event,
+        severity: alert.severity,
+        urgency: alert.urgency,
+        certainty: alert.certainty,
+        sender: alert.sender,
+        effective: alert.effective!,
+        expires: alert.expires,
+        countryPolygon: convertCoordinates(alert.country.polygon),
+        countryName: alert.country.name,
+        countryCentroid: convertCoordinates(alert.country.centroid),
+        countryISO3: alert.country.iso3,
+        areaDesc: alert.areaDesc,
+      }));
+
+      const popup = new mapboxgl.Popup({
+        closeButton: true,
+        closeOnClick: true,
+      });
+      filteredAlert.forEach((alert, index) => {
+        console.log(alert);
+        if (
+          mapRef.current?.getSource(`polygon-source-${alert.countryISO3}`) !==
+            undefined ||
+          alert.countryISO3 === "FRA"
+        ) {
+          console.log("Exists");
+        } else {
+          const sourceId = `polygon-source-${alert.countryISO3}`;
+          const layerId = `polygon-layer-${alert.countryISO3}`;
+
+          mapRef.current?.addSource(sourceId, {
+            type: "geojson",
+            data: {
+              type: "Feature",
+              geometry: {
+                type: "Polygon",
+                coordinates: [alert.countryPolygon],
+              },
+              properties: {},
+            },
+          });
+
+          mapRef.current?.addLayer({
+            id: layerId,
+            type: "fill",
+            source: sourceId,
+            paint: {
+              "fill-color": ExtremeThreatColour,
+              "fill-opacity": 0.8,
+            },
+          });
+
+          mapRef.current?.on(
+            "click",
+            layerId,
+            (e: mapboxgl.MapMouseEvent & mapboxgl.EventData) => {
+              const coordinates = getPolygonCenter(
+                e.features[0].geometry.coordinates[0]
+              );
+              const popupNode = document.createElement("div");
+
+              const popupComponent = (
+                <ThemeProvider theme={theme}>
+                  <PopupComponent />
+                </ThemeProvider>
+              );
+
+              createRoot(popupNode).render(popupComponent);
+
+              popup
+                .setLngLat(coordinates)
+                .setDOMContent(popupNode)
+                .addTo(mapRef.current!);
+            }
+          );
+        }
+      });
+      setAlertsLoaded(true);
+    });
+  }, [alertsLoaded, alerts, mapRef]);
 
   return <div ref={mapContainerRef} className="map-container" />;
 };
