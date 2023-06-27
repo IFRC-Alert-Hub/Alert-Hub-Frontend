@@ -298,8 +298,6 @@ const MapComponent: React.FC<MapProps> = ({
     if (!mapRef.current || alertsLoaded || alerts.length === 0) {
       return;
     }
-    const countryTables = {};
-
     mapRef.current?.on("load", () => {
       console.log(alerts[0]);
       const filteredAlert = alerts.map((alert: any) => ({
