@@ -40,9 +40,6 @@ const AlertCard: React.FC<AlertCardProps> = ({ cardInfo }) => {
               display: "block",
               paddingBottom: "0.2rem",
               maxWidth: "auto",
-              overflow: "hidden",
-              textOverflow: "ellipsis",
-              whiteSpace: "nowrap",
             }}
           >
             {cardInfo.title}
