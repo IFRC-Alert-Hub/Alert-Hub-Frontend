@@ -20,7 +20,7 @@ interface SubscriptionData {
   urgency: string[];
   severity: string[];
   certainty: string[];
-  method: string[];
+  methods: string[];
   displayedCountries?: string[];
 }
 
@@ -106,7 +106,7 @@ const SubscriptionTable = ({ rows }: PropsType) => {
               <TableCell align="center">{row.urgency}</TableCell>
               <TableCell align="center">{row.severity}</TableCell>
               <TableCell align="center">{row.certainty}</TableCell>
-              <TableCell align="center">{row.method}</TableCell>
+              <TableCell align="center">{row.methods}</TableCell>
               <TableCell align="center">
                 <Button
                   variant="text"

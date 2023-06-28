@@ -15,8 +15,7 @@ interface UserType {
 const Profile = () => {
   const [user, setUser] = useState<UserType>({
     id: "1",
-    avatar:
-      "https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif?imageView2/1/w/80/h/80",
+    avatar: "https://eu.ui-avatars.com/api/?name=M&size=250",
     firstName: "Adi",
     lastName: "Leio",
     email: "email123@email.com",

@@ -1,7 +1,29 @@
-import { Box, Button, InputLabel, TextField } from "@mui/material";
+import {
+  Box,
+  Button,
+  InputLabel,
+  Modal,
+  TextField,
+  Typography,
+} from "@mui/material";
 import { useState } from "react";
-import CountrySelect from "./CountrySelect";
+import CountrySelectionField from "./CountrySelectionField";
 import FormCheckbox from "./FormCheckbox";
+
+const style = {
+  position: "absolute" as "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  width: "40%",
+  minWidth: "350px",
+  maxHeight: "500px",
+  overflow: "auto",
+  bgcolor: "background.paper",
+  boxShadow: 24,
+  p: 4,
+  borderRadius: "5px",
+};
 
 type PropsType = {
   open: boolean;
@@ -47,56 +69,74 @@ const ModalForm = ({ open, handleClose }: PropsType) => {
   };
 
   return (
-    <Box component="form" onSubmit={handleSubmit} m={1}>
-      <Box sx={{ mb: 1 }}>
-        <InputLabel htmlFor="title" className="subs-form-title">
-          Group Title
-        </InputLabel>
-        <TextField
-          id="title"
-          name="title"
-          variant="outlined"
-          size="small"
-          value={subscriptionForm.title}
-          onChange={handleChange}
-          required
-          sx={{ width: "100%", mt: 1, mb: 1 }}
-        />
+    <Modal open={open} onClose={handleClose} aria-labelledby="modal-title">
+      <Box sx={style}>
+        <Typography id="modal-title" variant="h3" fontWeight={"bold"} mb="5px">
+          Add New Subscription
+        </Typography>
+        <Box component="form" onSubmit={handleSubmit} m={1}>
+          <Box sx={{ mb: 1 }}>
+            <InputLabel htmlFor="title" className="subs-form-title">
+              Group Title
+            </InputLabel>
+            <TextField
+              id="title"
+              name="title"
+              variant="outlined"
+              size="small"
+              value={subscriptionForm.title}
+              onChange={handleChange}
+              sx={{ width: "100%", mt: 1, mb: 1 }}
+            />
+          </Box>
+          <CountrySelectionField />
+          <FormCheckbox
+            legend="Urgency"
+            checkboxNames={[
+              "Immediate",
+              "Expected",
+              "Future",
+              "Past",
+              "Unknown",
+            ]}
+          />
+          <FormCheckbox
+            legend="Severity"
+            checkboxNames={[
+              "Extreme",
+              "Severe",
+              "Moderate",
+              "Minor",
+              "Unknown",
+            ]}
+          />
+          <FormCheckbox
+            legend="Certainty"
+            checkboxNames={[
+              "Observed",
+              "Likely",
+              "Possible",
+              "Unlikely",
+              "Unknown",
+            ]}
+          />
+          <FormCheckbox legend="Methods" checkboxNames={["Email", "SMS"]} />
+          <Box display="flex" justifyContent="flex-end">
+            <Button
+              variant="outlined"
+              color="error"
+              sx={{ marginRight: "10px" }}
+              onClick={handleCancel}
+            >
+              Cancel
+            </Button>
+            <Button type="submit" variant="contained" color="error">
+              Submit
+            </Button>
+          </Box>
+        </Box>
       </Box>
-      <CountrySelect />
-      <FormCheckbox
-        legend="Urgency"
-        checkboxNames={["Immediate", "Expected", "Future", "Past", "Unknown"]}
-      />
-      <FormCheckbox
-        legend="Severity"
-        checkboxNames={["Extreme", "Severe", "Moderate", "Minor", "Unknown"]}
-      />
-      <FormCheckbox
-        legend="Certainty"
-        checkboxNames={[
-          "Observed",
-          "Likely",
-          "Possible",
-          "Unlikely",
-          "Unknown",
-        ]}
-      />
-      <FormCheckbox legend="Methods" checkboxNames={["Email", "SMS"]} />
-      <Box display="flex" justifyContent="flex-end">
-        <Button
-          variant="outlined"
-          color="error"
-          sx={{ marginRight: "10px" }}
-          onClick={handleCancel}
-        >
-          Cancel
-        </Button>
-        <Button type="submit" variant="contained" color="error">
-          Submit
-        </Button>
-      </Box>
-    </Box>
+    </Modal>
   );
 };
 
