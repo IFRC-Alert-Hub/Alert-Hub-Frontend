@@ -59,7 +59,7 @@ const ContinentCollapse = ({ continent, countries }: PropsType) => {
           }}
         >
           {countries.map((country) => (
-            <>
+            <div key={country.id}>
               <input
                 className="country-input"
                 type="checkbox"
@@ -71,7 +71,7 @@ const ContinentCollapse = ({ continent, countries }: PropsType) => {
               <label htmlFor={country.name} className="country-checkbox">
                 {country.name}
               </label>
-            </>
+            </div>
           ))}
         </Box>
       </Collapse>

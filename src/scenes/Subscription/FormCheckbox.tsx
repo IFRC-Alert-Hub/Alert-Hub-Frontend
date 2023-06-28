@@ -37,6 +37,7 @@ const FormCheckbox = ({ legend, checkboxNames }: CheckboxProps) => {
         <FormGroup sx={{ flexDirection: "row", marginLeft: 1 }}>
           {checkboxNames.map((name) => (
             <FormControlLabel
+              key={name}
               control={
                 <Checkbox
                   checked={checkedItems[name]}

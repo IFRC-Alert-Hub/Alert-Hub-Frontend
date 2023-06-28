@@ -21,7 +21,11 @@ const CountrySelect = () => {
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error.message}</p>;
 
-  console.log(data.listRegion);
+  const sortedRegions = data.listRegion
+    .slice()
+    .sort(
+      (a: ContinentType, b: ContinentType) => parseInt(a.id) - parseInt(b.id)
+    );
 
   return (
     <div>
@@ -41,12 +45,13 @@ const CountrySelect = () => {
           variant="outlined"
           sx={{ width: "100%", borderRadius: 5, mt: 1, mb: 1 }}
         />
-        {data.listRegion.map((item: ContinentType) => {
+        {sortedRegions.map((item: ContinentType) => {
           if (item.name === "Unknown") {
-            return <div></div>;
+            return <div key={item.id}></div>;
           }
           return (
             <ContinentCollapse
+              key={item.id}
               continent={item.name}
               countries={item.countrySet}
             />
