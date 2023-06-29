@@ -140,7 +140,7 @@ const Register = () => {
               component="form"
               noValidate
               onSubmit={formik.handleSubmit}
-              sx={{ mt: 1 }}
+              sx={{ mt: 1, width: "80%" }}
             >
               <TextField
                 margin="normal"
@@ -290,7 +290,7 @@ const Register = () => {
           }}
         >
           <img
-            src={process.env.PUBLIC_URL + "/assets/login_ifrc.jpeg"}
+            src={process.env.PUBLIC_URL + "/assets/login_ifrc.png"}
             alt="ifrc_image"
             style={{
               width: "80%",

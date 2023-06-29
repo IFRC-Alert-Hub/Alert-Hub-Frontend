@@ -14,6 +14,8 @@ import Profile from "./scenes/Profile";
 import Subscription from "./scenes/Subscription";
 import { DisplayAlerts } from "./API/queries/getAllAlerts";
 import Register from "./scenes/Register";
+import ForgotPassword from "./scenes/ForgotPassword";
+import ReSendValidationEmail from "./scenes/ReSendValidationEmail";
 
 function App() {
   return (
@@ -29,6 +31,11 @@ function App() {
               <Route path="/resources" element={<Resources />} />
               <Route path="/login" element={<Login />} />
               <Route path="/register" element={<Register />} />
+              <Route path="/forget-password" element={<ForgotPassword />} />
+              <Route
+                path="/re-send-validation-email"
+                element={<ReSendValidationEmail />}
+              />
 
               <Route path="/regions/:id" element={<Region />} />
               <Route path="/alerts/all" element={<AllAlerts />} />
