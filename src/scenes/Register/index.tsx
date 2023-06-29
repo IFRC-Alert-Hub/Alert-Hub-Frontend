@@ -1,4 +1,4 @@
-import { Container } from "@mui/material";
+import { Container, LinearProgress } from "@mui/material";
 import * as React from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
@@ -9,8 +9,46 @@ import Link from "@mui/material/Link";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
+// import Tooltip from "@mui/material/Tooltip";
+// import InfoIcon from "@mui/icons-material/Info";
+// import CancelIcon from "@mui/icons-material/Cancel";
+
+// import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 
 const Register = () => {
+  const [passwordStrength, setPasswordStrength] = React.useState(0);
+
+  const calculatePasswordStrength = (password: string) => {
+    const strengthRegex =
+      /^(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*()])[a-zA-Z0-9!@#$%^&*()]{8,}$/;
+    if (password.length === 0) {
+      return 0;
+    } else if (strengthRegex.test(password)) {
+      return 100;
+    } else {
+      const factors = [
+        { regex: /[A-Z]/, factor: 20 },
+        { regex: /[0-9]/, factor: 15 },
+        { regex: /[!@#$%^&*()]/, factor: 15 },
+      ];
+      const lengthFactor = Math.min(password.length / 8, 1) * 50;
+
+      let totalFactor = lengthFactor;
+      factors.forEach((item) => {
+        if (item.regex.test(password)) {
+          totalFactor += item.factor;
+        }
+      });
+
+      return totalFactor;
+    }
+  };
+  const handlePasswordChange = (event: any) => {
+    const password = event.target.value;
+    const strength = calculatePasswordStrength(password);
+    setPasswordStrength(strength);
+    formik.handleChange(event);
+  };
   const formik = useFormik({
     initialValues: {
       firstName: "",
@@ -25,7 +63,10 @@ const Register = () => {
       email: Yup.string().email("Invalid email address").required("Required"),
       password: Yup.string()
         .required("Required")
-        .min(6, "Password must be at least 6 characters"),
+        .matches(
+          /^(?=.*[A-Z])(?=.*[0-9])(?=.*[?!@#$%^&*()])[a-zA-Z0-9!@#$%^&*()]{8,}$/,
+          "Password must contain at least one uppercase letter, one number, and one special character"
+        ),
       confirmPassword: Yup.string()
         .required("Required")
         .oneOf([Yup.ref("password"), ""], "Passwords must match"),
@@ -140,21 +181,6 @@ const Register = () => {
                 margin="normal"
                 required
                 fullWidth
-                id="email"
-                label="Email"
-                name="email"
-                autoComplete="email"
-                sx={{ fontSize: "12px" }}
-                value={formik.values.email}
-                onChange={formik.handleChange}
-                error={formik.touched.email && Boolean(formik.errors.email)}
-                helperText={formik.touched.email && formik.errors.email}
-              />
-
-              <TextField
-                margin="normal"
-                required
-                fullWidth
                 id="password"
                 label="Password"
                 name="password"
@@ -162,13 +188,32 @@ const Register = () => {
                 autoComplete="new-password"
                 sx={{ fontSize: "12px" }}
                 value={formik.values.password}
-                onChange={formik.handleChange}
+                onChange={handlePasswordChange} // Update the onChange handler
                 error={
                   formik.touched.password && Boolean(formik.errors.password)
                 }
                 helperText={formik.touched.password && formik.errors.password}
               />
 
+              <LinearProgress
+                variant="determinate"
+                value={passwordStrength}
+                sx={{
+                  marginTop: "4px",
+                  direction: "ltr",
+                  borderRadius: "25px",
+                  height: "10px",
+                  "& .MuiLinearProgress-barColorPrimary": {
+                    backgroundColor:
+                      passwordStrength === 100 ? "#4caf50" : "#f5333f",
+                  },
+                  "& .MuiLinearProgress-barColorPrimary.MuiLinearProgress-determinate":
+                    {
+                      backgroundColor:
+                        passwordStrength === 100 ? "#4caf50" : "#4caf50",
+                    },
+                }}
+              />
               <TextField
                 margin="normal"
                 required
