@@ -8,30 +8,30 @@ type CountryType = {
   name: string;
 };
 
+interface SubscriptionForm {
+  [key: string]: string | string[];
+  title: string;
+  countries: string[];
+  urgency: string[];
+  severity: string[];
+  certainty: string[];
+  methods: string[];
+}
+
 interface PropsType {
   continent: string;
   countries: CountryType[];
+  subscriptionForm: SubscriptionForm;
+  handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
-const ContinentCollapse = ({ continent, countries }: PropsType) => {
+const ContinentCollapse = ({
+  continent,
+  countries,
+  subscriptionForm,
+  handleChange,
+}: PropsType) => {
   const [open, setOpen] = useState(false);
-  const [selectedCountries, setSelectedCountries] = useState<string[]>([]);
-
-  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    const isChecked = e.target.checked;
-
-    if (isChecked) {
-      setSelectedCountries((prevSelectedCountries) => [
-        ...prevSelectedCountries,
-        value,
-      ]);
-    } else {
-      setSelectedCountries((prevSelectedCountries) =>
-        prevSelectedCountries.filter((item) => item !== value)
-      );
-    }
-  };
 
   return (
     <Box>
@@ -63,9 +63,12 @@ const ContinentCollapse = ({ continent, countries }: PropsType) => {
               <input
                 className="country-input"
                 type="checkbox"
+                name="countries"
                 id={country.name}
                 value={country.name}
-                checked={selectedCountries.includes(`${country.name}`)}
+                checked={subscriptionForm["countries"].includes(
+                  `${country.name}`
+                )}
                 onChange={handleChange}
               />
               <label htmlFor={country.name} className="country-checkbox">

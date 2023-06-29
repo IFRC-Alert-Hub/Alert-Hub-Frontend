@@ -4,6 +4,16 @@ import SearchIcon from "@mui/icons-material/Search";
 import { useQuery } from "@apollo/client";
 import { GET_ALL_COUNTRIES } from "../../API/queries/getAllCountries";
 
+interface SubscriptionForm {
+  [key: string]: string | string[];
+  title: string;
+  countries: string[];
+  urgency: string[];
+  severity: string[];
+  certainty: string[];
+  methods: string[];
+}
+
 type CountryType = {
   id: string;
   name: string;
@@ -15,7 +25,12 @@ type ContinentType = {
   countrySet: CountryType[];
 };
 
-const CountrySelect = () => {
+type PropsType = {
+  subscriptionForm: SubscriptionForm;
+  handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+};
+
+const CountrySelect = ({ subscriptionForm, handleChange }: PropsType) => {
   const { loading, error, data } = useQuery(GET_ALL_COUNTRIES);
 
   if (loading) return <p>Loading...</p>;
@@ -54,6 +69,8 @@ const CountrySelect = () => {
               key={item.id}
               continent={item.name}
               countries={item.countrySet}
+              subscriptionForm={subscriptionForm}
+              handleChange={handleChange}
             />
           );
         })}

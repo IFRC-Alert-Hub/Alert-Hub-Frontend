@@ -4,48 +4,49 @@ import {
   FormControlLabel,
   FormGroup,
 } from "@mui/material";
-import { useState } from "react";
+
+interface SubscriptionForm {
+  [key: string]: string | string[];
+  title: string;
+  countries: string[];
+  urgency: string[];
+  severity: string[];
+  certainty: string[];
+  methods: string[];
+}
 
 interface CheckboxProps {
   legend: string;
-  checkboxNames: string[];
+  checkboxItems: string[];
+  subscriptionForm: SubscriptionForm;
+  handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
-interface CheckboxItem {
-  [key: string]: boolean;
-}
-
-const FormCheckbox = ({ legend, checkboxNames }: CheckboxProps) => {
-  const initialState: CheckboxItem = checkboxNames.reduce((obj, value) => {
-    obj[value] = false;
-    return obj;
-  }, {} as CheckboxItem);
-
-  const [checkedItems, setCheckedItems] = useState<CheckboxItem>(initialState);
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setCheckedItems({
-      ...checkedItems,
-      [e.target.name]: e.target.checked,
-    });
-  };
+const FormCheckbox = ({
+  legend,
+  checkboxItems,
+  subscriptionForm,
+  handleChange,
+}: CheckboxProps) => {
+  const checkboxName = legend.toLowerCase();
 
   return (
     <div>
       <FormControl component="fieldset">
         <legend className="subs-form-legend">{legend}</legend>
         <FormGroup sx={{ flexDirection: "row", marginLeft: 1 }}>
-          {checkboxNames.map((name) => (
+          {checkboxItems.map((item) => (
             <FormControlLabel
-              key={name}
+              key={item}
               control={
                 <Checkbox
-                  checked={checkedItems[name]}
+                  checked={subscriptionForm[checkboxName].includes(item)}
                   onChange={handleChange}
-                  name={name}
+                  name={checkboxName}
+                  value={item}
                 />
               }
-              label={name}
+              label={item}
             />
           ))}
         </FormGroup>

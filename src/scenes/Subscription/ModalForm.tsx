@@ -25,47 +25,90 @@ const style = {
   borderRadius: "5px",
 };
 
+const checkBoxList = [
+  {
+    legend: "Urgency",
+    checkboxItems: ["Immediate", "Expected", "Future", "Past", "Unknown"],
+  },
+  {
+    legend: "Severity",
+    checkboxItems: ["Extreme", "Severe", "Moderate", "Minor", "Unknown"],
+  },
+  {
+    legend: "Certainty",
+    checkboxItems: ["Observed", "Likely", "Possible", "Unlikely", "Unknown"],
+  },
+  {
+    legend: "Methods",
+    checkboxItems: ["Email", "SMS"],
+  },
+];
+
 type PropsType = {
   open: boolean;
   handleClose: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 interface SubscriptionForm {
+  [key: string]: string | string[];
   title: string;
-  country: string[];
+  countries: string[];
   urgency: string[];
   severity: string[];
   certainty: string[];
-  method: string[];
+  methods: string[];
 }
 
 const ModalForm = ({ open, handleClose }: PropsType) => {
   const [subscriptionForm, setSubscriptionForm] = useState<SubscriptionForm>({
     title: "",
-    country: [],
+    countries: [],
     urgency: [],
     severity: [],
     certainty: [],
-    method: [],
+    methods: [],
   });
+
+  const emptyForm = {
+    title: "",
+    countries: [],
+    urgency: [],
+    severity: [],
+    certainty: [],
+    methods: [],
+  };
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log("Form Submit");
+    console.log(subscriptionForm);
+    setSubscriptionForm(emptyForm);
+    handleClose(open);
   };
 
-  const handleCancel = () => {
-    setSubscriptionForm(subscriptionForm);
-    handleClose(open);
+  const handleReset = () => {
+    setSubscriptionForm(emptyForm);
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value, type, checked } = e.target;
 
-    setSubscriptionForm((prevState) => ({
-      ...prevState,
-      [name]: type === "checkbox" ? checked : value,
-    }));
+    if (type === "checkbox") {
+      const updatedValues = checked
+        ? [...(subscriptionForm[name] as string[]), value]
+        : (subscriptionForm[name] as string[]).filter(
+            (item: string) => item !== value
+          );
+
+      setSubscriptionForm((prevState) => ({
+        ...prevState,
+        [name]: updatedValues,
+      }));
+    } else {
+      setSubscriptionForm((prevState) => ({
+        ...prevState,
+        [name]: value,
+      }));
+    }
   };
 
   return (
@@ -89,46 +132,27 @@ const ModalForm = ({ open, handleClose }: PropsType) => {
               sx={{ width: "100%", mt: 1, mb: 1 }}
             />
           </Box>
-          <CountrySelectionField />
-          <FormCheckbox
-            legend="Urgency"
-            checkboxNames={[
-              "Immediate",
-              "Expected",
-              "Future",
-              "Past",
-              "Unknown",
-            ]}
+          <CountrySelectionField
+            subscriptionForm={subscriptionForm}
+            handleChange={handleChange}
           />
-          <FormCheckbox
-            legend="Severity"
-            checkboxNames={[
-              "Extreme",
-              "Severe",
-              "Moderate",
-              "Minor",
-              "Unknown",
-            ]}
-          />
-          <FormCheckbox
-            legend="Certainty"
-            checkboxNames={[
-              "Observed",
-              "Likely",
-              "Possible",
-              "Unlikely",
-              "Unknown",
-            ]}
-          />
-          <FormCheckbox legend="Methods" checkboxNames={["Email", "SMS"]} />
+          {checkBoxList.map((item) => (
+            <FormCheckbox
+              key={item.legend}
+              legend={item.legend}
+              checkboxItems={item.checkboxItems}
+              subscriptionForm={subscriptionForm}
+              handleChange={handleChange}
+            />
+          ))}
           <Box display="flex" justifyContent="flex-end">
             <Button
               variant="outlined"
               color="error"
               sx={{ marginRight: "10px" }}
-              onClick={handleCancel}
+              onClick={handleReset}
             >
-              Cancel
+              Reset
             </Button>
             <Button type="submit" variant="contained" color="error">
               Submit
