@@ -1,5 +1,7 @@
 import { Container } from "@mui/material";
 import * as React from "react";
+import { useFormik } from "formik";
+import * as Yup from "yup";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 
@@ -7,11 +9,12 @@ import Link from "@mui/material/Link";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
-import { useMutation } from "@apollo/client";
-import { LOGIN } from "../../API/mutations/login";
+// import { useMutation } from "@apollo/client";
+// import { LOGIN } from "../../API/mutations/login";
 
 const Login = () => {
-  const [login] = useMutation(LOGIN);
+  // const [login] = useMutation(LOGIN);
+
   // const getToken = async (loginData: any) => {
   //   try {
   //     const result = await login({ variables: loginData });
@@ -21,19 +24,25 @@ const Login = () => {
   //     return null;
   //   }
   // };
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get("email"),
-      password: data.get("password"),
-    });
-    // const token = getToken({
-    //   email: data.get("email"),
-    //   password: data.get("password"),
-    // });
-    // console.log(token);
-  };
+  const formik = useFormik({
+    initialValues: {
+      email: "",
+      password: "",
+    },
+    validationSchema: Yup.object({
+      email: Yup.string().email("Invalid email address").required("Required"),
+      password: Yup.string().required("Required"),
+    }),
+    onSubmit: (values) => {
+      console.log(values);
+      // const token = getToken({
+      //   email: data.get("email"),
+      //   password: data.get("password"),
+      // });
+      // console.log(token);
+    },
+  });
+
   return (
     <Container maxWidth="lg" sx={{ paddingTop: "30px" }}>
       <Typography
@@ -94,7 +103,7 @@ const Login = () => {
             <Box
               component="form"
               noValidate
-              onSubmit={handleSubmit}
+              onSubmit={formik.handleSubmit}
               sx={{ mt: 1 }}
             >
               <TextField
@@ -107,6 +116,10 @@ const Login = () => {
                 autoComplete="email"
                 autoFocus
                 sx={{ fontSize: "12px" }}
+                value={formik.values.email}
+                onChange={formik.handleChange}
+                error={formik.touched.email && Boolean(formik.errors.email)}
+                helperText={formik.touched.email && formik.errors.email}
               />
               <TextField
                 margin="normal"
@@ -117,6 +130,12 @@ const Login = () => {
                 type="password"
                 id="password"
                 autoComplete="current-password"
+                value={formik.values.password}
+                onChange={formik.handleChange}
+                error={
+                  formik.touched.password && Boolean(formik.errors.password)
+                }
+                helperText={formik.touched.password && formik.errors.password}
               />
 
               <Box

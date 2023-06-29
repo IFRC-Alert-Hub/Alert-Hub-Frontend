@@ -1,5 +1,7 @@
 import { Container } from "@mui/material";
 import * as React from "react";
+import { useFormik } from "formik";
+import * as Yup from "yup";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 
@@ -9,21 +11,30 @@ import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 
 const Register = () => {
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      firstName: data.get("firstName"),
-      lastName: data.get("lastName"),
-      email: data.get("email"),
-      password: data.get("password"),
-    });
-    // const token = getToken({
-    //   email: data.get("email"),
-    //   password: data.get("password"),
-    // });
-    // console.log(token);
-  };
+  const formik = useFormik({
+    initialValues: {
+      firstName: "",
+      lastName: "",
+      email: "",
+      password: "",
+      confirmPassword: "",
+    },
+    validationSchema: Yup.object({
+      firstName: Yup.string().required("Required"),
+      lastName: Yup.string().required("Required"),
+      email: Yup.string().email("Invalid email address").required("Required"),
+      password: Yup.string()
+        .required("Required")
+        .min(6, "Password must be at least 6 characters"),
+      confirmPassword: Yup.string()
+        .required("Required")
+        .oneOf([Yup.ref("password"), ""], "Passwords must match"),
+    }),
+    onSubmit: (values) => {
+      console.log(values);
+    },
+  });
+
   return (
     <Container maxWidth="lg" sx={{ paddingTop: "30px" }}>
       <Typography
@@ -87,7 +98,7 @@ const Register = () => {
             <Box
               component="form"
               noValidate
-              onSubmit={handleSubmit}
+              onSubmit={formik.handleSubmit}
               sx={{ mt: 1 }}
             >
               <TextField
@@ -100,6 +111,12 @@ const Register = () => {
                 autoComplete="given-name"
                 autoFocus
                 sx={{ fontSize: "12px" }}
+                value={formik.values.firstName}
+                onChange={formik.handleChange}
+                error={
+                  formik.touched.firstName && Boolean(formik.errors.firstName)
+                }
+                helperText={formik.touched.firstName && formik.errors.firstName}
               />
 
               <TextField
@@ -111,6 +128,12 @@ const Register = () => {
                 name="lastName"
                 autoComplete="family-name"
                 sx={{ fontSize: "12px" }}
+                value={formik.values.lastName}
+                onChange={formik.handleChange}
+                error={
+                  formik.touched.lastName && Boolean(formik.errors.lastName)
+                }
+                helperText={formik.touched.lastName && formik.errors.lastName}
               />
 
               <TextField
@@ -122,6 +145,10 @@ const Register = () => {
                 name="email"
                 autoComplete="email"
                 sx={{ fontSize: "12px" }}
+                value={formik.values.email}
+                onChange={formik.handleChange}
+                error={formik.touched.email && Boolean(formik.errors.email)}
+                helperText={formik.touched.email && formik.errors.email}
               />
 
               <TextField
@@ -134,6 +161,12 @@ const Register = () => {
                 type="password"
                 autoComplete="new-password"
                 sx={{ fontSize: "12px" }}
+                value={formik.values.password}
+                onChange={formik.handleChange}
+                error={
+                  formik.touched.password && Boolean(formik.errors.password)
+                }
+                helperText={formik.touched.password && formik.errors.password}
               />
 
               <TextField
@@ -146,6 +179,16 @@ const Register = () => {
                 type="password"
                 autoComplete="new-password"
                 sx={{ fontSize: "12px", paddingBottom: "20px" }}
+                value={formik.values.confirmPassword}
+                onChange={formik.handleChange}
+                error={
+                  formik.touched.confirmPassword &&
+                  Boolean(formik.errors.confirmPassword)
+                }
+                helperText={
+                  formik.touched.confirmPassword &&
+                  formik.errors.confirmPassword
+                }
               />
 
               <Button
