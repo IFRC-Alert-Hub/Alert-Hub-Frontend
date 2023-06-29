@@ -172,6 +172,7 @@ body,
 }
 
 /* || SUBSCRIPTION FORM */
+
 .subs-form-title,
 .subs-form-legend {
   margin: 0 !important;
@@ -186,4 +187,31 @@ body,
 
   justify-content: flex-start;
   align-items: center;
+}
+
+/* country checkbox */
+
+.country-checkbox {
+  display: inline-block;
+  cursor: pointer;
+  margin: 5px 0px 5px 5px;
+  padding: 0px 5px;
+  border-radius: 15px;
+  color: rgba(0, 0, 0, 0.7);
+  background-color: #fff;
+  border: 1px solid #b8b8b8;
+}
+
+.country-checkbox:hover {
+  filter: brightness(0.9);
+}
+
+.country-input {
+  display: none;
+}
+
+.country-input:checked + .country-checkbox {
+  color: #fff;
+  background-color: #f87575;
+  border: 1px solid #f87575;
 }

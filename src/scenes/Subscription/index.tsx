@@ -1,7 +1,7 @@
 import { Button, Container, Grid, Typography } from "@mui/material";
 import SubscriptionTable from "./SubscriptionTable";
 import { useState } from "react";
-import AddModal from "./AddModal";
+import ModalForm from "./ModalForm";
 
 interface SubscriptionData {
   id: number;
@@ -10,48 +10,30 @@ interface SubscriptionData {
   urgency: string[];
   severity: string[];
   certainty: string[];
-  method: string[];
+  methods: string[];
   displayedCountries?: string[];
 }
 
-function createData(
-  id: number,
-  title: string,
-  countries: string[],
-  urgency: string[],
-  severity: string[],
-  certainty: string[],
-  method: string[]
-) {
-  return { id, title, countries, urgency, severity, certainty, method };
-}
-
-const rows: SubscriptionData[] = [];
-
-rows.push(
-  createData(
-    0,
-    "Asian flood",
-    ["Egypt", "South Africa", "Nigeria"],
-    ["Future"],
-    ["Extreme, Severe"],
-    ["Observed"],
-    ["Email, SMS"]
-  )
-);
-for (let i = 1; i < 13; i++) {
-  rows.push(
-    createData(
-      i,
-      "Africa-v1",
-      ["Egypt", "South Africa", "Nigeria", "Kenya", "Morocco"],
-      ["Future, Expected"],
-      ["Severe"],
-      ["Likely"],
-      ["Email"]
-    )
-  );
-}
+const rows: SubscriptionData[] = [
+  {
+    id: 0,
+    title: "Asian flood",
+    countries: ["China", "Japan", "India"],
+    urgency: ["Future"],
+    severity: ["Extreme, Severe"],
+    certainty: ["Observed"],
+    methods: ["Email, SMS"],
+  },
+  {
+    id: 1,
+    title: "Africa-v1",
+    countries: ["Egypt", "South Africa", "Nigeria", "Kenya", "Morocco"],
+    urgency: ["Future, Expected"],
+    severity: ["Severe"],
+    certainty: ["Likely"],
+    methods: ["Email"],
+  },
+];
 
 const Subscription = () => {
   const [open, setOpen] = useState(false);
@@ -84,7 +66,7 @@ const Subscription = () => {
         </Grid>
       </Grid>
       <SubscriptionTable rows={rows} />
-      <AddModal open={open} handleClose={handleClose} />
+      <ModalForm open={open} handleClose={handleClose} />
     </Container>
   );
 };
