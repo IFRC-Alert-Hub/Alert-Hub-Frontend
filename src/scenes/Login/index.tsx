@@ -1,51 +1,54 @@
 import { Container } from "@mui/material";
 import * as React from "react";
-import Avatar from "@mui/material/Avatar";
+import { useFormik } from "formik";
+import * as Yup from "yup";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Checkbox from "@mui/material/Checkbox";
+
 import Link from "@mui/material/Link";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
-import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
-
-function Copyright(props: any) {
-  return (
-    <Typography
-      variant="body2"
-      color="text.secondary"
-      align="center"
-      {...props}
-    >
-      {"Copyright © "}
-      <Link color="inherit" href="https://mui.com/">
-        Your Website
-      </Link>{" "}
-      {new Date().getFullYear()}
-      {"."}
-    </Typography>
-  );
-}
-
-const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-  event.preventDefault();
-  const data = new FormData(event.currentTarget);
-  console.log({
-    email: data.get("email"),
-    password: data.get("password"),
-  });
-};
+// import { useMutation } from "@apollo/client";
+// import { LOGIN } from "../../API/mutations/login";
 
 const Login = () => {
+  // const [login] = useMutation(LOGIN);
+
+  // const getToken = async (loginData: any) => {
+  //   try {
+  //     const result = await login({ variables: loginData });
+  //     return result.data.login.token;
+  //   } catch (error: any) {
+  //     alert(error.message);
+  //     return null;
+  //   }
+  // };
+  const formik = useFormik({
+    initialValues: {
+      email: "",
+      password: "",
+    },
+    validationSchema: Yup.object({
+      email: Yup.string().email("Invalid email address").required("Required"),
+      password: Yup.string().required("Required"),
+    }),
+    onSubmit: (values) => {
+      console.log(values);
+      // const token = getToken({
+      //   email: data.get("email"),
+      //   password: data.get("password"),
+      // });
+      // console.log(token);
+    },
+  });
+
   return (
     <Container maxWidth="lg" sx={{ paddingTop: "30px" }}>
       <Typography
         variant="h1"
         textAlign={"center"}
         fontWeight={"bold"}
-        paddingBottom={"15px"}
         textTransform={"capitalize"}
         letterSpacing={"1.6px"}
       >
@@ -69,26 +72,38 @@ const Login = () => {
               display: "flex",
               flexDirection: "column",
               alignItems: "center",
+              justifyContent: "center",
               backgroundColor: "white",
               borderRadius: "20px",
-              padding: "1rem",
+              padding: "2rem",
+              minHeight: "600px",
+              textAlign: "center",
             }}
           >
-            <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
-              <LockOutlinedIcon />
-            </Avatar>
-            <Typography component="h1" variant="h3" textAlign={"center"}>
+            <Typography
+              component="h1"
+              variant="h2"
+              fontWeight={560}
+              textAlign={"center"}
+            >
               Welcome Back
             </Typography>
-            <Typography component="h1" variant="h5" textAlign={"center"}>
-              If you are staff, member or volunteer of the Red Cross Red
-              Crescent Movement (National Societies, the IFRC and the ICRC)
-              login with you email and password.{" "}
+            <Typography
+              variant="h5"
+              fontSize={"12px"}
+              textAlign={"center"}
+              color={"#444850"}
+              padding="0 10px"
+              marginBottom="3px"
+            >
+              If you are staff, member or volunteer of the Red Cross Re Crescent
+              Movement (National Societies, the IFRC and the ICRC) login with
+              you email and password.{" "}
             </Typography>
             <Box
               component="form"
               noValidate
-              onSubmit={handleSubmit}
+              onSubmit={formik.handleSubmit}
               sx={{ mt: 1 }}
             >
               <TextField
@@ -100,6 +115,11 @@ const Login = () => {
                 name="email"
                 autoComplete="email"
                 autoFocus
+                sx={{ fontSize: "12px" }}
+                value={formik.values.email}
+                onChange={formik.handleChange}
+                error={formik.touched.email && Boolean(formik.errors.email)}
+                helperText={formik.touched.email && formik.errors.email}
               />
               <TextField
                 margin="normal"
@@ -110,11 +130,46 @@ const Login = () => {
                 type="password"
                 id="password"
                 autoComplete="current-password"
+                value={formik.values.password}
+                onChange={formik.handleChange}
+                error={
+                  formik.touched.password && Boolean(formik.errors.password)
+                }
+                helperText={formik.touched.password && formik.errors.password}
               />
-              <FormControlLabel
-                control={<Checkbox value="remember" color="primary" />}
-                label="Remember me"
-              />
+
+              <Box
+                textAlign="center"
+                display="flex"
+                justifyContent="center"
+                marginTop={"17px"}
+                marginBottom={"17px"}
+              >
+                <Link href="#" style={{ marginRight: "8px" }}>
+                  <Typography
+                    variant="h5"
+                    fontSize="13px"
+                    color="#444850"
+                    sx={{ textDecoration: "underline" }}
+                  >
+                    Forgot Password
+                  </Typography>
+                </Link>
+                <Typography variant="h5" fontSize="12px" color="#444850">
+                  |
+                </Typography>
+                <Link href="#" style={{ marginLeft: "8px" }}>
+                  <Typography
+                    variant="h5"
+                    fontSize="13px"
+                    color="#444850"
+                    sx={{ textDecoration: "underline" }}
+                  >
+                    Re-send validation email
+                  </Typography>
+                </Link>
+              </Box>
+
               <Button
                 type="submit"
                 fullWidth
@@ -134,17 +189,28 @@ const Login = () => {
               >
                 Login
               </Button>
-              <Grid container>
-                <Grid item xs>
-                  <Link href="#">Forgot password?</Link>
-                </Grid>
-                <Grid item>
-                  <Link href="#" variant="body2">
-                    {"Don't have an account? Sign Up"}
-                  </Link>
-                </Grid>
-              </Grid>
-              <Copyright sx={{ mt: 5 }} />
+
+              <Box
+                textAlign="center"
+                display="flex"
+                justifyContent="center"
+                marginTop={"17px"}
+                marginBottom={"17px"}
+              >
+                <Typography variant="h5" fontSize="13px" color="#444850">
+                  Don’t have an account?
+                </Typography>
+                <Link href="#" style={{ marginLeft: "8px" }}>
+                  <Typography
+                    variant="h5"
+                    fontSize="13px"
+                    color="#444850"
+                    sx={{ textDecoration: "underline" }}
+                  >
+                    Sign up
+                  </Typography>
+                </Link>
+              </Box>
             </Box>
           </Box>
         </Grid>
