@@ -77,8 +77,23 @@ const Home = () => {
             <TextField
               {...params}
               label="Alert Type"
+              size="small"
               sx={{
                 "& .MuiInputLabel-root": { color: "#8D8D8D", fontSize: "12px" },
+                "& .MuiOutlinedInput-root": {
+                  "& fieldset": {
+                    borderColor: "#E0E3E7",
+                  },
+                  "&:hover fieldset": {
+                    borderColor: "#B2BAC2",
+                  },
+                  "&.Mui-focused fieldset": {
+                    borderColor: "#B2BAC2",
+                  },
+                  "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+                    border: "1px solid #B2BAC2",
+                  },
+                },
               }}
             />
           )}
