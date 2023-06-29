@@ -98,7 +98,7 @@ const regionItems = [
   },
 ];
 
-const cardData = [
+export const cardData = [
   {
     title: "Flood Warning issured March 2023",
     updatedTime: "JUNE 8, 2023",

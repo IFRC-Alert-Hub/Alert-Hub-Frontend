@@ -1,8 +1,10 @@
 import {
+  Autocomplete,
   Box,
   CircularProgress,
   Container,
   Grid,
+  TextField,
   Typography,
 } from "@mui/material";
 import TitleHeader from "../../components/TitleHeader";
@@ -11,6 +13,8 @@ import { useRef } from "react";
 import { useIntl } from "react-intl";
 import { useQuery } from "@apollo/client";
 import { ALL_ALERTS } from "../../API/queries/getAllAlerts";
+import CardCarousel from "../../components/Card/CardCarousel";
+import { cardData } from "../Region";
 
 const Home = () => {
   const mapContainerRef = useRef<HTMLDivElement>(null);
@@ -49,6 +53,38 @@ const Home = () => {
         rightTitle={"View all alerts"}
         rightLinkURL={"/alerts/all"}
       />
+      <Box margin={"0px 25px 25px"}>
+        <CardCarousel cards={cardData} />
+      </Box>
+      <TitleHeader
+        title="All ONGOING Exeme Alerts"
+        rightTitle={"View all alerts"}
+        rightLinkURL={"/alerts/all"}
+      />
+      <Box margin={"20px"} display="flex" flexDirection="row">
+        <Autocomplete
+          disablePortal
+          id="combo-box-demo"
+          options={[{ label: "Alert Type 1" }, { label: "Alert Type 2" }]}
+          sx={{
+            width: 200,
+            backgroundColor: "#f4f4f4",
+            "& .MuiAutocomplete-input": {
+              padding: "4px",
+            },
+          }}
+          renderInput={(params) => (
+            <TextField
+              {...params}
+              label="Alert Type"
+              sx={{
+                "& .MuiInputLabel-root": { color: "#8D8D8D", fontSize: "12px" },
+              }}
+            />
+          )}
+        />
+      </Box>
+
       {loading && (
         <CircularProgress sx={{ textAlign: "center" }} color="secondary" />
       )}
