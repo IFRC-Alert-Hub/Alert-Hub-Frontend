@@ -5,14 +5,13 @@ import * as Yup from "yup";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 
-import Link from "@mui/material/Link";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 // import { useMutation } from "@apollo/client";
 // import { LOGIN } from "../../API/mutations/login";
 
-const Login = () => {
+const ReSendValidationEmail = () => {
   // const [login] = useMutation(LOGIN);
 
   // const getToken = async (loginData: any) => {
@@ -27,11 +26,9 @@ const Login = () => {
   const formik = useFormik({
     initialValues: {
       email: "",
-      password: "",
     },
     validationSchema: Yup.object({
       email: Yup.string().email("Invalid email address").required("Required"),
-      password: Yup.string().required("Required"),
     }),
     onSubmit: (values) => {
       console.log(values);
@@ -52,7 +49,7 @@ const Login = () => {
         textTransform={"capitalize"}
         letterSpacing={"1.6px"}
       >
-        Login
+        Re-send validation email{" "}
       </Typography>
       <Grid
         container
@@ -86,7 +83,7 @@ const Login = () => {
               fontWeight={560}
               textAlign={"center"}
             >
-              Welcome Back
+              Re-send Validation Email
             </Typography>
             <Typography
               variant="h5"
@@ -96,9 +93,7 @@ const Login = () => {
               padding="0 10px"
               marginBottom="3px"
             >
-              If you are staff, member or volunteer of the Red Cross Re Crescent
-              Movement (National Societies, the IFRC and the ICRC) login with
-              you email and password.{" "}
+              Enter the email you used during registration
             </Typography>
             <Box
               component="form"
@@ -115,65 +110,17 @@ const Login = () => {
                 name="email"
                 autoComplete="email"
                 autoFocus
-                sx={{ fontSize: "12px" }}
+                sx={{ fontSize: "10px", minWidth: "100%", width: "100%" }} // Added sx property for full width
                 value={formik.values.email}
                 onChange={formik.handleChange}
                 error={formik.touched.email && Boolean(formik.errors.email)}
                 helperText={formik.touched.email && formik.errors.email}
               />
-              <TextField
-                margin="normal"
-                required
-                fullWidth
-                name="password"
-                label="Password"
-                type="password"
-                id="password"
-                autoComplete="current-password"
-                value={formik.values.password}
-                onChange={formik.handleChange}
-                error={
-                  formik.touched.password && Boolean(formik.errors.password)
-                }
-                helperText={formik.touched.password && formik.errors.password}
-              />
-
-              <Box
-                textAlign="center"
-                display="flex"
-                justifyContent="center"
-                marginTop={"17px"}
-                marginBottom={"17px"}
-              >
-                <Link href="#" style={{ marginRight: "8px" }}>
-                  <Typography
-                    variant="h5"
-                    fontSize="13px"
-                    color="#444850"
-                    sx={{ textDecoration: "underline" }}
-                  >
-                    Forgot Password
-                  </Typography>
-                </Link>
-                <Typography variant="h5" fontSize="12px" color="#444850">
-                  |
-                </Typography>
-                <Link href="#" style={{ marginLeft: "8px" }}>
-                  <Typography
-                    variant="h5"
-                    fontSize="13px"
-                    color="#444850"
-                    sx={{ textDecoration: "underline" }}
-                  >
-                    Re-send validation email
-                  </Typography>
-                </Link>
-              </Box>
 
               <Button
                 type="submit"
-                fullWidth
                 variant="contained"
+                fullWidth
                 sx={{
                   color: "#fff",
                   outline: "red",
@@ -185,32 +132,11 @@ const Login = () => {
                     backgroundColor: "#f5333f",
                   },
                   fontSize: "14px",
+                  width: "100%", // Added sx property for full width
                 }}
               >
-                Login
+                Re-send
               </Button>
-
-              <Box
-                textAlign="center"
-                display="flex"
-                justifyContent="center"
-                marginTop={"17px"}
-                marginBottom={"17px"}
-              >
-                <Typography variant="h5" fontSize="13px" color="#444850">
-                  Don’t have an account?
-                </Typography>
-                <Link href="#" style={{ marginLeft: "8px" }}>
-                  <Typography
-                    variant="h5"
-                    fontSize="13px"
-                    color="#444850"
-                    sx={{ textDecoration: "underline" }}
-                  >
-                    Sign up
-                  </Typography>
-                </Link>
-              </Box>
             </Box>
           </Box>
         </Grid>
@@ -239,4 +165,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default ReSendValidationEmail;

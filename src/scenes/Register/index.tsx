@@ -140,7 +140,7 @@ const Register = () => {
               component="form"
               noValidate
               onSubmit={formik.handleSubmit}
-              sx={{ mt: 1 }}
+              sx={{ mt: 1, width: "80%" }}
             >
               <TextField
                 margin="normal"

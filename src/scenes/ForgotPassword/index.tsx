@@ -99,7 +99,7 @@ const ForgotPassword = () => {
               component="form"
               noValidate
               onSubmit={formik.handleSubmit}
-              sx={{ mt: 1 }}
+              sx={{ mt: 1, width: "80%" }}
             >
               <TextField
                 margin="normal"
@@ -110,7 +110,7 @@ const ForgotPassword = () => {
                 name="email"
                 autoComplete="email"
                 autoFocus
-                sx={{ fontSize: "10px", minWidth: "100%" }}
+                sx={{ fontSize: "10px", minWidth: "100%", width: "100%" }} // Added sx property for full width
                 value={formik.values.email}
                 onChange={formik.handleChange}
                 error={formik.touched.email && Boolean(formik.errors.email)}
@@ -132,6 +132,7 @@ const ForgotPassword = () => {
                     backgroundColor: "#f5333f",
                   },
                   fontSize: "14px",
+                  width: "100%", // Added sx property for full width
                 }}
               >
                 Recover
