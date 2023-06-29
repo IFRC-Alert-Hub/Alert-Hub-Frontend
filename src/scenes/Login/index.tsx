@@ -12,15 +12,15 @@ import { LOGIN } from "../../API/mutations/login";
 
 const Login = () => {
   const [login] = useMutation(LOGIN);
-  const getToken = async (loginData: any) => {
-    try {
-      const result = await login({ variables: loginData });
-      return result.data.login.token;
-    } catch (error: any) {
-      alert(error.message);
-      return null;
-    }
-  };
+  // const getToken = async (loginData: any) => {
+  //   try {
+  //     const result = await login({ variables: loginData });
+  //     return result.data.login.token;
+  //   } catch (error: any) {
+  //     alert(error.message);
+  //     return null;
+  //   }
+  // };
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
