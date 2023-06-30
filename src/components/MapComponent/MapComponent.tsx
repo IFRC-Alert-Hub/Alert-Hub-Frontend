@@ -420,16 +420,6 @@ const MapComponent: React.FC<MapProps> = ({
 
           const colour = determineColour(ModerateThreatColour, alert);
 
-          mapRef.current?.addLayer({
-            id: `${layerId}-fill`,
-            type: "fill",
-            source: sourceId,
-            paint: {
-              "fill-color": colour,
-              "fill-opacity": 0.8,
-            },
-          });
-
           // Add the border layer
           mapRef.current?.addLayer({
             id: `${layerId}-border`,
@@ -438,6 +428,15 @@ const MapComponent: React.FC<MapProps> = ({
             paint: {
               "line-color": "black",
               "line-width": 1,
+            },
+          });
+          mapRef.current?.addLayer({
+            id: `${layerId}`,
+            type: "fill",
+            source: sourceId,
+            paint: {
+              "fill-color": colour,
+              "fill-opacity": 0.8,
             },
           });
 
