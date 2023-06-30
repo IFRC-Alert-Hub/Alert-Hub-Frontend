@@ -311,13 +311,13 @@ const MapComponent: React.FC<MapProps> = ({
     });
   }, [pinDataLoaded, pins, mapRef]);
 
-  const convertCoordinates = (coordinatesString: string): number[][] => {
-    const trimmedString = coordinatesString.trim();
-    return trimmedString.split(" ").map((coordinates) => {
-      const [latitude, longitude] = coordinates.split(",").map(parseFloat);
-      return [latitude, longitude];
-    });
-  };
+  // const convertCoordinates = (coordinatesString: string): number[][] => {
+  //   const trimmedString = coordinatesString.trim();
+  //   return trimmedString.split(" ").map((coordinates) => {
+  //     const [latitude, longitude] = coordinates.split(",").map(parseFloat);
+  //     return [latitude, longitude];
+  //   });
+  // };
 
   const determineColour = (currentColour: string, alert: Alert) => {
     if (currentColour === ExtremeThreatColour) {
