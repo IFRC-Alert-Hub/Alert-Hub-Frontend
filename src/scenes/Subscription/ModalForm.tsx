@@ -115,7 +115,7 @@ const ModalForm = ({ open, handleClose }: PropsType) => {
     <Modal open={open} onClose={handleClose} aria-labelledby="modal-title">
       <Box sx={style}>
         <Typography id="modal-title" variant="h3" fontWeight={"bold"} mb="5px">
-          Add New Subscription
+          Add New Group
         </Typography>
         <Box component="form" onSubmit={handleSubmit} m={1}>
           <Box sx={{ mb: 1 }}>
