@@ -7,6 +7,7 @@ import turfBbox from "@turf/bbox";
 import { PopupComponent } from "./PopupComponent";
 // import { MapData } from "./MapData";
 import { EuropeData } from "./EuropeData";
+// import { MapData } from "./MapData";
 export const ExtremeThreatColour: string = "#f5333f";
 export const ModerateThreatColour: string = "#ff9e00";
 export const OtherAlertsColour: string = "#95BF6E";
@@ -45,6 +46,7 @@ type MapProps = {
   boundingRegionCoordinates?: Bbox;
   alerts?: AlertData[];
 };
+type GeometryType = "Polygon" | "MultiPolygon";
 
 type Polygon = {
   coordinates: number[][];
@@ -100,6 +102,7 @@ export interface Alert {
   countryName: string;
   countryCentroid: number[][];
   countryISO3: string;
+  type: string;
 }
 
 const MapComponent: React.FC<MapProps> = ({
@@ -182,16 +185,6 @@ const MapComponent: React.FC<MapProps> = ({
                 coordinates: [polygon.coordinates],
               },
               properties: {},
-            },
-          });
-
-          mapRef.current?.addLayer({
-            id: layerId + "-border", // Unique layer ID for the border
-            type: "line",
-            source: sourceId,
-            paint: {
-              "line-color": "black", // Border color
-              "line-width": 14, // Border width
             },
           });
 
@@ -318,13 +311,13 @@ const MapComponent: React.FC<MapProps> = ({
     });
   }, [pinDataLoaded, pins, mapRef]);
 
-  const convertCoordinates = (coordinatesString: string): number[][] => {
-    const trimmedString = coordinatesString.trim();
-    return trimmedString.split(" ").map((coordinates) => {
-      const [latitude, longitude] = coordinates.split(",").map(parseFloat);
-      return [latitude, longitude];
-    });
-  };
+  // const convertCoordinates = (coordinatesString: string): number[][] => {
+  //   const trimmedString = coordinatesString.trim();
+  //   return trimmedString.split(" ").map((coordinates) => {
+  //     const [latitude, longitude] = coordinates.split(",").map(parseFloat);
+  //     return [latitude, longitude];
+  //   });
+  // };
 
   const determineColour = (currentColour: string, alert: Alert) => {
     if (currentColour === ExtremeThreatColour) {
@@ -364,7 +357,11 @@ const MapComponent: React.FC<MapProps> = ({
         sender: alert.sender,
         effective: alert.effective!,
         expires: alert.expires,
-        countryPolygon: convertCoordinates(alert.country.polygon),
+        countryPolygon:
+          alert.country.multipolygon === ""
+            ? JSON.parse(alert.country.polygon)
+            : JSON.parse(alert.country.multipolygon),
+        type: alert.country.multipolygon === "" ? "Polygon" : "MultiPolygon",
         countryName: alert.country.name,
         countryISO3: alert.country.iso3,
         countryCentroid: alert.country.centroid,
@@ -414,8 +411,8 @@ const MapComponent: React.FC<MapProps> = ({
             data: {
               type: "Feature",
               geometry: {
-                type: EuropeData[alert.countryISO3].type,
-                coordinates: EuropeData[alert.countryISO3].coordinates,
+                type: alert.type as GeometryType,
+                coordinates: alert.countryPolygon,
               },
               properties: {},
             },
@@ -423,8 +420,18 @@ const MapComponent: React.FC<MapProps> = ({
 
           const colour = determineColour(ModerateThreatColour, alert);
 
+          // Add the border layer
           mapRef.current?.addLayer({
-            id: layerId,
+            id: `${layerId}-border`,
+            type: "line",
+            source: sourceId,
+            paint: {
+              "line-color": "black",
+              "line-width": 1.3,
+            },
+          });
+          mapRef.current?.addLayer({
+            id: `${layerId}`,
             type: "fill",
             source: sourceId,
             paint: {
