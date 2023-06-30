@@ -116,6 +116,18 @@ export const PopupComponent: React.FC<PopupComponentProps> = ({
               {alert.event}
             </Typography>
             <Typography variant="body2">
+              <span style={{ fontWeight: "bold" }}>Country: </span>
+              {alert.countryName}
+            </Typography>
+            <Typography variant="body2">
+              <span style={{ fontWeight: "bold" }}>ISO3: </span>
+              {alert.countryISO3}
+            </Typography>
+            <Typography variant="body2">
+              <span style={{ fontWeight: "bold" }}>Region: </span>
+              {alert.region}
+            </Typography>
+            <Typography variant="body2">
               <span style={{ fontWeight: "bold" }}>Expires: </span>
               {modifyDateTime(alert.expires)}
             </Typography>

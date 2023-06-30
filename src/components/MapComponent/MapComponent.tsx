@@ -427,7 +427,7 @@ const MapComponent: React.FC<MapProps> = ({
             source: sourceId,
             paint: {
               "line-color": "black",
-              "line-width": 1,
+              "line-width": 1.3,
             },
           });
           mapRef.current?.addLayer({
