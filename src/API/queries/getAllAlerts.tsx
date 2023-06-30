@@ -6,20 +6,6 @@ export const ALL_ALERTS = gql`
     listAlert {
       areaDesc
       certainty
-      country {
-        centroid
-        id
-        iso
-        iso3
-        name
-        polygon
-        region {
-          name
-          centroid
-          polygon
-          id
-        }
-      }
       event
       expires
       geocodeName
@@ -27,13 +13,25 @@ export const ALL_ALERTS = gql`
       id
       identifier
       msgType
-      urgency
-      status
-      severity
-      sent
       sender
       scope
-      polygon
+      sent
+      severity
+      status
+      urgency
+      country {
+        id
+        iso3
+        multipolygon
+        name
+        polygon
+        region {
+          id
+          centroid
+          name
+          polygon
+        }
+      }
       effective
     }
   }

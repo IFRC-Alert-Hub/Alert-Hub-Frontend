@@ -3,7 +3,8 @@ import * as React from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import Button from "@mui/material/Button";
-import TextField from "@mui/material/TextField";
+import { TextField, IconButton, InputAdornment } from "@mui/material";
+import { Visibility, VisibilityOff } from "@mui/icons-material";
 
 import Link from "@mui/material/Link";
 import Box from "@mui/material/Box";
@@ -42,6 +43,11 @@ const Login = () => {
       // console.log(token);
     },
   });
+  const [showPassword, setShowPassword] = React.useState(false);
+
+  const handleTogglePassword = () => {
+    setShowPassword(!showPassword);
+  };
 
   return (
     <Container maxWidth="lg" sx={{ paddingTop: "30px" }}>
@@ -127,7 +133,7 @@ const Login = () => {
                 fullWidth
                 name="password"
                 label="Password"
-                type="password"
+                type={showPassword ? "text" : "password"}
                 id="password"
                 autoComplete="current-password"
                 value={formik.values.password}
@@ -135,6 +141,15 @@ const Login = () => {
                 error={
                   formik.touched.password && Boolean(formik.errors.password)
                 }
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton onClick={handleTogglePassword} edge="end">
+                        {showPassword ? <VisibilityOff /> : <Visibility />}
+                      </IconButton>
+                    </InputAdornment>
+                  ),
+                }}
                 helperText={formik.touched.password && formik.errors.password}
               />
 
