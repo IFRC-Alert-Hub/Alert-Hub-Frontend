@@ -51,10 +51,21 @@ export const theme: Theme = createTheme({
     MuiTextField: {
       styleOverrides: {
         root: {
-          "& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline":
-            {
-              borderColor: "#f5333f",
+          "& .MuiInputLabel-root": { color: "#8D8D8D", fontSize: "12px" },
+          "& .MuiOutlinedInput-root": {
+            "& fieldset": {
+              borderColor: "#E0E3E7",
             },
+            "&:hover fieldset": {
+              borderColor: "#B2BAC2",
+            },
+            "&.Mui-focused fieldset": {
+              borderColor: "#B2BAC2",
+            },
+            "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+              border: "1px solid #B2BAC2",
+            },
+          },
         },
       },
     },
@@ -71,7 +82,6 @@ export const theme: Theme = createTheme({
           "&.Mui-focused": {
             color: "#5A5A5A",
           },
-          
         },
       },
     },

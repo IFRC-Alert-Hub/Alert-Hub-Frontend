@@ -74,7 +74,7 @@ const Home = () => {
           options={[{ label: "Fire" }, { label: "Floods" }]}
           value={{ label: "Floods" }}
           sx={{
-            width: 150,
+            width: 170,
             backgroundColor: "#f4f4f4",
             "& .MuiAutocomplete-input": {
               padding: "4px",
@@ -111,7 +111,44 @@ const Home = () => {
           id="combo-box-demo"
           options={[{ label: "Filter Type 1" }, { label: "Filter Type 2" }]}
           sx={{
-            width: 150,
+            width: 170,
+            backgroundColor: "#f4f4f4",
+            "& .MuiAutocomplete-input": {
+              padding: "4px",
+            },
+            marginRight: "20px",
+          }}
+          renderInput={(params) => (
+            <TextField
+              {...params}
+              label="Filter Type"
+              size="small"
+              sx={{
+                "& .MuiInputLabel-root": { color: "#8D8D8D", fontSize: "12px" },
+                "& .MuiOutlinedInput-root": {
+                  "& fieldset": {
+                    borderColor: "#E0E3E7",
+                  },
+                  "&:hover fieldset": {
+                    borderColor: "#B2BAC2",
+                  },
+                  "&.Mui-focused fieldset": {
+                    borderColor: "#B2BAC2",
+                  },
+                  "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+                    border: "1px solid #B2BAC2",
+                  },
+                },
+              }}
+            />
+          )}
+        />
+        <Autocomplete
+          disablePortal
+          id="combo-box-demo"
+          options={[{ label: "Filter Type 1" }, { label: "Filter Type 2" }]}
+          sx={{
+            width: 170,
             backgroundColor: "#f4f4f4",
             "& .MuiAutocomplete-input": {
               padding: "4px",
