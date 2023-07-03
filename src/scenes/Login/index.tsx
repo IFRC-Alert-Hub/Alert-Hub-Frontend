@@ -1,4 +1,4 @@
-import { Container } from "@mui/material";
+import { Breadcrumbs, Container, Stack } from "@mui/material";
 import * as React from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
@@ -10,6 +10,7 @@ import Link from "@mui/material/Link";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
+import PageTitle from "../../components/PageTitle";
 // import { useMutation } from "@apollo/client";
 // import { LOGIN } from "../../API/mutations/login";
 
@@ -48,18 +49,48 @@ const Login = () => {
   const handleTogglePassword = () => {
     setShowPassword(!showPassword);
   };
+  function handleClick(event: React.MouseEvent<HTMLAnchorElement, MouseEvent>) {
+    event.preventDefault();
+    console.info("You clicked a breadcrumb.");
+  }
 
+  const breadcrumbs = [
+    <Link
+      underline="none"
+      key="1"
+      color="inherit"
+      href="/"
+      onClick={handleClick}
+      sx={{ color: "rgb(27, 27, 27)" }}
+    >
+      MUI
+    </Link>,
+    <Link
+      underline="none"
+      key="2"
+      color="inherit"
+      href="/material-ui/getting-started/installation/"
+      onClick={handleClick}
+      sx={{ color: "rgb(27, 27, 27)" }}
+    >
+      Core
+    </Link>,
+    <Typography
+      key="3"
+      color="text.primary"
+      sx={{ fontWeight: "bolder", color: "rgb(27, 27, 27)" }}
+    >
+      Breadcrumb
+    </Typography>,
+  ];
   return (
     <Container maxWidth="lg" sx={{ paddingTop: "30px" }}>
-      <Typography
-        variant="h1"
-        textAlign={"center"}
-        fontWeight={"bold"}
-        textTransform={"capitalize"}
-        letterSpacing={"1.6px"}
-      >
-        Login
-      </Typography>
+      <Stack spacing={2}>
+        <Breadcrumbs separator=">" aria-label="breadcrumb">
+          {breadcrumbs}
+        </Breadcrumbs>
+      </Stack>
+      <PageTitle title="Login"></PageTitle>
       <Grid
         container
         component="main"
@@ -82,7 +113,7 @@ const Login = () => {
               backgroundColor: "white",
               borderRadius: "20px",
               padding: "2rem",
-              minHeight: "600px",
+              minHeight: "auto",
               textAlign: "center",
             }}
           >
@@ -91,6 +122,7 @@ const Login = () => {
               variant="h2"
               fontWeight={560}
               textAlign={"center"}
+              fontSize={"23px"}
             >
               Welcome Back
             </Typography>

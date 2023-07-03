@@ -33,18 +33,18 @@ body,
 .mapboxgl-popup-content {
   width: max-content;
   height: max-content;
-  background-color: #000000 !important;
+  background-color: #272727 !important;
   padding: 4px !important;
-  border-radius: 5px;
+  border-radius: 2px;
   z-index: 1000;
 }
 
 .mapboxgl-popup-anchor-top .mapboxgl-popup-tip {
-  border-bottom-color: #000000 !important;
+  border-bottom-color: #272727 !important;
 }
 
 .mapboxgl-popup-anchor-bottom .mapboxgl-popup-tip {
-  border-top-color: #000000 !important;
+  border-top-color: #272727 !important;
 }
 
 .mapboxgl-popup-close-button {
@@ -52,7 +52,7 @@ body,
   top: 10px !important;
   color: white !important;
   border-radius: 3px !important;
-  background-color: black !important;
+  background-color: #272727 !important;
 }
 
 /* || ALERT CARD */
