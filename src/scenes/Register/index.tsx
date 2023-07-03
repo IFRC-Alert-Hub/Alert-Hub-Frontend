@@ -1,4 +1,4 @@
-import { Container, LinearProgress } from "@mui/material";
+import { Container, InputAdornment, LinearProgress } from "@mui/material";
 import * as React from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
@@ -18,6 +18,7 @@ import PageTitle from "../../components/PageTitle";
 
 const Register = () => {
   const [passwordStrength, setPasswordStrength] = React.useState(0);
+  const [isSendClicked, setIsSendClicked] = React.useState(false);
 
   const calculatePasswordStrength = (password: string) => {
     const strengthRegex =
@@ -50,17 +51,22 @@ const Register = () => {
     setPasswordStrength(strength);
     formik.handleChange(event);
   };
+  const handleSendClick = () => {
+    setIsSendClicked(true);
+  };
+
   const formik = useFormik({
     initialValues: {
-      firstName: "",
-      lastName: "",
+      // firstName: "",
+      // lastName: "",
       email: "",
       password: "",
       confirmPassword: "",
+      verificationCode: "",
     },
     validationSchema: Yup.object({
-      firstName: Yup.string().required("Required"),
-      lastName: Yup.string().required("Required"),
+      // firstName: Yup.string().required("Required"),
+      // lastName: Yup.string().required("Required"),
       email: Yup.string().email("Invalid email address").required("Required"),
       password: Yup.string()
         .required("Required")
@@ -71,6 +77,7 @@ const Register = () => {
       confirmPassword: Yup.string()
         .required("Required")
         .oneOf([Yup.ref("password"), ""], "Passwords must match"),
+      verificationCode: Yup.string().required("Required"),
     }),
     onSubmit: (values) => {
       console.log(values);
@@ -136,7 +143,7 @@ const Register = () => {
               onSubmit={formik.handleSubmit}
               sx={{ mt: 1, width: "80%" }}
             >
-              <TextField
+              {/* <TextField
                 margin="normal"
                 required
                 fullWidth
@@ -169,8 +176,7 @@ const Register = () => {
                   formik.touched.lastName && Boolean(formik.errors.lastName)
                 }
                 helperText={formik.touched.lastName && formik.errors.lastName}
-              />
-
+              /> */}
               <TextField
                 margin="normal"
                 required
@@ -185,6 +191,46 @@ const Register = () => {
                 onChange={formik.handleChange}
                 error={formik.touched.email && Boolean(formik.errors.email)}
                 helperText={formik.touched.email && formik.errors.email}
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <span style={{ marginRight: "5px", color: "grey" }}>
+                        |
+                      </span>
+                      <Link
+                        sx={{
+                          fontSize: "12px",
+                          color: "grey",
+                        }}
+                        href="#"
+                        onClick={handleSendClick}
+                      >
+                        SEND
+                      </Link>
+                    </InputAdornment>
+                  ),
+                }}
+              />
+              <TextField
+                margin="normal"
+                required
+                fullWidth
+                id="verification-code"
+                label="Verification Code"
+                name="verificationCode"
+                autoComplete="off"
+                sx={{ fontSize: "12px" }}
+                value={formik.values.verificationCode}
+                onChange={formik.handleChange}
+                disabled={!isSendClicked} // Disable field until send button is clicked
+                error={
+                  formik.touched.verificationCode &&
+                  Boolean(formik.errors.verificationCode)
+                }
+                helperText={
+                  formik.touched.verificationCode &&
+                  formik.errors.verificationCode
+                }
               />
               <TextField
                 margin="normal"
@@ -203,7 +249,6 @@ const Register = () => {
                 }
                 helperText={formik.touched.password && formik.errors.password}
               />
-
               <LinearProgress
                 variant="determinate"
                 value={passwordStrength}
@@ -244,7 +289,6 @@ const Register = () => {
                   formik.errors.confirmPassword
                 }
               />
-
               <Button
                 type="submit"
                 fullWidth
@@ -263,7 +307,6 @@ const Register = () => {
               >
                 Register
               </Button>
-
               <Box
                 textAlign="center"
                 display="flex"
