@@ -1,13 +1,14 @@
 import React, { ReactElement, useEffect, useRef, useState } from "react";
 import mapboxgl, { Map as MapboxMap, LngLatBoundsLike } from "mapbox-gl";
 import { createRoot } from "react-dom/client";
-import { ThemeProvider } from "@mui/material";
+import { Dialog, ThemeProvider } from "@mui/material";
 import { theme } from "../../theme";
 import turfBbox from "@turf/bbox";
 import { PopupComponent } from "./PopupComponent";
 // import { MapData } from "./MapData";
-import { EuropeData } from "./EuropeData";
+// import { EuropeData } from "./EuropeData";
 // import { MapData } from "./MapData";
+
 export const ExtremeThreatColour: string = "#f5333f";
 export const ModerateThreatColour: string = "#ff9e00";
 export const OtherAlertsColour: string = "#95BF6E";
@@ -119,6 +120,9 @@ const MapComponent: React.FC<MapProps> = ({
   const [polygonDataLoaded, setPolygonDataLoaded] = useState(false);
   const [pinDataLoaded, setPinDataLoaded] = useState(false);
   const [alertsLoaded, setAlertsLoaded] = useState(false);
+  const [dialogLoaded, setDialogLoaded] = useState(false);
+  const [tableID, setTableID] = useState<string>("");
+
   const countryTables = useRef<{
     [key: string]: { table: ReactElement; alerts: Alert[] };
   }>({});
@@ -340,6 +344,7 @@ const MapComponent: React.FC<MapProps> = ({
   useEffect(() => {
     console.log("NEW: ", countryTables);
   }, [countryTables]);
+
   useEffect(() => {
     if (!mapRef.current || alertsLoaded || alerts.length === 0) {
       return;
@@ -444,31 +449,29 @@ const MapComponent: React.FC<MapProps> = ({
             "click",
             layerId,
             (e: mapboxgl.MapMouseEvent & mapboxgl.EventData) => {
-              // const coordinates = getPolygonCenter(
-              //   e.features[0].geometry.coordinates[0]
+              setDialogLoaded(true);
+              setTableID(tableId);
+              // const coordinates: [number, number] =
+              //   EuropeData[alert.countryISO3].centroid;
+              // const popupNode = document.createElement("div");
+              // const popupComponent = (
+              //   <ThemeProvider theme={theme}>
+              //     <PopupComponent
+              //       alerts={countryTables.current[tableId].alerts}
+              //     />
+              //   </ThemeProvider>
               // );
 
-              const coordinates: [number, number] =
-                EuropeData[alert.countryISO3].centroid;
-              const popupNode = document.createElement("div");
-              const popupComponent = (
-                <ThemeProvider theme={theme}>
-                  <PopupComponent
-                    alerts={countryTables.current[tableId].alerts}
-                  />
-                </ThemeProvider>
-              );
+              // createRoot(popupNode).render(popupComponent);
+              // let popup = new mapboxgl.Popup({
+              //   closeButton: true,
+              //   closeOnClick: true,
+              // });
 
-              createRoot(popupNode).render(popupComponent);
-              let popup = new mapboxgl.Popup({
-                closeButton: true,
-                closeOnClick: true,
-              });
-
-              popup
-                .setLngLat(coordinates)
-                .setDOMContent(popupNode)
-                .addTo(mapRef.current!);
+              // popup
+              //   .setLngLat(coordinates)
+              //   .setDOMContent(popupNode)
+              //   .addTo(mapRef.current!);
             }
           );
         }
@@ -476,8 +479,31 @@ const MapComponent: React.FC<MapProps> = ({
       setAlertsLoaded(true);
     });
   }, [alertsLoaded, alerts, mapRef, countryTables]);
+  const handleCloseDialog = () => {
+    setDialogLoaded(false);
+  };
 
-  return <div ref={mapContainerRef} className="map-container" />;
+  return (
+    <>
+      <div ref={mapContainerRef} className="map-container"></div>
+      <Dialog
+        PaperProps={{
+          sx: {
+            maxWidth: "800px",
+            margin: "none !important",
+          },
+        }}
+        open={dialogLoaded}
+        onClose={handleCloseDialog}
+      >
+        {tableID ? (
+          <PopupComponent alerts={countryTables.current[tableID].alerts} />
+        ) : (
+          ""
+        )}
+      </Dialog>
+    </>
+  );
 };
 
 export default MapComponent;

@@ -8,6 +8,7 @@ import TextField from "@mui/material/TextField";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
+import PageTitle from "../../components/PageTitle";
 // import { useMutation } from "@apollo/client";
 // import { LOGIN } from "../../API/mutations/login";
 
@@ -42,15 +43,7 @@ const ForgotPassword = () => {
 
   return (
     <Container maxWidth="lg" sx={{ paddingTop: "30px" }}>
-      <Typography
-        variant="h1"
-        textAlign={"center"}
-        fontWeight={"bold"}
-        textTransform={"capitalize"}
-        letterSpacing={"1.6px"}
-      >
-        Forgot Password
-      </Typography>
+      <PageTitle title="Forgot Password" />
       <Grid
         container
         component="main"
