@@ -11,6 +11,7 @@ import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 import PageTitle from "../../components/PageTitle";
+import BreadcrumbsComponent from "../../components/Breadcrumbs/BreadcrumbsComponent";
 // import { useMutation } from "@apollo/client";
 // import { LOGIN } from "../../API/mutations/login";
 
@@ -49,47 +50,10 @@ const Login = () => {
   const handleTogglePassword = () => {
     setShowPassword(!showPassword);
   };
-  function handleClick(event: React.MouseEvent<HTMLAnchorElement, MouseEvent>) {
-    event.preventDefault();
-    console.info("You clicked a breadcrumb.");
-  }
 
-  const breadcrumbs = [
-    <Link
-      underline="none"
-      key="1"
-      color="inherit"
-      href="/"
-      onClick={handleClick}
-      sx={{ color: "rgb(27, 27, 27)" }}
-    >
-      MUI
-    </Link>,
-    <Link
-      underline="none"
-      key="2"
-      color="inherit"
-      href="/material-ui/getting-started/installation/"
-      onClick={handleClick}
-      sx={{ color: "rgb(27, 27, 27)" }}
-    >
-      Core
-    </Link>,
-    <Typography
-      key="3"
-      color="text.primary"
-      sx={{ fontWeight: "bolder", color: "rgb(27, 27, 27)" }}
-    >
-      Breadcrumb
-    </Typography>,
-  ];
   return (
     <Container maxWidth="lg" sx={{ paddingTop: "30px" }}>
-      <Stack spacing={2}>
-        <Breadcrumbs separator=">" aria-label="breadcrumb">
-          {breadcrumbs}
-        </Breadcrumbs>
-      </Stack>
+      <BreadcrumbsComponent />
       <PageTitle title="Login"></PageTitle>
       <Grid
         container
