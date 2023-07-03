@@ -19,6 +19,7 @@ import PageTitle from "../../components/PageTitle";
 const Register = () => {
   const [passwordStrength, setPasswordStrength] = React.useState(0);
   const [isSendClicked, setIsSendClicked] = React.useState(false);
+  const [isSendEnabled, setIsSendEnabled] = React.useState<boolean>(false);
 
   const calculatePasswordStrength = (password: string) => {
     const strengthRegex =
@@ -83,6 +84,17 @@ const Register = () => {
       console.log(values);
     },
   });
+
+  const handleEmailChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ): void => {
+    const isValidEmail = Yup.string()
+      .email("Invalid email address")
+      .required("Required")
+      .isValidSync(event.target.value);
+    setIsSendEnabled(isValidEmail);
+    formik.handleChange(event);
+  };
 
   return (
     <Container maxWidth="lg" sx={{ paddingTop: "30px" }}>
@@ -188,7 +200,7 @@ const Register = () => {
                 autoFocus
                 sx={{ fontSize: "12px" }}
                 value={formik.values.email}
-                onChange={formik.handleChange}
+                onChange={handleEmailChange}
                 error={formik.touched.email && Boolean(formik.errors.email)}
                 helperText={formik.touched.email && formik.errors.email}
                 InputProps={{
@@ -201,6 +213,7 @@ const Register = () => {
                         sx={{
                           fontSize: "12px",
                           color: "grey",
+                          pointerEvents: !isSendEnabled ? "none" : "auto",
                         }}
                         href="#"
                         onClick={handleSendClick}
