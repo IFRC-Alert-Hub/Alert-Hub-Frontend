@@ -1,14 +1,13 @@
 import React, { ReactElement, useEffect, useRef, useState } from "react";
 import mapboxgl, { Map as MapboxMap, LngLatBoundsLike } from "mapbox-gl";
 import { createRoot } from "react-dom/client";
-import { Dialog, Drawer, ThemeProvider } from "@mui/material";
+import { Dialog, ThemeProvider } from "@mui/material";
 import { theme } from "../../theme";
 import turfBbox from "@turf/bbox";
 import { PopupComponent } from "./PopupComponent";
 // import { MapData } from "./MapData";
-import { EuropeData } from "./EuropeData";
+// import { EuropeData } from "./EuropeData";
 // import { MapData } from "./MapData";
-import SwipeableDrawer from "@mui/material/SwipeableDrawer";
 
 export const ExtremeThreatColour: string = "#f5333f";
 export const ModerateThreatColour: string = "#ff9e00";
