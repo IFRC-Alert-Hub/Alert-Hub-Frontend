@@ -115,6 +115,16 @@ export const PopupComponent: React.FC<PopupComponentProps> = ({
             <TabPanel value={value} index={index}>
               <Typography variant="h5" fontWeight={500} paddingBottom={"10px"}>
                 {alert.event}
+                <span
+                  style={{
+                    display: "inline-block",
+                    width: "10px",
+                    height: "10px",
+                    borderRadius: "50%",
+                    backgroundColor: alert.color,
+                    marginLeft: "10px",
+                  }}
+                ></span>
               </Typography>
               <Typography variant="body2">
                 <span style={{ fontWeight: "bold" }}>Country: </span>
@@ -151,6 +161,19 @@ export const PopupComponent: React.FC<PopupComponentProps> = ({
               <Typography variant="body2">
                 <span style={{ fontWeight: "bold" }}>Effective: </span>
                 {modifyDateTime(alert.effective)}
+              </Typography>
+
+              <Typography variant="body2">
+                <span style={{ fontWeight: "bold" }}>Centroid: </span>[
+                {alert.countryCentroid[0]}, {alert.countryCentroid[1]}]
+              </Typography>
+              <Typography variant="body2">
+                <span style={{ fontWeight: "bold" }}>Area Description: </span>
+                {alert.areaDesc}
+              </Typography>
+              <Typography variant="body2">
+                <span style={{ fontWeight: "bold" }}>Sender: </span>
+                {alert.sender}
               </Typography>
             </TabPanel>
           ))}
