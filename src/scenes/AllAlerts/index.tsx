@@ -6,6 +6,7 @@ import { RowsData } from "./Table/Data";
 import { ALL_ALERTS } from "../../API/queries/getAllAlerts";
 import TitleHeader from "../../components/TitleHeader";
 import FilterableTableComponent from "./Table/TableComponent";
+import { cap_aggregator } from "../../API/API_Links";
 
 interface AllAlertsProps {
   selectedFilter?: string;
@@ -24,7 +25,9 @@ const AllAlerts: React.FC<AllAlertsProps> = () => {
   const location = useLocation();
   const { selectedFilter, filterKey } = location.state || {};
 
-  const { loading, error, data } = useQuery(ALL_ALERTS);
+  const { loading, error, data } = useQuery(ALL_ALERTS, {
+    client: cap_aggregator,
+  });
   const [numAlerts, setNumAlerts] = useState<number>(0);
 
   const rowsData: RowsData[] = data?.listAlert?.map((alert: any) => ({
