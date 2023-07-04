@@ -50,7 +50,7 @@ const CardCarousel = ({ cards }: CardCarouselProps) => {
     <div>
       <Slider {...settings}>
         {cards.map((card) => (
-          <AlertCard cardInfo={card} />
+          <AlertCard key={card.title} cardInfo={card} />
         ))}
       </Slider>
     </div>

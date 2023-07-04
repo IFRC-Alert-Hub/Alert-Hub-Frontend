@@ -4,7 +4,7 @@ import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
-import { Typography } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import { Link, useLocation } from "react-router-dom";
 
 export interface IDropdownItems {
@@ -35,7 +35,7 @@ const CustomNavItemDropdown = (props: {
   };
 
   return (
-    <>
+    <Box display="inline" sx={{ p: "0 40px 0 0" }}>
       <Button
         id="demo-customized-button"
         aria-controls={open ? "demo-customized-menu" : undefined}
@@ -47,7 +47,7 @@ const CustomNavItemDropdown = (props: {
         onClick={handleClick}
         endIcon={<KeyboardArrowDownIcon sx={{ color: "#f5333f" }} />}
         sx={{
-          padding: "0px",
+          p: 0,
           borderRadius: "0px",
           borderBottom: "1px solid transparent",
           ...(props.DropdownItems.some(
@@ -86,6 +86,7 @@ const CustomNavItemDropdown = (props: {
       >
         {props.DropdownItems.map((item) => (
           <Link
+            key={item.name}
             to={item.path}
             style={{ textDecoration: "none", color: "inherit" }}
           >
@@ -98,7 +99,7 @@ const CustomNavItemDropdown = (props: {
           </Link>
         ))}
       </Menu>
-    </>
+    </Box>
   );
 };
 

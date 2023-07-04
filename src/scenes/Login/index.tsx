@@ -10,6 +10,8 @@ import Link from "@mui/material/Link";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
+import PageTitle from "../../components/PageTitle";
+import BreadcrumbsComponent from "../../components/Breadcrumbs/BreadcrumbsComponent";
 // import { useMutation } from "@apollo/client";
 // import { LOGIN } from "../../API/mutations/login";
 
@@ -51,15 +53,8 @@ const Login = () => {
 
   return (
     <Container maxWidth="lg" sx={{ paddingTop: "30px" }}>
-      <Typography
-        variant="h1"
-        textAlign={"center"}
-        fontWeight={"bold"}
-        textTransform={"capitalize"}
-        letterSpacing={"1.6px"}
-      >
-        Login
-      </Typography>
+      <BreadcrumbsComponent />
+      <PageTitle title="Login"></PageTitle>
       <Grid
         container
         component="main"
@@ -82,7 +77,7 @@ const Login = () => {
               backgroundColor: "white",
               borderRadius: "20px",
               padding: "2rem",
-              minHeight: "600px",
+              minHeight: "auto",
               textAlign: "center",
             }}
           >
@@ -91,6 +86,7 @@ const Login = () => {
               variant="h2"
               fontWeight={560}
               textAlign={"center"}
+              fontSize={"23px"}
             >
               Welcome Back
             </Typography>

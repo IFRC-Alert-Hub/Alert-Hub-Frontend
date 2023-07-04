@@ -14,6 +14,7 @@ import {
   ListItemButton,
   ListItemText,
   Drawer,
+  Collapse,
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import { Link, useLocation } from "react-router-dom";
@@ -25,51 +26,80 @@ import {
   firstNavBarItems,
   secondNavBarItems,
 } from "./NavItemItems";
-import RoundButton from "../RoundButton";
+import LoginButton from "./LoginButton";
 import TimeComponent from "./TimeComponent";
 import { useState } from "react";
 import AvatarDropdown from "./AvatarDropdown";
-import ChangeLanguageDropdownComponent from "./ChangeLanguageDropdown";
+import ChangeLanguageDropdown from "./ChangeLanguageDropdown";
+import { ExpandLess, ExpandMore } from "@mui/icons-material";
 
 const NavbarComponent = (props: any) => {
   // used for test login
   const isLogin = true;
 
   const location = useLocation();
-
   const { window } = props;
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [openMobileRegion, setOpenMobileRegion] = useState(false);
 
+  const handleClick = () => {
+    setOpenMobileRegion(!openMobileRegion);
+  };
   const handleDrawerToggle = () => {
     setMobileOpen((prevState) => !prevState);
+    setOpenMobileRegion(false);
   };
+
+  // Mobile drawer
   const drawer = (
-    <Box onClick={handleDrawerToggle} sx={{ textAlign: "center" }}>
+    <Box sx={{ textAlign: "center" }}>
       <Typography variant="h6" sx={{ my: 2 }}>
         Alert Hub
       </Typography>
       <Divider />
-
       <List>
-        {firstNavBarItems.map((item) => (
+        {secondNavBarItems.map((item) => (
           <Link
+            key={item.name}
             to={item.path}
             style={{ textDecoration: "none", color: "inherit" }}
           >
-            <ListItem key={item.name} disablePadding>
-              <ListItemButton sx={{ textAlign: "center" }}>
+            <ListItem disablePadding>
+              <ListItemButton onClick={handleDrawerToggle}>
                 <ListItemText primary={item.name}>{item.name}</ListItemText>
               </ListItemButton>
             </ListItem>
           </Link>
         ))}
-        {secondNavBarItems.map((item) => (
+        <ListItemButton onClick={handleClick}>
+          <ListItemText primary="Regions" />
+          {openMobileRegion ? <ExpandLess /> : <ExpandMore />}
+        </ListItemButton>
+        <Collapse in={openMobileRegion} timeout="auto" unmountOnExit>
+          <List component="div" disablePadding>
+            {RegionsDropdownItems.map((item) => (
+              <Link
+                key={item.name}
+                to={item.path}
+                style={{ textDecoration: "none", color: "inherit" }}
+              >
+                <ListItem disablePadding>
+                  <ListItemButton onClick={handleDrawerToggle} sx={{ pl: 4 }}>
+                    <ListItemText primary={item.name} />
+                  </ListItemButton>
+                </ListItem>
+              </Link>
+            ))}
+          </List>
+        </Collapse>
+        {firstNavBarItems.map((item) => (
           <Link
+            key={item.name}
             to={item.path}
             style={{ textDecoration: "none", color: "inherit" }}
           >
-            <ListItem key={item.name} disablePadding>
-              <ListItemButton sx={{ textAlign: "center" }}>
+            <ListItem disablePadding>
+              <ListItemButton onClick={handleDrawerToggle}>
                 <ListItemText primary={item.name}>{item.name}</ListItemText>
               </ListItemButton>
             </ListItem>
@@ -81,8 +111,6 @@ const NavbarComponent = (props: any) => {
 
   const container =
     window !== undefined ? () => window().document.body : undefined;
-
-  const avatarBtn = isLogin ? <AvatarDropdown /> : <RoundButton />;
 
   return (
     <div className="header">
@@ -118,32 +146,34 @@ const NavbarComponent = (props: any) => {
               onClick={handleDrawerToggle}
               sx={{
                 mr: 2,
-                display: { xs: "block", sm: "block", md: "none", lg: "none" },
+                display: { sm: "none" },
               }}
             >
               <MenuIcon />
             </IconButton>
-            <Link to={"/"} style={{ textDecoration: "none", color: "inherit" }}>
-              <Avatar
-                alt="logo"
-                src={process.env.PUBLIC_URL + "/assets/go-logo-2020.svg"}
-                sx={{
-                  verticalAlign: "middle",
-                  height: "2.2rem",
-                  width: "6.25rem",
-                  display: { xs: "block", sm: "block" },
-                }}
-                variant="square"
-              ></Avatar>
-            </Link>
+            <Box sx={{ flexGrow: { xs: 1, sm: 0 } }}>
+              <Link
+                to={"/"}
+                style={{ textDecoration: "none", color: "inherit" }}
+              >
+                <Avatar
+                  alt="logo"
+                  src={process.env.PUBLIC_URL + "/assets/go-logo-2020.svg"}
+                  sx={{
+                    verticalAlign: "middle",
+                    height: "2.2rem",
+                    width: "6.25rem",
+                  }}
+                  variant="square"
+                />
+              </Link>
+            </Box>
 
             <Typography
               variant="h6"
-              component="div"
               sx={{
                 flexGrow: 1,
-                display: { xs: "block", sm: "block" },
-                textTransform: "uppercase",
+                display: { xs: "none", sm: "inline" },
               }}
               fontWeight={"bold"}
               fontSize={"20px"}
@@ -152,33 +182,24 @@ const NavbarComponent = (props: any) => {
                 to={"/"}
                 style={{ textDecoration: "none", color: "inherit" }}
               >
-                Alert Hub
+                ALERT HUB
               </Link>
             </Typography>
 
-            <Box
-              sx={{
-                display: { xs: "block" },
-              }}
-            >
-              <Box
-                sx={{
-                  display: { xs: "none", sm: "none", md: "inline" },
-                }}
-              >
-                <ChangeLanguageDropdownComponent />
+            <Box>
+              <ChangeLanguageDropdown />
+              <Box sx={{ display: { xs: "none", sm: "inline" } }}>
                 {firstNavBarItems.map((item) => (
                   <Link
+                    key={item.name}
                     to={item.path}
                     style={{ textDecoration: "none", color: "inherit" }}
                   >
                     <Button
                       key={item.name}
                       sx={{
-                        color: "#fff",
-                        padding: "0 20px",
+                        padding: "0 0.5rem",
                         textTransform: "capitalize",
-                        borderRadius: "0px",
                       }}
                       disableRipple
                       disableTouchRipple
@@ -195,38 +216,33 @@ const NavbarComponent = (props: any) => {
                           }),
                         }}
                       >
-                        {item.name}{" "}
+                        {item.name}
                       </Typography>
                     </Button>
                   </Link>
                 ))}
               </Box>
-              {avatarBtn}
+              {isLogin ? <AvatarDropdown /> : <LoginButton />}
             </Box>
           </Toolbar>
         </Container>
       </AppBar>
-      <Hidden mdDown>
+      <Hidden smDown>
         <AppBar position="static" color="primary">
           <Container maxWidth="lg">
             <Toolbar sx={{ padding: "0px !important" }}>
-              <Box
-                sx={{
-                  display: { xs: "none", sm: "none", md: "block", lg: "block" },
-                }}
-              >
+              <Box>
                 {secondNavBarItems.map((item) => (
                   <Link
+                    key={item.name}
                     to={item.path}
                     style={{ textDecoration: "none", color: "inherit" }}
                   >
                     <Button
                       key={item.name}
                       sx={{
-                        color: "#fff",
                         padding: "0 40px 0 0",
                         textTransform: "capitalize",
-                        borderRadius: "0px",
                       }}
                       disableRipple
                       disableTouchRipple
@@ -243,61 +259,23 @@ const NavbarComponent = (props: any) => {
                           }),
                         }}
                       >
-                        {item.name}{" "}
+                        {item.name}
                       </Typography>
                     </Button>
                   </Link>
                 ))}
-                <Button
-                  sx={{
-                    color: "#fff",
-                    padding: "0 40px 0 0",
-                    textTransform: "capitalize",
-                    borderRadius: "0px",
-                  }}
-                  disableRipple
-                  disableTouchRipple
-                  disableFocusRipple
-                >
-                  <CustomNavItemDropdown
-                    NavItemTitle="Regions"
-                    DropdownItems={RegionsDropdownItems}
-                  />
-                </Button>
-
-                <Button
-                  sx={{
-                    color: "#fff",
-                    padding: "0 40px 0 0",
-                    textTransform: "capitalize",
-                    borderRadius: "0px",
-                  }}
-                  disableRipple
-                  disableTouchRipple
-                  disableFocusRipple
-                >
-                  <CustomNavItemDropdown
-                    NavItemTitle="Hazard Type"
-                    DropdownItems={HazardTypeDropdownItems}
-                  />
-                </Button>
-
-                <Button
-                  sx={{
-                    color: "#fff",
-                    padding: "0 40px 0 0",
-                    textTransform: "capitalize",
-                    borderRadius: "0px",
-                  }}
-                  disableRipple
-                  disableTouchRipple
-                  disableFocusRipple
-                >
-                  <CustomNavItemDropdown
-                    NavItemTitle="Urgency Level"
-                    DropdownItems={UrgencyLevelDropdownItems}
-                  />
-                </Button>
+                <CustomNavItemDropdown
+                  NavItemTitle="Regions"
+                  DropdownItems={RegionsDropdownItems}
+                />
+                <CustomNavItemDropdown
+                  NavItemTitle="Hazard Type"
+                  DropdownItems={HazardTypeDropdownItems}
+                />
+                <CustomNavItemDropdown
+                  NavItemTitle="Urgency Level"
+                  DropdownItems={UrgencyLevelDropdownItems}
+                />
               </Box>
             </Toolbar>
           </Container>
