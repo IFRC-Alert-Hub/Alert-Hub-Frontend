@@ -1,7 +1,7 @@
 import { Box, Button } from "@mui/material";
 import { Link } from "react-router-dom";
 
-const RoundButton = () => {
+const LoginButton = () => {
   return (
     <>
       <Link to={`/login`} style={{ textDecoration: "none", color: "inherit" }}>
@@ -29,4 +29,4 @@ const RoundButton = () => {
   );
 };
 
-export default RoundButton;
+export default LoginButton;
