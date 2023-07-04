@@ -2,11 +2,12 @@ import { Box, CircularProgress, Container, Typography } from "@mui/material";
 import { useParams } from "react-router-dom";
 import TitleHeader from "../../components/TitleHeader";
 import MapComponent from "../../components/MapComponent/MapComponent";
-import { useRef } from "react";
+import { useMemo, useRef } from "react";
 import CardCarousel from "../../components/Card/CardCarousel";
 import { GET_ALL_REGIONS } from "../../API/queries/getAllRegions";
 import { useQuery } from "@apollo/client";
 import { ALL_ALERTS } from "../../API/queries/getAllAlerts";
+import { cap_aggregator } from "../../API/API_Links";
 
 // const regionItems = [
 //   {
@@ -209,18 +210,21 @@ const Region = () => {
     loading: loading_regions,
     error: error_regions,
     data: data_regions,
-  } = useQuery(GET_ALL_REGIONS);
+  } = useQuery(GET_ALL_REGIONS, {
+    client: cap_aggregator,
+  });
   const {
     loading: loading_alerts,
     error: error_alerts,
     data: data_alerts,
-    refetch: refect_alerts,
+    refetch: refetch_alerts,
   } = useQuery(ALL_ALERTS, {
     variables: {
       regionId: "",
     },
+    client: cap_aggregator,
   });
-  const region = () => {
+  const region = useMemo(() => {
     if (!loading_regions && !error_regions && data_regions) {
       const regions = data_regions.listRegion;
       let region = regions.find(
@@ -236,12 +240,11 @@ const Region = () => {
           coordinates: [convertCoordinates(region.polygon)],
         },
       };
-      refect_alerts({ regionId: region.id });
+      refetch_alerts({ regionId: region.id });
 
       return updatedRegion;
     }
-  };
-  const regionObj = region(); // Call the function to get the updated region object
+  }, [loading_regions, error_regions, data_regions, id, refetch_alerts]);
 
   return (
     <>
@@ -259,7 +262,7 @@ const Region = () => {
               textTransform={"capitalize"}
               letterSpacing={"1.6px"}
             >
-              {regionObj?.name}
+              {region?.name}
             </Typography>
           </Box>
           <TitleHeader
@@ -277,7 +280,7 @@ const Region = () => {
             rightTitle={"View all alerts"}
             rightLinkURL={"/alerts/all"}
             filterKey="region"
-            selectedFilter={regionObj?.name}
+            selectedFilter={region?.name}
           />
           {loading_alerts && (
             <CircularProgress sx={{ textAlign: "center" }} color="secondary" />
@@ -287,7 +290,7 @@ const Region = () => {
             <MapComponent
               mapContainerRef={mapContainerRef}
               mapRef={mapRef}
-              boundingRegionCoordinates={regionObj?.bbox}
+              boundingRegionCoordinates={region?.bbox}
               alerts={data_alerts?.listAlert}
             />
           )}

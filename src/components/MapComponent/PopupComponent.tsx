@@ -29,7 +29,7 @@ function TabPanel(props: TabPanelProps) {
     >
       {value === index && (
         <Box sx={{ p: 3 }}>
-          <Typography>{children}</Typography>
+          <Typography component={"div"}>{children}</Typography>
         </Box>
       )}
     </div>
@@ -112,8 +112,13 @@ export const PopupComponent: React.FC<PopupComponentProps> = ({
           ref={tabPanelRef}
         >
           {alerts.map((alert, index) => (
-            <TabPanel value={value} index={index}>
-              <Typography variant="h5" fontWeight={500} paddingBottom={"10px"}>
+            <TabPanel value={value} key={index} index={index}>
+              <Typography
+                variant="h5"
+                fontWeight={500}
+                paddingBottom={"10px"}
+                component="div"
+              >
                 {alert.event}
                 <span
                   style={{
@@ -126,52 +131,52 @@ export const PopupComponent: React.FC<PopupComponentProps> = ({
                   }}
                 ></span>
               </Typography>
-              <Typography variant="body2">
+              <Typography variant="body2" component="div">
                 <span style={{ fontWeight: "bold" }}>Country: </span>
                 {alert.countryName}
               </Typography>
-              <Typography variant="body2">
+              <Typography variant="body2" component="div">
                 <span style={{ fontWeight: "bold" }}>ISO3: </span>
                 {alert.countryISO3}
               </Typography>
-              <Typography variant="body2">
+              <Typography variant="body2" component="div">
                 <span style={{ fontWeight: "bold" }}>Region: </span>
                 {alert.region}
               </Typography>
-              <Typography variant="body2">
+              <Typography variant="body2" component="div">
                 <span style={{ fontWeight: "bold" }}>Expires: </span>
                 {modifyDateTime(alert.expires)}
               </Typography>
 
-              <Typography variant="body2">
+              <Typography variant="body2" component="div">
                 <span style={{ fontWeight: "bold" }}>Severity: </span>
                 {alert.severity}
               </Typography>
 
-              <Typography variant="body2">
+              <Typography variant="body2" component="div">
                 <span style={{ fontWeight: "bold" }}>Certainty: </span>
                 {alert.certainty}
               </Typography>
 
-              <Typography variant="body2">
+              <Typography variant="body2" component="div">
                 <span style={{ fontWeight: "bold" }}>Urgency: </span>
                 {alert.urgency}
               </Typography>
 
-              <Typography variant="body2">
+              <Typography variant="body2" component="div">
                 <span style={{ fontWeight: "bold" }}>Effective: </span>
                 {modifyDateTime(alert.effective)}
               </Typography>
 
-              <Typography variant="body2">
+              <Typography variant="body2" component="div">
                 <span style={{ fontWeight: "bold" }}>Centroid: </span>[
                 {alert.countryCentroid[0]}, {alert.countryCentroid[1]}]
               </Typography>
-              <Typography variant="body2">
+              <Typography variant="body2" component="div">
                 <span style={{ fontWeight: "bold" }}>Area Description: </span>
                 {alert.areaDesc}
               </Typography>
-              <Typography variant="body2">
+              <Typography variant="body2" component="div">
                 <span style={{ fontWeight: "bold" }}>Sender: </span>
                 {alert.sender}
               </Typography>

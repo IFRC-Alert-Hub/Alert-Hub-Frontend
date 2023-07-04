@@ -15,12 +15,15 @@ import { useQuery } from "@apollo/client";
 import { ALL_ALERTS } from "../../API/queries/getAllAlerts";
 import CardCarousel from "../../components/Card/CardCarousel";
 import { cardData } from "../Region";
+import { cap_aggregator } from "../../API/API_Links";
 
 const Home = () => {
   const mapContainerRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<mapboxgl.Map | null>(null);
   const { formatMessage } = useIntl();
-  const { loading, error, data } = useQuery(ALL_ALERTS);
+  const { loading, error, data } = useQuery(ALL_ALERTS, {
+    client: cap_aggregator,
+  });
 
   const [filteredAlerts, setFilteredAlerts] = useState(data?.listAlert || []);
   const [selectedUrgency, setSelectedUrgency] = useState("");
