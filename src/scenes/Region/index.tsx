@@ -7,6 +7,7 @@ import CardCarousel from "../../components/Card/CardCarousel";
 import { GET_ALL_REGIONS } from "../../API/queries/getAllRegions";
 import { useQuery } from "@apollo/client";
 import { ALL_ALERTS } from "../../API/queries/getAllAlerts";
+import { cap_aggregator } from "../../API/API_Links";
 
 // const regionItems = [
 //   {
@@ -209,7 +210,9 @@ const Region = () => {
     loading: loading_regions,
     error: error_regions,
     data: data_regions,
-  } = useQuery(GET_ALL_REGIONS);
+  } = useQuery(GET_ALL_REGIONS, {
+    client: cap_aggregator,
+  });
   const {
     loading: loading_alerts,
     error: error_alerts,
@@ -219,6 +222,7 @@ const Region = () => {
     variables: {
       regionId: "",
     },
+    client: cap_aggregator,
   });
   const region = () => {
     if (!loading_regions && !error_regions && data_regions) {
