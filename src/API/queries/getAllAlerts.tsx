@@ -2,8 +2,8 @@ import { useQuery, gql } from "@apollo/client";
 import { Container } from "@mui/material";
 
 export const ALL_ALERTS = gql`
-  query MyQuery {
-    listAlert {
+  query MyQuery($regionId: String, $iso3: String, $continentId: String) {
+    listAlert(regionId: $regionId, iso3: $iso3, continentId: $continentId) {
       areaDesc
       certainty
       country {
