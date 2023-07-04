@@ -9,6 +9,9 @@ import {
 import { useState } from "react";
 import CountrySelectionField from "./CountrySelectionField";
 import FormCheckbox from "./FormCheckbox";
+import { useMutation } from "@apollo/client";
+import { ADD_SUBSCRIPTION } from "../../API/mutations/subscriptionMutation";
+import { SubscriptionItem } from "../../API/queries/getSubscriptions";
 
 const style = {
   position: "absolute" as "absolute",
@@ -45,6 +48,8 @@ const checkBoxList = [
 ];
 
 type PropsType = {
+  tableData: SubscriptionItem[];
+  setTableData: React.Dispatch<React.SetStateAction<SubscriptionItem[]>>;
   open: boolean;
   handleClose: React.Dispatch<React.SetStateAction<boolean>>;
 };
@@ -59,7 +64,13 @@ interface SubscriptionForm {
   methods: string[];
 }
 
-const ModalForm = ({ open, handleClose }: PropsType) => {
+const ModalForm = ({
+  tableData,
+  setTableData,
+  open,
+  handleClose,
+}: PropsType) => {
+  const [addSubscription] = useMutation(ADD_SUBSCRIPTION);
   const [subscriptionForm, setSubscriptionForm] = useState<SubscriptionForm>({
     title: "",
     countries: [],
@@ -76,17 +87,6 @@ const ModalForm = ({ open, handleClose }: PropsType) => {
     severity: [],
     certainty: [],
     methods: [],
-  };
-
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    console.log(subscriptionForm);
-    setSubscriptionForm(emptyForm);
-    handleClose(open);
-  };
-
-  const handleReset = () => {
-    setSubscriptionForm(emptyForm);
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -109,6 +109,29 @@ const ModalForm = ({ open, handleClose }: PropsType) => {
         [name]: value,
       }));
     }
+  };
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    console.log(subscriptionForm);
+    const res = await addSubscription({
+      variables: {
+        userId: 10, // use for test
+        subscriptionName: subscriptionForm.title,
+        countryIds: subscriptionForm.countries,
+        urgencyArray: subscriptionForm.urgency,
+        severityArray: subscriptionForm.severity,
+        certaintyArray: subscriptionForm.certainty,
+        subscribeBy: subscriptionForm.methods,
+      },
+    });
+    setTableData([...tableData, res.data.createSubscription.subscription]);
+    setSubscriptionForm(emptyForm);
+    handleClose(open);
+  };
+
+  const handleReset = () => {
+    setSubscriptionForm(emptyForm);
   };
 
   return (

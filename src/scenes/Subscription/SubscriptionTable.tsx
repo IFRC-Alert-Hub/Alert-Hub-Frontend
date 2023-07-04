@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
   Table,
   TableBody,
@@ -12,37 +12,48 @@ import {
   Tooltip,
   Box,
 } from "@mui/material";
-
-interface SubscriptionData {
-  id: number;
-  title: string;
-  countries: string[];
-  urgency: string[];
-  severity: string[];
-  certainty: string[];
-  methods: string[];
-  displayedCountries?: string[];
-}
+import { SubscriptionItem } from "../../API/queries/getSubscriptions";
 
 type PropsType = {
-  rows: SubscriptionData[];
+  tableData: SubscriptionItem[];
 };
 
-const SubscriptionTable = ({ rows }: PropsType) => {
+interface UpdatedRow extends SubscriptionItem {
+  filteredCountries: string[];
+}
+
+const SubscriptionTable = ({ tableData }: PropsType) => {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [updatedRows, setUpdatedRows] = useState<UpdatedRow[]>();
 
   // show the first three countries
-  const updatedRows = rows.map((row) => {
-    let filteredCountries: string[];
-    if (row.countries.length > 3) {
-      filteredCountries = row.countries.slice(0, 3);
-      filteredCountries.push("...");
-    } else {
-      filteredCountries = row.countries;
-    }
-    return { ...row, filteredCountries };
-  });
+  useEffect(() => {
+    const updatedItems = tableData.map((row: SubscriptionItem) => {
+      let filteredCountries: string[];
+      if (row.countryIds?.length > 3) {
+        filteredCountries = row.countryIds.slice(0, 3);
+        filteredCountries.push("...");
+      } else {
+        filteredCountries = row.countryIds;
+      }
+      return { ...row, filteredCountries };
+    });
+    setUpdatedRows(updatedItems);
+    // console.log("updated: ", updatedRows);
+  }, [tableData]);
+
+  // Avoid a layout jump when reaching the last page with empty rows.
+  const emptyRows = useMemo(
+    () =>
+      page > 0 ? Math.max(0, (1 + page) * rowsPerPage - tableData?.length) : 0,
+    [page, rowsPerPage, tableData]
+  );
+  const visibleRows = useMemo(
+    () =>
+      updatedRows?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage),
+    [page, rowsPerPage, updatedRows]
+  );
 
   const handleChangePage = (
     event: React.MouseEvent<HTMLButtonElement> | null,
@@ -57,16 +68,6 @@ const SubscriptionTable = ({ rows }: PropsType) => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
   };
-
-  // Avoid a layout jump when reaching the last page with empty rows.
-  const emptyRows =
-    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
-
-  const visibleRows = useMemo(
-    () =>
-      updatedRows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage),
-    [page, rowsPerPage, updatedRows]
-  );
 
   return (
     <TableContainer component={Paper}>
@@ -83,30 +84,30 @@ const SubscriptionTable = ({ rows }: PropsType) => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {visibleRows.map((row) => (
+          {visibleRows?.map((row: UpdatedRow) => (
             <TableRow key={row.id}>
               <TableCell align="center" component="th" scope="row">
-                {row.title}
+                {row.subscriptionName}
               </TableCell>
 
               <TableCell align="center">
-                {row.countries.length > 0 ? (
+                {row.countryIds?.length > 0 ? (
                   <Tooltip
-                    title={`${row.countries.length} countries are selected`}
+                    title={`${row.countryIds?.length} countries are selected`}
                     arrow
                   >
-                    <Box>{row.filteredCountries.join(", ")}</Box>
+                    <Box>{row.filteredCountries?.join(", ")}</Box>
                   </Tooltip>
                 ) : (
                   <Tooltip title={"1 country is selected"} arrow>
-                    <Box>{row.filteredCountries.join(", ")}</Box>
+                    <Box>{row.filteredCountries?.join(", ")}</Box>
                   </Tooltip>
                 )}
               </TableCell>
-              <TableCell align="center">{row.urgency}</TableCell>
-              <TableCell align="center">{row.severity}</TableCell>
-              <TableCell align="center">{row.certainty}</TableCell>
-              <TableCell align="center">{row.methods}</TableCell>
+              <TableCell align="center">{row.urgencyArray}</TableCell>
+              <TableCell align="center">{row.severityArray}</TableCell>
+              <TableCell align="center">{row.certaintyArray}</TableCell>
+              <TableCell align="center">{row.subscribeBy}</TableCell>
               <TableCell align="center">
                 <Button
                   variant="text"
@@ -141,7 +142,7 @@ const SubscriptionTable = ({ rows }: PropsType) => {
       <TablePagination
         rowsPerPageOptions={[5, 10]}
         component="div"
-        count={updatedRows.length}
+        count={updatedRows ? updatedRows.length : 0}
         rowsPerPage={rowsPerPage}
         page={page}
         onPageChange={handleChangePage}
