@@ -22,13 +22,20 @@ const Home = () => {
   const { formatMessage } = useIntl();
   const { loading, error, data } = useQuery(ALL_ALERTS);
 
-  const [selectedUrgency, setSelectedUrgency] = useState("");
   const [filteredAlerts, setFilteredAlerts] = useState(data?.listAlert || []);
+  const [selectedUrgency, setSelectedUrgency] = useState("");
+  const [selectedSeverity, setSelectedSeverity] = useState("");
   const handleUrgencyChange = (event: any, value: any) => {
     setSelectedUrgency(value || "");
   };
 
+  const handleSeverityChange = (event: any, value: any) => {
+    setSelectedSeverity(value || "");
+  };
+
   const urgencyOptions = ["Future", "Past", "Unknown", "Immediate"];
+  const severityOptions = ["Moderate", "Minor", "Unknown", "Severe"];
+
   useEffect(() => {
     if (!loading && !error) {
       let filteredData = data?.listAlert || [];
@@ -39,9 +46,16 @@ const Home = () => {
         );
       }
 
+      if (selectedSeverity !== "") {
+        filteredData = filteredData.filter(
+          (alert: any) => alert.severity === selectedSeverity
+        );
+      }
+
       setFilteredAlerts(filteredData);
     }
-  }, [selectedUrgency, data, loading, error]);
+  }, [selectedUrgency, selectedSeverity, data, loading, error]);
+
   return (
     <Container maxWidth="lg">
       <Box sx={{ padding: "50px 0 50px 0" }}>
@@ -76,8 +90,9 @@ const Home = () => {
       <Box margin={"0px 25px 25px"}>
         <CardCarousel cards={cardData} />
       </Box>
+
       <TitleHeader
-        title="All ONGOING Exeme Alerts"
+        title={`All ONGOING Exeme Alerts (${filteredAlerts.length})`}
         rightTitle={"View all alerts"}
         rightLinkURL={"/alerts/all"}
       />
@@ -139,6 +154,34 @@ const Home = () => {
             />
           )}
           onChange={handleUrgencyChange}
+        />
+        <Autocomplete
+          disablePortal
+          id="combo-box-demo"
+          options={severityOptions}
+          getOptionLabel={(option) => option}
+          sx={{
+            width: 170,
+            backgroundColor: "#f4f4f4",
+            "& .MuiAutocomplete-input": {
+              padding: "4px",
+            },
+            marginRight: "20px",
+          }}
+          renderInput={(params) => (
+            <TextField
+              {...params}
+              label="Severity"
+              size="small"
+              sx={{
+                "& .MuiInputLabel-root": {
+                  color: "#8D8D8D",
+                  fontSize: "12px",
+                },
+              }}
+            />
+          )}
+          onChange={handleSeverityChange}
         />
         {/* <Autocomplete
           disablePortal
