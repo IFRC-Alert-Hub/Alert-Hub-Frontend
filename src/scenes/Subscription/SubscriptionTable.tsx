@@ -13,16 +13,23 @@ import {
   Box,
 } from "@mui/material";
 import { SubscriptionItem } from "../../API/queries/getSubscriptions";
+import { useMutation } from "@apollo/client";
+import { DELETE_SUBSCRIPTION } from "../../API/mutations/subscriptionMutation";
+import { subscription_module } from "../../API/API_Links";
 
 type PropsType = {
   tableData: SubscriptionItem[];
+  setTableData: React.Dispatch<React.SetStateAction<SubscriptionItem[]>>;
 };
 
 interface UpdatedRow extends SubscriptionItem {
   filteredCountries: string[];
 }
 
-const SubscriptionTable = ({ tableData }: PropsType) => {
+const SubscriptionTable = ({ tableData, setTableData }: PropsType) => {
+  const [deleteSubscription] = useMutation(DELETE_SUBSCRIPTION, {
+    client: subscription_module,
+  });
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [updatedRows, setUpdatedRows] = useState<UpdatedRow[]>();
@@ -40,7 +47,6 @@ const SubscriptionTable = ({ tableData }: PropsType) => {
       return { ...row, filteredCountries };
     });
     setUpdatedRows(updatedItems);
-    // console.log("updated: ", updatedRows);
   }, [tableData]);
 
   // Avoid a layout jump when reaching the last page with empty rows.
@@ -67,6 +73,11 @@ const SubscriptionTable = ({ tableData }: PropsType) => {
   ) => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
+  };
+
+  const handleDelete = (id: string) => {
+    deleteSubscription({ variables: { subscriptionId: parseInt(id) } });
+    setTableData(tableData.filter((item) => item.id !== id));
   };
 
   return (
@@ -104,10 +115,16 @@ const SubscriptionTable = ({ tableData }: PropsType) => {
                   </Tooltip>
                 )}
               </TableCell>
-              <TableCell align="center">{row.urgencyArray}</TableCell>
-              <TableCell align="center">{row.severityArray}</TableCell>
-              <TableCell align="center">{row.certaintyArray}</TableCell>
-              <TableCell align="center">{row.subscribeBy}</TableCell>
+              <TableCell align="center">
+                {row.urgencyArray.join(", ")}
+              </TableCell>
+              <TableCell align="center">
+                {row.severityArray.join(", ")}
+              </TableCell>
+              <TableCell align="center">
+                {row.certaintyArray.join(", ")}
+              </TableCell>
+              <TableCell align="center">{row.subscribeBy.join(", ")}</TableCell>
               <TableCell align="center">
                 <Button
                   variant="text"
@@ -121,6 +138,7 @@ const SubscriptionTable = ({ tableData }: PropsType) => {
                   variant="text"
                   size="small"
                   color="error"
+                  onClick={() => handleDelete(row.id)}
                   sx={{ minWidth: 0 }}
                 >
                   Delete

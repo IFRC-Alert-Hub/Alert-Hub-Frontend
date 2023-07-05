@@ -32,3 +32,13 @@ export const ADD_SUBSCRIPTION = gql`
     }
   }
 `;
+
+export const DELETE_SUBSCRIPTION = gql`
+  mutation DeleteSubscription($subscriptionId: Int = 5) {
+    deleteSubscription(subscriptionId: $subscriptionId) {
+      subscription {
+        id
+      }
+    }
+  }
+`;

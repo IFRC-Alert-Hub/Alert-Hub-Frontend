@@ -12,6 +12,7 @@ import FormCheckbox from "./FormCheckbox";
 import { useMutation } from "@apollo/client";
 import { ADD_SUBSCRIPTION } from "../../API/mutations/subscriptionMutation";
 import { SubscriptionItem } from "../../API/queries/getSubscriptions";
+import { subscription_module } from "../../API/API_Links";
 
 const style = {
   position: "absolute" as "absolute",
@@ -70,7 +71,9 @@ const ModalForm = ({
   open,
   handleClose,
 }: PropsType) => {
-  const [addSubscription] = useMutation(ADD_SUBSCRIPTION);
+  const [addSubscription] = useMutation(ADD_SUBSCRIPTION, {
+    client: subscription_module,
+  });
   const [subscriptionForm, setSubscriptionForm] = useState<SubscriptionForm>({
     title: "",
     countries: [],
@@ -113,12 +116,14 @@ const ModalForm = ({
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log(subscriptionForm);
+    const countryNumberIds: number[] = subscriptionForm.countries.map(
+      (str: string) => Number(str)
+    );
     const res = await addSubscription({
       variables: {
         userId: 10, // use for test
         subscriptionName: subscriptionForm.title,
-        countryIds: subscriptionForm.countries,
+        countryIds: countryNumberIds,
         urgencyArray: subscriptionForm.urgency,
         severityArray: subscriptionForm.severity,
         certaintyArray: subscriptionForm.certainty,

@@ -3,6 +3,7 @@ import ContinentCollapse from "./ContinentCollapse";
 import SearchIcon from "@mui/icons-material/Search";
 import { useQuery } from "@apollo/client";
 import { GET_ALL_COUNTRIES } from "../../API/queries/getAllCountries";
+import { cap_aggregator } from "../../API/API_Links";
 
 interface SubscriptionForm {
   [key: string]: string | string[];
@@ -15,7 +16,7 @@ interface SubscriptionForm {
 }
 
 type CountryType = {
-  id: string;
+  id: number;
   name: string;
 };
 
@@ -31,7 +32,9 @@ type PropsType = {
 };
 
 const CountrySelect = ({ subscriptionForm, handleChange }: PropsType) => {
-  const { loading, error, data } = useQuery(GET_ALL_COUNTRIES);
+  const { loading, error, data } = useQuery(GET_ALL_COUNTRIES, {
+    client: cap_aggregator,
+  });
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error.message}</p>;

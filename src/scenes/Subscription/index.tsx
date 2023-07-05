@@ -15,13 +15,16 @@ import {
   SubscriptionItem,
   SubscriptionQueryResult,
 } from "../../API/queries/getSubscriptions";
+import { subscription_module } from "../../API/API_Links";
 
 const Subscription = () => {
   const {
     loading,
     error,
     data: subscriptionData,
-  } = useQuery<SubscriptionQueryResult>(GET_SUBSCRIPTIONS);
+  } = useQuery<SubscriptionQueryResult>(GET_SUBSCRIPTIONS, {
+    client: subscription_module,
+  });
   const [tableData, setTableData] = useState<SubscriptionItem[]>([]);
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
@@ -65,7 +68,7 @@ const Subscription = () => {
       ) : error ? (
         <p>Error: {error.message}</p>
       ) : (
-        <SubscriptionTable tableData={tableData} />
+        <SubscriptionTable tableData={tableData} setTableData={setTableData} />
       )}
       <ModalForm
         tableData={tableData}

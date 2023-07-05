@@ -1,7 +1,7 @@
 import { gql } from "@apollo/client";
 
 export interface SubscriptionItem {
-  id: number;
+  id: string;
   userId: number;
   subscriptionName: string;
   countryIds: string[];
