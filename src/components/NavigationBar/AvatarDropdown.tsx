@@ -8,16 +8,23 @@ import {
   Tooltip,
 } from "@mui/material";
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const AvatarDropdown = () => {
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
   const open = Boolean(anchorEl);
+  const navigate = useNavigate();
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
   };
   const handleClose = () => {
     setAnchorEl(null);
+  };
+
+  const handleLogout = () => {
+    // Remove the token from localStorage
+    localStorage.removeItem("authData");
+    navigate("/");
   };
 
   return (
@@ -59,7 +66,9 @@ const AvatarDropdown = () => {
             My Subscription
           </MenuItem>
         </Link>
-        <MenuItem onClick={handleClose}>
+        <MenuItem onClick={handleLogout}>
+          {" "}
+          {/* Add onClick handler */}
           <ListItemIcon>
             <Logout fontSize="small" />
           </ListItemIcon>

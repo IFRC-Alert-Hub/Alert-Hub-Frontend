@@ -35,7 +35,7 @@ import { ExpandLess, ExpandMore } from "@mui/icons-material";
 
 const NavbarComponent = (props: any) => {
   // used for test login
-  const isLogin = true;
+  const isAuthenticated = localStorage.getItem("authData") !== null;
 
   const location = useLocation();
   const { window } = props;
@@ -222,7 +222,7 @@ const NavbarComponent = (props: any) => {
                   </Link>
                 ))}
               </Box>
-              {isLogin ? <AvatarDropdown /> : <LoginButton />}
+              {isAuthenticated ? <AvatarDropdown /> : <LoginButton />}
             </Box>
           </Toolbar>
         </Container>
