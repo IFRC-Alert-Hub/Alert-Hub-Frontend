@@ -15,12 +15,12 @@ const TimeComponent: React.FC = () => {
         hour: "numeric",
         minute: "numeric",
         hour12: true,
-        timeZone: "GMT",
+        timeZone: "UTC",
       };
       const formattedTime = date
-        .toLocaleString("en-US", options)
+        .toLocaleString("en-GB", options)
         .replace(" at", "");
-      setCurrentTime(`${formattedTime} (GMT)`);
+      setCurrentTime(`${formattedTime} (UTC)`);
     };
 
     getTime();
