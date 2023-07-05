@@ -1,4 +1,9 @@
-import { Container, InputAdornment, LinearProgress } from "@mui/material";
+import {
+  Alert,
+  Container,
+  InputAdornment,
+  LinearProgress,
+} from "@mui/material";
 import * as React from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
@@ -10,6 +15,9 @@ import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 import PageTitle from "../../components/PageTitle";
+import { useMutation } from "@apollo/client";
+import { REGISTER, VERIFY_EMAIL } from "../../API/mutations/register";
+import { auth_system } from "../../API/API_Links";
 // import Tooltip from "@mui/material/Tooltip";
 // import InfoIcon from "@mui/icons-material/Info";
 // import CancelIcon from "@mui/icons-material/Cancel";
@@ -20,7 +28,32 @@ const Register = () => {
   const [passwordStrength, setPasswordStrength] = React.useState(0);
   const [isSendClicked, setIsSendClicked] = React.useState(false);
   const [isSendEnabled, setIsSendEnabled] = React.useState<boolean>(false);
+  const [isEmailSent, setIsEmailSent] = React.useState(false);
 
+  const [verifyEmail] = useMutation(VERIFY_EMAIL, {
+    client: auth_system,
+    variables: {
+      email: "",
+    },
+  });
+
+  const [register] = useMutation(REGISTER, {
+    client: auth_system,
+    variables: {
+      email: "",
+      password: "",
+      verifyCode: "",
+    },
+  });
+
+  const sendEmail = async (email: string) => {
+    try {
+      await verifyEmail({ variables: { email: email } });
+      alert("Sent");
+    } catch (error: any) {
+      alert(error);
+    }
+  };
   const calculatePasswordStrength = (password: string) => {
     const strengthRegex =
       /^(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*()])[a-zA-Z0-9!@#$%^&*()]{8,}$/;
@@ -54,6 +87,27 @@ const Register = () => {
   };
   const handleSendClick = () => {
     setIsSendClicked(true);
+    const { email } = formik.values;
+    sendEmail(email);
+    setIsEmailSent(true);
+  };
+
+  const handleRegister = async (values: any) => {
+    try {
+      await register({
+        variables: {
+          email: values.email,
+          password: values.password,
+          verifyCode: values.verifyCode,
+        },
+      });
+
+      // Registration successful
+      alert("Registration successful!");
+    } catch (error) {
+      // Handle registration error
+      alert("Registration failed. Please try again."); // You can display a specific error message based on the error received
+    }
   };
 
   const formik = useFormik({
@@ -63,7 +117,7 @@ const Register = () => {
       email: "",
       password: "",
       confirmPassword: "",
-      verificationCode: "",
+      verifyCode: "",
     },
     validationSchema: Yup.object({
       // firstName: Yup.string().required("Required"),
@@ -78,10 +132,11 @@ const Register = () => {
       confirmPassword: Yup.string()
         .required("Required")
         .oneOf([Yup.ref("password"), ""], "Passwords must match"),
-      verificationCode: Yup.string().required("Required"),
+      verifyCode: Yup.string().required("Required"),
     }),
-    onSubmit: (values) => {
+    onSubmit: async (values) => {
       console.log(values);
+      handleRegister(values);
     },
   });
 
@@ -214,9 +269,9 @@ const Register = () => {
                           fontSize: "12px",
                           color: "grey",
                           pointerEvents: !isSendEnabled ? "none" : "auto",
+                          cursor: isSendEnabled ? "pointer" : "default",
                         }}
-                        href="#"
-                        onClick={handleSendClick}
+                        onClick={isSendEnabled ? handleSendClick : undefined}
                       >
                         SEND
                       </Link>
@@ -224,25 +279,26 @@ const Register = () => {
                   ),
                 }}
               />
+              {isEmailSent && (
+                <Alert severity="success">Email has been sent</Alert>
+              )}
               <TextField
                 margin="normal"
                 required
                 fullWidth
-                id="verification-code"
+                id="verifyCode"
                 label="Verification Code"
-                name="verificationCode"
+                name="verifyCode"
                 autoComplete="off"
                 sx={{ fontSize: "12px" }}
-                value={formik.values.verificationCode}
+                value={formik.values.verifyCode}
                 onChange={formik.handleChange}
                 disabled={!isSendClicked} // Disable field until send button is clicked
                 error={
-                  formik.touched.verificationCode &&
-                  Boolean(formik.errors.verificationCode)
+                  formik.touched.verifyCode && Boolean(formik.errors.verifyCode)
                 }
                 helperText={
-                  formik.touched.verificationCode &&
-                  formik.errors.verificationCode
+                  formik.touched.verifyCode && formik.errors.verifyCode
                 }
               />
               <TextField
@@ -317,6 +373,7 @@ const Register = () => {
                   },
                   fontSize: "14px",
                 }}
+                disabled={!formik.isValid || !formik.dirty}
               >
                 Register
               </Button>

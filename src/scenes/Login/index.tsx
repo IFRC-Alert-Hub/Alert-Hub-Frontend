@@ -224,6 +224,7 @@ const Login = () => {
                     },
                     fontSize: "14px",
                   }}
+                  disabled={!formik.isValid || !formik.dirty}
                 >
                   Login
                 </Button>
