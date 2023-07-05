@@ -1,44 +1,40 @@
-import { Button, Container, Grid, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  CircularProgress,
+  Container,
+  Grid,
+  Typography,
+} from "@mui/material";
 import SubscriptionTable from "./SubscriptionTable";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ModalForm from "./ModalForm";
-
-interface SubscriptionData {
-  id: number;
-  title: string;
-  countries: string[];
-  urgency: string[];
-  severity: string[];
-  certainty: string[];
-  methods: string[];
-  displayedCountries?: string[];
-}
-
-const rows: SubscriptionData[] = [
-  {
-    id: 0,
-    title: "Asian flood",
-    countries: ["China", "Japan", "India"],
-    urgency: ["Future"],
-    severity: ["Extreme, Severe"],
-    certainty: ["Observed"],
-    methods: ["Email, SMS"],
-  },
-  {
-    id: 1,
-    title: "Africa-v1",
-    countries: ["Egypt", "South Africa", "Nigeria", "Kenya", "Morocco"],
-    urgency: ["Future, Expected"],
-    severity: ["Severe"],
-    certainty: ["Likely"],
-    methods: ["Email"],
-  },
-];
+import { useQuery } from "@apollo/client";
+import {
+  GET_SUBSCRIPTIONS,
+  SubscriptionItem,
+  SubscriptionQueryResult,
+} from "../../API/queries/getSubscriptions";
+import { subscription_module } from "../../API/API_Links";
 
 const Subscription = () => {
+  const {
+    loading,
+    error,
+    data: subscriptionData,
+  } = useQuery<SubscriptionQueryResult>(GET_SUBSCRIPTIONS, {
+    client: subscription_module,
+  });
+  const [tableData, setTableData] = useState<SubscriptionItem[]>([]);
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+
+  useEffect(() => {
+    if (subscriptionData) {
+      setTableData(subscriptionData.listSubscriptionByUserId);
+    }
+  }, [subscriptionData]);
 
   return (
     <Container maxWidth={"lg"}>
@@ -65,8 +61,21 @@ const Subscription = () => {
           </Button>
         </Grid>
       </Grid>
-      <SubscriptionTable rows={rows} />
-      <ModalForm open={open} handleClose={handleClose} />
+      {loading ? (
+        <Box sx={{ display: "flex" }}>
+          <CircularProgress />
+        </Box>
+      ) : error ? (
+        <p>Error: {error.message}</p>
+      ) : (
+        <SubscriptionTable tableData={tableData} setTableData={setTableData} />
+      )}
+      <ModalForm
+        tableData={tableData}
+        setTableData={setTableData}
+        open={open}
+        handleClose={handleClose}
+      />
     </Container>
   );
 };

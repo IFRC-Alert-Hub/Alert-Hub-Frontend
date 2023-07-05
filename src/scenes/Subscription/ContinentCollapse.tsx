@@ -4,7 +4,7 @@ import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import { ChangeEvent, useState } from "react";
 
 type CountryType = {
-  id: string;
+  id: number;
   name: string;
 };
 
@@ -65,9 +65,9 @@ const ContinentCollapse = ({
                 type="checkbox"
                 name="countries"
                 id={country.name}
-                value={country.name}
+                value={country.id}
                 checked={subscriptionForm["countries"].includes(
-                  `${country.name}`
+                  `${country.id}`
                 )}
                 onChange={handleChange}
               />

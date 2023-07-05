@@ -13,7 +13,11 @@ import { IntlProvider } from "react-intl";
 import { getLanguage } from "./multiLanguage/helpers/useLanguage";
 import en from "./multiLanguage/locales/en.json";
 import fr from "./multiLanguage/locales/fr.json";
-import { auth_system, cap_aggregator } from "./API/API_Links";
+import {
+  auth_system,
+  cap_aggregator,
+  subscription_module,
+} from "./API/API_Links";
 const messages = { en: en, fr: fr };
 const language = getLanguage();
 
@@ -29,9 +33,11 @@ root.render(
       {" "}
       <ApolloProvider client={cap_aggregator}>
         <ApolloProvider client={auth_system}>
-          <BrowserRouter>
-            <App />
-          </BrowserRouter>
+          <ApolloProvider client={subscription_module}>
+            <BrowserRouter>
+              <App />
+            </BrowserRouter>
+          </ApolloProvider>
         </ApolloProvider>
       </ApolloProvider>
     </IntlProvider>
