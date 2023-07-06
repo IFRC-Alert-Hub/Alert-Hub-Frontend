@@ -16,6 +16,7 @@ import { ALL_ALERTS } from "../../API/queries/getAllAlerts";
 import CardCarousel from "../../components/Card/CardCarousel";
 import { cardData } from "../Region";
 import { cap_aggregator } from "../../API/API_Links";
+import DatePickerComponent from "./DatePicker";
 
 const Home = () => {
   const mapContainerRef = useRef<HTMLDivElement>(null);
@@ -23,7 +24,6 @@ const Home = () => {
   const { formatMessage } = useIntl();
   const { loading, error, data } = useQuery(ALL_ALERTS, {
     client: cap_aggregator,
-    
   });
 
   const [filteredAlerts, setFilteredAlerts] = useState(data?.listAlert || []);
@@ -210,6 +210,7 @@ const Home = () => {
             />
           )}
         /> */}
+        <DatePickerComponent />
       </Box>
 
       {loading && (
