@@ -186,7 +186,7 @@ const NavbarComponent = (props: any) => {
               </Link>
             </Typography>
 
-            <Box>
+            <Box sx={{ display: "flex", alignItems: "center" }}>
               <ChangeLanguageDropdown />
               <Box sx={{ display: { xs: "none", sm: "inline" } }}>
                 {firstNavBarItems.map((item) => (
@@ -198,7 +198,7 @@ const NavbarComponent = (props: any) => {
                     <Button
                       key={item.name}
                       sx={{
-                        padding: "0 0.5rem",
+                        padding: "6px 0.5rem",
                         textTransform: "capitalize",
                       }}
                       disableRipple

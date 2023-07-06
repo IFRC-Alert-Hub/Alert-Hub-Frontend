@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 
 const LoginButton = () => {
   return (
-    <>
+    <Box padding={"6px 8px"}>
       <Link to={`/login`} style={{ textDecoration: "none", color: "inherit" }}>
         <Button
           variant="contained"
@@ -12,7 +12,7 @@ const LoginButton = () => {
           sx={{
             color: "#fff",
             outline: "red",
-            marginLeft: "20px",
+            marginLeft: "8px",
             textTransform: "capitalize",
             padding: "0px ",
             borderRadius: "10px",
@@ -22,10 +22,10 @@ const LoginButton = () => {
             },
           }}
         >
-          <Box sx={{ margin: "0 50px 0 50px" }}>Login</Box>
+          <Box sx={{ margin: "0 25px 0 25px" }}>Login</Box>
         </Button>
       </Link>
-    </>
+    </Box>
   );
 };
 
