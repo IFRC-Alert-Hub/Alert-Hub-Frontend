@@ -92,9 +92,7 @@ const Subscription = () => {
         />
       )}
       {countryLoading ? (
-        <Box sx={{ display: "flex" }}>
-          <CircularProgress />
-        </Box>
+        <div></div>
       ) : countryError ? (
         <p>Error: {countryError.message}</p>
       ) : (

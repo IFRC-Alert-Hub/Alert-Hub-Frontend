@@ -60,7 +60,7 @@ type PropsType = {
   countryList: CountryType[];
   regionList: ContinentType[];
   open: boolean;
-  handleClose: React.Dispatch<React.SetStateAction<boolean>>;
+  handleClose: () => void;
 };
 
 const ModalForm = ({
@@ -91,6 +91,17 @@ const ModalForm = ({
     methods: [],
   };
 
+  const [verifyForm, setVerifyForm] = useState(false);
+
+  const formErrors = {
+    title: subscriptionForm.title.length < 1,
+    countries: subscriptionForm.countries.length < 1,
+    urgency: subscriptionForm.urgency.length < 1,
+    severity: subscriptionForm.severity.length < 1,
+    certainty: subscriptionForm.certainty.length < 1,
+    methods: subscriptionForm.methods.length < 1,
+  };
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value, type, checked } = e.target;
     if (type === "checkbox") {
@@ -114,38 +125,71 @@ const ModalForm = ({
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const countryNumberIds: number[] = subscriptionForm.countries.map(
-      (str: string) => Number(str)
-    );
-    const res = await addSubscription({
-      variables: {
-        userId: 10, // use for test
-        subscriptionName: subscriptionForm.title,
-        countryIds: countryNumberIds,
-        urgencyArray: subscriptionForm.urgency,
-        severityArray: subscriptionForm.severity,
-        certaintyArray: subscriptionForm.certainty,
-        subscribeBy: subscriptionForm.methods,
-      },
-    });
-    setTableData([...tableData, res.data.createSubscription.subscription]);
-    setSubscriptionForm(emptyForm);
-    handleClose(open);
+    setVerifyForm(true);
+    if (!Object.values(formErrors).includes(true)) {
+      const countryNumberIds: number[] = subscriptionForm.countries.map(
+        (str: string) => Number(str)
+      );
+      const res = await addSubscription({
+        variables: {
+          userId: 10, // use for test
+          subscriptionName: subscriptionForm.title,
+          countryIds: countryNumberIds,
+          urgencyArray: subscriptionForm.urgency,
+          severityArray: subscriptionForm.severity,
+          certaintyArray: subscriptionForm.certainty,
+          subscribeBy: subscriptionForm.methods,
+        },
+      });
+      setTableData([...tableData, res.data.createSubscription.subscription]);
+      setSubscriptionForm(emptyForm);
+      setVerifyForm(false);
+      handleClose();
+    }
   };
 
   const handleReset = () => {
     setSubscriptionForm(emptyForm);
   };
 
+  // const formik = useFormik({
+  //   initialValues: {
+  //     title: "",
+  //     // countries: [],
+  //     // urgency: [],
+  //     // severity: [],
+  //     // certainty: [],
+  //     // methods: [],
+  //   },
+  //   validationSchema: yup.object({
+  //     title: yup.string().required("Title is required"),
+  //   }),
+  //   onSubmit: (values) => {
+  //     console.log(values);
+  //   },
+  // });
+
   return (
-    <Modal open={open} onClose={handleClose} aria-labelledby="modal-title">
+    <Modal
+      open={open}
+      onClose={() => {
+        setVerifyForm(false);
+        handleClose();
+      }}
+      aria-labelledby="modal-title"
+    >
       <Box sx={style}>
         <Typography id="modal-title" variant="h3" fontWeight={"bold"} mb="10px">
           Add New Group
         </Typography>
         <Box component="form" onSubmit={handleSubmit} m={1}>
           <Box sx={{ mb: 1 }}>
-            <InputLabel htmlFor="title" className="subs-form-title">
+            <InputLabel
+              htmlFor="title"
+              required
+              error={verifyForm && formErrors.title}
+              className="subs-form-title"
+            >
               Group Title
             </InputLabel>
             <TextField
@@ -155,6 +199,10 @@ const ModalForm = ({
               variant="outlined"
               value={subscriptionForm.title}
               onChange={handleChange}
+              error={verifyForm && formErrors.title}
+              helperText={
+                verifyForm && formErrors.title && "You need to enter the title"
+              }
               InputProps={{
                 endAdornment: (
                   <InputAdornment position="end">
@@ -167,6 +215,8 @@ const ModalForm = ({
             />
           </Box>
           <CountrySelectionField
+            verifyForm={verifyForm}
+            formErrors={formErrors}
             countryList={countryList}
             regionList={regionList}
             subscriptionForm={subscriptionForm}
@@ -174,6 +224,8 @@ const ModalForm = ({
           />
           {checkBoxList.map((item) => (
             <FormCheckbox
+              verifyForm={verifyForm}
+              formErrors={formErrors}
               key={item.legend}
               legend={item.legend}
               checkboxItems={item.checkboxItems}

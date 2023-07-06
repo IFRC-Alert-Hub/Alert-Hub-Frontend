@@ -145,7 +145,7 @@ const SubscriptionTable = ({
                 {row.certaintyArray.join(", ")}
               </TableCell>
               <TableCell align="center">{row.subscribeBy.join(", ")}</TableCell>
-              <TableCell align="center">
+              <TableCell align="center" sx={{ minWidth: "130px" }}>
                 <Button
                   variant="text"
                   size="small"

@@ -4,10 +4,18 @@ import {
   FormControl,
   FormControlLabel,
   FormGroup,
+  FormHelperText,
+  FormLabel,
 } from "@mui/material";
 import { SubscriptionForm } from "../../API/queries/getSubscriptions";
 
+interface FormErrors {
+  [key: string]: boolean;
+}
+
 interface CheckboxProps {
+  verifyForm: boolean;
+  formErrors: FormErrors;
   legend: string;
   checkboxItems: string[];
   subscriptionForm: SubscriptionForm;
@@ -15,6 +23,8 @@ interface CheckboxProps {
 }
 
 const FormCheckbox = ({
+  verifyForm,
+  formErrors,
   legend,
   checkboxItems,
   subscriptionForm,
@@ -24,16 +34,28 @@ const FormCheckbox = ({
 
   return (
     <div>
-      <FormControl component="fieldset" sx={{ mt: 1 }}>
+      <FormControl
+        required
+        error={verifyForm && formErrors[checkboxName]}
+        component="fieldset"
+        sx={{
+          mt: 1,
+        }}
+      >
         <Box display="flex" sx={{ alignItems: "center" }}>
-          <legend className="subs-form-legend">{legend}</legend>
+          <FormLabel
+            className="subs-form-legend"
+            sx={{ "&.Mui-focused": { color: "#000000" } }}
+          >
+            {legend}
+          </FormLabel>
           <Box ml={2} sx={{ color: "gray", fontSize: "10px" }}>
             {subscriptionForm[checkboxName].length}/{checkboxItems.length}{" "}
             selected
           </Box>
         </Box>
 
-        <FormGroup sx={{ flexDirection: "row", marginLeft: 1 }}>
+        <FormGroup sx={{ flexDirection: "row", marginLeft: "14px" }}>
           {checkboxItems.map((item) => (
             <FormControlLabel
               key={item}
@@ -43,12 +65,20 @@ const FormCheckbox = ({
                   onChange={handleChange}
                   name={checkboxName}
                   value={item}
+                  disableFocusRipple
+                  disableRipple
+                  disableTouchRipple
                 />
               }
               label={item}
             />
           ))}
         </FormGroup>
+        <FormHelperText>
+          {verifyForm &&
+            formErrors[checkboxName] &&
+            "You need to select at least one"}
+        </FormHelperText>
       </FormControl>
     </div>
   );
