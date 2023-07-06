@@ -1,54 +1,41 @@
-import { FormControl, InputAdornment, TextField } from "@mui/material";
+import { Box, FormControl, InputAdornment, TextField } from "@mui/material";
 import ContinentCollapse from "./ContinentCollapse";
 import SearchIcon from "@mui/icons-material/Search";
-import { useQuery } from "@apollo/client";
-import { GET_ALL_COUNTRIES } from "../../API/queries/getAllCountries";
-import { cap_aggregator } from "../../API/API_Links";
-
-interface SubscriptionForm {
-  [key: string]: string | string[];
-  title: string;
-  countries: string[];
-  urgency: string[];
-  severity: string[];
-  certainty: string[];
-  methods: string[];
-}
-
-type CountryType = {
-  id: number;
-  name: string;
-};
-
-type ContinentType = {
-  id: string;
-  name: string;
-  countrySet: CountryType[];
-};
+import {
+  ContinentType,
+  CountryType,
+  SubscriptionForm,
+} from "../../API/queries/getSubscriptions";
 
 type PropsType = {
+  countryList: CountryType[];
+  regionList: ContinentType[];
   subscriptionForm: SubscriptionForm;
   handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 };
 
-const CountrySelect = ({ subscriptionForm, handleChange }: PropsType) => {
-  const { loading, error, data } = useQuery(GET_ALL_COUNTRIES, {
-    client: cap_aggregator,
-  });
-
-  if (loading) return <p>Loading...</p>;
-  if (error) return <p>Error: {error.message}</p>;
-
-  const sortedRegions = data.listRegion
-    .slice()
-    .sort(
-      (a: ContinentType, b: ContinentType) => parseInt(a.id) - parseInt(b.id)
-    );
+const CountrySelect = ({
+  countryList,
+  regionList,
+  subscriptionForm,
+  handleChange,
+}: PropsType) => {
+  // const sortedRegions = Array(regionList)
+  //   .slice()
+  //   .sort(
+  //     (a: ContinentType, b: ContinentType) => parseInt(a.id) - parseInt(b.id)
+  //   );
 
   return (
     <div>
       <FormControl component="fieldset" sx={{ width: "100%" }}>
-        <legend className="subs-form-legend">Countries</legend>
+        <Box display="flex" sx={{ alignItems: "center" }}>
+          <legend className="subs-form-legend">Countries</legend>
+          <Box ml={2} sx={{ color: "gray", fontSize: "0.5em" }}>
+            {subscriptionForm.countries.length}/{countryList.length} selected
+          </Box>
+        </Box>
+
         <TextField
           id="search-bar"
           placeholder="Search countries..."
@@ -63,9 +50,9 @@ const CountrySelect = ({ subscriptionForm, handleChange }: PropsType) => {
           variant="outlined"
           sx={{ width: "100%", borderRadius: 5, mt: 1, mb: 1 }}
         />
-        {sortedRegions.map((item: ContinentType) => {
+        {regionList.map((item) => {
           if (item.name === "Unknown") {
-            return <div key={item.id}></div>;
+            return <div></div>;
           }
           return (
             <ContinentCollapse

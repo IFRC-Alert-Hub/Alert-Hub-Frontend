@@ -10,5 +10,9 @@ export const GET_ALL_COUNTRIES = gql`
         name
       }
     }
+    listCountry {
+      id
+      name
+    }
   }
 `;

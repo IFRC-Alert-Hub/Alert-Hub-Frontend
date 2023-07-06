@@ -1,6 +1,7 @@
 import {
   Box,
   Button,
+  InputAdornment,
   InputLabel,
   Modal,
   TextField,
@@ -11,7 +12,12 @@ import CountrySelectionField from "./CountrySelectionField";
 import FormCheckbox from "./FormCheckbox";
 import { useMutation } from "@apollo/client";
 import { ADD_SUBSCRIPTION } from "../../API/mutations/subscriptionMutation";
-import { SubscriptionItem } from "../../API/queries/getSubscriptions";
+import {
+  ContinentType,
+  CountryType,
+  SubscriptionForm,
+  SubscriptionItem,
+} from "../../API/queries/getSubscriptions";
 import { subscription_module } from "../../API/API_Links";
 
 const style = {
@@ -51,23 +57,17 @@ const checkBoxList = [
 type PropsType = {
   tableData: SubscriptionItem[];
   setTableData: React.Dispatch<React.SetStateAction<SubscriptionItem[]>>;
+  countryList: CountryType[];
+  regionList: ContinentType[];
   open: boolean;
   handleClose: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-interface SubscriptionForm {
-  [key: string]: string | string[];
-  title: string;
-  countries: string[];
-  urgency: string[];
-  severity: string[];
-  certainty: string[];
-  methods: string[];
-}
-
 const ModalForm = ({
   tableData,
   setTableData,
+  countryList,
+  regionList,
   open,
   handleClose,
 }: PropsType) => {
@@ -82,7 +82,6 @@ const ModalForm = ({
     certainty: [],
     methods: [],
   });
-
   const emptyForm = {
     title: "",
     countries: [],
@@ -94,23 +93,22 @@ const ModalForm = ({
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value, type, checked } = e.target;
-
     if (type === "checkbox") {
       const updatedValues = checked
         ? [...(subscriptionForm[name] as string[]), value]
         : (subscriptionForm[name] as string[]).filter(
             (item: string) => item !== value
           );
-
       setSubscriptionForm((prevState) => ({
         ...prevState,
         [name]: updatedValues,
       }));
     } else {
-      setSubscriptionForm((prevState) => ({
-        ...prevState,
-        [name]: value,
-      }));
+      if (value.toString().length <= 20)
+        setSubscriptionForm((prevState) => ({
+          ...prevState,
+          [name]: value,
+        }));
     }
   };
 
@@ -142,7 +140,7 @@ const ModalForm = ({
   return (
     <Modal open={open} onClose={handleClose} aria-labelledby="modal-title">
       <Box sx={style}>
-        <Typography id="modal-title" variant="h3" fontWeight={"bold"} mb="5px">
+        <Typography id="modal-title" variant="h3" fontWeight={"bold"} mb="10px">
           Add New Group
         </Typography>
         <Box component="form" onSubmit={handleSubmit} m={1}>
@@ -153,14 +151,24 @@ const ModalForm = ({
             <TextField
               id="title"
               name="title"
-              variant="outlined"
               size="small"
+              variant="outlined"
               value={subscriptionForm.title}
               onChange={handleChange}
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    {subscriptionForm.title.length | 0}
+                    /20
+                  </InputAdornment>
+                ),
+              }}
               sx={{ width: "100%", mt: 1, mb: 1 }}
             />
           </Box>
           <CountrySelectionField
+            countryList={countryList}
+            regionList={regionList}
             subscriptionForm={subscriptionForm}
             handleChange={handleChange}
           />
