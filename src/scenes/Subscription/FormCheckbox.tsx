@@ -1,19 +1,11 @@
 import {
+  Box,
   Checkbox,
   FormControl,
   FormControlLabel,
   FormGroup,
 } from "@mui/material";
-
-interface SubscriptionForm {
-  [key: string]: string | string[];
-  title: string;
-  countries: string[];
-  urgency: string[];
-  severity: string[];
-  certainty: string[];
-  methods: string[];
-}
+import { SubscriptionForm } from "../../API/queries/getSubscriptions";
 
 interface CheckboxProps {
   legend: string;
@@ -32,8 +24,15 @@ const FormCheckbox = ({
 
   return (
     <div>
-      <FormControl component="fieldset">
-        <legend className="subs-form-legend">{legend}</legend>
+      <FormControl component="fieldset" sx={{ mt: 1 }}>
+        <Box display="flex" sx={{ alignItems: "center" }}>
+          <legend className="subs-form-legend">{legend}</legend>
+          <Box ml={2} sx={{ color: "gray", fontSize: "10px" }}>
+            {subscriptionForm[checkboxName].length}/{checkboxItems.length}{" "}
+            selected
+          </Box>
+        </Box>
+
         <FormGroup sx={{ flexDirection: "row", marginLeft: 1 }}>
           {checkboxItems.map((item) => (
             <FormControlLabel
