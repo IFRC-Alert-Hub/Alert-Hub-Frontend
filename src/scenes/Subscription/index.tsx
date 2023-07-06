@@ -11,20 +11,33 @@ import { useEffect, useState } from "react";
 import ModalForm from "./ModalForm";
 import { useQuery } from "@apollo/client";
 import {
+  ContinentType,
+  CountryType,
   GET_SUBSCRIPTIONS,
   SubscriptionItem,
   SubscriptionQueryResult,
 } from "../../API/queries/getSubscriptions";
-import { subscription_module } from "../../API/API_Links";
+import { cap_aggregator, subscription_module } from "../../API/API_Links";
+import { GET_ALL_COUNTRIES } from "../../API/queries/getAllCountries";
 
 const Subscription = () => {
   const {
-    loading,
-    error,
+    loading: subscriptionLoading,
+    error: subscriptionError,
     data: subscriptionData,
   } = useQuery<SubscriptionQueryResult>(GET_SUBSCRIPTIONS, {
     client: subscription_module,
   });
+  const {
+    loading: countryLoading,
+    error: countryError,
+    data: countryData,
+  } = useQuery(GET_ALL_COUNTRIES, {
+    client: cap_aggregator,
+  });
+
+  const [regionList, setRegionList] = useState<ContinentType[]>([]);
+  const [countryList, setCountryList] = useState<CountryType[]>([]);
   const [tableData, setTableData] = useState<SubscriptionItem[]>([]);
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
@@ -34,7 +47,11 @@ const Subscription = () => {
     if (subscriptionData) {
       setTableData(subscriptionData.listSubscriptionByUserId);
     }
-  }, [subscriptionData]);
+    if (countryData) {
+      setRegionList(countryData.listRegion);
+      setCountryList(countryData.listCountry);
+    }
+  }, [subscriptionData, countryData]);
 
   return (
     <Container maxWidth={"lg"}>
@@ -61,21 +78,35 @@ const Subscription = () => {
           </Button>
         </Grid>
       </Grid>
-      {loading ? (
+      {subscriptionLoading ? (
         <Box sx={{ display: "flex" }}>
           <CircularProgress />
         </Box>
-      ) : error ? (
-        <p>Error: {error.message}</p>
+      ) : subscriptionError ? (
+        <p>Error: {subscriptionError.message}</p>
       ) : (
-        <SubscriptionTable tableData={tableData} setTableData={setTableData} />
+        <SubscriptionTable
+          countryList={countryList}
+          tableData={tableData}
+          setTableData={setTableData}
+        />
       )}
-      <ModalForm
-        tableData={tableData}
-        setTableData={setTableData}
-        open={open}
-        handleClose={handleClose}
-      />
+      {countryLoading ? (
+        <Box sx={{ display: "flex" }}>
+          <CircularProgress />
+        </Box>
+      ) : countryError ? (
+        <p>Error: {countryError.message}</p>
+      ) : (
+        <ModalForm
+          tableData={tableData}
+          setTableData={setTableData}
+          countryList={countryList}
+          regionList={regionList}
+          open={open}
+          handleClose={handleClose}
+        />
+      )}
     </Container>
   );
 };

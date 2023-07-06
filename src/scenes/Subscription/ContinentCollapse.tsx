@@ -2,21 +2,10 @@ import { Box, Collapse, IconButton, Typography } from "@mui/material";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import { ChangeEvent, useState } from "react";
-
-type CountryType = {
-  id: number;
-  name: string;
-};
-
-interface SubscriptionForm {
-  [key: string]: string | string[];
-  title: string;
-  countries: string[];
-  urgency: string[];
-  severity: string[];
-  certainty: string[];
-  methods: string[];
-}
+import {
+  CountryType,
+  SubscriptionForm,
+} from "../../API/queries/getSubscriptions";
 
 interface PropsType {
   continent: string;
@@ -58,7 +47,7 @@ const ContinentCollapse = ({
             borderRadius: "5px",
           }}
         >
-          {countries.map((country) => (
+          {countries?.map((country) => (
             <div key={country.id}>
               <input
                 className="country-input"

@@ -12,21 +12,29 @@ import {
   Tooltip,
   Box,
 } from "@mui/material";
-import { SubscriptionItem } from "../../API/queries/getSubscriptions";
+import {
+  CountryType,
+  SubscriptionItem,
+} from "../../API/queries/getSubscriptions";
 import { useMutation } from "@apollo/client";
 import { DELETE_SUBSCRIPTION } from "../../API/mutations/subscriptionMutation";
 import { subscription_module } from "../../API/API_Links";
 
 type PropsType = {
+  countryList: CountryType[];
   tableData: SubscriptionItem[];
   setTableData: React.Dispatch<React.SetStateAction<SubscriptionItem[]>>;
 };
 
 interface UpdatedRow extends SubscriptionItem {
-  filteredCountries: string[];
+  filteredCountryNames: (string | undefined)[];
 }
 
-const SubscriptionTable = ({ tableData, setTableData }: PropsType) => {
+const SubscriptionTable = ({
+  countryList,
+  tableData,
+  setTableData,
+}: PropsType) => {
   const [deleteSubscription] = useMutation(DELETE_SUBSCRIPTION, {
     client: subscription_module,
   });
@@ -37,17 +45,29 @@ const SubscriptionTable = ({ tableData, setTableData }: PropsType) => {
   // show the first three countries
   useEffect(() => {
     const updatedItems = tableData.map((row: SubscriptionItem) => {
-      let filteredCountries: string[];
       if (row.countryIds?.length > 3) {
-        filteredCountries = row.countryIds.slice(0, 3);
-        filteredCountries.push("...");
+        const filteredCountryIds = row.countryIds.slice(0, 3);
+        const filteredCountryNames = filteredCountryIds.map((countryId) => {
+          const foundCountry = countryList.find(
+            (country) => country.id === countryId.toString()
+          );
+          return foundCountry?.name;
+        });
+        filteredCountryNames.push("...");
+        return { ...row, filteredCountryNames };
       } else {
-        filteredCountries = row.countryIds;
+        const filteredCountryIds = row.countryIds;
+        const filteredCountryNames = filteredCountryIds.map((countryId) => {
+          const foundCountry = countryList?.find(
+            (country) => country.id === countryId.toString()
+          );
+          return foundCountry?.name;
+        });
+        return { ...row, filteredCountryNames };
       }
-      return { ...row, filteredCountries };
     });
     setUpdatedRows(updatedItems);
-  }, [tableData]);
+  }, [tableData, countryList]);
 
   // Avoid a layout jump when reaching the last page with empty rows.
   const emptyRows = useMemo(
@@ -107,11 +127,11 @@ const SubscriptionTable = ({ tableData, setTableData }: PropsType) => {
                     title={`${row.countryIds?.length} countries are selected`}
                     arrow
                   >
-                    <Box>{row.filteredCountries?.join(", ")}</Box>
+                    <Box>{row.filteredCountryNames?.join(", ")}</Box>
                   </Tooltip>
                 ) : (
                   <Tooltip title={"1 country is selected"} arrow>
-                    <Box>{row.filteredCountries?.join(", ")}</Box>
+                    <Box>{row.filteredCountryNames?.join(", ")}</Box>
                   </Tooltip>
                 )}
               </TableCell>
