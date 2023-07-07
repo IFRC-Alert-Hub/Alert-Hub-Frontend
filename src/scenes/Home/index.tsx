@@ -29,6 +29,11 @@ const Home = () => {
   const [filteredAlerts, setFilteredAlerts] = useState(data?.listAlert || []);
   const [selectedUrgency, setSelectedUrgency] = useState("");
   const [selectedSeverity, setSelectedSeverity] = useState("");
+
+  const [selectedEffectiveDate, setSelectedEffectiveDate] = useState<
+    [number | null, number | null] | undefined
+  >([null, null]);
+
   const handleUrgencyChange = (event: any, value: any) => {
     setSelectedUrgency(value || "");
   };
@@ -56,9 +61,39 @@ const Home = () => {
         );
       }
 
+      if (
+        selectedEffectiveDate &&
+        selectedEffectiveDate[0] !== null &&
+        selectedEffectiveDate[1] !== null
+      ) {
+        filteredData = filteredData.filter((alert: any) => {
+          let effectiveTimestamp = new Date(alert.effective).getTime() / 1000;
+          let expiresTimestamp = new Date(alert.expires).getTime() / 1000;
+
+          if (
+            selectedEffectiveDate &&
+            selectedEffectiveDate[0] !== null &&
+            selectedEffectiveDate[1] !== null &&
+            effectiveTimestamp >= selectedEffectiveDate[0] &&
+            expiresTimestamp <= selectedEffectiveDate[1]
+          ) {
+            return true;
+          }
+
+          return false;
+        });
+      }
+
       setFilteredAlerts(filteredData);
     }
-  }, [selectedUrgency, selectedSeverity, data, loading, error]);
+  }, [
+    selectedUrgency,
+    selectedSeverity,
+    data,
+    loading,
+    error,
+    selectedEffectiveDate,
+  ]);
 
   return (
     <Container maxWidth="lg">
@@ -210,7 +245,9 @@ const Home = () => {
             />
           )}
         /> */}
-        <DatePickerComponent />
+        <DatePickerComponent
+          setSelectedEffectiveDate={setSelectedEffectiveDate}
+        />
       </Box>
 
       {loading && (

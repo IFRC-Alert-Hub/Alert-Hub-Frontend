@@ -9,12 +9,16 @@ interface EffectivePopupProps {
   open: boolean;
   onClose: () => void;
   anchorEl: HTMLElement | null;
+  setSelectedEffectiveDate: React.Dispatch<
+    React.SetStateAction<[number | null, number | null] | undefined>
+  >;
 }
 
 const EffectivePopup: React.FC<EffectivePopupProps> = ({
   open,
   onClose,
   anchorEl,
+  setSelectedEffectiveDate,
 }) => {
   const [fromDate, setFromDate] = useState<Date | null>(null);
   const [toDate, setToDate] = useState<Date | null>(null);
@@ -39,6 +43,7 @@ const EffectivePopup: React.FC<EffectivePopupProps> = ({
     const toDateTime = toDate ? new Date(toDate) : null;
     const toUnixTimestamp = toDateTime ? toDateTime.getTime() / 1000 : null;
     console.log("TO Unix timestamp:", toUnixTimestamp);
+    setSelectedEffectiveDate([fromUnixTimestamp, toUnixTimestamp]);
     onClose();
   };
 
@@ -100,7 +105,15 @@ const EffectivePopup: React.FC<EffectivePopupProps> = ({
   );
 };
 
-const DatePickerComponent: React.FC = () => {
+interface DatePickerComponentProps {
+  setSelectedEffectiveDate: React.Dispatch<
+    React.SetStateAction<[number | null, number | null] | undefined>
+  >;
+}
+
+const DatePickerComponent: React.FC<DatePickerComponentProps> = ({
+  setSelectedEffectiveDate,
+}) => {
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
 
   const handleMenuOpen = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -142,6 +155,7 @@ const DatePickerComponent: React.FC = () => {
         open={Boolean(anchorEl)}
         onClose={handleMenuClose}
         anchorEl={anchorEl}
+        setSelectedEffectiveDate={setSelectedEffectiveDate}
       />
     </div>
   );
