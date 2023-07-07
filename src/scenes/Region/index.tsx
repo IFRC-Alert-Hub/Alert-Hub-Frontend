@@ -230,7 +230,7 @@ const Region = () => {
       let region = regions.find(
         (item: RegionInterface) => item.id.toString() === id
       );
-      console.log(region);
+      console.log("aafafafa: ", region);
 
       let updatedRegion = {
         ...region,

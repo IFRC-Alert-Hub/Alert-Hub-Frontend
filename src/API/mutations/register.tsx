@@ -3,7 +3,13 @@ import { gql } from "@apollo/client";
 export const VERIFY_EMAIL = gql`
   mutation MyMutation($email: String!) {
     sendVerifyEmail(email: $email) {
-      errors
+      errors {
+        email
+        session
+        user
+        userName
+        verifyCode
+      }
       success
     }
   }
@@ -16,7 +22,13 @@ export const REGISTER = gql`
     $verifyCode: String!
   ) {
     register(email: $email, password: $password, verifyCode: $verifyCode) {
-      errors
+      errors {
+        email
+        session
+        user
+        userName
+        verifyCode
+      }
       success
     }
   }

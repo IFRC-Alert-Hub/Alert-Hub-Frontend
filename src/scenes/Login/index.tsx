@@ -17,10 +17,7 @@ import { LOGIN } from "../../API/mutations/login";
 import { auth_system } from "../../API/API_Links";
 import { useNavigate } from "react-router-dom";
 
-interface AuthData {
-  token: string;
-  expiryDate: number;
-}
+
 
 const Login = () => {
   const navigate = useNavigate();
@@ -37,11 +34,8 @@ const Login = () => {
   const getTokenData = async (loginData: any) => {
     try {
       const result = await login({ variables: loginData });
-      const authData: AuthData = {
-        token: result.data.login.token, // replace with the actual token
-        expiryDate: result.data.login.refreshExpiresIn, // replace with the actual expiry date
-      };
-      return authData;
+      
+      return result;
     } catch (error: any) {
       formik.setFieldError("email", "Invalid email or password.");
       formik.setFieldError("password", "Invalid email or password.");
