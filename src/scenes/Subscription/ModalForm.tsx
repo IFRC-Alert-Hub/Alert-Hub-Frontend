@@ -142,6 +142,12 @@ const ModalForm = ({
           },
         });
         console.log(res.data.updateSubscription.subscription.subscriptionName);
+        const updatedData = tableData.map((item) =>
+          item.id === res.data.updateSubscription.subscription.id
+            ? res.data.updateSubscription.subscription
+            : item
+        );
+        setTableData(updatedData);
       } else {
         const res = await addSubscription({
           variables: {
