@@ -42,3 +42,38 @@ export const DELETE_SUBSCRIPTION = gql`
     }
   }
 `;
+
+export const UPDATE_SUBSCRIPTION = gql`
+  mutation UpdateSubscription(
+    $subscriptionId: Int!
+    $userId: Int!
+    $subscriptionName: String = ""
+    $certaintyArray: [String] = ""
+    $countryIds: [Int] = 10
+    $severityArray: [String] = ""
+    $subscribeBy: [String] = ""
+    $urgencyArray: [String] = ""
+  ) {
+    updateSubscription(
+      subscriptionId: $subscriptionId
+      userId: $userId
+      subscriptionName: $subscriptionName
+      countryIds: $countryIds
+      urgencyArray: $urgencyArray
+      severityArray: $severityArray
+      certaintyArray: $certaintyArray
+      subscribeBy: $subscribeBy
+    ) {
+      subscription {
+        id
+        userId
+        urgencyArray
+        subscriptionName
+        subscribeBy
+        severityArray
+        countryIds
+        certaintyArray
+      }
+    }
+  }
+`;

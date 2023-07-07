@@ -18,7 +18,7 @@ interface CheckboxProps {
   formErrors: FormErrors;
   legend: string;
   checkboxItems: string[];
-  subscriptionForm: SubscriptionForm;
+  selectedRow: SubscriptionForm;
   handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
@@ -27,7 +27,7 @@ const FormCheckbox = ({
   formErrors,
   legend,
   checkboxItems,
-  subscriptionForm,
+  selectedRow,
   handleChange,
 }: CheckboxProps) => {
   const checkboxName = legend.toLowerCase();
@@ -50,8 +50,7 @@ const FormCheckbox = ({
             {legend}
           </FormLabel>
           <Box ml={2} sx={{ color: "gray", fontSize: "10px" }}>
-            {subscriptionForm[checkboxName].length}/{checkboxItems.length}{" "}
-            selected
+            {selectedRow[checkboxName]?.length}/{checkboxItems.length} selected
           </Box>
         </Box>
 
@@ -61,7 +60,7 @@ const FormCheckbox = ({
               key={item}
               control={
                 <Checkbox
-                  checked={subscriptionForm[checkboxName].includes(item)}
+                  checked={selectedRow[checkboxName]?.includes(item)}
                   onChange={handleChange}
                   name={checkboxName}
                   value={item}

@@ -23,7 +23,7 @@ type PropsType = {
   formErrors: FormErrors;
   countryList: CountryType[];
   regionList: ContinentType[];
-  subscriptionForm: SubscriptionForm;
+  selectedRow: SubscriptionForm;
   handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 };
 
@@ -32,7 +32,7 @@ const CountrySelect = ({
   formErrors,
   countryList,
   regionList,
-  subscriptionForm,
+  selectedRow,
   handleChange,
 }: PropsType) => {
   // const sortedRegions = Array(regionList)
@@ -52,7 +52,7 @@ const CountrySelect = ({
         <Box display="flex" sx={{ alignItems: "center" }}>
           <FormLabel className="subs-form-legend">Countries</FormLabel>
           <Box ml={2} sx={{ color: "gray", fontSize: "0.5em" }}>
-            {subscriptionForm.countries.length}/{countryList.length} selected
+            {selectedRow.countries.length}/{countryList.length} selected
           </Box>
         </Box>
 
@@ -79,7 +79,7 @@ const CountrySelect = ({
               key={item.id}
               continent={item.name}
               countries={item.countrySet}
-              subscriptionForm={subscriptionForm}
+              selectedRow={selectedRow}
               handleChange={handleChange}
             />
           );
