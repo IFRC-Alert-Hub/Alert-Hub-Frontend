@@ -14,6 +14,7 @@ import {
   ContinentType,
   CountryType,
   GET_SUBSCRIPTIONS,
+  SubscriptionForm,
   SubscriptionItem,
   SubscriptionQueryResult,
 } from "../../API/queries/getSubscriptions";
@@ -39,9 +40,50 @@ const Subscription = () => {
   const [regionList, setRegionList] = useState<ContinentType[]>([]);
   const [countryList, setCountryList] = useState<CountryType[]>([]);
   const [tableData, setTableData] = useState<SubscriptionItem[]>([]);
+  const [formType, setFormType] = useState("");
+  const [selectedRow, setSelectedRow] = useState<SubscriptionForm>({
+    title: "",
+    countries: [],
+    urgency: [],
+    severity: [],
+    certainty: [],
+    methods: [],
+  });
   const [open, setOpen] = useState(false);
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
+
+  const handleOpen = (type: string, id?: string) => {
+    if (id) {
+      const foundItem = tableData.find(
+        (item) => item.id.toString() === id.toString()
+      );
+      if (foundItem) {
+        setSelectedRow({
+          id: id,
+          title: foundItem.subscriptionName,
+          countries: foundItem.countryIds.map((number) => number.toString()),
+          urgency: foundItem.urgencyArray,
+          severity: foundItem.severityArray,
+          certainty: foundItem.certaintyArray,
+          methods: foundItem.subscribeBy,
+        });
+      }
+    } else {
+      setSelectedRow({
+        title: "",
+        countries: [],
+        urgency: [],
+        severity: [],
+        certainty: [],
+        methods: [],
+      });
+    }
+    setFormType(type);
+    setOpen(true);
+  };
+  const handleClose = () => {
+    setFormType("");
+    setOpen(false);
+  };
 
   useEffect(() => {
     if (subscriptionData) {
@@ -71,7 +113,7 @@ const Subscription = () => {
           <Button
             variant="contained"
             color="error"
-            onClick={handleOpen}
+            onClick={() => handleOpen("Add")}
             sx={{ borderRadius: 3, marginRight: "10px" }}
           >
             Add
@@ -86,19 +128,27 @@ const Subscription = () => {
         <p>Error: {subscriptionError.message}</p>
       ) : (
         <SubscriptionTable
+          selectedRow={selectedRow}
+          setSelectedRow={setSelectedRow}
+          formType={formType}
           countryList={countryList}
+          regionList={regionList}
           tableData={tableData}
           setTableData={setTableData}
+          open={open}
+          handleOpen={handleOpen}
+          handleClose={handleClose}
         />
       )}
       {countryLoading ? (
-        <Box sx={{ display: "flex" }}>
-          <CircularProgress />
-        </Box>
+        <div></div>
       ) : countryError ? (
         <p>Error: {countryError.message}</p>
       ) : (
         <ModalForm
+          selectedRow={selectedRow}
+          setSelectedRow={setSelectedRow}
+          formType={formType}
           tableData={tableData}
           setTableData={setTableData}
           countryList={countryList}

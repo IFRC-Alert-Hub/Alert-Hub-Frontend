@@ -1,4 +1,11 @@
-import { Box, FormControl, InputAdornment, TextField } from "@mui/material";
+import {
+  Box,
+  FormControl,
+  FormHelperText,
+  FormLabel,
+  InputAdornment,
+  TextField,
+} from "@mui/material";
 import ContinentCollapse from "./ContinentCollapse";
 import SearchIcon from "@mui/icons-material/Search";
 import {
@@ -7,17 +14,25 @@ import {
   SubscriptionForm,
 } from "../../API/queries/getSubscriptions";
 
+interface FormErrors {
+  [key: string]: boolean;
+}
+
 type PropsType = {
+  verifyForm: boolean;
+  formErrors: FormErrors;
   countryList: CountryType[];
   regionList: ContinentType[];
-  subscriptionForm: SubscriptionForm;
+  selectedRow: SubscriptionForm;
   handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 };
 
 const CountrySelect = ({
+  verifyForm,
+  formErrors,
   countryList,
   regionList,
-  subscriptionForm,
+  selectedRow,
   handleChange,
 }: PropsType) => {
   // const sortedRegions = Array(regionList)
@@ -28,11 +43,16 @@ const CountrySelect = ({
 
   return (
     <div>
-      <FormControl component="fieldset" sx={{ width: "100%" }}>
+      <FormControl
+        required
+        error={verifyForm && formErrors["countries"]}
+        component="fieldset"
+        sx={{ width: "100%" }}
+      >
         <Box display="flex" sx={{ alignItems: "center" }}>
-          <legend className="subs-form-legend">Countries</legend>
+          <FormLabel className="subs-form-legend">Countries</FormLabel>
           <Box ml={2} sx={{ color: "gray", fontSize: "0.5em" }}>
-            {subscriptionForm.countries.length}/{countryList.length} selected
+            {selectedRow.countries.length}/{countryList.length} selected
           </Box>
         </Box>
 
@@ -59,11 +79,16 @@ const CountrySelect = ({
               key={item.id}
               continent={item.name}
               countries={item.countrySet}
-              subscriptionForm={subscriptionForm}
+              selectedRow={selectedRow}
               handleChange={handleChange}
             />
           );
         })}
+        <FormHelperText>
+          {verifyForm &&
+            formErrors["countries"] &&
+            "You need to select at least one"}
+        </FormHelperText>
       </FormControl>
     </div>
   );

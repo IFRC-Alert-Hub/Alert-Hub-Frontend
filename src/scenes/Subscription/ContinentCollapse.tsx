@@ -10,14 +10,14 @@ import {
 interface PropsType {
   continent: string;
   countries: CountryType[];
-  subscriptionForm: SubscriptionForm;
+  selectedRow: SubscriptionForm;
   handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
 const ContinentCollapse = ({
   continent,
   countries,
-  subscriptionForm,
+  selectedRow,
   handleChange,
 }: PropsType) => {
   const [open, setOpen] = useState(false);
@@ -33,6 +33,9 @@ const ContinentCollapse = ({
           {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
         </IconButton>
         <Typography variant="h6">{continent}</Typography>
+        {/* <Box ml={2} sx={{ color: "gray", fontSize: "0.5em" }}>
+          {selectedRow.countries.length}/{countries.length} selected
+        </Box> */}
       </div>
       <Collapse in={open} sx={{ ml: 4, mr: 4 }}>
         <Box
@@ -55,9 +58,7 @@ const ContinentCollapse = ({
                 name="countries"
                 id={country.name}
                 value={country.id}
-                checked={subscriptionForm["countries"].includes(
-                  `${country.id}`
-                )}
+                checked={selectedRow["countries"].includes(`${country.id}`)}
                 onChange={handleChange}
               />
               <label htmlFor={country.name} className="country-checkbox">

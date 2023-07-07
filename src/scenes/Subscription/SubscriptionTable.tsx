@@ -13,17 +13,27 @@ import {
   Box,
 } from "@mui/material";
 import {
+  ContinentType,
   CountryType,
+  SubscriptionForm,
   SubscriptionItem,
 } from "../../API/queries/getSubscriptions";
 import { useMutation } from "@apollo/client";
 import { DELETE_SUBSCRIPTION } from "../../API/mutations/subscriptionMutation";
 import { subscription_module } from "../../API/API_Links";
+import ModalForm from "./ModalForm";
 
 type PropsType = {
+  selectedRow: SubscriptionForm;
+  setSelectedRow: React.Dispatch<React.SetStateAction<SubscriptionForm>>;
+  formType: string;
   countryList: CountryType[];
+  regionList: ContinentType[];
   tableData: SubscriptionItem[];
   setTableData: React.Dispatch<React.SetStateAction<SubscriptionItem[]>>;
+  open: boolean;
+  handleOpen: (type: string, id?: string) => void;
+  handleClose: () => void;
 };
 
 interface UpdatedRow extends SubscriptionItem {
@@ -31,9 +41,16 @@ interface UpdatedRow extends SubscriptionItem {
 }
 
 const SubscriptionTable = ({
+  selectedRow,
+  setSelectedRow,
+  formType,
   countryList,
+  regionList,
   tableData,
   setTableData,
+  open,
+  handleOpen,
+  handleClose,
 }: PropsType) => {
   const [deleteSubscription] = useMutation(DELETE_SUBSCRIPTION, {
     client: subscription_module,
@@ -105,13 +122,27 @@ const SubscriptionTable = ({
       <Table sx={{ minWidth: 650 }} aria-label="subscription table">
         <TableHead>
           <TableRow>
-            <TableCell align="center">Group Title</TableCell>
-            <TableCell align="center">Subscribed Countries</TableCell>
-            <TableCell align="center">Urgency</TableCell>
-            <TableCell align="center">Severity</TableCell>
-            <TableCell align="center">Certainty</TableCell>
-            <TableCell align="center">Subscription Methods</TableCell>
-            <TableCell align="center">Operations</TableCell>
+            <TableCell align="center" sx={{ fontWeight: "600" }}>
+              Group Title
+            </TableCell>
+            <TableCell align="center" sx={{ fontWeight: "600" }}>
+              Subscribed Countries
+            </TableCell>
+            <TableCell align="center" sx={{ fontWeight: "600" }}>
+              Urgency
+            </TableCell>
+            <TableCell align="center" sx={{ fontWeight: "600" }}>
+              Severity
+            </TableCell>
+            <TableCell align="center" sx={{ fontWeight: "600" }}>
+              Certainty
+            </TableCell>
+            <TableCell align="center" sx={{ fontWeight: "600" }}>
+              Subscription Methods
+            </TableCell>
+            <TableCell align="center" sx={{ fontWeight: "600" }}>
+              Operations
+            </TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -145,11 +176,12 @@ const SubscriptionTable = ({
                 {row.certaintyArray.join(", ")}
               </TableCell>
               <TableCell align="center">{row.subscribeBy.join(", ")}</TableCell>
-              <TableCell align="center">
+              <TableCell align="center" sx={{ minWidth: "130px" }}>
                 <Button
                   variant="text"
                   size="small"
                   color="error"
+                  onClick={() => handleOpen("Edit", row.id)}
                   sx={{ minWidth: 0, marginRight: "5px" }}
                 >
                   Edit
@@ -185,6 +217,17 @@ const SubscriptionTable = ({
         page={page}
         onPageChange={handleChangePage}
         onRowsPerPageChange={handleChangeRowsPerPage}
+      />
+      <ModalForm
+        selectedRow={selectedRow}
+        setSelectedRow={setSelectedRow}
+        formType={formType}
+        tableData={tableData}
+        setTableData={setTableData}
+        countryList={countryList}
+        regionList={regionList}
+        open={open}
+        handleClose={handleClose}
       />
     </TableContainer>
   );

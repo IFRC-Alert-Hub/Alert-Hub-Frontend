@@ -19,7 +19,7 @@ export interface SubscriptionItem {
   id: string;
   userId: number;
   subscriptionName: string;
-  countryIds: string[];
+  countryIds: number[];
   urgencyArray: string[];
   severityArray: string[];
   certaintyArray: string[];
@@ -32,7 +32,8 @@ export interface SubscriptionQueryResult {
 }
 
 export interface SubscriptionForm {
-  [key: string]: string | string[];
+  [key: string]: string | string[] | string[] | undefined;
+  id?: string;
   title: string;
   countries: string[];
   urgency: string[];
