@@ -9,7 +9,7 @@ interface EffectivePopupProps {
   open: boolean;
   onClose: () => void;
   anchorEl: HTMLElement | null;
-  setSelectedEffectiveDate: React.Dispatch<
+  setSelectedDate: React.Dispatch<
     React.SetStateAction<[number | null, number | null] | undefined>
   >;
 }
@@ -18,7 +18,7 @@ const EffectivePopup: React.FC<EffectivePopupProps> = ({
   open,
   onClose,
   anchorEl,
-  setSelectedEffectiveDate,
+  setSelectedDate,
 }) => {
   const [fromDate, setFromDate] = useState<Date | null>(null);
   const [toDate, setToDate] = useState<Date | null>(null);
@@ -31,19 +31,30 @@ const EffectivePopup: React.FC<EffectivePopupProps> = ({
     setToDate(date);
   };
 
+  const handleClear = () => {
+    setFromDate(null);
+    setToDate(null);
+    setSelectedDate([null, null]);
+  };
   const handleSearch = () => {
-    console.log("From date:", fromDate);
-    console.log("To date:", toDate);
+    if (!fromDate) {
+      alert("Please enter the From date.");
+      return;
+    }
+
+    if (!toDate) {
+      alert("Please enter the To date.");
+      return;
+    }
+
     const fromDateTime = fromDate ? new Date(fromDate) : null;
     const fromUnixTimestamp = fromDateTime
       ? fromDateTime.getTime() / 1000
       : null;
-    console.log("FROM Unix timestamp:", fromUnixTimestamp);
 
     const toDateTime = toDate ? new Date(toDate) : null;
     const toUnixTimestamp = toDateTime ? toDateTime.getTime() / 1000 : null;
-    console.log("TO Unix timestamp:", toUnixTimestamp);
-    setSelectedEffectiveDate([fromUnixTimestamp, toUnixTimestamp]);
+    setSelectedDate([fromUnixTimestamp, toUnixTimestamp]);
     onClose();
   };
 
@@ -79,40 +90,71 @@ const EffectivePopup: React.FC<EffectivePopupProps> = ({
           />
         </LocalizationProvider>
 
-        <Button
-          type="submit"
-          onClick={handleSearch}
-          variant="contained"
-          disableElevation={true}
+        <Box
           sx={{
-            color: "#f5333f",
-            outline: "red",
-            textTransform: "capitalize",
-            padding: "0px ",
-            borderRadius: "10px",
-            backgroundColor: "none",
-            "&:hover": {
-              backgroundColor: "rgba(245,51,63,.16)",
-              boxShadow: "inset 0 0 0 1px #f5333f",
-            },
-            boxShadow: "inset 0 0 0 1px #f5333f",
+            display: "flex",
+            justifyContent: "space-between",
+            marginTop: "10px",
           }}
         >
-          Apply
-        </Button>
+          <Button
+            type="submit"
+            onClick={handleClear}
+            variant="contained"
+            disableElevation={true}
+            sx={{
+              color: "#f5333f",
+              outline: "red",
+              textTransform: "capitalize",
+              padding: "0px ",
+              borderRadius: "10px",
+              backgroundColor: "none",
+              "&:hover": {
+                backgroundColor: "rgba(245,51,63,.16)",
+                boxShadow: "inset 0 0 0 1px #f5333f",
+              },
+              boxShadow: "inset 0 0 0 1px #f5333f",
+            }}
+          >
+            Clear
+          </Button>
+          <Button
+            type="submit"
+            onClick={handleSearch}
+            variant="contained"
+            disableElevation={true}
+            sx={{
+              color: "#f5333f",
+              outline: "red",
+              textTransform: "capitalize",
+              padding: "0px ",
+              borderRadius: "10px",
+              backgroundColor: "none",
+              "&:hover": {
+                backgroundColor: "rgba(245,51,63,.16)",
+                boxShadow: "inset 0 0 0 1px #f5333f",
+              },
+              boxShadow: "inset 0 0 0 1px #f5333f",
+            }}
+          >
+            Apply
+          </Button>
+        </Box>
       </Box>
     </Menu>
   );
 };
 
 interface DatePickerComponentProps {
-  setSelectedEffectiveDate: React.Dispatch<
+  setSelectedDate: React.Dispatch<
     React.SetStateAction<[number | null, number | null] | undefined>
   >;
+  datePickerTitle: string;
 }
 
 const DatePickerComponent: React.FC<DatePickerComponentProps> = ({
-  setSelectedEffectiveDate,
+  setSelectedDate,
+  datePickerTitle,
 }) => {
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
 
@@ -139,7 +181,7 @@ const DatePickerComponent: React.FC<DatePickerComponentProps> = ({
         sx={{
           p: 0,
           borderRadius: "0px",
-          borderBottom: "1px solid transparent",
+          border: "0.2px solid grey",
           "&:hover": { backgroundColor: "transparent !important" },
           "&:focus": { backgroundColor: "transparent !important" },
           height: "100%",
@@ -147,15 +189,20 @@ const DatePickerComponent: React.FC<DatePickerComponentProps> = ({
           backgroundColor: "transparent !important",
         }}
       >
-        <Typography variant="h6" textTransform={"capitalize"}>
-          Effective
+        <Typography
+          variant="h6"
+          fontSize={"12px"}
+          textTransform={"capitalize"}
+          paddingRight={"40px"}
+        >
+          {datePickerTitle}
         </Typography>
       </Button>
       <EffectivePopup
         open={Boolean(anchorEl)}
         onClose={handleMenuClose}
         anchorEl={anchorEl}
-        setSelectedEffectiveDate={setSelectedEffectiveDate}
+        setSelectedDate={setSelectedDate}
       />
     </div>
   );

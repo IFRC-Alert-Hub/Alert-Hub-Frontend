@@ -246,7 +246,8 @@ const Home = () => {
           )}
         /> */}
         <DatePickerComponent
-          setSelectedEffectiveDate={setSelectedEffectiveDate}
+          datePickerTitle="Effective"
+          setSelectedDate={setSelectedEffectiveDate}
         />
       </Box>
 
