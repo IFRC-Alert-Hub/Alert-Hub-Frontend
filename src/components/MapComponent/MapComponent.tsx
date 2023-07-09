@@ -11,7 +11,7 @@ type Pin = {
   coordinates: number[];
   color: string;
 };
-type Bbox = {
+export type Bbox = {
   type: string;
   coordinates: number[][][];
 };

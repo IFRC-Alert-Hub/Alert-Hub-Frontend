@@ -1,106 +1,13 @@
 import { Box, CircularProgress, Container, Typography } from "@mui/material";
 import { useParams } from "react-router-dom";
 import TitleHeader from "../../components/TitleHeader";
-import MapComponent from "../../components/MapComponent/MapComponent";
-import { useMemo, useRef } from "react";
+import { useEffect, useMemo } from "react";
 import CardCarousel from "../../components/Card/CardCarousel";
 import { GET_ALL_REGIONS } from "../../API/queries/getAllRegions";
 import { useQuery } from "@apollo/client";
 import { ALL_ALERTS } from "../../API/queries/getAllAlerts";
 import { cap_aggregator } from "../../API/API_Links";
-
-// const regionItems = [
-//   {
-//     name: 0,
-//     id: 0,
-//     region_name: "Africa",
-//     bbox: {
-//       type: "Polygon",
-//       coordinates: [
-//         [
-//           [-32.99047851563365, -47.08120743260386],
-//           [-32.99047851563365, 41.726381079898935],
-//           [67.90795898435852, 41.726381079898935],
-//           [67.90795898435852, -47.08120743260386],
-//           [-32.99047851563365, -47.08120743260386],
-//         ],
-//       ],
-//     },
-//     label: "Africa",
-//   },
-//   {
-//     name: 1,
-//     id: 1,
-//     region_name: "Americas",
-//     bbox: {
-//       type: "Polygon",
-//       coordinates: [
-//         [
-//           [-129.72656248194582, -62.378488432147485],
-//           [-131.72607420041345, 57.13276081967902],
-//           [-32.23388671426278, 56.749208410332756],
-//           [-29.42138671465428, -61.94196560312882],
-//           [-129.72656248194582, -62.378488432147485],
-//         ],
-//       ],
-//     },
-//     label: "Americas",
-//   },
-//   {
-//     name: 2,
-//     id: 2,
-//     region_name: "Asia Pacific",
-//     bbox: {
-//       type: "Polygon",
-//       coordinates: [
-//         [
-//           [179.29687497503375, 54.87660664883007],
-//           [179.99999997494376, -60.84491056841565],
-//           [54.492187492411134, -61.015724808747116],
-//           [57.65624999197012, 55.478853458027295],
-//           [179.29687497503375, 54.87660664883007],
-//         ],
-//       ],
-//     },
-//     label: "Asia Pacific",
-//   },
-//   {
-//     name: 3,
-//     id: 3,
-//     region_name: "Europe",
-//     bbox: {
-//       type: "Polygon",
-//       coordinates: [
-//         [
-//           [-31.826238837911355, 20.48553219475167],
-//           [-27.959051338449562, 70.67700773369562],
-//           [89.81438614515588, 71.47500691896067],
-//           [91.92376114486606, 20.48553219475167],
-//           [-31.826238837911355, 20.48553219475167],
-//         ],
-//       ],
-//     },
-//     label: "Europe",
-//   },
-//   {
-//     name: 4,
-//     id: 4,
-//     region_name: "Middle East & North East",
-//     bbox: {
-//       type: "Polygon",
-//       coordinates: [
-//         [
-//           [-29.82641601564615, 10.082644243860523],
-//           [-29.82641601564615, 52.446089149543],
-//           [72.20141321303812, 52.446089149543],
-//           [72.20141321303812, 10.082644243860523],
-//           [-29.82641601564615, 10.082644243860523],
-//         ],
-//       ],
-//     },
-//     label: "Middle East & North East",
-//   },
-// ];
+import MapComponentWithFilter from "../../components/NavigationBar/MapComponentWithFilter";
 
 export const cardData = [
   {
@@ -201,9 +108,6 @@ const convertCoordinates = (coordinatesString: string): number[][] => {
 };
 
 const Region = () => {
-  const mapContainerRef = useRef<HTMLDivElement>(null);
-  const mapRef = useRef<mapboxgl.Map | null>(null);
-
   const { id } = useParams<string>();
 
   const {
@@ -212,6 +116,7 @@ const Region = () => {
     data: data_regions,
   } = useQuery(GET_ALL_REGIONS, {
     client: cap_aggregator,
+    fetchPolicy: "network-only",
   });
   const {
     loading: loading_alerts,
@@ -223,6 +128,7 @@ const Region = () => {
       regionId: "",
     },
     client: cap_aggregator,
+    fetchPolicy: "network-only",
   });
   const region = useMemo(() => {
     if (!loading_regions && !error_regions && data_regions) {
@@ -230,7 +136,6 @@ const Region = () => {
       let region = regions.find(
         (item: RegionInterface) => item.id.toString() === id
       );
-      console.log("aafafafa: ", region);
 
       let updatedRegion = {
         ...region,
@@ -240,12 +145,17 @@ const Region = () => {
           coordinates: [convertCoordinates(region.polygon)],
         },
       };
-      refetch_alerts({ regionId: region.id });
 
       return updatedRegion;
     }
-  }, [loading_regions, error_regions, data_regions, id, refetch_alerts]);
+  }, [loading_regions, error_regions, data_regions, id]);
 
+  useEffect(() => {
+    console.log("Region:", region);
+    if (!loading_regions && !error_regions && data_regions) {
+      refetch_alerts({ regionId: region.id });
+    }
+  }, [loading_regions, error_regions, data_regions, region, refetch_alerts]);
   return (
     <>
       {loading_regions && (
@@ -275,25 +185,15 @@ const Region = () => {
           <Box margin={"0px 25px 25px"}>
             <CardCarousel cards={cardData} />
           </Box>
-          <TitleHeader
-            title="ONGOING Extreme Alerts"
-            rightTitle={"View all alerts"}
-            rightLinkURL={"/alerts/all"}
+
+          <MapComponentWithFilter
+            data={data_alerts}
+            loading={loading_alerts}
+            error={error_alerts}
+            boundingRegionCoordinates={region?.bbox}
             filterKey="region"
             selectedFilter={region?.name}
-          />
-          {loading_alerts && (
-            <CircularProgress sx={{ textAlign: "center" }} color="secondary" />
-          )}
-          {error_alerts && <p>Error: {error_alerts.message}</p>}
-          {!loading_alerts && !error_alerts && (
-            <MapComponent
-              mapContainerRef={mapContainerRef}
-              mapRef={mapRef}
-              boundingRegionCoordinates={region?.bbox}
-              alerts={data_alerts?.listAlert}
-            />
-          )}
+          ></MapComponentWithFilter>
         </Container>
       )}
     </>
