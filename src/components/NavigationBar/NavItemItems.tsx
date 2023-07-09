@@ -6,11 +6,11 @@ export const firstNavBarItems = [
 export const secondNavBarItems = [{ name: "Home", path: "/", exact: true }];
 
 export const RegionsDropdownItems = [
-  { name: "Africa", path: "/regions/0", exact: false },
-  { name: "America", path: "/regions/1", exact: false },
-  { name: "Asia Pacific", path: "/regions/2", exact: false },
-  { name: "Europe", path: "/regions/3", exact: false },
-  { name: "Middle East & North East", path: "/regions/4", exact: false },
+  { name: "Africa", path: "/regions/1", exact: false },
+  { name: "America", path: "/regions/2", exact: false },
+  { name: "Asia Pacific", path: "/regions/3", exact: false },
+  { name: "Europe", path: "/regions/4", exact: false },
+  { name: "Middle East & North East", path: "/regions/5", exact: false },
 ];
 
 export const HazardTypeDropdownItems = [
