@@ -5,7 +5,7 @@ import {
   Container,
   TextField,
 } from "@mui/material";
-import MapComponent, { Bbox } from "../MapComponent/MapComponent";
+import MapComponent, { Bbox } from "./MapComponent";
 import { useEffect, useRef, useState } from "react";
 import mapboxgl from "mapbox-gl";
 
@@ -104,7 +104,7 @@ const MapComponentWithFilter: React.FC<MapComponentWithFilterProps> = ({
   return (
     <Container maxWidth="lg">
       <TitleHeader
-        title={`All ONGOING Exeme Alerts (${filteredAlerts.length})`}
+        title={`All ONGOING Extreme Alerts (${filteredAlerts.length})`}
         rightTitle={"View all alerts"}
         rightLinkURL={"/alerts/all"}
         selectedFilter={selectedFilter}

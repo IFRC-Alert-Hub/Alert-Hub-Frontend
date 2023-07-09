@@ -7,7 +7,7 @@ import { GET_ALL_REGIONS } from "../../API/queries/getAllRegions";
 import { useQuery } from "@apollo/client";
 import { ALL_ALERTS } from "../../API/queries/getAllAlerts";
 import { cap_aggregator } from "../../API/API_Links";
-import MapComponentWithFilter from "../../components/NavigationBar/MapComponentWithFilter";
+import MapComponentWithFilter from "../../components/MapComponent/MapComponentWithFilter";
 
 export const cardData = [
   {
