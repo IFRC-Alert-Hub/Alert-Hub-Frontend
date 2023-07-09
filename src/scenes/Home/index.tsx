@@ -6,7 +6,7 @@ import { ALL_ALERTS } from "../../API/queries/getAllAlerts";
 import CardCarousel from "../../components/Card/CardCarousel";
 import { cardData } from "../Region";
 import { cap_aggregator } from "../../API/API_Links";
-import MapComponentWithFilter from "../../components/NavigationBar/MapComponentWithFilter";
+import MapComponentWithFilter from "../../components/MapComponent/MapComponentWithFilter";
 
 const Home = () => {
   const { formatMessage } = useIntl();

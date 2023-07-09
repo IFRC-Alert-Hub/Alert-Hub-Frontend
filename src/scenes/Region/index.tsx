@@ -7,7 +7,7 @@ import { GET_ALL_REGIONS } from "../../API/queries/getAllRegions";
 import { useQuery } from "@apollo/client";
 import { ALL_ALERTS } from "../../API/queries/getAllAlerts";
 import { cap_aggregator } from "../../API/API_Links";
-import MapComponentWithFilter from "../../components/NavigationBar/MapComponentWithFilter";
+import MapComponentWithFilter from "../../components/MapComponent/MapComponentWithFilter";
 
 export const cardData = [
   {
@@ -158,44 +158,46 @@ const Region = () => {
   }, [loading_regions, error_regions, data_regions, region, refetch_alerts]);
   return (
     <>
-      {loading_regions && (
-        <CircularProgress sx={{ textAlign: "center" }} color="secondary" />
-      )}
-      {error_regions && <p>Error: {error_regions.message}</p>}
-      {!loading_regions && !error_regions && (
-        <Container maxWidth="lg">
-          <Box sx={{ padding: "50px 0 30px 0" }}>
-            <Typography
-              variant="h1"
-              textAlign={"center"}
-              fontWeight={"bold"}
-              textTransform={"capitalize"}
-              letterSpacing={"1.6px"}
-            >
-              {region?.name}
-            </Typography>
-          </Box>
-          <TitleHeader
-            title="ONGOING Extreme Alerts"
-            rightTitle={"View all alerts"}
-            rightLinkURL={"/alerts/all"}
-            filterKey="region"
-            selectedFilter={region?.name}
-          />
-          <Box margin={"0px 25px 25px"}>
-            <CardCarousel cards={cardData} />
-          </Box>
+      <Container maxWidth="lg">
+        {loading_regions ? (
+          <CircularProgress sx={{ textAlign: "center" }} color="secondary" />
+        ) : error_regions ? (
+          <p>Error: {error_regions.message}</p>
+        ) : (
+          <>
+            <Box sx={{ padding: "50px 0 30px 0" }}>
+              <Typography
+                variant="h1"
+                textAlign="center"
+                fontWeight="bold"
+                textTransform="capitalize"
+                letterSpacing="1.6px"
+              >
+                {region?.name}
+              </Typography>
+            </Box>
+            <TitleHeader
+              title="ONGOING Extreme Alerts"
+              rightTitle="View all alerts"
+              rightLinkURL="/alerts/all"
+              filterKey="region"
+              selectedFilter={region?.name}
+            />
+            <Box margin="0px 25px 25px">
+              <CardCarousel cards={cardData} />
+            </Box>
 
-          <MapComponentWithFilter
-            data={data_alerts}
-            loading={loading_alerts}
-            error={error_alerts}
-            boundingRegionCoordinates={region?.bbox}
-            filterKey="region"
-            selectedFilter={region?.name}
-          ></MapComponentWithFilter>
-        </Container>
-      )}
+            <MapComponentWithFilter
+              data={data_alerts}
+              loading={loading_alerts}
+              error={error_alerts}
+              boundingRegionCoordinates={region?.bbox}
+              filterKey="region"
+              selectedFilter={region?.name}
+            />
+          </>
+        )}
+      </Container>
     </>
   );
 };
