@@ -130,6 +130,7 @@ const Region = () => {
     client: cap_aggregator,
     fetchPolicy: "network-only",
   });
+
   const region = useMemo(() => {
     if (!loading_regions && !error_regions && data_regions) {
       const regions = data_regions.listRegion;
