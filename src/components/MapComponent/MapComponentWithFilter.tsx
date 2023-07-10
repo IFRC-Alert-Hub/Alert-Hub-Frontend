@@ -181,6 +181,7 @@ const MapComponentWithFilter: React.FC<MapComponentWithFilterProps> = ({
 
             <DatePickerComponent
               datePickerTitle="Effective"
+              selectedDate={selectedEffectiveDate}
               setSelectedDate={setSelectedEffectiveDate}
             />
           </Box>{" "}
