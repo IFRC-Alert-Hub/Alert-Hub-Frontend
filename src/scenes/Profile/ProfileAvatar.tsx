@@ -1,16 +1,18 @@
 import { Avatar, Box, Button } from "@mui/material";
 
-interface UserType {
+interface User {
   id: string;
   avatar: string;
   firstName: string;
   lastName: string;
+  country: string;
+  city: string;
   email: string;
-  contactNumber: string;
+  phoneNumber: string;
 }
 
 type PropsType = {
-  user: UserType;
+  user: User;
   editStatus: boolean;
   setEditStatus: React.Dispatch<React.SetStateAction<boolean>>;
 };

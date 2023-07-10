@@ -1,18 +1,28 @@
-import { Box, Button, Grid, TextField } from "@mui/material";
+import {
+  Box,
+  Button,
+  Grid,
+  InputAdornment,
+  InputLabel,
+  OutlinedInput,
+  TextField,
+} from "@mui/material";
 import { useState } from "react";
 
-interface UserType {
+interface User {
   id: string;
   avatar: string;
   firstName: string;
   lastName: string;
+  country: string;
+  city: string;
   email: string;
-  contactNumber: string;
+  phoneNumber: string;
 }
 
 type PropsType = {
-  user: UserType;
-  setUser: React.Dispatch<React.SetStateAction<UserType>>;
+  user: User;
+  setUser: React.Dispatch<React.SetStateAction<User>>;
   editStatus: boolean;
   setEditStatus: React.Dispatch<React.SetStateAction<boolean>>;
 };
@@ -53,9 +63,9 @@ const ProfileForm = ({
     >
       <Grid container>
         <Grid item xs={12} sm={6}>
-          <label className="form-label" htmlFor="firstName">
+          <InputLabel className="form-label" htmlFor="firstName">
             FIRST NAME
-          </label>
+          </InputLabel>
           <TextField
             id="firstName"
             name="firstName"
@@ -67,9 +77,9 @@ const ProfileForm = ({
           />
         </Grid>
         <Grid item xs={12} sm={6}>
-          <label className="form-label" htmlFor="lastName">
+          <InputLabel className="form-label" htmlFor="lastName">
             LAST NAME
-          </label>
+          </InputLabel>
           <TextField
             id="lastName"
             name="lastName"
@@ -80,32 +90,97 @@ const ProfileForm = ({
             onChange={handleInputChange}
           />
         </Grid>
-        <Grid item xs={12}>
-          <label className="form-label" htmlFor="email">
-            EMAIL ADDRESS
-          </label>
+        <Grid item xs={12} sm={6}>
+          <InputLabel className="form-label" htmlFor="country">
+            COUNTRY
+          </InputLabel>
           <TextField
-            id="email"
-            name="email"
+            id="country"
+            name="country"
             size="small"
             className="form-text-field"
-            value={user.email}
+            value={user.country}
             disabled={editStatus}
             onChange={handleInputChange}
           />
         </Grid>
-        <Grid item xs={12}>
-          <label className="form-label" htmlFor="contactNumber">
-            PHONE NUMBER
-          </label>
+        <Grid item xs={12} sm={6}>
+          <InputLabel className="form-label" htmlFor="city">
+            CITY
+          </InputLabel>
           <TextField
-            id="contactNumber"
-            name="contactNumber"
+            id="city"
+            name="city"
             size="small"
             className="form-text-field"
-            value={user.contactNumber}
+            value={user.city}
             disabled={editStatus}
             onChange={handleInputChange}
+          />
+        </Grid>
+
+        <Grid
+          item
+          xs={12}
+          m={{ xs: "0px 20px 20px 20px", sm: "0 30px 20px 0" }}
+        >
+          <InputLabel htmlFor="email">EMAIL ADDRESS</InputLabel>
+          <OutlinedInput
+            id="email"
+            name="email"
+            size="small"
+            value={user.email}
+            disabled
+            fullWidth
+            sx={{ p: "0px" }}
+            endAdornment={
+              <InputAdornment position="end">
+                <Button
+                  variant="text"
+                  disabled={!editStatus}
+                  disableRipple
+                  sx={{
+                    color: "red",
+                    textTransform: "capitalize",
+                    "&:hover": { opacity: "0.5" },
+                  }}
+                >
+                  {"Switch"}
+                </Button>
+              </InputAdornment>
+            }
+          />
+        </Grid>
+        <Grid
+          item
+          xs={12}
+          m={{ xs: "0px 20px 20px 20px", sm: "0 30px 30px 0" }}
+        >
+          <InputLabel htmlFor="phoneNumber">PHONE NUMBER</InputLabel>
+          <OutlinedInput
+            id="phoneNumber"
+            name="phoneNumber"
+            size="small"
+            value={user.phoneNumber}
+            disabled
+            fullWidth
+            sx={{ p: "0px" }}
+            endAdornment={
+              <InputAdornment position="end">
+                <Button
+                  variant="text"
+                  disabled={!editStatus}
+                  disableRipple
+                  sx={{
+                    color: "red",
+                    textTransform: "capitalize",
+                    "&:hover": { opacity: "0.5" },
+                  }}
+                >
+                  {"Switch"}
+                </Button>
+              </InputAdornment>
+            }
           />
         </Grid>
 
@@ -117,7 +192,7 @@ const ProfileForm = ({
             xs={12}
             display="flex"
             justifyContent="flex-end"
-            paddingRight="30px"
+            pr={{ xs: "20px", sm: "30px" }}
           >
             <Button
               variant="outlined"

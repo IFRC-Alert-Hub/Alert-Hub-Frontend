@@ -3,23 +3,27 @@ import ProfileForm from "./ProfileForm";
 import ProfileAvatar from "./ProfileAvatar";
 import { useState } from "react";
 
-interface UserType {
+interface User {
   id: string;
   avatar: string;
   firstName: string;
   lastName: string;
+  country: string;
+  city: string;
   email: string;
-  contactNumber: string;
+  phoneNumber: string;
 }
 
 const Profile = () => {
-  const [user, setUser] = useState<UserType>({
+  const [user, setUser] = useState<User>({
     id: "1",
     avatar: "https://eu.ui-avatars.com/api/?name=M&size=250",
     firstName: "Adi",
     lastName: "Leio",
+    country: "United Kindom",
+    city: "London",
     email: "email123@email.com",
-    contactNumber: "01234567890",
+    phoneNumber: "01234567890",
   });
   const [editStatus, setEditStatus] = useState(true);
 
