@@ -17,8 +17,6 @@ import { LOGIN } from "../../API/mutations/login";
 import { auth_system } from "../../API/API_Links";
 import { useNavigate } from "react-router-dom";
 
-
-
 const Login = () => {
   const navigate = useNavigate();
 
@@ -34,7 +32,7 @@ const Login = () => {
   const getTokenData = async (loginData: any) => {
     try {
       const result = await login({ variables: loginData });
-      
+
       return result;
     } catch (error: any) {
       formik.setFieldError("email", "Invalid email or password.");
@@ -51,10 +49,8 @@ const Login = () => {
       password: Yup.string().required("Required"),
     }),
     onSubmit: (values) => {
-      console.log("FORM VALUES: ", values);
       getTokenData(values).then((authData) => {
         if (authData) {
-          localStorage.setItem("authData", JSON.stringify(authData));
           navigate("/account/profile");
         }
       });

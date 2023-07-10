@@ -1,12 +1,14 @@
-import { ApolloClient, InMemoryCache } from "@apollo/client";
-
+import { ApolloClient, InMemoryCache, createHttpLink } from "@apollo/client";
 export const cap_aggregator = new ApolloClient({
   uri: "https://cap-aggregator.azurewebsites.net/graphql/",
   cache: new InMemoryCache(),
 });
 
 export const auth_system = new ApolloClient({
-  uri: "https://backend-deploy.azurewebsites.net/users/graphql",
+  link: createHttpLink({
+    uri: "https://backend-deploy.azurewebsites.net/users/graphql",
+    credentials: "include",
+  }),
   cache: new InMemoryCache(),
 });
 

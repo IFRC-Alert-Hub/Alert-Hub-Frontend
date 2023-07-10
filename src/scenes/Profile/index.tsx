@@ -1,7 +1,10 @@
 import { Box, Container, Grid, Typography } from "@mui/material";
 import ProfileForm from "./ProfileForm";
 import ProfileAvatar from "./ProfileAvatar";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { getUserDetails } from "../../API/queries/getUserDetails";
+import { auth_system } from "../../API/API_Links";
+import { useQuery } from "@apollo/client";
 
 interface UserType {
   id: string;
@@ -13,6 +16,18 @@ interface UserType {
 }
 
 const Profile = () => {
+  const { loading, error, data } = useQuery(getUserDetails, {
+    client: auth_system,
+  });
+
+  useEffect(() => {
+    console.log("test");
+
+    if (!loading && !error) {
+      console.log(data);
+    }
+  }, [loading, error, data]);
+
   const [user, setUser] = useState<UserType>({
     id: "1",
     avatar: "https://eu.ui-avatars.com/api/?name=M&size=250",
