@@ -161,6 +161,22 @@ const DatePickerComponent: React.FC<DatePickerComponentProps> = ({
 }) => {
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
 
+  // const getSelectedDates = (
+  //   selectedDate: [number | null, number | null] | undefined
+  // ) => {
+  //   const startDate = new Date((selectedDate?.[0] as number) * 1000);
+  //   const endDate = new Date((selectedDate?.[1] as number) * 1000);
+  //   const dateRange = `${String(startDate.getDate()).padStart(2, "0")}/${String(
+  //     startDate.getMonth() + 1
+  //   ).padStart(2, "0")}/${startDate.getFullYear()} - ${String(
+  //     endDate.getDate()
+  //   ).padStart(2, "0")}/${String(endDate.getMonth() + 1).padStart(
+  //     2,
+  //     "0"
+  //   )}/${endDate.getFullYear()}`;
+
+  //   return dateRange;
+  // };
   const handleMenuOpen = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
   };

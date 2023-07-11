@@ -26,14 +26,14 @@ import {
 } from "./NavItemItems";
 import LoginButton from "./LoginButton";
 import TimeComponent from "./TimeComponent";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import AvatarDropdown from "./AvatarDropdown";
 import ChangeLanguageDropdown from "./ChangeLanguageDropdown";
 import { ExpandLess, ExpandMore } from "@mui/icons-material";
+import { UserContext } from "../../context/UserContext";
 
 const NavbarComponent = (props: any) => {
-  // used for test login
-  const isAuthenticated = localStorage.getItem("authData") !== null;
+  const userContext = useContext(UserContext);
 
   const location = useLocation();
   const { window } = props;
@@ -48,7 +48,6 @@ const NavbarComponent = (props: any) => {
     setOpenMobileRegion(false);
   };
 
-  // Mobile drawer
   const drawer = (
     <Box sx={{ textAlign: "center" }}>
       <Typography variant="h6" sx={{ my: 2 }}>
@@ -198,6 +197,7 @@ const NavbarComponent = (props: any) => {
                       sx={{
                         padding: "6px 0.5rem",
                         textTransform: "capitalize",
+                        paddingRight: "15px",
                       }}
                       disableRipple
                       disableTouchRipple
@@ -220,7 +220,7 @@ const NavbarComponent = (props: any) => {
                   </Link>
                 ))}
               </Box>
-              {isAuthenticated ? <AvatarDropdown /> : <LoginButton />}
+              {userContext.user ? <AvatarDropdown /> : <LoginButton />}
             </Box>
           </Toolbar>
         </Container>
@@ -309,7 +309,7 @@ const NavbarComponent = (props: any) => {
           open={mobileOpen}
           onClose={handleDrawerToggle}
           ModalProps={{
-            keepMounted: true, // Better open performance on mobile.
+            keepMounted: true,
           }}
           sx={{
             display: { xs: "block", sm: "none" },

@@ -16,9 +16,12 @@ import { useMutation } from "@apollo/client";
 import { LOGIN } from "../../API/mutations/login";
 import { auth_system } from "../../API/API_Links";
 import { useNavigate } from "react-router-dom";
+import { UserContext } from "../../context/UserContext";
 
 const Login = () => {
   const navigate = useNavigate();
+
+  const userContext = React.useContext(UserContext);
 
   const [login] = useMutation(LOGIN, {
     client: auth_system,
@@ -27,6 +30,7 @@ const Login = () => {
       password: "",
     },
   });
+
   const isLoggedIn = !!localStorage.getItem("authData"); // Check if the user is already logged in
 
   const getTokenData = async (loginData: any) => {
@@ -52,6 +56,7 @@ const Login = () => {
       getTokenData(values).then((authData) => {
         if (authData) {
           navigate("/account/profile");
+          userContext.setUser(authData.data.login.user);
         }
       });
     },

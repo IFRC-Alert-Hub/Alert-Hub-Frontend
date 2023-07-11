@@ -178,7 +178,6 @@ const MapComponentWithFilter: React.FC<MapComponentWithFilterProps> = ({
               )}
               onChange={handleSeverityChange}
             />
-
             <DatePickerComponent
               datePickerTitle="Effective"
               selectedDate={selectedEffectiveDate}

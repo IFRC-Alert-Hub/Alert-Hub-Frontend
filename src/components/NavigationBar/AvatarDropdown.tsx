@@ -1,3 +1,4 @@
+import { useMutation } from "@apollo/client";
 import { AccountBox, Checklist, Logout } from "@mui/icons-material";
 import {
   Avatar,
@@ -7,13 +8,22 @@ import {
   MenuItem,
   Tooltip,
 } from "@mui/material";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { auth_system } from "../../API/API_Links";
+import { LOGOUT } from "../../API/mutations/logout";
+import { UserContext } from "../../context/UserContext";
 
 const AvatarDropdown = () => {
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
   const open = Boolean(anchorEl);
   const navigate = useNavigate();
+  const userContext = useContext(UserContext);
+
+  const [logoutData] = useMutation(LOGOUT, {
+    client: auth_system,
+  });
+
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
   };
@@ -21,10 +31,20 @@ const AvatarDropdown = () => {
     setAnchorEl(null);
   };
 
+  const logoutHandler = async () => {
+    try {
+      const result = await logoutData();
+      console.log(result.data.logout.success);
+      return result;
+    } catch (error: any) {
+      console.log(error);
+    }
+  };
+
   const handleLogout = () => {
-    // Remove the token from localStorage
-    localStorage.removeItem("authData");
+    logoutHandler();
     navigate("/");
+    userContext.setUser(null);
   };
 
   return (
