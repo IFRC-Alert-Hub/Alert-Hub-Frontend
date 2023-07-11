@@ -7,10 +7,11 @@ import {
 } from "@mui/material";
 import ProfileForm from "./ProfileForm";
 import ProfileAvatar from "./ProfileAvatar";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { getUserDetails } from "../../API/queries/getUserDetails";
 import { auth_system } from "../../API/API_Links";
 import { useQuery } from "@apollo/client";
+import { UserContext } from "../../context/UserContext";
 
 interface User {
   id: string;
@@ -24,7 +25,9 @@ interface User {
 }
 
 const Profile = () => {
-  const { loading, error, data } = useQuery(getUserDetails, {
+  const userContext = useContext(UserContext);
+
+  const { loading, error } = useQuery(getUserDetails, {
     client: auth_system,
     onCompleted: ({ profile }) => {
       console.log("ProfileID", profile.id);
@@ -33,7 +36,7 @@ const Profile = () => {
   });
 
   const [editStatus, setEditStatus] = useState(true);
-
+  console.log(userContext);
   const [user, setUser] = useState<User>({
     id: "1",
     avatar: "https://eu.ui-avatars.com/api/?name=M&size=250",
