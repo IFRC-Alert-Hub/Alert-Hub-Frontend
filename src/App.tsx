@@ -15,6 +15,7 @@ import Subscription from "./scenes/Subscription";
 import Register from "./scenes/Register";
 import ForgotPassword from "./scenes/ForgotPassword";
 import ReSendValidationEmail from "./scenes/ReSendValidationEmail";
+import PrivateRoutes from "./utils/PrivateRoute";
 
 function App() {
   return (
@@ -39,7 +40,7 @@ function App() {
               <Route path="/regions/:id" element={<Region />} />
               <Route path="/alerts/all" element={<AllAlerts />} />
 
-              <Route path="/account/">
+              <Route path="/account/" element={<PrivateRoutes />}>
                 <Route path="profile" element={<Profile />} />
                 <Route path="subscription" element={<Subscription />} />
               </Route>

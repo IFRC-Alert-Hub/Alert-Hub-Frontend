@@ -27,6 +27,7 @@ const Login = () => {
       password: "",
     },
   });
+
   const isLoggedIn = !!localStorage.getItem("authData"); // Check if the user is already logged in
 
   const getTokenData = async (loginData: any) => {
