@@ -4,7 +4,6 @@ import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
-
 interface EffectivePopupProps {
   open: boolean;
   onClose: () => void;
@@ -169,23 +168,6 @@ const DatePickerComponent: React.FC<DatePickerComponentProps> = ({
     setAnchorEl(null);
   };
 
-  const transferDate = (
-    selectedDate: [number | null, number | null] | undefined
-  ) => {
-    const startDate = new Date((selectedDate?.[0] as number) * 1000);
-    const endDate = new Date((selectedDate?.[1] as number) * 1000);
-    const dateRange = `${String(startDate.getDate()).padStart(2, "0")}/${String(
-      startDate.getMonth() + 1
-    ).padStart(2, "0")}/${startDate.getFullYear()} - ${String(
-      endDate.getDate()
-    ).padStart(2, "0")}/${String(endDate.getMonth() + 1).padStart(
-      2,
-      "0"
-    )}/${endDate.getFullYear()}`;
-
-    return dateRange;
-  };
-
   return (
     <div>
       <Button
@@ -208,19 +190,27 @@ const DatePickerComponent: React.FC<DatePickerComponentProps> = ({
           },
         }}
       >
-        {JSON.stringify(selectedDate) === JSON.stringify([null, null]) ? (
-          <Typography
-            textTransform={"capitalize"}
-            paddingRight={"40px"}
-            sx={{ color: "#8D8D8D", fontSize: "12px" }}
-          >
-            {datePickerTitle}
-          </Typography>
-        ) : (
-          <Typography textTransform={"capitalize"} sx={{ color: "black" }}>
-            {transferDate(selectedDate)}
-          </Typography>
-        )}
+        <Typography
+          textTransform={"capitalize"}
+          paddingRight={"40px"}
+          sx={{
+            color:
+              selectedDate !== undefined &&
+              selectedDate[0] !== null &&
+              selectedDate[1] !== null
+                ? "#f5333f"
+                : "#8D8D8D",
+            fontSize: "12px",
+            fontWeight:
+              selectedDate !== undefined &&
+              selectedDate[0] !== null &&
+              selectedDate[1] !== null
+                ? "600"
+                : "",
+          }}
+        >
+          {datePickerTitle}
+        </Typography>
       </Button>
       <EffectivePopup
         open={Boolean(anchorEl)}
