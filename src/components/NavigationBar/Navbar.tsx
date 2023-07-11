@@ -26,13 +26,14 @@ import {
 } from "./NavItemItems";
 import LoginButton from "./LoginButton";
 import TimeComponent from "./TimeComponent";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import AvatarDropdown from "./AvatarDropdown";
 import ChangeLanguageDropdown from "./ChangeLanguageDropdown";
 import { ExpandLess, ExpandMore } from "@mui/icons-material";
+import { UserContext } from "../../context/UserContext";
 
 const NavbarComponent = (props: any) => {
-  const isAuthenticated = localStorage.getItem("authData") !== null;
+  const userContext = useContext(UserContext);
 
   const location = useLocation();
   const { window } = props;
@@ -219,7 +220,7 @@ const NavbarComponent = (props: any) => {
                   </Link>
                 ))}
               </Box>
-              {isAuthenticated ? <AvatarDropdown /> : <LoginButton />}
+              {userContext.user ? <AvatarDropdown /> : <LoginButton />}
             </Box>
           </Toolbar>
         </Container>
