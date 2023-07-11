@@ -20,8 +20,6 @@ import MenuIcon from "@mui/icons-material/Menu";
 import { Link, useLocation } from "react-router-dom";
 import CustomNavItemDropdown from "./CustomNavItemDropdown";
 import {
-  UrgencyLevelDropdownItems,
-  HazardTypeDropdownItems,
   RegionsDropdownItems,
   firstNavBarItems,
   secondNavBarItems,
@@ -268,14 +266,37 @@ const NavbarComponent = (props: any) => {
                   NavItemTitle="Regions"
                   DropdownItems={RegionsDropdownItems}
                 />
-                <CustomNavItemDropdown
-                  NavItemTitle="Hazard Type"
-                  DropdownItems={HazardTypeDropdownItems}
-                />
-                <CustomNavItemDropdown
-                  NavItemTitle="Urgency Level"
-                  DropdownItems={UrgencyLevelDropdownItems}
-                />
+
+                <Link
+                  key={"subscription"}
+                  to={"/account/subscription"}
+                  style={{ textDecoration: "none", color: "inherit" }}
+                >
+                  <Button
+                    key={"subscription"}
+                    sx={{
+                      padding: "0 40px 0 0",
+                      textTransform: "capitalize",
+                    }}
+                    disableRipple
+                    disableTouchRipple
+                    disableFocusRipple
+                  >
+                    <Typography
+                      variant="h6"
+                      sx={{
+                        borderBottom: "1px solid transparent",
+                        ...(location.pathname === "/account/subscription" && {
+                          borderBottomColor: "#f5333f",
+                          paddingBottom: "2px",
+                          marginBottom: "-2px",
+                        }),
+                      }}
+                    >
+                      My Subscriptions
+                    </Typography>
+                  </Button>
+                </Link>
               </Box>
             </Toolbar>
           </Container>
