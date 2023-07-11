@@ -9,6 +9,9 @@ const LoginButton = () => {
           variant="contained"
           color="success"
           disableTouchRipple
+          disableRipple
+          disableElevation
+          disableFocusRipple
           sx={{
             color: "#fff",
             outline: "red",

@@ -32,7 +32,6 @@ import ChangeLanguageDropdown from "./ChangeLanguageDropdown";
 import { ExpandLess, ExpandMore } from "@mui/icons-material";
 
 const NavbarComponent = (props: any) => {
-  // used for test login
   const isAuthenticated = localStorage.getItem("authData") !== null;
 
   const location = useLocation();
@@ -48,7 +47,6 @@ const NavbarComponent = (props: any) => {
     setOpenMobileRegion(false);
   };
 
-  // Mobile drawer
   const drawer = (
     <Box sx={{ textAlign: "center" }}>
       <Typography variant="h6" sx={{ my: 2 }}>
@@ -198,6 +196,7 @@ const NavbarComponent = (props: any) => {
                       sx={{
                         padding: "6px 0.5rem",
                         textTransform: "capitalize",
+                        paddingRight: "15px",
                       }}
                       disableRipple
                       disableTouchRipple
@@ -309,7 +308,7 @@ const NavbarComponent = (props: any) => {
           open={mobileOpen}
           onClose={handleDrawerToggle}
           ModalProps={{
-            keepMounted: true, // Better open performance on mobile.
+            keepMounted: true,
           }}
           sx={{
             display: { xs: "block", sm: "none" },

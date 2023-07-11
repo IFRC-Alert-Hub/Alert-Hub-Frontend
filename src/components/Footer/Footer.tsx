@@ -1,5 +1,5 @@
 import { Box, Button, Container, Grid, Link, Typography } from "@mui/material";
-import "../index.css";
+import "../../index.css";
 
 const Footer = () => {
   return (

@@ -6,7 +6,7 @@ import About from "./scenes/About";
 import Resources from "./scenes/Resources";
 import { theme } from "./theme";
 import Login from "./scenes/Login";
-import Footer from "./components/Footer";
+import Footer from "./components/Footer/Footer";
 import Region from "./scenes/Region";
 import "./index.css";
 import AllAlerts from "./scenes/AllAlerts";
