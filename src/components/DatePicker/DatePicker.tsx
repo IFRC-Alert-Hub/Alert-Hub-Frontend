@@ -94,6 +94,7 @@ const EffectivePopup: React.FC<EffectivePopupProps> = ({
           sx={{
             display: "flex",
             justifyContent: "space-between",
+            gap: "10px",
             marginTop: "10px",
           }}
         >
@@ -146,6 +147,7 @@ const EffectivePopup: React.FC<EffectivePopupProps> = ({
 };
 
 interface DatePickerComponentProps {
+  selectedDate: [number | null, number | null] | undefined;
   setSelectedDate: React.Dispatch<
     React.SetStateAction<[number | null, number | null] | undefined>
   >;
@@ -153,6 +155,7 @@ interface DatePickerComponentProps {
 }
 
 const DatePickerComponent: React.FC<DatePickerComponentProps> = ({
+  selectedDate,
   setSelectedDate,
   datePickerTitle,
 }) => {
@@ -166,37 +169,58 @@ const DatePickerComponent: React.FC<DatePickerComponentProps> = ({
     setAnchorEl(null);
   };
 
+  const transferDate = (
+    selectedDate: [number | null, number | null] | undefined
+  ) => {
+    const startDate = new Date((selectedDate?.[0] as number) * 1000);
+    const endDate = new Date((selectedDate?.[1] as number) * 1000);
+    const dateRange = `${String(startDate.getDate()).padStart(2, "0")}/${String(
+      startDate.getMonth() + 1
+    ).padStart(2, "0")}/${startDate.getFullYear()} - ${String(
+      endDate.getDate()
+    ).padStart(2, "0")}/${String(endDate.getMonth() + 1).padStart(
+      2,
+      "0"
+    )}/${endDate.getFullYear()}`;
+
+    return dateRange;
+  };
+
   return (
     <div>
       <Button
         id="demo-customized-button"
+        size="small"
+        variant="outlined"
         aria-controls={anchorEl ? "demo-customized-menu" : undefined}
         aria-haspopup="true"
         aria-expanded={anchorEl ? "true" : undefined}
-        variant="contained"
-        disableElevation
-        disableRipple
         onClick={handleMenuOpen}
         endIcon={<KeyboardArrowDownIcon sx={{ color: "#f5333f" }} />}
         sx={{
-          p: 0,
-          borderRadius: "0px",
-          border: "0.2px solid grey",
-          "&:hover": { backgroundColor: "transparent !important" },
-          "&:focus": { backgroundColor: "transparent !important" },
           height: "100%",
           padding: "0 10px",
-          backgroundColor: "transparent !important",
+          backgroundColor: "#f4f4f4",
+          borderColor: "#E0E3E7",
+          "&:hover": {
+            borderColor: "#B2BAC2",
+            backgroundColor: "#f4f4f4",
+          },
         }}
       >
-        <Typography
-          variant="h6"
-          fontSize={"12px"}
-          textTransform={"capitalize"}
-          paddingRight={"40px"}
-        >
-          {datePickerTitle}
-        </Typography>
+        {JSON.stringify(selectedDate) === JSON.stringify([null, null]) ? (
+          <Typography
+            textTransform={"capitalize"}
+            paddingRight={"40px"}
+            sx={{ color: "#8D8D8D", fontSize: "12px" }}
+          >
+            {datePickerTitle}
+          </Typography>
+        ) : (
+          <Typography textTransform={"capitalize"} sx={{ color: "black" }}>
+            {transferDate(selectedDate)}
+          </Typography>
+        )}
       </Button>
       <EffectivePopup
         open={Boolean(anchorEl)}
