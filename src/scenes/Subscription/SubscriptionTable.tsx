@@ -126,7 +126,7 @@ const SubscriptionTable = ({
         <TableHead>
           <TableRow>
             <TableCell align="center" sx={{ fontWeight: "600" }}>
-              Group Title
+              Title
             </TableCell>
             <TableCell align="center" sx={{ fontWeight: "600" }}>
               Subscribed Countries
@@ -141,7 +141,7 @@ const SubscriptionTable = ({
               Certainty
             </TableCell>
             <TableCell align="center" sx={{ fontWeight: "600" }}>
-              Subscription Methods
+              Notification Methods
             </TableCell>
             <TableCell align="center" sx={{ fontWeight: "600" }}>
               Operations
@@ -156,7 +156,7 @@ const SubscriptionTable = ({
               </TableCell>
 
               <TableCell align="center">
-                {row.countryIds?.length > 0 ? (
+                {row.countryIds?.length > 1 ? (
                   <Tooltip
                     title={`${row.countryIds?.length} countries are selected`}
                     arrow
