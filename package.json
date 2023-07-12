@@ -22,6 +22,7 @@
     "@types/react-slick": "^0.23.10",
     "@types/react-table": "^7.7.14",
     "apollo-link-http": "^1.5.17",
+    "crypto-js": "^4.1.1",
     "dayjs": "^1.11.9",
     "formik": "^2.4.2",
     "http-proxy-middleware": "^2.0.6",

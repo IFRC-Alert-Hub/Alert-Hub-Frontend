@@ -12,7 +12,7 @@ interface User {
 }
 
 type PropsType = {
-  user: User;
+  user: User | null;
   editStatus: boolean;
   setEditStatus: React.Dispatch<React.SetStateAction<boolean>>;
 };
@@ -30,7 +30,7 @@ const ProfileAvatar = ({ user, editStatus, setEditStatus }: PropsType) => {
       alignItems="center"
       flexDirection="column"
     >
-      <Avatar alt="User Name" src={user.avatar} className="avatar-size" />
+      <Avatar alt="User Name" src={user?.avatar} className="avatar-size" />
       {editStatus ? (
         <Button variant="text" className="edit-btn" onClick={handleEdit}>
           Edit Profile
