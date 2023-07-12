@@ -19,10 +19,7 @@ import PageTitle from "../../components/PageTitle";
 import { useMutation } from "@apollo/client";
 import { auth_system } from "../../API/API_Links";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
-import {
-  RESET_PASSWORD,
-  RESET_PASSWORD_CONFIRM,
-} from "../../API/mutations/resetPassword";
+import { RESET_PASSWORD } from "../../API/mutations/resetPassword";
 // import Tooltip from "@mui/material/Tooltip";
 // import InfoIcon from "@mui/icons-material/Info";
 // import CancelIcon from "@mui/icons-material/Cancel";
