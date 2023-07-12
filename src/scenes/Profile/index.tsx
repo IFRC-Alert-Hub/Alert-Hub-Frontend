@@ -20,7 +20,7 @@ const Profile = () => {
   const userContext = useContext(UserContext);
 
   const [editStatus, setEditStatus] = useState(true);
-  const [user, setUser] = useState<User>(userContext.user);
+  const [user, setUser] = useState<User | null>(userContext.user);
   return (
     <>
       <Container maxWidth={"lg"}>

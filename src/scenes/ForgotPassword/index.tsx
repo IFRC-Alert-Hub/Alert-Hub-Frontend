@@ -47,8 +47,16 @@ const ForgotPassword = () => {
   // });
   const sendEmail = async (email: string) => {
     try {
-      await resetPassword({ variables: { email: email } });
-      alert("Sent");
+      const resetPass = await resetPassword({
+        variables: { email: email },
+      });
+      if (resetPass.data.resetPassword.success) {
+        alert("Sent");
+        setIsEmailSent(true);
+      } else {
+        alert("afsafafasa");
+        formik.setFieldError("email", "afasfafa");
+      }
     } catch (error: any) {
       alert(error);
     }
@@ -88,21 +96,16 @@ const ForgotPassword = () => {
     setIsSendClicked(true);
     const { email } = formik.values;
     sendEmail(email);
-    setIsEmailSent(true);
   };
 
   const formik = useFormik({
     initialValues: {
-      // firstName: "",
-      // lastName: "",
       email: "",
       password: "",
       confirmPassword: "",
       verifyCode: "",
     },
     validationSchema: Yup.object({
-      // firstName: Yup.string().required("Required"),
-      // lastName: Yup.string().required("Required"),
       email: Yup.string().email("Invalid email address").required("Required"),
       password: Yup.string()
         .required("Required")

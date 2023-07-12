@@ -1,8 +1,8 @@
-import { createContext, useState } from "react";
+import React, { createContext, useState, useEffect } from "react";
 
 export type UserContextType = {
-  user: any;
-  setUser: any;
+  user: User | null;
+  setUser: React.Dispatch<React.SetStateAction<User | null>>;
 };
 
 interface User {
@@ -16,14 +16,27 @@ interface User {
   phoneNumber: string;
 }
 
-export const UserContext = createContext({} as UserContextType);
+export const UserContext = createContext<UserContextType>({
+  user: null,
+  setUser: () => {},
+});
 
-type UserContextProviderType = {
+type UserContextProviderProps = {
   children: React.ReactNode;
 };
 
-export const UserContextProvider = ({ children }: UserContextProviderType) => {
-  const [user, setUser] = useState<User | null>(null);
+export const UserContextProvider: React.FC<UserContextProviderProps> = ({
+  children,
+}) => {
+  const [user, setUser] = useState<User | null>(() => {
+    const storedUser = localStorage.getItem("user");
+    return storedUser ? JSON.parse(storedUser) : null;
+  });
+
+  useEffect(() => {
+    localStorage.setItem("user", JSON.stringify(user));
+  }, [user]);
+
   return (
     <UserContext.Provider value={{ user, setUser }}>
       {children}
