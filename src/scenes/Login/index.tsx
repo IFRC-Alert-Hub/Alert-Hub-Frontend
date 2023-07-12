@@ -31,8 +31,6 @@ const Login = () => {
     },
   });
 
-  const isLoggedIn = !!localStorage.getItem("authData"); // Check if the user is already logged in
-
   const getTokenData = async (loginData: any) => {
     console.log("Login Data: ", loginData);
     try {
@@ -68,7 +66,6 @@ const Login = () => {
   const handleTogglePassword = () => {
     setShowPassword(!showPassword);
   };
-
 
   return (
     <>

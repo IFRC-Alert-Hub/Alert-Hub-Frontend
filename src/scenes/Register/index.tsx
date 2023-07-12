@@ -97,16 +97,20 @@ const Register = () => {
 
   const handleRegister = async (values: any) => {
     try {
-      await register({
+      const registerData = await register({
         variables: {
           email: values.email,
           password: values.password,
           verifyCode: values.verifyCode,
         },
       });
-
-      alert("Registration successful!");
-      navigate("/login");
+      if (registerData.data.register.success) {
+        alert("Registration successful!");
+        navigate("/login");
+      } else {
+        console.log("data: ", registerData.data.register.errors);
+        alert("Registration failed. Please try again.");
+      }
     } catch (error) {
       alert("Registration failed. Please try again.");
     }

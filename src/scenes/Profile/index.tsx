@@ -20,17 +20,7 @@ const Profile = () => {
   const userContext = useContext(UserContext);
 
   const [editStatus, setEditStatus] = useState(true);
-  console.log(userContext);
-  const [user, setUser] = useState<User>({
-    id: "1",
-    avatar: "https://eu.ui-avatars.com/api/?name=M&size=250",
-    firstName: "Adi",
-    lastName: "Leio",
-    country: "United Kindom",
-    city: "London",
-    email: "email123@email.com",
-    phoneNumber: "01234567890",
-  });
+  const [user, setUser] = useState<User>(userContext.user);
   return (
     <>
       <Container maxWidth={"lg"}>
