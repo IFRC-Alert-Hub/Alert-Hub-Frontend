@@ -17,7 +17,8 @@ import { Outlet, Navigate } from "react-router-dom";
 import { useMutation } from "@apollo/client";
 import { auth_system } from "../API/API_Links";
 import { VERIFY_TOKEN } from "../API/mutations/verifyToken";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
+import { UserContext } from "../context/UserContext";
 
 const PrivateRoutes = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -26,18 +27,30 @@ const PrivateRoutes = () => {
     client: auth_system,
   });
 
+  const userContext = useContext(UserContext);
+
   useEffect(() => {
     verify()
-      .then(() => {
-        setIsAuthenticated(true);
-        setIsLoading(false);
+      .then((verifyData) => {
+        console.log(verifyData.data.verifyToken);
+        if (verifyData.data.verifyToken) {
+          setIsAuthenticated(true);
+          setIsLoading(false);
+        } else {
+          setIsAuthenticated(false);
+          setIsLoading(false);
+          userContext.setUser(null);
+          console.error("Token verification failed:");
+        }
       })
       .catch((error) => {
         setIsAuthenticated(false);
         setIsLoading(false);
+        userContext.setUser(null);
+
         console.error("Token verification failed:", error);
       });
-  }, [verify]);
+  }, [verify, userContext]);
 
   if (isLoading) {
     return <div>Loading...</div>;

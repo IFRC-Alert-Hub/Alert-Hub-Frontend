@@ -58,6 +58,7 @@ const Login = () => {
         console.log("afsafsafa: ", authData);
         if (authData) {
           userContext.setUser(authData.data.login.user);
+          //localStorage.setItem("tokenExpiry", authData.data.login.payload.exp);
           navigate("/account/profile");
         }
       });
