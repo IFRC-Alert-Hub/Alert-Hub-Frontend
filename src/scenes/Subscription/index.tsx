@@ -7,7 +7,7 @@ import {
   Typography,
 } from "@mui/material";
 import SubscriptionTable from "./SubscriptionTable";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import ModalForm from "./ModalForm";
 import { useQuery } from "@apollo/client";
 import {
@@ -20,13 +20,20 @@ import {
 } from "../../API/queries/getSubscriptions";
 import { cap_aggregator, subscription_module } from "../../API/API_Links";
 import { GET_ALL_COUNTRIES } from "../../API/queries/getAllCountries";
+import { UserContext } from "../../context/UserContext";
 
 const Subscription = () => {
+  const userContext = useContext(UserContext);
+  const userId = Number(userContext.user.id);
+
   const {
     loading: subscriptionLoading,
     error: subscriptionError,
     data: subscriptionData,
   } = useQuery<SubscriptionQueryResult>(GET_SUBSCRIPTIONS, {
+    variables: {
+      userId: userId,
+    },
     client: subscription_module,
   });
   const {
@@ -146,6 +153,7 @@ const Subscription = () => {
         <p>Error: {countryError.message}</p>
       ) : (
         <ModalForm
+          userId={userId}
           selectedRow={selectedRow}
           setSelectedRow={setSelectedRow}
           formType={formType}
