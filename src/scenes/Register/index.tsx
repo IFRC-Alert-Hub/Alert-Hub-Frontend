@@ -1,6 +1,8 @@
 import {
   Alert,
+  Checkbox,
   Container,
+  FormControlLabel,
   IconButton,
   InputAdornment,
   LinearProgress,
@@ -59,7 +61,7 @@ const Register = () => {
   };
   const calculatePasswordStrength = (password: string) => {
     const strengthRegex =
-      /^(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*()])[a-zA-Z0-9!@#$%^&*()]{8,}$/;
+      /^(?=.[A-Z])(?=.[0-9])(?=.[?!@#$%^&()])[a-zA-Z0-9!@#$%^&()]{8,}$/;
     if (password.length === 0) {
       return 0;
     } else if (strengthRegex.test(password)) {
@@ -68,10 +70,9 @@ const Register = () => {
       const factors = [
         { regex: /[A-Z]/, factor: 20 },
         { regex: /[0-9]/, factor: 15 },
-        { regex: /[!@#$%^&*()]/, factor: 15 },
+        { regex: /[?!@#$%^&()]/, factor: 15 },
       ];
       const lengthFactor = Math.min(password.length / 8, 1) * 50;
-
       let totalFactor = lengthFactor;
       factors.forEach((item) => {
         if (item.regex.test(password)) {
@@ -82,6 +83,7 @@ const Register = () => {
       return totalFactor;
     }
   };
+
   const handlePasswordChange = (event: any) => {
     const password = event.target.value;
     const strength = calculatePasswordStrength(password);
@@ -309,7 +311,6 @@ const Register = () => {
                     </InputAdornment>
                   ),
                 }}
-                helperText={formik.touched.password && formik.errors.password}
               />
 
               <LinearProgress
@@ -331,6 +332,63 @@ const Register = () => {
                     },
                 }}
               />
+
+              <Box textAlign={"left"} padding={"none"} color="green">
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      checked={/[A-Z]/.test(formik.values.password)}
+                      color="primary"
+                      disabled
+                      className={
+                        /[A-Z]/.test(formik.values.password) ? "fulfilled" : ""
+                      }
+                    />
+                  }
+                  label="At least one uppercase letter"
+                />
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      checked={/[0-9]/.test(formik.values.password)}
+                      color="primary"
+                      disabled
+                      className={
+                        /[0-9]/.test(formik.values.password) ? "fulfilled" : ""
+                      }
+                    />
+                  }
+                  label="At least one number"
+                />
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      checked={/[?!@#$%^&()]/.test(formik.values.password)}
+                      color="primary"
+                      disabled
+                      className={
+                        /[?!@#$%^&()]/.test(formik.values.password)
+                          ? "fulfilled"
+                          : ""
+                      }
+                    />
+                  }
+                  label="At least one special character"
+                />
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      checked={formik.values.password.length >= 8}
+                      color="primary"
+                      disabled
+                      className={
+                        formik.values.password.length >= 8 ? "fulfilled" : ""
+                      }
+                    />
+                  }
+                  label="At least 8 characters"
+                />
+              </Box>
               <TextField
                 margin="normal"
                 required

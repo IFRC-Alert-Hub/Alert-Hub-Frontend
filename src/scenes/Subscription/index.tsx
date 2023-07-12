@@ -96,11 +96,14 @@ const Subscription = () => {
     if (subscriptionData) {
       setTableData(subscriptionData.listSubscriptionByUserId);
     }
+  }, [subscriptionData]);
+
+  useEffect(() => {
     if (countryData) {
       setRegionList(countryData.listRegion);
       setCountryList(countryData.listCountry);
     }
-  }, [subscriptionData, countryData]);
+  }, [countryData]);
 
   return (
     <Container maxWidth={"lg"}>

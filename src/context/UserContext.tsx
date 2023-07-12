@@ -33,9 +33,32 @@ export const UserContextProvider: React.FC<UserContextProviderProps> = ({
     return storedUser ? JSON.parse(storedUser) : null;
   });
 
+  // const isTokenExpired = (expiryTimestamp: number): boolean => {
+  //   const currentTimestamp = Date.now();
+  //   const expiryTime = new Date(expiryTimestamp).getTime();
+  //   console.log(expiryTime);
+
+  //   return currentTimestamp <= expiryTime;
+  // };
   useEffect(() => {
     localStorage.setItem("user", JSON.stringify(user));
   }, [user]);
+
+  // useEffect(() => {
+  //   const checkTokenExpiry = () => {
+  //     const expiryTimestamp = localStorage.getItem("tokenExpiry");
+
+  //     if (user && expiryTimestamp && isTokenExpired(Number(expiryTimestamp))) {
+  //       setUser(null);
+  //     }
+  //   };
+
+  //   const expiryCheckInterval = setInterval(checkTokenExpiry, 5000);
+
+  //   return () => {
+  //     clearInterval(expiryCheckInterval);
+  //   };
+  // }, [user]);
 
   return (
     <UserContext.Provider value={{ user, setUser }}>
