@@ -1,49 +1,152 @@
-import { Container } from "@mui/material";
+import {
+  Alert,
+  Container,
+  IconButton,
+  InputAdornment,
+  LinearProgress,
+} from "@mui/material";
 import * as React from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 
+import Link from "@mui/material/Link";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 import PageTitle from "../../components/PageTitle";
-// import { useMutation } from "@apollo/client";
-// import { LOGIN } from "../../API/mutations/login";
+import { useMutation } from "@apollo/client";
+import { auth_system } from "../../API/API_Links";
+import { Visibility, VisibilityOff } from "@mui/icons-material";
+import { RESET_PASSWORD } from "../../API/mutations/resetPassword";
+// import Tooltip from "@mui/material/Tooltip";
+// import InfoIcon from "@mui/icons-material/Info";
+// import CancelIcon from "@mui/icons-material/Cancel";
+
+// import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 
 const ForgotPassword = () => {
-  // const [login] = useMutation(LOGIN);
+  const [passwordStrength, setPasswordStrength] = React.useState(0);
+  const [isSendClicked, setIsSendClicked] = React.useState(false);
+  const [isSendEnabled, setIsSendEnabled] = React.useState<boolean>(false);
+  const [isEmailSent, setIsEmailSent] = React.useState(false);
 
-  // const getToken = async (loginData: any) => {
-  //   try {
-  //     const result = await login({ variables: loginData });
-  //     return result.data.login.token;
-  //   } catch (error: any) {
-  //     alert(error.message);
-  //     return null;
-  //   }
-  // };
-  const formik = useFormik({
-    initialValues: {
+  const [resetPassword] = useMutation(RESET_PASSWORD, {
+    client: auth_system,
+    variables: {
       email: "",
-    },
-    validationSchema: Yup.object({
-      email: Yup.string().email("Invalid email address").required("Required"),
-    }),
-    onSubmit: (values) => {
-      console.log(values);
-      // const token = getToken({
-      //   email: data.get("email"),
-      //   password: data.get("password"),
-      // });
-      // console.log(token);
     },
   });
 
+  // const [resetPasswordConfirm] = useMutation(RESET_PASSWORD_CONFIRM, {
+  //   client: auth_system,
+  //   variables: {
+  //     email: "",
+  //   },
+  // });
+  const sendEmail = async (email: string) => {
+    try {
+      await resetPassword({ variables: { email: email } });
+      alert("Sent");
+    } catch (error: any) {
+      alert(error);
+    }
+  };
+  const calculatePasswordStrength = (password: string) => {
+    const strengthRegex =
+      /^(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*()])[a-zA-Z0-9!@#$%^&*()]{8,}$/;
+    if (password.length === 0) {
+      return 0;
+    } else if (strengthRegex.test(password)) {
+      return 100;
+    } else {
+      const factors = [
+        { regex: /[A-Z]/, factor: 20 },
+        { regex: /[0-9]/, factor: 15 },
+        { regex: /[!@#$%^&*()]/, factor: 15 },
+      ];
+      const lengthFactor = Math.min(password.length / 8, 1) * 50;
+
+      let totalFactor = lengthFactor;
+      factors.forEach((item) => {
+        if (item.regex.test(password)) {
+          totalFactor += item.factor;
+        }
+      });
+
+      return totalFactor;
+    }
+  };
+  const handlePasswordChange = (event: any) => {
+    const password = event.target.value;
+    const strength = calculatePasswordStrength(password);
+    setPasswordStrength(strength);
+    formik.handleChange(event);
+  };
+  const handleSendClick = () => {
+    setIsSendClicked(true);
+    const { email } = formik.values;
+    sendEmail(email);
+    setIsEmailSent(true);
+  };
+
+  const formik = useFormik({
+    initialValues: {
+      // firstName: "",
+      // lastName: "",
+      email: "",
+      password: "",
+      confirmPassword: "",
+      verifyCode: "",
+    },
+    validationSchema: Yup.object({
+      // firstName: Yup.string().required("Required"),
+      // lastName: Yup.string().required("Required"),
+      email: Yup.string().email("Invalid email address").required("Required"),
+      password: Yup.string()
+        .required("Required")
+        .matches(
+          /^(?=.*[A-Z])(?=.*[0-9])(?=.*[?!@#$%^&*()])[a-zA-Z0-9!@#$%^&*()]{8,}$/,
+          "Password must contain at least one uppercase letter, one number, and one special character"
+        ),
+      confirmPassword: Yup.string()
+        .required("Required")
+        .oneOf([Yup.ref("password"), ""], "Passwords must match"),
+      verifyCode: Yup.string().required("Required"),
+    }),
+    onSubmit: async (values) => {
+      console.log(values);
+    },
+  });
+
+  const handleEmailChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ): void => {
+    const isValidEmail = Yup.string()
+      .email("Invalid email address")
+      .required("Required")
+      .isValidSync(event.target.value);
+    setIsSendEnabled(isValidEmail);
+    formik.handleChange(event);
+  };
+
+  const [showPassword, setShowPassword] = React.useState(false);
+
+  const handleTogglePassword = () => {
+    setShowPassword(!showPassword);
+  };
+
+  const [showConfirmPassword, setConfirmPassword] = React.useState(false);
+
+  const handleToggleConfirmPassword = () => {
+    setConfirmPassword(!showConfirmPassword);
+  };
+
   return (
     <Container maxWidth="lg" sx={{ paddingTop: "30px" }}>
-      <PageTitle title="Forgot Password" />
+      <PageTitle title="Forgot Password"></PageTitle>
+
       <Grid
         container
         component="main"
@@ -66,7 +169,7 @@ const ForgotPassword = () => {
               backgroundColor: "white",
               borderRadius: "20px",
               padding: "2rem",
-              minHeight: "600px",
+              minHeight: "auto",
               textAlign: "center",
             }}
           >
@@ -76,7 +179,7 @@ const ForgotPassword = () => {
               fontWeight={560}
               textAlign={"center"}
             >
-              Forgot Password
+              Forgot Password{" "}
             </Typography>
             <Typography
               variant="h5"
@@ -103,33 +206,177 @@ const ForgotPassword = () => {
                 name="email"
                 autoComplete="email"
                 autoFocus
-                sx={{ fontSize: "10px", minWidth: "100%", width: "100%" }} // Added sx property for full width
+                sx={{ fontSize: "12px" }}
                 value={formik.values.email}
-                onChange={formik.handleChange}
+                onChange={handleEmailChange}
                 error={formik.touched.email && Boolean(formik.errors.email)}
                 helperText={formik.touched.email && formik.errors.email}
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <span style={{ marginRight: "5px", color: "grey" }}>
+                        |
+                      </span>
+                      <Link
+                        sx={{
+                          fontSize: "12px",
+                          color: "grey",
+                          pointerEvents: !isSendEnabled ? "none" : "auto",
+                          cursor: isSendEnabled ? "pointer" : "default",
+                        }}
+                        onClick={isSendEnabled ? handleSendClick : undefined}
+                      >
+                        SEND
+                      </Link>
+                    </InputAdornment>
+                  ),
+                }}
+              />
+              {isEmailSent && (
+                <Alert severity="success">Email has been sent</Alert>
+              )}
+              <TextField
+                margin="normal"
+                required
+                fullWidth
+                id="verifyCode"
+                label="Verification Code"
+                name="verifyCode"
+                autoComplete="off"
+                sx={{ fontSize: "12px" }}
+                value={formik.values.verifyCode}
+                onChange={formik.handleChange}
+                disabled={!isSendClicked}
+                error={
+                  formik.touched.verifyCode && Boolean(formik.errors.verifyCode)
+                }
+                helperText={
+                  formik.touched.verifyCode && formik.errors.verifyCode
+                }
+              />
+              <TextField
+                margin="normal"
+                required
+                fullWidth
+                name="password"
+                label="Password"
+                type={showPassword ? "text" : "password"}
+                id="password"
+                autoComplete="new-password"
+                value={formik.values.password}
+                onChange={handlePasswordChange}
+                error={
+                  formik.touched.password && Boolean(formik.errors.password)
+                }
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton onClick={handleTogglePassword} edge="end">
+                        {showPassword ? <VisibilityOff /> : <Visibility />}
+                      </IconButton>
+                    </InputAdornment>
+                  ),
+                }}
+                helperText={formik.touched.password && formik.errors.password}
+              />
+
+              <LinearProgress
+                variant="determinate"
+                value={passwordStrength}
+                sx={{
+                  marginTop: "4px",
+                  direction: "ltr",
+                  borderRadius: "25px",
+                  height: "10px",
+                  "& .MuiLinearProgress-barColorPrimary": {
+                    backgroundColor:
+                      passwordStrength === 100 ? "#4caf50" : "#f5333f",
+                  },
+                  "& .MuiLinearProgress-barColorPrimary.MuiLinearProgress-determinate":
+                    {
+                      backgroundColor:
+                        passwordStrength === 100 ? "#4caf50" : "#4caf50",
+                    },
+                }}
+              />
+              <TextField
+                margin="normal"
+                required
+                fullWidth
+                id="confirm-password"
+                label="Confirm Password"
+                name="confirmPassword"
+                type={showConfirmPassword ? "text" : "password"}
+                autoComplete="new-password"
+                sx={{ fontSize: "12px", paddingBottom: "20px" }}
+                value={formik.values.confirmPassword}
+                onChange={formik.handleChange}
+                error={
+                  formik.touched.confirmPassword &&
+                  Boolean(formik.errors.confirmPassword)
+                }
+                helperText={
+                  formik.touched.confirmPassword &&
+                  formik.errors.confirmPassword
+                }
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton
+                        onClick={handleToggleConfirmPassword}
+                        edge="end"
+                      >
+                        {showConfirmPassword ? (
+                          <VisibilityOff />
+                        ) : (
+                          <Visibility />
+                        )}
+                      </IconButton>
+                    </InputAdornment>
+                  ),
+                }}
               />
 
               <Button
                 type="submit"
-                variant="contained"
                 fullWidth
+                variant="contained"
                 sx={{
                   color: "#fff",
                   outline: "red",
                   textTransform: "capitalize",
-                  padding: "0px ",
                   borderRadius: "10px",
                   backgroundColor: "#f5333f",
                   "&:hover": {
                     backgroundColor: "#f5333f",
                   },
                   fontSize: "14px",
-                  width: "100%", // Added sx property for full width
                 }}
+                disabled={!formik.isValid || !formik.dirty}
               >
                 Recover
               </Button>
+              <Box
+                textAlign="center"
+                display="flex"
+                justifyContent="center"
+                marginTop={"17px"}
+                marginBottom={"17px"}
+              >
+                <Typography variant="h5" fontSize="13px" color="#444850">
+                  Already have an account?
+                </Typography>
+                <Link href="#" style={{ marginLeft: "8px" }}>
+                  <Typography
+                    variant="h5"
+                    fontSize="13px"
+                    color="#444850"
+                    sx={{ textDecoration: "underline" }}
+                  >
+                    Log in
+                  </Typography>
+                </Link>
+              </Box>
             </Box>
           </Box>
         </Grid>

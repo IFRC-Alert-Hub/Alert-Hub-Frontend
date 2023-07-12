@@ -1,6 +1,7 @@
 import {
   Alert,
   Container,
+  IconButton,
   InputAdornment,
   LinearProgress,
 } from "@mui/material";
@@ -18,6 +19,8 @@ import PageTitle from "../../components/PageTitle";
 import { useMutation } from "@apollo/client";
 import { REGISTER, VERIFY_EMAIL } from "../../API/mutations/register";
 import { auth_system } from "../../API/API_Links";
+import { useNavigate } from "react-router-dom";
+import { Visibility, VisibilityOff } from "@mui/icons-material";
 // import Tooltip from "@mui/material/Tooltip";
 // import InfoIcon from "@mui/icons-material/Info";
 // import CancelIcon from "@mui/icons-material/Cancel";
@@ -29,7 +32,7 @@ const Register = () => {
   const [isSendClicked, setIsSendClicked] = React.useState(false);
   const [isSendEnabled, setIsSendEnabled] = React.useState<boolean>(false);
   const [isEmailSent, setIsEmailSent] = React.useState(false);
-
+  const navigate = useNavigate();
   const [verifyEmail] = useMutation(VERIFY_EMAIL, {
     client: auth_system,
     variables: {
@@ -94,26 +97,30 @@ const Register = () => {
 
   const handleRegister = async (values: any) => {
     try {
-      await register({
+      const registerData = await register({
         variables: {
           email: values.email,
           password: values.password,
           verifyCode: values.verifyCode,
         },
       });
-
-      // Registration successful
-      alert("Registration successful!");
+      if (registerData.data.register.success) {
+        navigate("/login");
+      } else {
+        console.log("data: ", registerData.data.register.errors);
+        formik.setFieldError("email", registerData.data.register.errors.email);
+        formik.setFieldError(
+          "verifyCode",
+          registerData.data.register.errors.verifyCode
+        );
+      }
     } catch (error) {
-      // Handle registration error
-      alert("Registration failed. Please try again."); // You can display a specific error message based on the error received
+      console.log(error);
     }
   };
 
   const formik = useFormik({
     initialValues: {
-      // firstName: "",
-      // lastName: "",
       email: "",
       password: "",
       confirmPassword: "",
@@ -149,6 +156,18 @@ const Register = () => {
       .isValidSync(event.target.value);
     setIsSendEnabled(isValidEmail);
     formik.handleChange(event);
+  };
+
+  const [showPassword, setShowPassword] = React.useState(false);
+
+  const handleTogglePassword = () => {
+    setShowPassword(!showPassword);
+  };
+
+  const [showConfirmPassword, setConfirmPassword] = React.useState(false);
+
+  const handleToggleConfirmPassword = () => {
+    setConfirmPassword(!showConfirmPassword);
   };
 
   return (
@@ -210,40 +229,6 @@ const Register = () => {
               onSubmit={formik.handleSubmit}
               sx={{ mt: 1, width: "80%" }}
             >
-              {/* <TextField
-                margin="normal"
-                required
-                fullWidth
-                id="first-name"
-                label="First Name"
-                name="firstName"
-                autoComplete="given-name"
-                autoFocus
-                sx={{ fontSize: "12px" }}
-                value={formik.values.firstName}
-                onChange={formik.handleChange}
-                error={
-                  formik.touched.firstName && Boolean(formik.errors.firstName)
-                }
-                helperText={formik.touched.firstName && formik.errors.firstName}
-              />
-
-              <TextField
-                margin="normal"
-                required
-                fullWidth
-                id="last-name"
-                label="Last Name"
-                name="lastName"
-                autoComplete="family-name"
-                sx={{ fontSize: "12px" }}
-                value={formik.values.lastName}
-                onChange={formik.handleChange}
-                error={
-                  formik.touched.lastName && Boolean(formik.errors.lastName)
-                }
-                helperText={formik.touched.lastName && formik.errors.lastName}
-              /> */}
               <TextField
                 margin="normal"
                 required
@@ -293,7 +278,7 @@ const Register = () => {
                 sx={{ fontSize: "12px" }}
                 value={formik.values.verifyCode}
                 onChange={formik.handleChange}
-                disabled={!isSendClicked} // Disable field until send button is clicked
+                disabled={!isSendClicked}
                 error={
                   formik.touched.verifyCode && Boolean(formik.errors.verifyCode)
                 }
@@ -305,19 +290,28 @@ const Register = () => {
                 margin="normal"
                 required
                 fullWidth
-                id="password"
-                label="Password"
                 name="password"
-                type="password"
+                label="Password"
+                type={showPassword ? "text" : "password"}
+                id="password"
                 autoComplete="new-password"
-                sx={{ fontSize: "12px" }}
                 value={formik.values.password}
-                onChange={handlePasswordChange} // Update the onChange handler
+                onChange={handlePasswordChange}
                 error={
                   formik.touched.password && Boolean(formik.errors.password)
                 }
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton onClick={handleTogglePassword} edge="end">
+                        {showPassword ? <VisibilityOff /> : <Visibility />}
+                      </IconButton>
+                    </InputAdornment>
+                  ),
+                }}
                 helperText={formik.touched.password && formik.errors.password}
               />
+
               <LinearProgress
                 variant="determinate"
                 value={passwordStrength}
@@ -344,7 +338,7 @@ const Register = () => {
                 id="confirm-password"
                 label="Confirm Password"
                 name="confirmPassword"
-                type="password"
+                type={showConfirmPassword ? "text" : "password"}
                 autoComplete="new-password"
                 sx={{ fontSize: "12px", paddingBottom: "20px" }}
                 value={formik.values.confirmPassword}
@@ -357,7 +351,24 @@ const Register = () => {
                   formik.touched.confirmPassword &&
                   formik.errors.confirmPassword
                 }
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton
+                        onClick={handleToggleConfirmPassword}
+                        edge="end"
+                      >
+                        {showConfirmPassword ? (
+                          <VisibilityOff />
+                        ) : (
+                          <Visibility />
+                        )}
+                      </IconButton>
+                    </InputAdornment>
+                  ),
+                }}
               />
+
               <Button
                 type="submit"
                 fullWidth
@@ -387,7 +398,7 @@ const Register = () => {
                 <Typography variant="h5" fontSize="13px" color="#444850">
                   Already have an account?
                 </Typography>
-                <Link href="#" style={{ marginLeft: "8px" }}>
+                <Link href="/login" style={{ marginLeft: "8px" }}>
                   <Typography
                     variant="h5"
                     fontSize="13px"

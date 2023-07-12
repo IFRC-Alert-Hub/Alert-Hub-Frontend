@@ -9,7 +9,6 @@ const PrivateRoutes = () => {
   // const [isAuthenticated, setIsAuthenticated] = useState(false);
   // const [isLoading, setIsLoading] = useState(true);
   const userContext = useContext(UserContext);
-  console.log("afafsfa: ", userContext);
   // const [verify] = useMutation(VERIFY_TOKEN, {
   //   client: auth_system,
   // });
