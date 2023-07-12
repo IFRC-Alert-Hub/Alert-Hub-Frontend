@@ -17,6 +17,7 @@ import ForgotPassword from "./scenes/ForgotPassword";
 import ReSendValidationEmail from "./scenes/ReSendValidationEmail";
 import PrivateRoutes from "./utils/PrivateRoute";
 import { UserContextProvider } from "./context/UserContext";
+import PageNotFound from "./scenes/404_Page";
 
 function App() {
   return (
@@ -46,6 +47,8 @@ function App() {
                   <Route path="profile" element={<Profile />} />
                   <Route path="subscription" element={<Subscription />} />
                 </Route>
+
+                <Route path="*" element={<PageNotFound />}></Route>
               </Routes>
             </Box>
             <Footer />

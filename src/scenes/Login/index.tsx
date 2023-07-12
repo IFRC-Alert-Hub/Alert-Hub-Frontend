@@ -31,15 +31,17 @@ const Login = () => {
     },
   });
 
+  // const [serverError, setServerError] = React.useState(false);
+
   const getTokenData = async (loginData: any) => {
     console.log("Login Data: ", loginData);
     try {
       const result = await login({ variables: loginData });
-
       return result;
     } catch (error: any) {
       formik.setFieldError("email", "Invalid email or password.");
       formik.setFieldError("password", "Invalid email or password.");
+      //setServerError(true);
     }
   };
   const formik = useFormik({
@@ -218,6 +220,17 @@ const Login = () => {
                 >
                   Login
                 </Button>
+
+                {/* {serverError && (
+                  <Typography
+                    variant="body2"
+                    color="error"
+                    align="center"
+                    sx={{ marginTop: "8px", textTransform: "Uppercase" }}
+                  >
+                    Cannot connect to the server
+                  </Typography>
+                )} */}
 
                 <Box
                   textAlign="center"

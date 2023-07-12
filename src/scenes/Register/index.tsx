@@ -105,21 +105,22 @@ const Register = () => {
         },
       });
       if (registerData.data.register.success) {
-        alert("Registration successful!");
         navigate("/login");
       } else {
         console.log("data: ", registerData.data.register.errors);
-        alert("Registration failed. Please try again.");
+        formik.setFieldError("email", registerData.data.register.errors.email);
+        formik.setFieldError(
+          "verifyCode",
+          registerData.data.register.errors.verifyCode
+        );
       }
     } catch (error) {
-      alert("Registration failed. Please try again.");
+      console.log(error);
     }
   };
 
   const formik = useFormik({
     initialValues: {
-      // firstName: "",
-      // lastName: "",
       email: "",
       password: "",
       confirmPassword: "",
@@ -397,7 +398,7 @@ const Register = () => {
                 <Typography variant="h5" fontSize="13px" color="#444850">
                   Already have an account?
                 </Typography>
-                <Link href="#" style={{ marginLeft: "8px" }}>
+                <Link href="/login" style={{ marginLeft: "8px" }}>
                   <Typography
                     variant="h5"
                     fontSize="13px"
