@@ -1,8 +1,8 @@
 import { gql } from "@apollo/client";
 
 export const LOGIN = gql`
-  mutation MyMutation {
-    login(email: "1234@1234.com", password: "1234") {
+  mutation MyMutation($email: String!, $password: String!) {
+    login(email: $email, password: $password) {
       payload
       refreshExpiresIn
       user {

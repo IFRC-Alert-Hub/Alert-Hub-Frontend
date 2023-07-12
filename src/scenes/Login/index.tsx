@@ -34,6 +34,7 @@ const Login = () => {
   const isLoggedIn = !!localStorage.getItem("authData"); // Check if the user is already logged in
 
   const getTokenData = async (loginData: any) => {
+    console.log("Login Data: ", loginData);
     try {
       const result = await login({ variables: loginData });
 
@@ -54,6 +55,7 @@ const Login = () => {
     }),
     onSubmit: (values) => {
       getTokenData(values).then((authData) => {
+        console.log("afsafsafa: ", authData);
         if (authData) {
           navigate("/account/profile");
           userContext.setUser(authData.data.login.user);
@@ -67,11 +69,7 @@ const Login = () => {
     setShowPassword(!showPassword);
   };
 
-  React.useEffect(() => {
-    if (isLoggedIn) {
-      return navigate("/account/profile");
-    }
-  }, [isLoggedIn, navigate]);
+
   return (
     <>
       <Container maxWidth="lg" sx={{ paddingTop: "30px" }}>
@@ -178,7 +176,7 @@ const Login = () => {
                   marginTop={"17px"}
                   marginBottom={"17px"}
                 >
-                  <Link href="#" style={{ marginRight: "8px" }}>
+                  <Link href="/forget-password" style={{ marginRight: "8px" }}>
                     <Typography
                       variant="h5"
                       fontSize="13px"
@@ -234,7 +232,7 @@ const Login = () => {
                   <Typography variant="h5" fontSize="13px" color="#444850">
                     Don’t have an account?
                   </Typography>
-                  <Link href="#" style={{ marginLeft: "8px" }}>
+                  <Link href="/register" style={{ marginLeft: "8px" }}>
                     <Typography
                       variant="h5"
                       fontSize="13px"
