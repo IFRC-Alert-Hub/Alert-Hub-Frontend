@@ -16,6 +16,7 @@ import {
 import {
   ContinentType,
   CountryType,
+  GET_SUBSCRIPTIONS,
   SubscriptionForm,
   SubscriptionItem,
 } from "../../API/queries/getSubscriptions";
@@ -54,6 +55,7 @@ const SubscriptionTable = ({
   handleClose,
 }: PropsType) => {
   const [deleteSubscription] = useMutation(DELETE_SUBSCRIPTION, {
+    refetchQueries: [GET_SUBSCRIPTIONS, "FetchSubscriptions"],
     client: subscription_module,
   });
   const [page, setPage] = useState(0);

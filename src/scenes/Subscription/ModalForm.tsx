@@ -18,6 +18,7 @@ import {
 import {
   ContinentType,
   CountryType,
+  GET_SUBSCRIPTIONS,
   SubscriptionForm,
   SubscriptionItem,
 } from "../../API/queries/getSubscriptions";
@@ -83,9 +84,11 @@ const ModalForm = ({
   setSelectedRow,
 }: PropsType) => {
   const [addSubscription] = useMutation(ADD_SUBSCRIPTION, {
+    refetchQueries: [GET_SUBSCRIPTIONS, "FetchSubscriptions"],
     client: subscription_module,
   });
   const [updateSubscription] = useMutation(UPDATE_SUBSCRIPTION, {
+    refetchQueries: [GET_SUBSCRIPTIONS, "FetchSubscriptions"],
     client: subscription_module,
   });
 
@@ -162,7 +165,7 @@ const ModalForm = ({
             subscribeBy: selectedRow.methods,
           },
         });
-        setTableData([...tableData, res.data.createSubscription.subscription]);
+        setTableData([res.data.createSubscription.subscription, ...tableData]);
       }
 
       setSelectedRow(selectedRow);
