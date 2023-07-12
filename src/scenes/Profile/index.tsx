@@ -21,6 +21,8 @@ const Profile = () => {
 
   const [editStatus, setEditStatus] = useState(true);
   const [user, setUser] = useState<User>(userContext.user);
+  console.log(user);
+
   return (
     <>
       <Container maxWidth={"lg"}>

@@ -58,6 +58,7 @@ const checkBoxList = [
 ];
 
 type PropsType = {
+  userId?: number;
   formType: String;
   tableData: SubscriptionItem[];
   setTableData: React.Dispatch<React.SetStateAction<SubscriptionItem[]>>;
@@ -70,6 +71,7 @@ type PropsType = {
 };
 
 const ModalForm = ({
+  userId,
   formType,
   tableData,
   setTableData,
@@ -132,7 +134,7 @@ const ModalForm = ({
         const res = await updateSubscription({
           variables: {
             subscriptionId: parseInt(selectedRow.id),
-            userId: 10, // use for test
+            userId: userId,
             subscriptionName: selectedRow.title,
             countryIds: countryNumberIds,
             urgencyArray: selectedRow.urgency,
@@ -151,7 +153,7 @@ const ModalForm = ({
       } else {
         const res = await addSubscription({
           variables: {
-            userId: 10, // use for test
+            userId: userId,
             subscriptionName: selectedRow.title,
             countryIds: countryNumberIds,
             urgencyArray: selectedRow.urgency,

@@ -11,6 +11,7 @@ import {
   Button,
   Tooltip,
   Box,
+  Typography,
 } from "@mui/material";
 import {
   ContinentType,
@@ -209,6 +210,17 @@ const SubscriptionTable = ({
           )}
         </TableBody>
       </Table>
+      {visibleRows?.length === 0 && (
+        <Typography
+          variant="h6"
+          textAlign={"center"}
+          padding={"20px"}
+          color={"gray"}
+        >
+          {" "}
+          No subscription groups added.
+        </Typography>
+      )}
       <TablePagination
         rowsPerPageOptions={[5, 10]}
         component="div"
