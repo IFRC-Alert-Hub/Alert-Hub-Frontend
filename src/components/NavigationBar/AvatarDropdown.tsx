@@ -62,7 +62,11 @@ const AvatarDropdown = () => {
           aria-haspopup="true"
           aria-expanded={open ? "true" : undefined}
         >
-          <Avatar sx={{ width: 32, height: 32 }}>M</Avatar>
+          <Avatar
+            alt="User Name"
+            src={userContext.user?.avatar}
+            sx={{ width: 32, height: 32 }}
+          />
         </IconButton>
       </Tooltip>
       <Menu

@@ -97,15 +97,13 @@ body,
 
 .avatar-size {
   width: 100px !important;
-  height: auto !important;
-  margin-bottom: 0.5rem;
+  height: 100px !important;
 }
 
 @media (min-width: 600px) {
   .avatar-size {
-    width: 100% !important;
-    height: auto !important;
-    margin-bottom: 1rem;
+    width: 150px !important;
+    height: 150px !important;
   }
 }
 
@@ -124,16 +122,12 @@ body,
 /* || PROFILE FORM */
 
 .form-box {
-  margin: 30px 20px 0px 20px !important;
-}
-
-.form-label {
-  padding-left: 20px !important;
+  margin: 20px 0px 0px 0px !important;
 }
 
 .form-text-field {
   width: 100% !important;
-  padding: 0px 20px 20px 20px !important;
+  padding: 0px 0px 20px 0px !important;
 }
 
 @media (min-width: 600px) {
