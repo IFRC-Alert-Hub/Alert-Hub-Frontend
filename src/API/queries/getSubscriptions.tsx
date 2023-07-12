@@ -1,7 +1,7 @@
 import { gql } from "@apollo/client";
 
 export const GET_SUBSCRIPTIONS = gql`
-  query FetchSubscriptions($userId: Int = 10) {
+  query FetchSubscriptions($userId: Int = 0) {
     listSubscriptionByUserId(userId: $userId) {
       certaintyArray
       countryIds
