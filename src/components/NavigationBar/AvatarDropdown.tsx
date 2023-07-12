@@ -35,6 +35,11 @@ const AvatarDropdown = () => {
     try {
       const result = await logoutData();
       console.log(result.data.logout.success);
+      if (result.data.logout.deleted) {
+        console.log("logout, token deleted");
+      } else {
+        console.log("error");
+      }
       return result;
     } catch (error: any) {
       console.log(error);

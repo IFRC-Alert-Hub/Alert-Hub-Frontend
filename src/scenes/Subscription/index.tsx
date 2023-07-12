@@ -24,7 +24,7 @@ import { UserContext } from "../../context/UserContext";
 
 const Subscription = () => {
   const userContext = useContext(UserContext);
-  const userId = Number(userContext.user.id);
+  const userId = Number(userContext.user?.id);
 
   const {
     loading: subscriptionLoading,

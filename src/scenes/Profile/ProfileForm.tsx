@@ -21,8 +21,8 @@ interface User {
 }
 
 type PropsType = {
-  user: User;
-  setUser: React.Dispatch<React.SetStateAction<User>>;
+  user: User | null;
+  setUser: React.Dispatch<React.SetStateAction<User | null>>;
   editStatus: boolean;
   setEditStatus: React.Dispatch<React.SetStateAction<boolean>>;
 };
@@ -33,17 +33,16 @@ const ProfileForm = ({
   editStatus,
   setEditStatus,
 }: PropsType) => {
-  const [prevUser, setPrevUser] = useState(user);
+  const [, setPrevUser] = useState(user);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setUser({
-      ...user,
+    setUser((prevUser: User | null) => ({
+      ...(prevUser as User), // Type assertion to satisfy TypeScript
       [e.target.name]: e.target.value,
-    });
+    }));
   };
-
   const handleCancel = () => {
-    setUser(prevUser);
+    setUser((prevUser) => prevUser); // No changes needed, just reset to the previous user state
     setEditStatus(true);
   };
 
@@ -71,7 +70,7 @@ const ProfileForm = ({
             name="firstName"
             size="small"
             className="form-text-field"
-            value={user.firstName}
+            value={user?.firstName}
             disabled={editStatus}
             onChange={handleInputChange}
           />
@@ -85,7 +84,7 @@ const ProfileForm = ({
             name="lastName"
             size="small"
             className="form-text-field"
-            value={user.lastName}
+            value={user?.lastName}
             disabled={editStatus}
             onChange={handleInputChange}
           />
@@ -99,7 +98,7 @@ const ProfileForm = ({
             name="country"
             size="small"
             className="form-text-field"
-            value={user.country}
+            value={user?.country}
             disabled={editStatus}
             onChange={handleInputChange}
           />
@@ -113,7 +112,7 @@ const ProfileForm = ({
             name="city"
             size="small"
             className="form-text-field"
-            value={user.city}
+            value={user?.city}
             disabled={editStatus}
             onChange={handleInputChange}
           />
@@ -129,7 +128,7 @@ const ProfileForm = ({
             id="email"
             name="email"
             size="small"
-            value={user.email}
+            value={user?.email}
             disabled
             fullWidth
             sx={{ p: "0px" }}
@@ -161,7 +160,7 @@ const ProfileForm = ({
             id="phoneNumber"
             name="phoneNumber"
             size="small"
-            value={user.phoneNumber}
+            value={user?.phoneNumber}
             disabled
             fullWidth
             sx={{ p: "0px" }}
