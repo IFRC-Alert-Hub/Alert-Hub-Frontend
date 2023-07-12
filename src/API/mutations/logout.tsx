@@ -3,7 +3,14 @@ import { gql } from "@apollo/client";
 export const LOGOUT = gql`
   mutation MyMutation {
     logout {
-      deleted
+      success
+      errors {
+        email
+        session
+        user
+        userName
+        verifyCode
+      }
     }
   }
 `;
