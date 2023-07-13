@@ -2,6 +2,7 @@ import React, { ReactElement, useEffect, useRef, useState } from "react";
 import mapboxgl, { Map as MapboxMap } from "mapbox-gl";
 import { Dialog } from "@mui/material";
 import { PopupComponent } from "./PopupComponent";
+import { Position } from "@turf/turf";
 
 export const ExtremeThreatColour: string = "#f5333f";
 export const ModerateThreatColour: string = "#ff9e00";
@@ -37,7 +38,7 @@ type CountryType = {
   polygon?: string;
   multipolygon?: string;
   region?: Region[];
-  type?: GeometryType;
+  type?: string;
   countryPolygon?: number[][];
 };
 
@@ -80,25 +81,6 @@ export type AlertData = {
   country?: CountryType;
   alertinfoSet?: AlertInfoSet[];
 };
-
-export interface Alert {
-  region: string;
-  country: string;
-  event: string;
-  severity: string;
-  urgency: string;
-  certainty: string;
-  sender: string;
-  effective: string;
-  expires: string;
-  areaDesc: string;
-  countryPolygon: number[][];
-  countryName: string;
-  countryCentroid: number[];
-  countryISO3: string;
-  type: string;
-  color: string;
-}
 
 const MapComponent: React.FC<MapProps> = ({
   lng = 0,
@@ -181,7 +163,7 @@ const MapComponent: React.FC<MapProps> = ({
     }
 
     mapRef.current?.on("load", () => {
-      const filteredAlerts = alerts.map((alert: AlertData) => {
+      const filteredAlerts = alerts.map((alert: any) => {
         const newCountry = countries.find(
           (country) => country?.id === alert?.country?.id
         );
@@ -203,23 +185,23 @@ const MapComponent: React.FC<MapProps> = ({
         return { ...alert, country: updatedCountry };
       });
 
-      filteredAlerts.forEach((alert) => {
+      filteredAlerts.forEach((alert: AlertData) => {
         const tableId = `alertTable-${alert?.country?.iso3}`;
         const tableData = countryTables.current[tableId];
 
-        // if (!tableData) {
-        //   const table = <PopupComponent alerts={[alert]} />;
-        //   countryTables.current[tableId] = { table, alerts: [alert] };
-        // } else {
-        //   const updatedAlerts = [...tableData.alerts, alert];
-        //   const updatedTable = React.cloneElement(tableData.table, {
-        //     alerts: updatedAlerts,
-        //   });
-        //   countryTables.current[tableId] = {
-        //     table: updatedTable,
-        //     alerts: updatedAlerts,
-        //   };
-        // }
+        if (!tableData) {
+          const table = <PopupComponent alerts={[alert]} />;
+          countryTables.current[tableId] = { table, alerts: [alert] };
+        } else {
+          const updatedAlerts = [...tableData.alerts, alert];
+          const updatedTable = React.cloneElement(tableData.table, {
+            alerts: updatedAlerts,
+          });
+          countryTables.current[tableId] = {
+            table: updatedTable,
+            alerts: updatedAlerts,
+          };
+        }
         if (
           mapRef.current?.getSource(
             `polygon-source-${alert?.country?.iso3}`
@@ -248,8 +230,8 @@ const MapComponent: React.FC<MapProps> = ({
             data: {
               type: "Feature",
               geometry: {
-                type: alert.country.type as GeometryType,
-                coordinates: alert.country.countryPolygon,
+                type: alert?.country?.type! as any,
+                coordinates: alert?.country?.countryPolygon! as any,
               },
               properties: {},
             },
@@ -298,7 +280,7 @@ const MapComponent: React.FC<MapProps> = ({
   return (
     <>
       <div ref={mapContainerRef} className="map-container"></div>
-      {/* <Dialog
+      <Dialog
         PaperProps={{
           sx: {
             maxWidth: "800px",
@@ -313,7 +295,7 @@ const MapComponent: React.FC<MapProps> = ({
         ) : (
           ""
         )}
-      </Dialog> */}
+      </Dialog>
     </>
   );
 };

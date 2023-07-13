@@ -3,7 +3,7 @@ import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
-import { Alert, AlertData } from "./MapComponent";
+import { AlertData } from "./MapComponent";
 
 interface TabPanelProps {
   children?: React.ReactNode;
