@@ -206,7 +206,6 @@ const MapComponent: React.FC<MapProps> = ({
           mapRef.current?.getSource(
             `polygon-source-${alert?.country?.iso3}`
           ) !== undefined
-          // || alert.countryISO3 === "FRA"
         ) {
           mapRef.current?.setPaintProperty(
             `polygon-layer-${alert?.country?.iso3}`,
@@ -271,7 +270,7 @@ const MapComponent: React.FC<MapProps> = ({
       });
       setAlertsLoaded(true);
     });
-  }, [alertsLoaded, alerts, mapRef, countryTables]);
+  }, [alertsLoaded, alerts, mapRef, countryTables, countries]);
 
   const handleCloseDialog = () => {
     setDialogLoaded(false);
