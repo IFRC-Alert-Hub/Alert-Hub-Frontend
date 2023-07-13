@@ -37,6 +37,8 @@ type CountryType = {
   polygon?: string;
   multipolygon?: string;
   region?: Region[];
+  type?: GeometryType;
+  countryPolygon?: number[][];
 };
 
 export type AlertInfoSet = {
@@ -75,7 +77,7 @@ export type AlertData = {
   code?: string;
   addresses?: string;
   id?: string;
-  country?: CountryType[];
+  country?: CountryType;
   alertinfoSet?: AlertInfoSet[];
 };
 
@@ -143,23 +145,23 @@ const MapComponent: React.FC<MapProps> = ({
     };
   }, [lat, lng, mapRef, mapContainerRef, zoom, alerts]);
 
-  const determineColour = (currentColour: string, alert: Alert) => {
-    if (currentColour === ExtremeThreatColour) {
-      return currentColour;
-    } else {
-      if (
-        alert.urgency === "Immediate" ||
-        alert.urgency === "Expected" ||
-        alert.severity === "Extreme" ||
-        alert.severity === "Severe" ||
-        alert.certainty === "Observed" ||
-        alert.certainty === "Likely"
-      ) {
-        return ExtremeThreatColour;
-      }
-    }
-    return currentColour;
-  };
+  // const determineColour = (currentColour: string, alert: AlertData) => {
+  //   if (currentColour === ExtremeThreatColour) {
+  //     return currentColour;
+  //   } else {
+  //     if (
+  //       alert.urgency === "Immediate" ||
+  //       alert.urgency === "Expected" ||
+  //       alert.severity === "Extreme" ||
+  //       alert.severity === "Severe" ||
+  //       alert.certainty === "Observed" ||
+  //       alert.certainty === "Likely"
+  //     ) {
+  //       return ExtremeThreatColour;
+  //     }
+  //   }
+  //   return currentColour;
+  // };
 
   useEffect(() => {
     console.log("NEW: ", countryTables);
@@ -173,124 +175,125 @@ const MapComponent: React.FC<MapProps> = ({
     console.log("Countries Loaded: ", countries);
   }, [countries]);
 
-  // useEffect(() => {
-  //   if (!mapRef.current || alertsLoaded || alerts.length === 0) {
-  //     return;
-  //   }
+  useEffect(() => {
+    if (!mapRef.current || alertsLoaded || alerts.length === 0) {
+      return;
+    }
 
-  //   mapRef.current?.on("load", () => {
-  //     //alerts? or MapData
-  //     const filteredAlert = alerts?.map((alert: any) => ({
-  //       region: alert.country?.region?.name,
-  //       country: alert.country?.name,
-  //       event: alert.event,
-  //       severity: alert.severity,
-  //       urgency: alert.urgency,
-  //       certainty: alert.certainty,
-  //       sender: alert.sender,
-  //       effective: alert.effective!,
-  //       expires: alert.expires,
-  //       countryPolygon:
-  //         alert.country.multipolygon === ""
-  //           ? JSON.parse(alert.country.polygon)
-  //           : JSON.parse(alert.country.multipolygon),
-  //       type: alert.country.multipolygon === "" ? "Polygon" : "MultiPolygon",
-  //       countryName: alert.country.name,
-  //       countryISO3: alert.country.iso3,
-  //       countryCentroid: JSON.parse(alert.country.centroid),
-  //       areaDesc: alert.areaDesc,
-  //       color: determineColour(ModerateThreatColour, alert),
-  //     }));
+    mapRef.current?.on("load", () => {
+      const filteredAlerts = alerts.map((alert: AlertData) => {
+        const newCountry = countries.find(
+          (country) => country?.id === alert?.country?.id
+        );
 
-  //     filteredAlert.forEach((alert) => {
-  //       const tableId = `alertTable-${alert.countryISO3}`;
-  //       const tableData = countryTables.current[tableId];
+        const countryPolygon =
+          newCountry?.multipolygon === ""
+            ? JSON.parse(newCountry?.polygon || "[]")
+            : JSON.parse(newCountry?.multipolygon || "[]");
 
-  //       if (!tableData) {
-  //         const table = <PopupComponent alerts={[alert]} />;
-  //         countryTables.current[tableId] = { table, alerts: [alert] };
-  //       } else {
-  //         const updatedAlerts = [...tableData.alerts, alert];
-  //         const updatedTable = React.cloneElement(tableData.table, {
-  //           alerts: updatedAlerts,
-  //         });
-  //         countryTables.current[tableId] = {
-  //           table: updatedTable,
-  //           alerts: updatedAlerts,
-  //         };
-  //       }
-  //       if (
-  //         mapRef.current?.getSource(`polygon-source-${alert.countryISO3}`) !==
-  //         undefined
-  //         // || alert.countryISO3 === "FRA"
-  //       ) {
-  //         mapRef.current?.setPaintProperty(
-  //           `polygon-layer-${alert.countryISO3}`,
-  //           "fill-color",
-  //           determineColour(
-  //             mapRef.current.getPaintProperty(
-  //               `polygon-layer-${alert.countryISO3}`,
-  //               "fill-color"
-  //             ),
-  //             alert
-  //           )
-  //         );
-  //       } else {
-  //         const sourceId = `polygon-source-${alert.countryISO3}`;
-  //         const layerId = `polygon-layer-${alert.countryISO3}`;
+        const type =
+          alert?.country?.multipolygon === "" ? "Polygon" : "MultiPolygon";
 
-  //         mapRef.current?.addSource(sourceId, {
-  //           type: "geojson",
+        const updatedCountry = {
+          ...newCountry,
+          countryPolygon,
+          type,
+        };
 
-  //           data: {
-  //             type: "Feature",
-  //             geometry: {
-  //               type: alert.type as GeometryType,
-  //               coordinates: alert.countryPolygon,
-  //             },
-  //             properties: {},
-  //           },
-  //         });
+        return { ...alert, country: updatedCountry };
+      });
 
-  //         const colour = determineColour(ModerateThreatColour, alert);
+      filteredAlerts.forEach((alert) => {
+        const tableId = `alertTable-${alert?.country?.iso3}`;
+        const tableData = countryTables.current[tableId];
 
-  //         // Add the border layer
-  //         mapRef.current?.addLayer({
-  //           id: `${layerId}-border`,
-  //           type: "line",
-  //           source: sourceId,
-  //           paint: {
-  //             "line-color": "black",
-  //             "line-width": 1.3,
-  //           },
-  //         });
-  //         mapRef.current?.addLayer({
-  //           id: `${layerId}`,
-  //           type: "fill",
-  //           source: sourceId,
-  //           paint: {
-  //             "fill-color": colour,
-  //             "fill-opacity": 0.8,
-  //           },
-  //         });
+        // if (!tableData) {
+        //   const table = <PopupComponent alerts={[alert]} />;
+        //   countryTables.current[tableId] = { table, alerts: [alert] };
+        // } else {
+        //   const updatedAlerts = [...tableData.alerts, alert];
+        //   const updatedTable = React.cloneElement(tableData.table, {
+        //     alerts: updatedAlerts,
+        //   });
+        //   countryTables.current[tableId] = {
+        //     table: updatedTable,
+        //     alerts: updatedAlerts,
+        //   };
+        // }
+        if (
+          mapRef.current?.getSource(
+            `polygon-source-${alert?.country?.iso3}`
+          ) !== undefined
+          // || alert.countryISO3 === "FRA"
+        ) {
+          mapRef.current?.setPaintProperty(
+            `polygon-layer-${alert?.country?.iso3}`,
+            "fill-color",
+            ExtremeThreatColour
+            // determineColour(
+            //   mapRef.current.getPaintProperty(
+            //     `polygon-layer-${alert?.country?.iso3}`,
+            //     "fill-color"
+            //   ),
+            //   alert
+            // )
+          );
+        } else {
+          const sourceId = `polygon-source-${alert?.country?.iso3}`;
+          const layerId = `polygon-layer-${alert?.country?.iso3}`;
 
-  //         mapRef.current?.on(
-  //           "click",
-  //           layerId,
-  //           (e: mapboxgl.MapMouseEvent & mapboxgl.EventData) => {
-  //             setDialogLoaded(true);
-  //             setTableID(tableId);
-  //           }
-  //         );
-  //       }
-  //     });
-  //     setAlertsLoaded(true);
-  //   });
-  // }, [alertsLoaded, alerts, mapRef, countryTables]);
+          mapRef.current?.addSource(sourceId, {
+            type: "geojson",
 
-  // const handleCloseDialog = () => {
-  //   setDialogLoaded(false);
-  // };
+            data: {
+              type: "Feature",
+              geometry: {
+                type: alert.country.type as GeometryType,
+                coordinates: alert.country.countryPolygon,
+              },
+              properties: {},
+            },
+          });
+
+          // const colour = determineColour(ModerateThreatColour, alert);
+
+          // Add the border layer
+          mapRef.current?.addLayer({
+            id: `${layerId}-border`,
+            type: "line",
+            source: sourceId,
+            paint: {
+              "line-color": "black",
+              "line-width": 1.3,
+            },
+          });
+          mapRef.current?.addLayer({
+            id: `${layerId}`,
+            type: "fill",
+            source: sourceId,
+            paint: {
+              "fill-color": ExtremeThreatColour,
+              "fill-opacity": 0.8,
+            },
+          });
+
+          mapRef.current?.on(
+            "click",
+            layerId,
+            (e: mapboxgl.MapMouseEvent & mapboxgl.EventData) => {
+              setDialogLoaded(true);
+              setTableID(tableId);
+            }
+          );
+        }
+      });
+      setAlertsLoaded(true);
+    });
+  }, [alertsLoaded, alerts, mapRef, countryTables]);
+
+  const handleCloseDialog = () => {
+    setDialogLoaded(false);
+  };
 
   return (
     <>
