@@ -3,7 +3,7 @@ import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
-import { Alert } from "./MapComponent";
+import { Alert, AlertData } from "./MapComponent";
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -44,7 +44,7 @@ function a11yProps(index: number) {
 }
 
 interface PopupComponentProps {
-  alerts: Alert[];
+  alerts: AlertData[];
 }
 
 export const PopupComponent: React.FC<PopupComponentProps> = ({
@@ -69,7 +69,8 @@ export const PopupComponent: React.FC<PopupComponentProps> = ({
   return (
     <>
       {" "}
-      <Box
+      Test
+      {/* <Box
         sx={{ backgroundColor: "black", color: "white", textAlign: "center" }}
       >
         {alerts[0].countryISO3} ({alerts[0].countryName})
@@ -183,7 +184,7 @@ export const PopupComponent: React.FC<PopupComponentProps> = ({
             </TabPanel>
           ))}
         </Box>
-      </Box>
+      </Box> */}
     </>
   );
 };
