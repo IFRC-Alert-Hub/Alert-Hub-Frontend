@@ -3,38 +3,57 @@ import { gql } from "@apollo/client";
 export const ALL_ALERTS = gql`
   query MyQuery($regionId: String, $iso3: String, $continentId: String) {
     listAlert(regionId: $regionId, iso3: $iso3, continentId: $continentId) {
-      areaDesc
-      certainty
+      status
+      source
+      sent
+      sender
+      references
+      scope
+      restriction
+      note
+      msgType
+      incidents
+      identifier
+      code
+      addresses
+      id
       country {
-        centroid
+        id
+      }
+      alertinfoSet {
+        web
+        urgency
+        audience
+        category
+        certainty
+        contact
+        effective
+        event
+        eventCode
+        headline
+        expires
+        instruction
+        language
+        onset
+        responseType
+        senderName
+        severity
+        id
+        description
+      }
+    }
+    listCountry {
+      id
+      iso3
+      multipolygon
+      name
+      polygon
+      centroid
+      region {
+        id
         name
         polygon
-        multipolygon
-        iso3
-        id
-        region {
-          centroid
-          id
-          name
-          polygon
-        }
       }
-      description
-      effective
-      geocodeValue
-      geocodeName
-      expires
-      event
-      status
-      severity
-      sent
-      senderName
-      sender
-      scope
-      msgType
-      identifier
-      id
-      urgency
     }
   }
 `;
