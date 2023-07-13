@@ -116,7 +116,6 @@ const Region = () => {
     data: data_regions,
   } = useQuery(GET_ALL_REGIONS, {
     client: cap_aggregator,
-    fetchPolicy: "network-only",
   });
   const {
     loading: loading_alerts,
@@ -128,7 +127,6 @@ const Region = () => {
       regionId: "",
     },
     client: cap_aggregator,
-    fetchPolicy: "network-only",
   });
 
   const region = useMemo(() => {
