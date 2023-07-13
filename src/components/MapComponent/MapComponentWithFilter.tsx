@@ -1,10 +1,4 @@
-import {
-  Autocomplete,
-  Box,
-  CircularProgress,
-  Container,
-  TextField,
-} from "@mui/material";
+import { Autocomplete, Box, CircularProgress, TextField } from "@mui/material";
 import MapComponent, { Bbox } from "./MapComponent";
 import { useEffect, useRef, useState } from "react";
 import mapboxgl from "mapbox-gl";
