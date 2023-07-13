@@ -175,6 +175,8 @@ const Register = () => {
       .isValidSync(event.target.value);
     setIsSendEnabled(isValidEmail);
     formik.handleChange(event);
+    setEmailError("");
+    setIsEmailSent(false);
   };
 
   const [showPassword, setShowPassword] = React.useState(false);
