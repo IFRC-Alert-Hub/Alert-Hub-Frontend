@@ -5,7 +5,7 @@ import {
   Container,
   TextField,
 } from "@mui/material";
-import MapComponent, { AlertData, Bbox } from "./MapComponent";
+import MapComponent, { AlertData, AlertInfoSet, Bbox } from "./MapComponent";
 import { useEffect, useRef, useState } from "react";
 import mapboxgl from "mapbox-gl";
 
@@ -33,9 +33,7 @@ const MapComponentWithFilter: React.FC<MapComponentWithFilterProps> = ({
   const mapRef = useRef<mapboxgl.Map | null>(null);
 
   const [filteredAlerts, setFilteredAlerts] = useState<AlertData[]>(
-    data?.listAlert.filter((data: AlertData) => {
-      return data.alertinfoSet && data.alertinfoSet.length > 0;
-    }) || []
+    data?.listAlert || []
   );
   const [selectedUrgency, setSelectedUrgency] = useState("");
   const [selectedSeverity, setSelectedSeverity] = useState("");
@@ -60,16 +58,20 @@ const MapComponentWithFilter: React.FC<MapComponentWithFilterProps> = ({
       let filteredData = data?.listAlert || [];
 
       if (selectedUrgency !== "") {
-        filteredData = filteredData.filter(
-          (alert: AlertData) =>
-            alert.alertinfoSet![0].urgency === selectedUrgency
+        filteredData = filteredData.filter((alert: AlertData) =>
+          alert?.alertinfoSet?.some((infoSet: AlertInfoSet) => {
+            const urgency = infoSet.urgency as string;
+            return urgency.toLowerCase() === selectedUrgency.toLowerCase();
+          })
         );
       }
 
       if (selectedSeverity !== "") {
-        filteredData = filteredData.filter(
-          (alert: AlertData) =>
-            alert.alertinfoSet![0].severity === selectedSeverity
+        filteredData = filteredData.filter((alert: AlertData) =>
+          alert?.alertinfoSet?.some((infoSet: AlertInfoSet) => {
+            const severity = infoSet.severity as string;
+            return severity.toLowerCase() === selectedSeverity.toLowerCase();
+          })
         );
       }
 
@@ -78,26 +80,26 @@ const MapComponentWithFilter: React.FC<MapComponentWithFilterProps> = ({
         selectedEffectiveDate[0] !== null &&
         selectedEffectiveDate[1] !== null
       ) {
-        filteredData = filteredData.filter((alert: AlertData) => {
-          let effectiveTimestamp =
-            new Date(alert.alertinfoSet![0].effective as string).getTime() /
-            1000;
-          let expiresTimestamp =
-            new Date(alert.alertinfoSet![0].effective as string).getTime() /
-            1000;
+        filteredData = filteredData.filter((alert: AlertData) =>
+          alert?.alertinfoSet?.some((infoSet: AlertInfoSet) => {
+            let effectiveTimestamp =
+              new Date(infoSet.effective as string).getTime() / 1000;
+            let expiresTimestamp =
+              new Date(infoSet.effective as string).getTime() / 1000;
 
-          if (
-            selectedEffectiveDate &&
-            selectedEffectiveDate[0] !== null &&
-            selectedEffectiveDate[1] !== null &&
-            effectiveTimestamp >= selectedEffectiveDate[0] &&
-            expiresTimestamp <= selectedEffectiveDate[1]
-          ) {
-            return true;
-          }
+            if (
+              selectedEffectiveDate &&
+              selectedEffectiveDate[0] !== null &&
+              selectedEffectiveDate[1] !== null &&
+              effectiveTimestamp >= selectedEffectiveDate[0] &&
+              expiresTimestamp <= selectedEffectiveDate[1]
+            ) {
+              return true;
+            }
 
-          return false;
-        });
+            return false;
+          })
+        );
       }
 
       setFilteredAlerts(filteredData);

@@ -39,7 +39,7 @@ type CountryType = {
   region?: Region[];
 };
 
-type AlertInfoSet = {
+export type AlertInfoSet = {
   web?: string;
   urgency?: string;
   audience?: string;
