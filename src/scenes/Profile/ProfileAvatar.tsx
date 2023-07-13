@@ -1,4 +1,4 @@
-import { Avatar, Box, Button } from "@mui/material";
+import { Avatar, Box, Button, Tooltip } from "@mui/material";
 
 interface User {
   id: string;
@@ -24,13 +24,24 @@ const ProfileAvatar = ({ user, editStatus, setEditStatus }: PropsType) => {
 
   return (
     <Box
-      marginTop="30px"
       display="flex"
       justifyContent="center"
       alignItems="center"
       flexDirection="column"
+      mt={"30px"}
     >
-      <Avatar alt="User Name" src={user?.avatar} className="avatar-size" />
+      <Box mb={"0.5rem"}>
+        <Tooltip title="Change your avatar" arrow>
+          <Button>
+            <Avatar
+              alt="User Name"
+              src={user?.avatar}
+              className="avatar-size"
+            />
+          </Button>
+        </Tooltip>
+      </Box>
+
       {editStatus ? (
         <Button variant="text" className="edit-btn" onClick={handleEdit}>
           Edit Profile

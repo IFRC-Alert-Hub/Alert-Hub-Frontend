@@ -34,6 +34,8 @@ const Register = () => {
   const [isSendClicked, setIsSendClicked] = React.useState(false);
   const [isSendEnabled, setIsSendEnabled] = React.useState<boolean>(false);
   const [isEmailSent, setIsEmailSent] = React.useState(false);
+  const [emailError, setEmailError] = React.useState("");
+
   const navigate = useNavigate();
   const [verifyEmail] = useMutation(VERIFY_EMAIL, {
     client: auth_system,
@@ -53,10 +55,22 @@ const Register = () => {
 
   const sendEmail = async (email: string) => {
     try {
-      await verifyEmail({ variables: { email: email } });
-      alert("Sent");
-    } catch (error: any) {
+      const verifyEmailResponse = await verifyEmail({
+        variables: { email: email },
+      });
+      const { success, errors } = verifyEmailResponse.data.sendVerifyEmail;
+
+      if (success) {
+        setIsEmailSent(true);
+        setEmailError("");
+      } else {
+        setIsEmailSent(false);
+        setEmailError(errors.email);
+        console.log(errors.email);
+      }
+    } catch (error) {
       alert(error);
+      setEmailError("");
     }
   };
   const calculatePasswordStrength = (password: string) => {
@@ -84,6 +98,12 @@ const Register = () => {
     }
   };
 
+  const handlePasswordCopy = (
+    event: React.ClipboardEvent<HTMLInputElement>
+  ): void => {
+    event.preventDefault();
+  };
+
   const handlePasswordChange = (event: any) => {
     const password = event.target.value;
     const strength = calculatePasswordStrength(password);
@@ -94,7 +114,6 @@ const Register = () => {
     setIsSendClicked(true);
     const { email } = formik.values;
     sendEmail(email);
-    setIsEmailSent(true);
   };
 
   const handleRegister = async (values: any) => {
@@ -129,13 +148,11 @@ const Register = () => {
       verifyCode: "",
     },
     validationSchema: Yup.object({
-      // firstName: Yup.string().required("Required"),
-      // lastName: Yup.string().required("Required"),
       email: Yup.string().email("Invalid email address").required("Required"),
       password: Yup.string()
         .required("Required")
         .matches(
-          /^(?=.*[A-Z])(?=.*[0-9])(?=.*[?!@#$%^&*()])[a-zA-Z0-9!@#$%^&*()]{8,}$/,
+          /^(?=.*[A-Z])(?=.*[0-9])(?=.*[?!@#$%^&*()])[a-zA-Z0-9!?@#$%^&*()]{8,}$/,
           "Password must contain at least one uppercase letter, one number, and one special character"
         ),
       confirmPassword: Yup.string()
@@ -243,6 +260,7 @@ const Register = () => {
                 sx={{ fontSize: "12px" }}
                 value={formik.values.email}
                 onChange={handleEmailChange}
+                onBlur={formik.handleBlur}
                 error={formik.touched.email && Boolean(formik.errors.email)}
                 helperText={formik.touched.email && formik.errors.email}
                 InputProps={{
@@ -269,6 +287,9 @@ const Register = () => {
               {isEmailSent && (
                 <Alert severity="success">Email has been sent</Alert>
               )}
+              {emailError !== "" && (
+                <Alert severity="error">{emailError}</Alert>
+              )}
               <TextField
                 margin="normal"
                 required
@@ -281,6 +302,7 @@ const Register = () => {
                 value={formik.values.verifyCode}
                 onChange={formik.handleChange}
                 disabled={!isSendClicked}
+                onBlur={formik.handleBlur}
                 error={
                   formik.touched.verifyCode && Boolean(formik.errors.verifyCode)
                 }
@@ -299,6 +321,7 @@ const Register = () => {
                 autoComplete="new-password"
                 value={formik.values.password}
                 onChange={handlePasswordChange}
+                onBlur={formik.handleBlur}
                 error={
                   formik.touched.password && Boolean(formik.errors.password)
                 }
@@ -310,6 +333,7 @@ const Register = () => {
                       </IconButton>
                     </InputAdornment>
                   ),
+                  onCopy: handlePasswordCopy, // Prevent password copying
                 }}
               />
 
@@ -341,7 +365,11 @@ const Register = () => {
                       color="primary"
                       disabled
                       className={
-                        /[A-Z]/.test(formik.values.password) ? "fulfilled" : ""
+                        /^(?=.*[A-Z])(?=.*[0-9])(?=.*[?!@#$%^&*()])[a-zA-Z0-9!?@#$%^&*()]{8,}$/.test(
+                          formik.values.password
+                        )
+                          ? "fulfilled"
+                          : ""
                       }
                     />
                   }
@@ -354,7 +382,11 @@ const Register = () => {
                       color="primary"
                       disabled
                       className={
-                        /[0-9]/.test(formik.values.password) ? "fulfilled" : ""
+                        /^(?=.*[A-Z])(?=.*[0-9])(?=.*[?!@#$%^&*()])[a-zA-Z0-9!?@#$%^&*()]{8,}$/.test(
+                          formik.values.password
+                        )
+                          ? "fulfilled"
+                          : ""
                       }
                     />
                   }
@@ -367,13 +399,15 @@ const Register = () => {
                       color="primary"
                       disabled
                       className={
-                        /[?!@#$%^&()]/.test(formik.values.password)
+                        /^(?=.*[A-Z])(?=.*[0-9])(?=.*[?!@#$%^&*()])[a-zA-Z0-9!?@#$%^&*()]{8,}$/.test(
+                          formik.values.password
+                        )
                           ? "fulfilled"
                           : ""
                       }
                     />
                   }
-                  label="At least one special character"
+                  label="At least one special character [?!@#$%^&*()]"
                 />
                 <FormControlLabel
                   control={
@@ -382,7 +416,11 @@ const Register = () => {
                       color="primary"
                       disabled
                       className={
-                        formik.values.password.length >= 8 ? "fulfilled" : ""
+                        /^(?=.*[A-Z])(?=.*[0-9])(?=.*[?!@#$%^&*()])[a-zA-Z0-9!?@#$%^&*()]{8,}$/.test(
+                          formik.values.password
+                        )
+                          ? "fulfilled"
+                          : ""
                       }
                     />
                   }
@@ -401,6 +439,7 @@ const Register = () => {
                 sx={{ fontSize: "12px", paddingBottom: "20px" }}
                 value={formik.values.confirmPassword}
                 onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
                 error={
                   formik.touched.confirmPassword &&
                   Boolean(formik.errors.confirmPassword)

@@ -63,7 +63,7 @@ const ProfileForm = ({
       <Grid container>
         <Grid item xs={12} sm={6}>
           <InputLabel className="form-label" htmlFor="firstName">
-            FIRST NAME
+            First Name
           </InputLabel>
           <TextField
             id="firstName"
@@ -77,7 +77,7 @@ const ProfileForm = ({
         </Grid>
         <Grid item xs={12} sm={6}>
           <InputLabel className="form-label" htmlFor="lastName">
-            LAST NAME
+            Last Name
           </InputLabel>
           <TextField
             id="lastName"
@@ -91,7 +91,7 @@ const ProfileForm = ({
         </Grid>
         <Grid item xs={12} sm={6}>
           <InputLabel className="form-label" htmlFor="country">
-            COUNTRY
+            Country
           </InputLabel>
           <TextField
             id="country"
@@ -105,7 +105,7 @@ const ProfileForm = ({
         </Grid>
         <Grid item xs={12} sm={6}>
           <InputLabel className="form-label" htmlFor="city">
-            CITY
+            City
           </InputLabel>
           <TextField
             id="city"
@@ -118,12 +118,8 @@ const ProfileForm = ({
           />
         </Grid>
 
-        <Grid
-          item
-          xs={12}
-          m={{ xs: "0px 20px 20px 20px", sm: "0 30px 20px 0" }}
-        >
-          <InputLabel htmlFor="email">EMAIL ADDRESS</InputLabel>
+        <Grid item xs={12} m={{ xs: "0px 0px 20px 0px", sm: "0 30px 20px 0" }}>
+          <InputLabel htmlFor="email">Email Address</InputLabel>
           <OutlinedInput
             id="email"
             name="email"
@@ -150,12 +146,8 @@ const ProfileForm = ({
             }
           />
         </Grid>
-        <Grid
-          item
-          xs={12}
-          m={{ xs: "0px 20px 20px 20px", sm: "0 30px 30px 0" }}
-        >
-          <InputLabel htmlFor="phoneNumber">PHONE NUMBER</InputLabel>
+        <Grid item xs={12} m={{ xs: "0px 0px 20px 0px", sm: "0 30px 30px 0" }}>
+          <InputLabel htmlFor="phoneNumber">Phone Number</InputLabel>
           <OutlinedInput
             id="phoneNumber"
             name="phoneNumber"

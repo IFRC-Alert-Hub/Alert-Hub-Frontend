@@ -43,6 +43,7 @@ export interface SubscriptionForm {
 }
 
 export interface CountryType {
+  [key: string]: string;
   id: string;
   name: string;
 }

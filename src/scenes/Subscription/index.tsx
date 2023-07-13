@@ -116,7 +116,7 @@ const Subscription = () => {
             textTransform={"capitalize"}
             letterSpacing={"1.6px"}
           >
-            My Subscription Groups
+            My Subscriptions
           </Typography>
         </Grid>
         <Grid item xs={12} sm={4} className="subscription-add-btn">

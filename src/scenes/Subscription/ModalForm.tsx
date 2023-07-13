@@ -8,7 +8,6 @@ import {
   Typography,
 } from "@mui/material";
 import { useState } from "react";
-import CountrySelectionField from "./CountrySelectionField";
 import FormCheckbox from "./FormCheckbox";
 import { useMutation } from "@apollo/client";
 import {
@@ -23,6 +22,7 @@ import {
   SubscriptionItem,
 } from "../../API/queries/getSubscriptions";
 import { subscription_module } from "../../API/API_Links";
+import CountryAutocomplete from "./CountryAutocomplete";
 
 const style = {
   position: "absolute" as "absolute",
@@ -31,7 +31,7 @@ const style = {
   transform: "translate(-50%, -50%)",
   width: "40%",
   minWidth: "350px",
-  maxHeight: "500px",
+  maxHeight: "600px",
   overflow: "auto",
   bgcolor: "background.paper",
   boxShadow: 24,
@@ -146,7 +146,6 @@ const ModalForm = ({
             subscribeBy: selectedRow.methods,
           },
         });
-        console.log(res.data.updateSubscription.subscription.subscriptionName);
         const updatedData = tableData.map((item) =>
           item.id === res.data.updateSubscription.subscription.id
             ? res.data.updateSubscription.subscription
@@ -189,7 +188,7 @@ const ModalForm = ({
     >
       <Box sx={style}>
         <Typography id="modal-title" variant="h3" fontWeight={"bold"} mb="10px">
-          {formType} Subscription Group
+          {formType} Subscription
         </Typography>
         <Box component="form" onSubmit={handleSubmit} m={1}>
           <Box sx={{ mb: 1 }}>
@@ -199,7 +198,7 @@ const ModalForm = ({
               error={verifyForm && formErrors.title}
               className="subs-form-title"
             >
-              Group Title
+              Title
             </InputLabel>
             <TextField
               id="title"
@@ -223,13 +222,12 @@ const ModalForm = ({
               sx={{ width: "100%", mt: 1, mb: 1 }}
             />
           </Box>
-          <CountrySelectionField
+          <CountryAutocomplete
             verifyForm={verifyForm}
             formErrors={formErrors}
             countryList={countryList}
-            regionList={regionList}
             selectedRow={selectedRow}
-            handleChange={handleChange}
+            setSelectedRow={setSelectedRow}
           />
           {checkBoxList.map((item) => (
             <FormCheckbox
