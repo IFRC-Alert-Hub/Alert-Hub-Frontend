@@ -102,7 +102,7 @@ const MapComponentWithFilter: React.FC<MapComponentWithFilterProps> = ({
   ]);
 
   return (
-    <Container maxWidth="lg">
+    <>
       <TitleHeader
         title={`All ONGOING Extreme Alerts (${filteredAlerts.length})`}
         rightTitle={"View all alerts"}
@@ -192,7 +192,7 @@ const MapComponentWithFilter: React.FC<MapComponentWithFilterProps> = ({
           />
         </>
       )}
-    </Container>
+    </>
   );
 };
 
