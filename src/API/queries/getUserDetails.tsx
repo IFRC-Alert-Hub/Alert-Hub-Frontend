@@ -1,7 +1,7 @@
 import { gql } from "@apollo/client";
 
-export const getUserDetails = gql`
-  query MyQuery {
+export const GET_USER_DETAILS = gql`
+  query FetchUserProfile {
     profile {
       avatar
       city

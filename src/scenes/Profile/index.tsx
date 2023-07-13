@@ -1,26 +1,29 @@
 import { Box, Container, Grid, Typography } from "@mui/material";
 import ProfileForm from "./ProfileForm";
 import ProfileAvatar from "./ProfileAvatar";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 
 import { UserContext } from "../../context/UserContext";
-
-interface User {
-  id: string;
-  avatar: string;
-  firstName: string;
-  lastName: string;
-  country: string;
-  city: string;
-  email: string;
-  phoneNumber: string;
-}
+import { GET_USER_DETAILS } from "../../API/queries/getUserDetails";
+import { useQuery } from "@apollo/client";
+import { auth_system } from "../../API/API_Links";
 
 const Profile = () => {
   const userContext = useContext(UserContext);
 
   const [editStatus, setEditStatus] = useState(true);
-  const [user, setUser] = useState<User | null>(userContext.user);
+  const { user, setUser } = userContext;
+
+  // const { data: profileData } = useQuery(GET_USER_DETAILS, {
+  //   client: auth_system,
+  // });
+
+  // useEffect(() => {
+  //   if (profileData) {
+  //     setUser(profileData.profile);
+  //   }
+  // }, [profileData, setUser]);
+
   return (
     <>
       <Container maxWidth={"lg"}>

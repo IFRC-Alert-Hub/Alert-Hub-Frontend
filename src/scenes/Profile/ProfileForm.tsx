@@ -7,18 +7,13 @@ import {
   OutlinedInput,
   TextField,
 } from "@mui/material";
-import { useState } from "react";
-
-interface User {
-  id: string;
-  avatar: string;
-  firstName: string;
-  lastName: string;
-  country: string;
-  city: string;
-  email: string;
-  phoneNumber: string;
-}
+import { User } from "../../context/UserContext";
+import { useFormik } from "formik";
+import * as yup from "yup";
+import { useMutation } from "@apollo/client";
+import { UPDATE_PROFILE } from "../../API/mutations/profileMutation";
+import { auth_system } from "../../API/API_Links";
+import { GET_USER_DETAILS } from "../../API/queries/getUserDetails";
 
 type PropsType = {
   user: User | null;
@@ -27,28 +22,56 @@ type PropsType = {
   setEditStatus: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
+const validationSchema = yup.object({
+  firstName: yup
+    .string()
+    .max(50, "First name should not be above 20 characters length"),
+  lastName: yup
+    .string()
+    .max(50, "Last name should not be above 20 characters length"),
+  country: yup
+    .string()
+    .max(50, "Country should not be above 20 characters length"),
+  city: yup.string().max(50, "City should not be above 20 characters length"),
+});
+
 const ProfileForm = ({
   user,
   setUser,
   editStatus,
   setEditStatus,
 }: PropsType) => {
-  const [, setPrevUser] = useState(user);
+  const [updateProfile] = useMutation(UPDATE_PROFILE, {
+    refetchQueries: [{ query: GET_USER_DETAILS }],
+    client: auth_system,
+  });
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setUser((prevUser: User | null) => ({
-      ...(prevUser as User), // Type assertion to satisfy TypeScript
-      [e.target.name]: e.target.value,
-    }));
-  };
+  const formik = useFormik({
+    initialValues: {
+      firstName: user?.firstName || "",
+      lastName: user?.lastName || "",
+      city: user?.city || "",
+      country: user?.country || "",
+    },
+    validationSchema: validationSchema,
+    onSubmit: (values) => {
+      updateProfile({ variables: values });
+      setUser((user) => ({
+        ...(user as User),
+        firstName: values.firstName,
+        lastName: values.lastName,
+        city: values.city,
+        country: values.country,
+      }));
+      setEditStatus(true);
+    },
+  });
+
   const handleCancel = () => {
-    setUser((prevUser) => prevUser); // No changes needed, just reset to the previous user state
-    setEditStatus(true);
-  };
-
-  const handleSubmit = () => {
-    setPrevUser(user);
-    console.log(user);
+    formik.values.firstName = user?.firstName as string;
+    formik.values.lastName = user?.lastName as string;
+    formik.values.city = user?.city as string;
+    formik.values.country = user?.country as string;
     setEditStatus(true);
   };
 
@@ -58,7 +81,7 @@ const ProfileForm = ({
       noValidate
       autoComplete="off"
       className="form-box"
-      onSubmit={(e) => e.preventDefault()}
+      onSubmit={formik.handleSubmit}
     >
       <Grid container>
         <Grid item xs={12} sm={6}>
@@ -70,9 +93,12 @@ const ProfileForm = ({
             name="firstName"
             size="small"
             className="form-text-field"
-            value={user?.firstName}
+            value={formik.values.firstName || ""}
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
             disabled={editStatus}
-            onChange={handleInputChange}
+            error={formik.touched.firstName && Boolean(formik.errors.firstName)}
+            helperText={formik.touched.firstName && formik.errors.firstName}
           />
         </Grid>
         <Grid item xs={12} sm={6}>
@@ -84,23 +110,12 @@ const ProfileForm = ({
             name="lastName"
             size="small"
             className="form-text-field"
-            value={user?.lastName}
+            value={formik.values.lastName || ""}
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
             disabled={editStatus}
-            onChange={handleInputChange}
-          />
-        </Grid>
-        <Grid item xs={12} sm={6}>
-          <InputLabel className="form-label" htmlFor="country">
-            Country
-          </InputLabel>
-          <TextField
-            id="country"
-            name="country"
-            size="small"
-            className="form-text-field"
-            value={user?.country}
-            disabled={editStatus}
-            onChange={handleInputChange}
+            error={formik.touched.lastName && Boolean(formik.errors.lastName)}
+            helperText={formik.touched.lastName && formik.errors.lastName}
           />
         </Grid>
         <Grid item xs={12} sm={6}>
@@ -112,9 +127,29 @@ const ProfileForm = ({
             name="city"
             size="small"
             className="form-text-field"
-            value={user?.city}
+            value={formik.values.city || ""}
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
             disabled={editStatus}
-            onChange={handleInputChange}
+            error={formik.touched.city && Boolean(formik.errors.city)}
+            helperText={formik.touched.city && formik.errors.city}
+          />
+        </Grid>
+        <Grid item xs={12} sm={6}>
+          <InputLabel className="form-label" htmlFor="country">
+            Country
+          </InputLabel>
+          <TextField
+            id="country"
+            name="country"
+            size="small"
+            className="form-text-field"
+            value={formik.values.country || ""}
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            disabled={editStatus}
+            error={formik.touched.country && Boolean(formik.errors.country)}
+            helperText={formik.touched.country && formik.errors.country}
           />
         </Grid>
 
@@ -124,7 +159,7 @@ const ProfileForm = ({
             id="email"
             name="email"
             size="small"
-            value={user?.email}
+            value={user?.email || ""}
             disabled
             fullWidth
             sx={{ p: "0px" }}
@@ -152,7 +187,7 @@ const ProfileForm = ({
             id="phoneNumber"
             name="phoneNumber"
             size="small"
-            value={user?.phoneNumber}
+            value={user?.phoneNumber || ""}
             disabled
             fullWidth
             sx={{ p: "0px" }}
@@ -193,12 +228,7 @@ const ProfileForm = ({
             >
               Cancel
             </Button>
-            <Button
-              type="submit"
-              variant="contained"
-              color="error"
-              onClick={handleSubmit}
-            >
+            <Button type="submit" variant="contained" color="error">
               Submit
             </Button>
           </Grid>
