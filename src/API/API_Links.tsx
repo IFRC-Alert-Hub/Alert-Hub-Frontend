@@ -13,6 +13,9 @@ export const auth_system = new ApolloClient({
 });
 
 export const subscription_module = new ApolloClient({
-  uri: "https://backend-deploy.azurewebsites.net/subscription/graphql",
+  link: createHttpLink({
+    uri: "https://backend-deploy.azurewebsites.net/subscription/graphql",
+    credentials: "include",
+  }),
   cache: new InMemoryCache(),
 });

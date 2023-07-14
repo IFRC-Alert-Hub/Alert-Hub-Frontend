@@ -12,6 +12,11 @@ import {
   Tooltip,
   Box,
   Typography,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogContentText,
+  DialogActions,
 } from "@mui/material";
 import {
   ContinentType,
@@ -61,6 +66,7 @@ const SubscriptionTable = ({
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [updatedRows, setUpdatedRows] = useState<UpdatedRow[]>();
+  const [confirmDelete, setConfirmDelete] = useState(false);
 
   // show the first three countries
   useEffect(() => {
@@ -125,25 +131,50 @@ const SubscriptionTable = ({
       <Table sx={{ minWidth: 650 }} aria-label="subscription table">
         <TableHead>
           <TableRow>
-            <TableCell align="center" sx={{ fontWeight: "600" }}>
+            <TableCell
+              align="center"
+              sx={{
+                fontSize: "0.875rem",
+                fontWeight: "600",
+                minWidth: "150px",
+              }}
+            >
               Title
             </TableCell>
-            <TableCell align="center" sx={{ fontWeight: "600" }}>
+            <TableCell
+              align="center"
+              sx={{ fontSize: "0.875rem", fontWeight: "600" }}
+            >
               Subscribed Countries
             </TableCell>
-            <TableCell align="center" sx={{ fontWeight: "600" }}>
+            <TableCell
+              align="center"
+              sx={{ fontSize: "0.875rem", fontWeight: "600" }}
+            >
               Urgency
             </TableCell>
-            <TableCell align="center" sx={{ fontWeight: "600" }}>
+            <TableCell
+              align="center"
+              sx={{ fontSize: "0.875rem", fontWeight: "600" }}
+            >
               Severity
             </TableCell>
-            <TableCell align="center" sx={{ fontWeight: "600" }}>
+            <TableCell
+              align="center"
+              sx={{ fontSize: "0.875rem", fontWeight: "600" }}
+            >
               Certainty
             </TableCell>
-            <TableCell align="center" sx={{ fontWeight: "600" }}>
+            <TableCell
+              align="center"
+              sx={{ fontSize: "0.875rem", fontWeight: "600" }}
+            >
               Notification Methods
             </TableCell>
-            <TableCell align="center" sx={{ fontWeight: "600" }}>
+            <TableCell
+              align="center"
+              sx={{ fontSize: "0.875rem", fontWeight: "600" }}
+            >
               Operations
             </TableCell>
           </TableRow>
@@ -151,11 +182,31 @@ const SubscriptionTable = ({
         <TableBody>
           {visibleRows?.map((row: UpdatedRow) => (
             <TableRow key={row.id}>
-              <TableCell align="center" component="th" scope="row">
-                {row.subscriptionName}
+              <TableCell
+                align="center"
+                sx={{ fontSize: "0.875rem" }}
+                component="th"
+                scope="row"
+              >
+                <Button
+                  sx={{
+                    color: "black",
+                    fontSize: "0.875rem",
+                    fontWeight: "500",
+                    textDecoration: "underline",
+                    textTransform: "capitalize",
+                    "&:hover": {
+                      color: "red",
+                      textDecoration: "underline",
+                    },
+                  }}
+                  disableRipple
+                >
+                  {row.subscriptionName}
+                </Button>
               </TableCell>
 
-              <TableCell align="center">
+              <TableCell align="center" sx={{ fontSize: "0.875rem" }}>
                 {row.countryIds?.length > 1 ? (
                   <Tooltip
                     title={`${row.countryIds?.length} countries are selected`}
@@ -169,35 +220,102 @@ const SubscriptionTable = ({
                   </Tooltip>
                 )}
               </TableCell>
-              <TableCell align="center">
+              <TableCell align="center" sx={{ fontSize: "0.875rem" }}>
                 {row.urgencyArray.join(", ")}
               </TableCell>
-              <TableCell align="center">
+              <TableCell align="center" sx={{ fontSize: "0.875rem" }}>
                 {row.severityArray.join(", ")}
               </TableCell>
-              <TableCell align="center">
+              <TableCell align="center" sx={{ fontSize: "0.875rem" }}>
                 {row.certaintyArray.join(", ")}
               </TableCell>
-              <TableCell align="center">{row.subscribeBy.join(", ")}</TableCell>
+              <TableCell align="center" sx={{ fontSize: "0.875rem" }}>
+                {row.subscribeBy.join(", ")}
+              </TableCell>
               <TableCell align="center" sx={{ minWidth: "130px" }}>
-                <Button
+                {/* <Button
                   variant="text"
                   size="small"
                   color="error"
                   onClick={() => handleOpen("Edit", row.id)}
                   sx={{ minWidth: 0, marginRight: "5px" }}
                 >
+                  View
+                </Button> */}
+                <Button
+                  variant="text"
+                  size="small"
+                  onClick={() => handleOpen("Edit", row.id)}
+                  sx={{
+                    color: "red",
+                    minWidth: 0,
+                    padding: "5px",
+                    mr: "5px",
+                    fontSize: "0.875rem",
+                    "&:hover": {
+                      opacity: "0.7",
+                    },
+                  }}
+                >
                   Edit
                 </Button>
                 <Button
                   variant="text"
                   size="small"
-                  color="error"
-                  onClick={() => handleDelete(row.id)}
-                  sx={{ minWidth: 0 }}
+                  onClick={() => setConfirmDelete(true)}
+                  sx={{
+                    color: "red",
+                    minWidth: 0,
+                    padding: "5px",
+                    fontSize: "0.875rem",
+                    "&:hover": {
+                      opacity: "0.7",
+                    },
+                  }}
                 >
                   Delete
                 </Button>
+                <Dialog
+                  open={confirmDelete}
+                  onClose={() => {
+                    setConfirmDelete(false);
+                  }}
+                  aria-labelledby="alert-dialog-title"
+                  aria-describedby="alert-dialog-description"
+                >
+                  <DialogTitle id="alert-dialog-title">
+                    {"Delete the subscription"}
+                  </DialogTitle>
+                  <DialogContent>
+                    <DialogContentText id="alert-dialog-description">
+                      Are you sure to delete this subscription?
+                    </DialogContentText>
+                  </DialogContent>
+                  <DialogActions>
+                    <Button
+                      onClick={() => {
+                        setConfirmDelete(false);
+                      }}
+                      variant="outlined"
+                      color="error"
+                      size="small"
+                    >
+                      Cancel
+                    </Button>
+                    <Button
+                      onClick={() => {
+                        handleDelete(row.id);
+                        setConfirmDelete(false);
+                      }}
+                      autoFocus
+                      variant="contained"
+                      color="error"
+                      size="small"
+                    >
+                      Confirm
+                    </Button>
+                  </DialogActions>
+                </Dialog>
               </TableCell>
             </TableRow>
           ))}

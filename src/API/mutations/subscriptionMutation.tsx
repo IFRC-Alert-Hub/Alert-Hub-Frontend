@@ -8,10 +8,8 @@ export const ADD_SUBSCRIPTION = gql`
     $subscribeBy: [String] = []
     $subscriptionName: String = ""
     $urgencyArray: [String] = []
-    $userId: Int = 0
   ) {
     createSubscription(
-      userId: $userId
       subscriptionName: $subscriptionName
       countryIds: $countryIds
       urgencyArray: $urgencyArray
@@ -34,11 +32,10 @@ export const ADD_SUBSCRIPTION = gql`
 `;
 
 export const DELETE_SUBSCRIPTION = gql`
-  mutation DeleteSubscription($subscriptionId: Int = 5) {
+  mutation DeleteSubscription($subscriptionId: Int = 10) {
     deleteSubscription(subscriptionId: $subscriptionId) {
-      subscription {
-        id
-      }
+      errorMessage
+      success
     }
   }
 `;
@@ -46,7 +43,6 @@ export const DELETE_SUBSCRIPTION = gql`
 export const UPDATE_SUBSCRIPTION = gql`
   mutation UpdateSubscription(
     $subscriptionId: Int!
-    $userId: Int!
     $subscriptionName: String = ""
     $certaintyArray: [String] = ""
     $countryIds: [Int] = 10
@@ -56,7 +52,6 @@ export const UPDATE_SUBSCRIPTION = gql`
   ) {
     updateSubscription(
       subscriptionId: $subscriptionId
-      userId: $userId
       subscriptionName: $subscriptionName
       countryIds: $countryIds
       urgencyArray: $urgencyArray
@@ -64,16 +59,8 @@ export const UPDATE_SUBSCRIPTION = gql`
       certaintyArray: $certaintyArray
       subscribeBy: $subscribeBy
     ) {
-      subscription {
-        id
-        userId
-        urgencyArray
-        subscriptionName
-        subscribeBy
-        severityArray
-        countryIds
-        certaintyArray
-      }
+      success
+      errorMessage
     }
   }
 `;

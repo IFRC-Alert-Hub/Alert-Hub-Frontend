@@ -5,7 +5,7 @@ export type UserContextType = {
   setUser: React.Dispatch<React.SetStateAction<User | null>>;
 };
 
-interface User {
+export interface User {
   id: string;
   avatar: string;
   firstName: string;

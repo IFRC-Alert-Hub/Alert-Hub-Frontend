@@ -18,26 +18,25 @@ import ReSendValidationEmail from "./scenes/ReSendValidationEmail";
 import PrivateRoutes from "./utils/PrivateRoute";
 import { UserContextProvider } from "./context/UserContext";
 import PageNotFound from "./scenes/404_Page";
-import { useEffect } from "react";
 
 function App() {
-  useEffect(() => {
-    const handleWheel = (event: WheelEvent) => {
-      const { deltaY } = event;
+  // useEffect(() => {
+  //   const handleWheel = (event: WheelEvent) => {
+  //     const { deltaY } = event;
 
-      const isScrollingAtTop = deltaY < 0 && window.scrollY === 0;
+  //     const isScrollingAtTop = deltaY < 0 && window.scrollY === 0;
 
-      if (isScrollingAtTop) {
-        event.preventDefault();
-      }
-    };
+  //     if (isScrollingAtTop) {
+  //       event.preventDefault();
+  //     }
+  //   };
 
-    window.addEventListener("wheel", handleWheel, { passive: false });
+  //   window.addEventListener("wheel", handleWheel, { passive: false });
 
-    return () => {
-      window.removeEventListener("wheel", handleWheel);
-    };
-  }, []);
+  //   return () => {
+  //     window.removeEventListener("wheel", handleWheel);
+  //   };
+  // }, []);
 
   return (
     <div className="app">
