@@ -166,30 +166,7 @@ const MapComponent: React.FC<MapProps> = ({
 
     mapRef.current?.on("load", () => {
       countryTables.current = {};
-      // const filteredAlerts = alerts.map((alert: any) => {
-      //   const newCountry = countries.find(
-      //     (country) => country?.id === alert?.country?.id
-      //   );
 
-      //   const countryPolygon =
-      //     newCountry?.multipolygon === ""
-      //       ? JSON.parse(newCountry?.polygon || "[]")
-      //       : JSON.parse(newCountry?.multipolygon || "[]");
-
-      //   const type =
-      //     alert?.country?.multipolygon === "" ? "Polygon" : "MultiPolygon";
-
-      //   const updatedCountry = {
-      //     ...newCountry,
-      //     countryPolygon,
-      //     type,
-      //   };
-
-      //   return { ...alert, country: updatedCountry };
-      // });
-
-      console.log("FILTERED ALERTS: ", alerts);
-      console.log(countryTables.current);
       alerts.forEach((alert: AlertData) => {
         const tableId = `alertTable-${alert?.country?.iso3}`;
         const tableData = countryTables.current[tableId];

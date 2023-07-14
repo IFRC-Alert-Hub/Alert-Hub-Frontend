@@ -128,7 +128,6 @@ const MapComponentWithFilter: React.FC<MapComponentWithFilterProps> = ({
           })
         );
       }
-      console.log("filteredAlerts: ", filteredData);
       setFilteredAlerts(filteredData);
     }
   }, [
