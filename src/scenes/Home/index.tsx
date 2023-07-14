@@ -14,6 +14,8 @@ const Home = () => {
     client: cap_aggregator,
   });
 
+
+
   return (
     <Container maxWidth="lg">
       <Box sx={{ padding: "50px 0 50px 0" }}>

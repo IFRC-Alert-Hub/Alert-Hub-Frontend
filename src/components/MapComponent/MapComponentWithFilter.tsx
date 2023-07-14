@@ -1,10 +1,16 @@
-import { Autocomplete, Box, CircularProgress, TextField } from "@mui/material";
-import MapComponent, { Bbox } from "./MapComponent";
-import { useEffect, useRef, useState } from "react";
+
+import React, { useEffect, useRef, useState } from "react";
+import {
+  Autocomplete,
+  Box,
+  CircularProgress,
+  TextField,
+} from "@mui/material";
 import mapboxgl from "mapbox-gl";
 
 import TitleHeader from "../TitleHeader";
 import DatePickerComponent from "../DatePicker/DatePicker";
+import MapComponent, { AlertData, AlertInfoSet, Bbox } from "./MapComponent";
 
 interface MapComponentWithFilterProps {
   loading: boolean;
@@ -23,41 +29,77 @@ const MapComponentWithFilter: React.FC<MapComponentWithFilterProps> = ({
   filterKey,
   selectedFilter,
 }) => {
-  const mapContainerRef = useRef<HTMLDivElement>(null);
+  const mapContainerRef = useRef<HTMLDivElement | null>(null);
   const mapRef = useRef<mapboxgl.Map | null>(null);
 
-  const [filteredAlerts, setFilteredAlerts] = useState(data?.listAlert || []);
-  const [selectedUrgency, setSelectedUrgency] = useState("");
-  const [selectedSeverity, setSelectedSeverity] = useState("");
-
+  const originalAlerts = useRef<AlertData[] | null>(null);
+  const [filteredAlerts, setFilteredAlerts] = useState<AlertData[]>(
+    data?.listAlert || []
+  );
+  const [selectedUrgency, setSelectedUrgency] = useState<string>("");
+  const [selectedSeverity, setSelectedSeverity] = useState<string>("");
+  const [alertsLoading, setAlertsLoading] = useState<boolean>(true);
   const [selectedEffectiveDate, setSelectedEffectiveDate] = useState<
     [number | null, number | null] | undefined
   >([null, null]);
 
-  const handleUrgencyChange = (event: any, value: any) => {
+  const handleUrgencyChange = (
+    event: React.ChangeEvent<{}>,
+    value: string | null
+  ) => {
     setSelectedUrgency(value || "");
   };
 
-  const handleSeverityChange = (event: any, value: any) => {
+  const handleSeverityChange = (
+    event: React.ChangeEvent<{}>,
+    value: string | null
+  ) => {
     setSelectedSeverity(value || "");
   };
 
-  const urgencyOptions = ["Future", "Past", "Unknown", "Immediate"];
-  const severityOptions = ["Moderate", "Minor", "Unknown", "Severe"];
+  const urgencyOptions: string[] = ["Future", "Past", "Unknown", "Immediate"];
+  const severityOptions: string[] = ["Moderate", "Minor", "Unknown", "Severe"];
 
   useEffect(() => {
-    if (!loading && !error) {
-      let filteredData = data?.listAlert || [];
+    if (!loading && !error && data) {
+      originalAlerts.current = (data?.listAlert || []).map(
+        (alert: AlertData) => {
+          const newCountry = data?.listCountry?.find(
+            (country: any) => country?.id === alert?.country?.id
+          );
+          const countryPolygon =
+            newCountry?.multipolygon === ""
+              ? JSON.parse(newCountry?.polygon || "[]")
+              : JSON.parse(newCountry?.multipolygon || "[]");
+          const type =
+            alert?.country?.multipolygon === "Polygon"
+              ? "Polygon"
+              : "MultiPolygon";
+          const updatedCountry = { ...newCountry, countryPolygon, type };
+          return { ...alert, country: updatedCountry };
+        }
+      );
+    }
+  }, [error, loading, data]);
 
+  useEffect(() => {
+    if (!loading && !error && originalAlerts.current) {
+      let filteredData = originalAlerts.current || [];
       if (selectedUrgency !== "") {
-        filteredData = filteredData.filter(
-          (alert: any) => alert.urgency === selectedUrgency
+        filteredData = filteredData.filter((alert: AlertData) =>
+          alert?.alertinfoSet?.some(
+            (infoSet: AlertInfoSet) =>
+              infoSet.urgency?.toLowerCase() === selectedUrgency.toLowerCase()
+          )
         );
       }
 
       if (selectedSeverity !== "") {
-        filteredData = filteredData.filter(
-          (alert: any) => alert.severity === selectedSeverity
+        filteredData = filteredData.filter((alert: AlertData) =>
+          alert?.alertinfoSet?.some(
+            (infoSet: AlertInfoSet) =>
+              infoSet.severity?.toLowerCase() === selectedSeverity.toLowerCase()
+          )
         );
       }
 
@@ -66,24 +108,26 @@ const MapComponentWithFilter: React.FC<MapComponentWithFilterProps> = ({
         selectedEffectiveDate[0] !== null &&
         selectedEffectiveDate[1] !== null
       ) {
-        filteredData = filteredData.filter((alert: any) => {
-          let effectiveTimestamp = new Date(alert.effective).getTime() / 1000;
-          let expiresTimestamp = new Date(alert.expires).getTime() / 1000;
+        filteredData = filteredData.filter((alert: AlertData) =>
+          alert?.alertinfoSet?.some((infoSet: AlertInfoSet) => {
+            const effectiveTimestamp =
+              new Date(infoSet.effective as string).getTime() / 1000;
+            const expiresTimestamp =
+              new Date(infoSet.expires as string).getTime() / 1000;
+            if (
+              selectedEffectiveDate &&
+              selectedEffectiveDate[0] !== null &&
+              selectedEffectiveDate[1] !== null &&
+              effectiveTimestamp >= selectedEffectiveDate[0] &&
+              expiresTimestamp <= selectedEffectiveDate[1]
+            ) {
+              return true;
+            }
 
-          if (
-            selectedEffectiveDate &&
-            selectedEffectiveDate[0] !== null &&
-            selectedEffectiveDate[1] !== null &&
-            effectiveTimestamp >= selectedEffectiveDate[0] &&
-            expiresTimestamp <= selectedEffectiveDate[1]
-          ) {
-            return true;
-          }
-
-          return false;
-        });
+            return false;
+          })
+        );
       }
-
       setFilteredAlerts(filteredData);
     }
   }, [
@@ -104,7 +148,7 @@ const MapComponentWithFilter: React.FC<MapComponentWithFilterProps> = ({
         selectedFilter={selectedFilter}
         filterKey={filterKey}
       />
-      {loading && (
+      {loading && alertsLoading && (
         <CircularProgress sx={{ textAlign: "center" }} color="secondary" />
       )}
       {error && <p>Error: {error.message}</p>}
@@ -118,7 +162,7 @@ const MapComponentWithFilter: React.FC<MapComponentWithFilterProps> = ({
           >
             <Autocomplete
               disablePortal
-              id="combo-box-demo"
+              id="combo-box-urgency"
               options={urgencyOptions}
               getOptionLabel={(option) => option}
               sx={{
@@ -146,7 +190,7 @@ const MapComponentWithFilter: React.FC<MapComponentWithFilterProps> = ({
             />
             <Autocomplete
               disablePortal
-              id="combo-box-demo"
+              id="combo-box-severity"
               options={severityOptions}
               getOptionLabel={(option) => option}
               sx={{
@@ -177,12 +221,15 @@ const MapComponentWithFilter: React.FC<MapComponentWithFilterProps> = ({
               selectedDate={selectedEffectiveDate}
               setSelectedDate={setSelectedEffectiveDate}
             />
-          </Box>{" "}
+          </Box>
           <MapComponent
             mapContainerRef={mapContainerRef}
             mapRef={mapRef}
             alerts={filteredAlerts}
-            boundingRegionCoordinates={boundingRegionCoordinates || undefined}
+            countries={data?.listCountry}
+            boundingRegionCoordinates={boundingRegionCoordinates}
+            alertsLoading={alertsLoading}
+            setAlertsLoading={setAlertsLoading}
           />
         </>
       )}
