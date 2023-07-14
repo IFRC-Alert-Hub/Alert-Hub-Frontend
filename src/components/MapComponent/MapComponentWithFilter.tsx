@@ -4,7 +4,6 @@ import {
   Autocomplete,
   Box,
   CircularProgress,
-  Container,
   TextField,
 } from "@mui/material";
 import mapboxgl from "mapbox-gl";
