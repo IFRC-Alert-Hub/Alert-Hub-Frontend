@@ -125,25 +125,46 @@ const SubscriptionTable = ({
       <Table sx={{ minWidth: 650 }} aria-label="subscription table">
         <TableHead>
           <TableRow>
-            <TableCell align="center" sx={{ fontWeight: "600" }}>
+            <TableCell
+              align="center"
+              sx={{ fontSize: "0.875rem", fontWeight: "600" }}
+            >
               Title
             </TableCell>
-            <TableCell align="center" sx={{ fontWeight: "600" }}>
+            <TableCell
+              align="center"
+              sx={{ fontSize: "0.875rem", fontWeight: "600" }}
+            >
               Subscribed Countries
             </TableCell>
-            <TableCell align="center" sx={{ fontWeight: "600" }}>
+            <TableCell
+              align="center"
+              sx={{ fontSize: "0.875rem", fontWeight: "600" }}
+            >
               Urgency
             </TableCell>
-            <TableCell align="center" sx={{ fontWeight: "600" }}>
+            <TableCell
+              align="center"
+              sx={{ fontSize: "0.875rem", fontWeight: "600" }}
+            >
               Severity
             </TableCell>
-            <TableCell align="center" sx={{ fontWeight: "600" }}>
+            <TableCell
+              align="center"
+              sx={{ fontSize: "0.875rem", fontWeight: "600" }}
+            >
               Certainty
             </TableCell>
-            <TableCell align="center" sx={{ fontWeight: "600" }}>
+            <TableCell
+              align="center"
+              sx={{ fontSize: "0.875rem", fontWeight: "600" }}
+            >
               Notification Methods
             </TableCell>
-            <TableCell align="center" sx={{ fontWeight: "600" }}>
+            <TableCell
+              align="center"
+              sx={{ fontSize: "0.875rem", fontWeight: "600" }}
+            >
               Operations
             </TableCell>
           </TableRow>
@@ -151,11 +172,16 @@ const SubscriptionTable = ({
         <TableBody>
           {visibleRows?.map((row: UpdatedRow) => (
             <TableRow key={row.id}>
-              <TableCell align="center" component="th" scope="row">
+              <TableCell
+                align="center"
+                sx={{ fontSize: "0.875rem" }}
+                component="th"
+                scope="row"
+              >
                 {row.subscriptionName}
               </TableCell>
 
-              <TableCell align="center">
+              <TableCell align="center" sx={{ fontSize: "0.875rem" }}>
                 {row.countryIds?.length > 1 ? (
                   <Tooltip
                     title={`${row.countryIds?.length} countries are selected`}
@@ -169,23 +195,34 @@ const SubscriptionTable = ({
                   </Tooltip>
                 )}
               </TableCell>
-              <TableCell align="center">
+              <TableCell align="center" sx={{ fontSize: "0.875rem" }}>
                 {row.urgencyArray.join(", ")}
               </TableCell>
-              <TableCell align="center">
+              <TableCell align="center" sx={{ fontSize: "0.875rem" }}>
                 {row.severityArray.join(", ")}
               </TableCell>
-              <TableCell align="center">
+              <TableCell align="center" sx={{ fontSize: "0.875rem" }}>
                 {row.certaintyArray.join(", ")}
               </TableCell>
-              <TableCell align="center">{row.subscribeBy.join(", ")}</TableCell>
+              <TableCell align="center" sx={{ fontSize: "0.875rem" }}>
+                {row.subscribeBy.join(", ")}
+              </TableCell>
               <TableCell align="center" sx={{ minWidth: "130px" }}>
-                <Button
+                {/* <Button
                   variant="text"
                   size="small"
                   color="error"
                   onClick={() => handleOpen("Edit", row.id)}
                   sx={{ minWidth: 0, marginRight: "5px" }}
+                >
+                  View
+                </Button> */}
+                <Button
+                  variant="text"
+                  size="small"
+                  color="error"
+                  onClick={() => handleOpen("Edit", row.id)}
+                  sx={{ minWidth: 0, padding: "5px", fontSize: "0.875rem" }}
                 >
                   Edit
                 </Button>
@@ -194,7 +231,7 @@ const SubscriptionTable = ({
                   size="small"
                   color="error"
                   onClick={() => handleDelete(row.id)}
-                  sx={{ minWidth: 0 }}
+                  sx={{ minWidth: 0, padding: "5px", fontSize: "0.875rem" }}
                 >
                   Delete
                 </Button>
