@@ -5,22 +5,12 @@ import { useContext, useState } from "react";
 
 import { UserContext } from "../../context/UserContext";
 
-interface User {
-  id: string;
-  avatar: string;
-  firstName: string;
-  lastName: string;
-  country: string;
-  city: string;
-  email: string;
-  phoneNumber: string;
-}
-
 const Profile = () => {
   const userContext = useContext(UserContext);
+  const { user, setUser } = userContext;
 
   const [editStatus, setEditStatus] = useState(true);
-  const [user, setUser] = useState<User | null>(userContext.user);
+
   return (
     <>
       <Container maxWidth={"lg"}>
