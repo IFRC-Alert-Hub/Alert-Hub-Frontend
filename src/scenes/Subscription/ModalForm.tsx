@@ -54,7 +54,7 @@ const checkBoxList = [
   },
   {
     legend: "Methods",
-    checkboxItems: ["Email", "SMS"],
+    checkboxItems: ["Email"],
   },
 ];
 
