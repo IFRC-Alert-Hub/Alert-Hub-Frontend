@@ -57,9 +57,9 @@ function App() {
                   path="/re-send-validation-email"
                   element={<ReSendValidationEmail />}
                 />
-
                 <Route path="/regions/:id" element={<Region />} />
                 <Route path="/alerts/all" element={<AllAlerts />} />
+
 
                 <Route path="/account/" element={<PrivateRoutes />}>
                   <Route path="profile" element={<Profile />} />
