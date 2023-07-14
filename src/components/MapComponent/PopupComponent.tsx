@@ -101,7 +101,7 @@ export const PopupComponent: React.FC<PopupComponentProps> = ({
           {alerts.map((alert, index) => (
             <Tab
               key={index}
-              label={<span>Alert {index}</span>}
+              label={<span>Alert {index + 1}</span>}
               {...a11yProps(index)}
             />
           ))}

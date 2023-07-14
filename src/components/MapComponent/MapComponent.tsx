@@ -2,7 +2,6 @@ import React, { ReactElement, useEffect, useRef, useState } from "react";
 import mapboxgl, { Map as MapboxMap } from "mapbox-gl";
 import { Dialog } from "@mui/material";
 import { PopupComponent } from "./PopupComponent";
-import { Position } from "@turf/turf";
 
 export const ExtremeThreatColour: string = "#f5333f";
 export const ModerateThreatColour: string = "#ff9e00";
@@ -21,8 +20,9 @@ type MapProps = {
   boundingRegionCoordinates?: Bbox;
   alerts?: AlertData[];
   countries?: CountryType[];
+  alertsLoading: boolean;
+  setAlertsLoading: React.Dispatch<React.SetStateAction<boolean>>;
 };
-type GeometryType = "Polygon" | "MultiPolygon";
 
 type Region = {
   centroid: string;
@@ -90,8 +90,9 @@ const MapComponent: React.FC<MapProps> = ({
   mapRef,
   alerts = [],
   countries = [],
+  alertsLoading,
+  setAlertsLoading,
 }) => {
-  const [alertsLoaded, setAlertsLoaded] = useState(false);
   const [dialogLoaded, setDialogLoaded] = useState(false);
   const [tableID, setTableID] = useState<string>("");
 
@@ -100,7 +101,7 @@ const MapComponent: React.FC<MapProps> = ({
   }>({});
 
   useEffect(() => {
-    setAlertsLoaded(false);
+    setAlertsLoading(true);
 
     if (mapRef.current) {
       mapRef.current.remove();
@@ -125,7 +126,7 @@ const MapComponent: React.FC<MapProps> = ({
         mapRef.current = null;
       }
     };
-  }, [lat, lng, mapRef, mapContainerRef, zoom, alerts]);
+  }, [lat, lng, mapRef, mapContainerRef, zoom, alerts, setAlertsLoading]);
 
   // const determineColour = (currentColour: string, alert: AlertData) => {
   //   if (currentColour === ExtremeThreatColour) {
@@ -145,24 +146,26 @@ const MapComponent: React.FC<MapProps> = ({
   //   return currentColour;
   // };
 
-  useEffect(() => {
-    console.log("NEW: ", countryTables);
-  }, [countryTables]);
+  // useEffect(() => {
+  //   console.log("NEW: ", countryTables);
+  // }, [countryTables]);
+
+  // useEffect(() => {
+  //   console.log("Alerts Loaded: ", alerts);
+  // }, [alerts]);
+
+  // useEffect(() => {
+  //   console.log("Countries Loaded: ", countries);
+  // }, [countries]);
 
   useEffect(() => {
-    console.log("Alerts Loaded: ", alerts);
-  }, [alerts]);
-
-  useEffect(() => {
-    console.log("Countries Loaded: ", countries);
-  }, [countries]);
-
-  useEffect(() => {
-    if (!mapRef.current || alertsLoaded || alerts.length === 0) {
+    if (!mapRef.current || !alertsLoading || alerts.length === 0) {
       return;
     }
+    setAlertsLoading(true);
 
     mapRef.current?.on("load", () => {
+      countryTables.current = {};
       const filteredAlerts = alerts.map((alert: any) => {
         const newCountry = countries.find(
           (country) => country?.id === alert?.country?.id
@@ -185,6 +188,8 @@ const MapComponent: React.FC<MapProps> = ({
         return { ...alert, country: updatedCountry };
       });
 
+      console.log("FILTERED ALERTS: ", filteredAlerts);
+      console.log(countryTables.current);
       filteredAlerts.forEach((alert: AlertData) => {
         const tableId = `alertTable-${alert?.country?.iso3}`;
         const tableData = countryTables.current[tableId];
@@ -211,13 +216,6 @@ const MapComponent: React.FC<MapProps> = ({
             `polygon-layer-${alert?.country?.iso3}`,
             "fill-color",
             ExtremeThreatColour
-            // determineColour(
-            //   mapRef.current.getPaintProperty(
-            //     `polygon-layer-${alert?.country?.iso3}`,
-            //     "fill-color"
-            //   ),
-            //   alert
-            // )
           );
         } else {
           const sourceId = `polygon-source-${alert?.country?.iso3}`;
@@ -268,9 +266,18 @@ const MapComponent: React.FC<MapProps> = ({
           );
         }
       });
-      setAlertsLoaded(true);
+      console.log(countryTables.current);
+
+      setAlertsLoading(false);
     });
-  }, [alertsLoaded, alerts, mapRef, countryTables, countries]);
+  }, [
+    alertsLoading,
+    setAlertsLoading,
+    alerts,
+    mapRef,
+    countryTables,
+    countries,
+  ]);
 
   const handleCloseDialog = () => {
     setDialogLoaded(false);

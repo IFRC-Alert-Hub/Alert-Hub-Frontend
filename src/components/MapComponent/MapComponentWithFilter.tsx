@@ -35,8 +35,10 @@ const MapComponentWithFilter: React.FC<MapComponentWithFilterProps> = ({
   const [filteredAlerts, setFilteredAlerts] = useState<AlertData[]>(
     data?.listAlert || []
   );
+  console.log("filteredAlerts 2", filteredAlerts);
   const [selectedUrgency, setSelectedUrgency] = useState("");
   const [selectedSeverity, setSelectedSeverity] = useState("");
+  const [alertsLoading, setAlertsLoading] = useState<boolean>(true);
 
   const [selectedEffectiveDate, setSelectedEffectiveDate] = useState<
     [number | null, number | null] | undefined
@@ -56,7 +58,6 @@ const MapComponentWithFilter: React.FC<MapComponentWithFilterProps> = ({
   useEffect(() => {
     if (!loading && !error) {
       let filteredData = data?.listAlert || [];
-
       if (selectedUrgency !== "") {
         filteredData = filteredData.filter((alert: AlertData) =>
           alert?.alertinfoSet?.some((infoSet: AlertInfoSet) => {
@@ -122,7 +123,7 @@ const MapComponentWithFilter: React.FC<MapComponentWithFilterProps> = ({
         selectedFilter={selectedFilter}
         filterKey={filterKey}
       />
-      {loading && (
+      {loading && alertsLoading && (
         <CircularProgress sx={{ textAlign: "center" }} color="secondary" />
       )}
       {error && <p>Error: {error.message}</p>}
@@ -202,6 +203,8 @@ const MapComponentWithFilter: React.FC<MapComponentWithFilterProps> = ({
             alerts={filteredAlerts}
             countries={data?.listCountry}
             boundingRegionCoordinates={boundingRegionCoordinates || undefined}
+            alertsLoading={alertsLoading}
+            setAlertsLoading={setAlertsLoading}
           />
         </>
       )}
