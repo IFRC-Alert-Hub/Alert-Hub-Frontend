@@ -19,6 +19,10 @@ export const ALL_ALERTS = gql`
       id
       country {
         id
+        name
+        region {
+          name
+        }
       }
       alertinfoSet {
         web
