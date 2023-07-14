@@ -12,6 +12,11 @@ import {
   Tooltip,
   Box,
   Typography,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogContentText,
+  DialogActions,
 } from "@mui/material";
 import {
   ContinentType,
@@ -61,6 +66,7 @@ const SubscriptionTable = ({
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [updatedRows, setUpdatedRows] = useState<UpdatedRow[]>();
+  const [confirmDelete, setConfirmDelete] = useState(false);
 
   // show the first three countries
   useEffect(() => {
@@ -127,7 +133,11 @@ const SubscriptionTable = ({
           <TableRow>
             <TableCell
               align="center"
-              sx={{ fontSize: "0.875rem", fontWeight: "600" }}
+              sx={{
+                fontSize: "0.875rem",
+                fontWeight: "600",
+                minWidth: "150px",
+              }}
             >
               Title
             </TableCell>
@@ -178,7 +188,22 @@ const SubscriptionTable = ({
                 component="th"
                 scope="row"
               >
-                {row.subscriptionName}
+                <Button
+                  sx={{
+                    color: "black",
+                    fontSize: "0.875rem",
+                    fontWeight: "500",
+                    textDecoration: "underline",
+                    textTransform: "capitalize",
+                    "&:hover": {
+                      color: "red",
+                      textDecoration: "underline",
+                    },
+                  }}
+                  disableRipple
+                >
+                  {row.subscriptionName}
+                </Button>
               </TableCell>
 
               <TableCell align="center" sx={{ fontSize: "0.875rem" }}>
@@ -220,21 +245,77 @@ const SubscriptionTable = ({
                 <Button
                   variant="text"
                   size="small"
-                  color="error"
                   onClick={() => handleOpen("Edit", row.id)}
-                  sx={{ minWidth: 0, padding: "5px", fontSize: "0.875rem" }}
+                  sx={{
+                    color: "red",
+                    minWidth: 0,
+                    padding: "5px",
+                    mr: "5px",
+                    fontSize: "0.875rem",
+                    "&:hover": {
+                      opacity: "0.7",
+                    },
+                  }}
                 >
                   Edit
                 </Button>
                 <Button
                   variant="text"
                   size="small"
-                  color="error"
-                  onClick={() => handleDelete(row.id)}
-                  sx={{ minWidth: 0, padding: "5px", fontSize: "0.875rem" }}
+                  onClick={() => setConfirmDelete(true)}
+                  sx={{
+                    color: "red",
+                    minWidth: 0,
+                    padding: "5px",
+                    fontSize: "0.875rem",
+                    "&:hover": {
+                      opacity: "0.7",
+                    },
+                  }}
                 >
                   Delete
                 </Button>
+                <Dialog
+                  open={confirmDelete}
+                  onClose={() => {
+                    setConfirmDelete(false);
+                  }}
+                  aria-labelledby="alert-dialog-title"
+                  aria-describedby="alert-dialog-description"
+                >
+                  <DialogTitle id="alert-dialog-title">
+                    {"Delete the subscription"}
+                  </DialogTitle>
+                  <DialogContent>
+                    <DialogContentText id="alert-dialog-description">
+                      Are you sure to delete this subscription?
+                    </DialogContentText>
+                  </DialogContent>
+                  <DialogActions>
+                    <Button
+                      onClick={() => {
+                        setConfirmDelete(false);
+                      }}
+                      variant="outlined"
+                      color="error"
+                      size="small"
+                    >
+                      Cancel
+                    </Button>
+                    <Button
+                      onClick={() => {
+                        handleDelete(row.id);
+                        setConfirmDelete(false);
+                      }}
+                      autoFocus
+                      variant="contained"
+                      color="error"
+                      size="small"
+                    >
+                      Confirm
+                    </Button>
+                  </DialogActions>
+                </Dialog>
               </TableCell>
             </TableRow>
           ))}
