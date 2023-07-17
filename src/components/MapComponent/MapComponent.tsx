@@ -7,10 +7,6 @@ export const ExtremeThreatColour: string = "#f5333f";
 export const ModerateThreatColour: string = "#ff9e00";
 export const OtherAlertsColour: string = "#95BF6E";
 
-type Pin = {
-  coordinates: number[];
-  color: string;
-};
 export type Bbox = {
   type: string;
   coordinates: number[][][];
@@ -21,17 +17,13 @@ type MapProps = {
   zoom?: number;
   mapContainerRef: React.RefObject<HTMLDivElement>;
   mapRef: React.MutableRefObject<MapboxMap | null>;
-  polygons?: Polygon[];
-  pins?: Pin[];
   boundingRegionCoordinates?: Bbox;
   alerts?: AlertData[];
+  countries?: CountryType[];
+  alertsLoading: boolean;
+  setAlertsLoading: React.Dispatch<React.SetStateAction<boolean>>;
 };
-type GeometryType = "Polygon" | "MultiPolygon";
 
-type Polygon = {
-  coordinates: number[][];
-  color: string;
-};
 type Region = {
   centroid: string;
   id: string;
@@ -39,52 +31,56 @@ type Region = {
   polygon: string;
 };
 type CountryType = {
-  centroid: string;
-  id: string;
-  iso: string;
-  iso3: string;
-  name: string;
-  polygon: string;
-  region: Region[];
-};
-type AlertData = {
-  areaDesc: string;
-  certainty: string;
-  country: CountryType[];
-  effective: string;
-  event: string;
-  expires: string;
-  geocodeName: string;
-  geocodeValue: string;
-  id: string;
-  identifier: string;
-  msgType: string;
-  scope: string;
-  sender: string;
-  sent: string;
-  severity: string;
-  status: string;
-  urgency: string;
+  centroid?: string;
+  id?: string;
+  iso3?: string;
+  name?: string;
+  polygon?: string;
+  multipolygon?: string;
+  region?: Region[];
+  type?: string;
+  countryPolygon?: number[][];
 };
 
-export interface Alert {
-  region: string;
-  country: string;
-  event: string;
-  severity: string;
-  urgency: string;
-  certainty: string;
-  sender: string;
-  effective: string;
-  expires: string;
-  areaDesc: string;
-  countryPolygon: number[][];
-  countryName: string;
-  countryCentroid: number[];
-  countryISO3: string;
-  type: string;
-  color: string;
-}
+export type AlertInfoSet = {
+  web?: string;
+  urgency?: string;
+  audience?: string;
+  category?: string;
+  certainty?: string;
+  contact?: string;
+  effective?: string;
+  event?: string;
+  eventCode?: string;
+  headline?: string;
+  expires?: string;
+  instruction?: string;
+  language?: string;
+  onset?: string;
+  responseType?: string;
+  senderName?: string;
+  severity?: string;
+  id?: string;
+  description?: string;
+};
+export type AlertData = {
+  status?: string;
+  source?: string;
+  sent?: string;
+  sender?: string;
+  references?: string;
+  scope?: string;
+  restriction?: string;
+  note?: string;
+  msgType?: string;
+  incidents?: string;
+  identifier?: string;
+  code?: string;
+  addresses?: string;
+  id?: string;
+  country?: CountryType;
+  alertinfoSet?: AlertInfoSet[];
+};
 
 const MapComponent: React.FC<MapProps> = ({
   lng = 0,
@@ -92,22 +88,20 @@ const MapComponent: React.FC<MapProps> = ({
   zoom = 1,
   mapContainerRef,
   mapRef,
-  polygons = [],
-  pins = [],
-  boundingRegionCoordinates = {},
   alerts = [],
+  countries = [],
+  alertsLoading,
+  setAlertsLoading,
 }) => {
-  const [alertsLoaded, setAlertsLoaded] = useState(false);
   const [dialogLoaded, setDialogLoaded] = useState(false);
   const [tableID, setTableID] = useState<string>("");
 
   const countryTables = useRef<{
-    [key: string]: { table: ReactElement; alerts: Alert[] };
+    [key: string]: { table: ReactElement; alerts: AlertData[] };
   }>({});
 
   useEffect(() => {
-    // Reinitialize the map whenever there is a change in dependencies
-    setAlertsLoaded(false);
+    setAlertsLoading(true);
 
     if (mapRef.current) {
       mapRef.current.remove();
@@ -132,65 +126,49 @@ const MapComponent: React.FC<MapProps> = ({
         mapRef.current = null;
       }
     };
-  }, [lat, lng, mapRef, mapContainerRef, zoom, alerts]);
+  }, [lat, lng, mapRef, mapContainerRef, zoom, alerts, setAlertsLoading]);
 
-  const determineColour = (currentColour: string, alert: Alert) => {
-    if (currentColour === ExtremeThreatColour) {
-      return currentColour;
-    } else {
-      if (
-        alert.urgency === "Immediate" ||
-        alert.urgency === "Expected" ||
-        alert.severity === "Extreme" ||
-        alert.severity === "Severe" ||
-        alert.certainty === "Observed" ||
-        alert.certainty === "Likely"
-      ) {
-        return ExtremeThreatColour;
-      }
-    }
-    return currentColour;
-  };
+  // const determineColour = (currentColour: string, alert: AlertData) => {
+  //   if (currentColour === ExtremeThreatColour) {
+  //     return currentColour;
+  //   } else {
+  //     if (
+  //       alert.urgency === "Immediate" ||
+  //       alert.urgency === "Expected" ||
+  //       alert.severity === "Extreme" ||
+  //       alert.severity === "Severe" ||
+  //       alert.certainty === "Observed" ||
+  //       alert.certainty === "Likely"
+  //     ) {
+  //       return ExtremeThreatColour;
+  //     }
+  //   }
+  //   return currentColour;
+  // };
+
+  // useEffect(() => {
+  //   console.log("NEW: ", countryTables);
+  // }, [countryTables]);
+
+  // useEffect(() => {
+  //   console.log("Alerts Loaded: ", alerts);
+  // }, [alerts]);
+
+  // useEffect(() => {
+  //   console.log("Countries Loaded: ", countries);
+  // }, [countries]);
 
   useEffect(() => {
-    console.log("NEW: ", countryTables);
-  }, [countryTables]);
-
-  useEffect(() => {
-    console.log("Alerts Loaded: ", alerts);
-  }, [alerts]);
-
-  useEffect(() => {
-    if (!mapRef.current || alertsLoaded || alerts.length === 0) {
+    if (!mapRef.current || !alertsLoading || alerts.length === 0) {
       return;
     }
+    setAlertsLoading(true);
 
     mapRef.current?.on("load", () => {
-      //alerts? or MapData
-      const filteredAlert = alerts?.map((alert: any) => ({
-        region: alert.country?.region?.name,
-        country: alert.country?.name,
-        event: alert.event,
-        severity: alert.severity,
-        urgency: alert.urgency,
-        certainty: alert.certainty,
-        sender: alert.sender,
-        effective: alert.effective!,
-        expires: alert.expires,
-        countryPolygon:
-          alert.country.multipolygon === ""
-            ? JSON.parse(alert.country.polygon)
-            : JSON.parse(alert.country.multipolygon),
-        type: alert.country.multipolygon === "" ? "Polygon" : "MultiPolygon",
-        countryName: alert.country.name,
-        countryISO3: alert.country.iso3,
-        countryCentroid: JSON.parse(alert.country.centroid),
-        areaDesc: alert.areaDesc,
-        color: determineColour(ModerateThreatColour, alert),
-      }));
+      countryTables.current = {};
 
-      filteredAlert.forEach((alert) => {
-        const tableId = `alertTable-${alert.countryISO3}`;
+      alerts.forEach((alert: AlertData) => {
+        const tableId = `alertTable-${alert?.country?.iso3}`;
         const tableData = countryTables.current[tableId];
 
         if (!tableData) {
@@ -207,24 +185,18 @@ const MapComponent: React.FC<MapProps> = ({
           };
         }
         if (
-          mapRef.current?.getSource(`polygon-source-${alert.countryISO3}`) !==
-          undefined
-          // || alert.countryISO3 === "FRA"
+          mapRef.current?.getSource(
+            `polygon-source-${alert?.country?.iso3}`
+          ) !== undefined
         ) {
           mapRef.current?.setPaintProperty(
-            `polygon-layer-${alert.countryISO3}`,
+            `polygon-layer-${alert?.country?.iso3}`,
             "fill-color",
-            determineColour(
-              mapRef.current.getPaintProperty(
-                `polygon-layer-${alert.countryISO3}`,
-                "fill-color"
-              ),
-              alert
-            )
+            ExtremeThreatColour
           );
         } else {
-          const sourceId = `polygon-source-${alert.countryISO3}`;
-          const layerId = `polygon-layer-${alert.countryISO3}`;
+          const sourceId = `polygon-source-${alert?.country?.iso3}`;
+          const layerId = `polygon-layer-${alert?.country?.iso3}`;
 
           mapRef.current?.addSource(sourceId, {
             type: "geojson",
@@ -232,14 +204,14 @@ const MapComponent: React.FC<MapProps> = ({
             data: {
               type: "Feature",
               geometry: {
-                type: alert.type as GeometryType,
-                coordinates: alert.countryPolygon,
+                type: alert?.country?.type! as any,
+                coordinates: alert?.country?.countryPolygon! as any,
               },
               properties: {},
             },
           });
 
-          const colour = determineColour(ModerateThreatColour, alert);
+          // const colour = determineColour(ModerateThreatColour, alert);
 
           // Add the border layer
           mapRef.current?.addLayer({
@@ -256,7 +228,7 @@ const MapComponent: React.FC<MapProps> = ({
             type: "fill",
             source: sourceId,
             paint: {
-              "fill-color": colour,
+              "fill-color": ExtremeThreatColour,
               "fill-opacity": 0.8,
             },
           });
@@ -271,9 +243,18 @@ const MapComponent: React.FC<MapProps> = ({
           );
         }
       });
-      setAlertsLoaded(true);
+      console.log(countryTables.current);
+
+      setAlertsLoading(false);
     });
-  }, [alertsLoaded, alerts, mapRef, countryTables]);
+  }, [
+    alertsLoading,
+    setAlertsLoading,
+    alerts,
+    mapRef,
+    countryTables,
+    countries,
+  ]);
 
   const handleCloseDialog = () => {
     setDialogLoaded(false);

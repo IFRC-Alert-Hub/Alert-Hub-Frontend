@@ -205,6 +205,7 @@ const DatePickerComponent: React.FC<DatePickerComponentProps> = ({
             borderColor: "#B2BAC2",
             backgroundColor: "#f4f4f4",
           },
+          marginRight: "20px",
         }}
       >
         <Typography
