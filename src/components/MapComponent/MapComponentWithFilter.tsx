@@ -99,9 +99,7 @@ const MapComponentWithFilter: React.FC<MapComponentWithFilterProps> = ({
               ? JSON.parse(newCountry?.polygon || "[]")
               : JSON.parse(newCountry?.multipolygon || "[]");
           const type =
-            alert?.country?.multipolygon === "Polygon"
-              ? "Polygon"
-              : "MultiPolygon";
+            newCountry?.multipolygon === "" ? "Polygon" : "MultiPolygon";
           const updatedCountry = { ...newCountry, countryPolygon, type };
           return { ...alert, country: updatedCountry };
         }
