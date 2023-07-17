@@ -4,7 +4,7 @@ import Tab from "@mui/material/Tab";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import { AlertData } from "./MapComponent";
-import { Container, Divider, Pagination, Paper } from "@mui/material";
+import { Pagination } from "@mui/material";
 
 interface TabPanelProps {
   children?: React.ReactNode;
