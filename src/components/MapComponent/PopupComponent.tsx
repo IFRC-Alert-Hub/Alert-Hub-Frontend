@@ -4,7 +4,7 @@ import Tab from "@mui/material/Tab";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import { AlertData } from "./MapComponent";
-import { Divider, Pagination } from "@mui/material";
+import { Container, Divider, Pagination, Paper } from "@mui/material";
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -152,16 +152,6 @@ export const PopupComponent: React.FC<PopupComponentProps> = ({
                   component="div"
                 >
                   {alert.id}
-                  {/* <span
-                  style={{
-                    display: "inline-block",
-                    width: "10px",
-                    height: "10px",
-                    borderRadius: "50%",
-                    backgroundColor: alert.color,
-                    marginLeft: "10px",
-                  }}
-                ></span> */}
                 </Typography>
 
                 <Typography variant="body2" component="div">
@@ -220,7 +210,11 @@ export const PopupComponent: React.FC<PopupComponentProps> = ({
                   </span>
                   {alert.restriction}{" "}
                 </Typography>
-                <Typography variant="body2" component="div">
+                <Typography
+                  variant="body2"
+                  component="div"
+                  sx={{ paddingBottom: "10px" }}
+                >
                   <span
                     style={{ fontWeight: "bold", textTransform: "capitalize" }}
                   >
@@ -230,227 +224,217 @@ export const PopupComponent: React.FC<PopupComponentProps> = ({
                 </Typography>
 
                 {alert?.alertinfoSet?.map((info, infoIndex) => (
-                  <React.Fragment key={infoIndex}>
-                    <Divider
-                      sx={{ paddingTop: "10px", paddingBottom: "10px" }}
-                    />
-                    <Typography>InfoSet {infoIndex + 1}</Typography>
-
-                    <Typography variant="body2" component="div">
-                      <span
-                        style={{
-                          fontWeight: "bold",
-                          textTransform: "capitalize",
-                        }}
-                      >
-                        language:{" "}
-                      </span>
-                      {info.language}{" "}
-                    </Typography>
-
-                    <Typography variant="body2" component="div">
-                      <span
-                        style={{
-                          fontWeight: "bold",
-                          textTransform: "capitalize",
-                        }}
-                      >
-                        Event Category:{" "}
-                      </span>
-                      {info.category}{" "}
-                    </Typography>
-
-                    <Typography variant="body2" component="div">
-                      <span
-                        style={{
-                          fontWeight: "bold",
-                          textTransform: "capitalize",
-                        }}
-                      >
-                        Event Type:{" "}
-                      </span>
-                      {info.event}{" "}
-                    </Typography>
-
-                    <Typography variant="body2" component="div">
-                      <span
-                        style={{
-                          fontWeight: "bold",
-                          textTransform: "capitalize",
-                        }}
-                      >
-                        Response Type:{" "}
-                      </span>
-                      {info.responseType}{" "}
-                    </Typography>
-
-                    <Typography variant="body2" component="div">
-                      <span
-                        style={{
-                          fontWeight: "bold",
-                          textTransform: "capitalize",
-                        }}
-                      >
-                        Urgency:{" "}
-                      </span>
-                      {info.urgency}{" "}
-                    </Typography>
-
-                    <Typography variant="body2" component="div">
-                      <span
-                        style={{
-                          fontWeight: "bold",
-                          textTransform: "capitalize",
-                        }}
-                      >
-                        Severity:{" "}
-                      </span>
-                      {info.severity}{" "}
-                    </Typography>
-
-                    <Typography variant="body2" component="div">
-                      <span
-                        style={{
-                          fontWeight: "bold",
-                          textTransform: "capitalize",
-                        }}
-                      >
-                        Certainty:{" "}
-                      </span>
-                      {info.certainty}{" "}
-                    </Typography>
-
-                    <Typography variant="body2" component="div">
-                      <span
-                        style={{
-                          fontWeight: "bold",
-                          textTransform: "capitalize",
-                        }}
-                      >
-                        Audience:{" "}
-                      </span>
-                      {info.audience}{" "}
-                    </Typography>
-
-                    <Typography variant="body2" component="div">
-                      <span
-                        style={{
-                          fontWeight: "bold",
-                          textTransform: "capitalize",
-                        }}
-                      >
-                        Event Code:{" "}
-                      </span>
-                      {info.eventCode}{" "}
-                    </Typography>
-                    <Typography variant="body2" component="div">
-                      <span
-                        style={{
-                          fontWeight: "bold",
-                          textTransform: "capitalize",
-                        }}
-                      >
-                        Effective Date/Time:{" "}
-                      </span>
-                      {modifyDateTime(info.effective as string)}{" "}
-                    </Typography>
-
-                    <Typography variant="body2" component="div">
-                      <span
-                        style={{
-                          fontWeight: "bold",
-                          textTransform: "capitalize",
-                        }}
-                      >
-                        Onset Date/Time:{" "}
-                      </span>
-                      {modifyDateTime(info.onset as string)}{" "}
-                    </Typography>
-
-                    <Typography variant="body2" component="div">
-                      <span
-                        style={{
-                          fontWeight: "bold",
-                          textTransform: "capitalize",
-                        }}
-                      >
-                        Expiration Date/Time:{" "}
-                      </span>
-                      {modifyDateTime(info.expires as string)}{" "}
-                    </Typography>
-
-                    <Typography variant="body2" component="div">
-                      <span
-                        style={{
-                          fontWeight: "bold",
-                          textTransform: "capitalize",
-                        }}
-                      >
-                        Sender Name:{" "}
-                      </span>
-                      {info.senderName}{" "}
-                    </Typography>
-
-                    <Typography variant="body2" component="div">
-                      <span
-                        style={{
-                          fontWeight: "bold",
-                          textTransform: "capitalize",
-                        }}
-                      >
-                        Headline:{" "}
-                      </span>
-                      {info.headline}{" "}
-                    </Typography>
-
-                    <Typography variant="body2" component="div">
-                      <span
-                        style={{
-                          fontWeight: "bold",
-                          textTransform: "capitalize",
-                        }}
-                      >
-                        Event Description:{" "}
-                      </span>
-                      {info.description}{" "}
-                    </Typography>
-
-                    <Typography variant="body2" component="div">
-                      <span
-                        style={{
-                          fontWeight: "bold",
-                          textTransform: "capitalize",
-                        }}
-                      >
-                        Instructions:{" "}
-                      </span>
-                      {info.instruction}{" "}
-                    </Typography>
-
-                    <Typography variant="body2" component="div">
-                      <span
-                        style={{
-                          fontWeight: "bold",
-                          textTransform: "capitalize",
-                        }}
-                      >
-                        Information URL:{" "}
-                      </span>
-                      {info.web}{" "}
-                    </Typography>
-
-                    <Typography variant="body2" component="div">
-                      <span
-                        style={{
-                          fontWeight: "bold",
-                          textTransform: "capitalize",
-                        }}
-                      >
-                        Contact Info:{" "}
-                      </span>
-                      {info.contact}{" "}
-                    </Typography>
-                  </React.Fragment>
+                  <Box sx={{ paddingBottom: "10px" }}>
+                    <React.Fragment key={infoIndex}>
+                      <Box sx={{ padding: "5px", border: "1px solid #f6343f" }}>
+                        <Typography
+                          variant="h5"
+                          fontWeight={"bolder"}
+                          sx={{ textDecoration: "underline" }}
+                        >
+                          InfoSet Title {infoIndex + 1}
+                        </Typography>
+                        <Typography variant="body2" component="div">
+                          <span
+                            style={{
+                              fontWeight: "bold",
+                              textTransform: "capitalize",
+                            }}
+                          >
+                            language:{" "}
+                          </span>
+                          {info.language}{" "}
+                        </Typography>
+                        <Typography variant="body2" component="div">
+                          <span
+                            style={{
+                              fontWeight: "bold",
+                              textTransform: "capitalize",
+                            }}
+                          >
+                            Event Category:{" "}
+                          </span>
+                          {info.category}{" "}
+                        </Typography>
+                        <Typography variant="body2" component="div">
+                          <span
+                            style={{
+                              fontWeight: "bold",
+                              textTransform: "capitalize",
+                            }}
+                          >
+                            Event Type:{" "}
+                          </span>
+                          {info.event}{" "}
+                        </Typography>
+                        <Typography variant="body2" component="div">
+                          <span
+                            style={{
+                              fontWeight: "bold",
+                              textTransform: "capitalize",
+                            }}
+                          >
+                            Response Type:{" "}
+                          </span>
+                          {info.responseType}{" "}
+                        </Typography>
+                        <Typography variant="body2" component="div">
+                          <span
+                            style={{
+                              fontWeight: "bold",
+                              textTransform: "capitalize",
+                            }}
+                          >
+                            Urgency:{" "}
+                          </span>
+                          {info.urgency}{" "}
+                        </Typography>
+                        <Typography variant="body2" component="div">
+                          <span
+                            style={{
+                              fontWeight: "bold",
+                              textTransform: "capitalize",
+                            }}
+                          >
+                            Severity:{" "}
+                          </span>
+                          {info.severity}{" "}
+                        </Typography>
+                        <Typography variant="body2" component="div">
+                          <span
+                            style={{
+                              fontWeight: "bold",
+                              textTransform: "capitalize",
+                            }}
+                          >
+                            Certainty:{" "}
+                          </span>
+                          {info.certainty}{" "}
+                        </Typography>
+                        <Typography variant="body2" component="div">
+                          <span
+                            style={{
+                              fontWeight: "bold",
+                              textTransform: "capitalize",
+                            }}
+                          >
+                            Audience:{" "}
+                          </span>
+                          {info.audience}{" "}
+                        </Typography>
+                        <Typography variant="body2" component="div">
+                          <span
+                            style={{
+                              fontWeight: "bold",
+                              textTransform: "capitalize",
+                            }}
+                          >
+                            Event Code:{" "}
+                          </span>
+                          {info.eventCode}{" "}
+                        </Typography>
+                        <Typography variant="body2" component="div">
+                          <span
+                            style={{
+                              fontWeight: "bold",
+                              textTransform: "capitalize",
+                            }}
+                          >
+                            Effective Date/Time:{" "}
+                          </span>
+                          {modifyDateTime(info.effective as string)}{" "}
+                        </Typography>
+                        <Typography variant="body2" component="div">
+                          <span
+                            style={{
+                              fontWeight: "bold",
+                              textTransform: "capitalize",
+                            }}
+                          >
+                            Onset Date/Time:{" "}
+                          </span>
+                          {modifyDateTime(info.onset as string)}{" "}
+                        </Typography>
+                        <Typography variant="body2" component="div">
+                          <span
+                            style={{
+                              fontWeight: "bold",
+                              textTransform: "capitalize",
+                            }}
+                          >
+                            Expiration Date/Time:{" "}
+                          </span>
+                          {modifyDateTime(info.expires as string)}{" "}
+                        </Typography>
+                        <Typography variant="body2" component="div">
+                          <span
+                            style={{
+                              fontWeight: "bold",
+                              textTransform: "capitalize",
+                            }}
+                          >
+                            Sender Name:{" "}
+                          </span>
+                          {info.senderName}{" "}
+                        </Typography>
+                        <Typography variant="body2" component="div">
+                          <span
+                            style={{
+                              fontWeight: "bold",
+                              textTransform: "capitalize",
+                            }}
+                          >
+                            Headline:{" "}
+                          </span>
+                          {info.headline}{" "}
+                        </Typography>
+                        <Typography variant="body2" component="div">
+                          <span
+                            style={{
+                              fontWeight: "bold",
+                              textTransform: "capitalize",
+                            }}
+                          >
+                            Event Description:{" "}
+                          </span>
+                          {info.description}{" "}
+                        </Typography>
+                        <Typography variant="body2" component="div">
+                          <span
+                            style={{
+                              fontWeight: "bold",
+                              textTransform: "capitalize",
+                            }}
+                          >
+                            Instructions:{" "}
+                          </span>
+                          {info.instruction}{" "}
+                        </Typography>
+                        <Typography variant="body2" component="div">
+                          <span
+                            style={{
+                              fontWeight: "bold",
+                              textTransform: "capitalize",
+                            }}
+                          >
+                            Information URL:{" "}
+                          </span>
+                          {info.web}{" "}
+                        </Typography>
+                        <Typography variant="body2" component="div">
+                          <span
+                            style={{
+                              fontWeight: "bold",
+                              textTransform: "capitalize",
+                            }}
+                          >
+                            Contact Info:{" "}
+                          </span>
+                          {info.contact}{" "}
+                        </Typography>
+                      </Box>
+                    </React.Fragment>
+                  </Box>
                 ))}
               </TabPanel>
             ))}
