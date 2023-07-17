@@ -4,7 +4,7 @@ import Tab from "@mui/material/Tab";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import { AlertData } from "./MapComponent";
-import { Divider } from "@mui/material";
+import { Divider, Pagination } from "@mui/material";
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -21,6 +21,7 @@ function modifyDateTime(timestamp: string) {
   const formattedDateTime = date.toLocaleString("en-US", { timeZone: "UTC" });
   return formattedDateTime;
 }
+
 function TabPanel(props: TabPanelProps) {
   const { children, value, index, ...other } = props;
 
@@ -55,14 +56,15 @@ interface PopupComponentProps {
 export const PopupComponent: React.FC<PopupComponentProps> = ({
   alerts = [],
 }) => {
+  const [page, setPage] = React.useState(1);
   const [value, setValue] = React.useState(0);
   const tabPanelRef = React.useRef<HTMLDivElement | null>(null);
-
+  const itemsPerPage = 10;
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     if (tabPanelRef.current) {
       tabPanelRef.current.scrollTop = 0;
     }
-    setValue(newValue);
+    setValue(newValue + (page - 1) * itemsPerPage); // Adjust the value based on the current page
   };
 
   React.useEffect(() => {
@@ -71,20 +73,29 @@ export const PopupComponent: React.FC<PopupComponentProps> = ({
     }
   }, [value]);
 
+  const handlePageChange = (
+    event: React.ChangeEvent<unknown>,
+    newPage: number
+  ) => {
+    setPage(newPage);
+    setValue((newPage - 1) * itemsPerPage); // Update the value to display the correct tabs on the new page
+  };
+
+  const pageCount = Math.ceil(alerts.length / itemsPerPage);
+
   return (
     <>
-      {" "}
       <Box
         sx={{ backgroundColor: "black", color: "white", textAlign: "center" }}
       >
-        {alerts[0].country?.iso3} ({alerts[0].country?.name})
+        {alerts[0]?.country?.iso3} ({alerts[0]?.country?.name})
       </Box>
       <Box
         sx={{
           flexGrow: 1,
           bgcolor: "background.paper",
           display: "flex",
-          height: "600px",
+          height: "550px",
           borderRadius: "5px !important",
         }}
       >
@@ -98,34 +109,50 @@ export const PopupComponent: React.FC<PopupComponentProps> = ({
             width: "400px",
             borderRight: 1,
             borderColor: "divider",
-            "& .Mui-selected": {
-              color: "#f6343f !important",
-            },
           }}
         >
-          {alerts.map((alert, index) => (
-            <Tab
-              key={index}
-              label={<span>Alert {index + 1}</span>}
-              {...a11yProps(index)}
-            />
-          ))}
+          {alerts
+            .slice((page - 1) * itemsPerPage, page * itemsPerPage)
+            .map((alert, index) => (
+              <Tab
+                key={index + (page - 1) * itemsPerPage}
+                label={
+                  <span
+                    style={{
+                      color:
+                        index + (page - 1) * itemsPerPage === value
+                          ? "#f6343f"
+                          : undefined,
+                    }}
+                  >
+                    Alert {index + (page - 1) * itemsPerPage + 1}
+                  </span>
+                }
+                {...a11yProps(index + (page - 1) * itemsPerPage)}
+              />
+            ))}
         </Tabs>
         <Box
           sx={{ width: "1000px" }}
           style={{ overflowY: "auto" }}
           ref={tabPanelRef}
         >
-          {alerts.map((alert, index) => (
-            <TabPanel value={value} key={index} index={index}>
-              <Typography
-                variant="h5"
-                fontWeight={500}
-                paddingBottom={"10px"}
-                component="div"
+          {alerts
+            .slice((page - 1) * itemsPerPage, page * itemsPerPage)
+            .map((alert, index) => (
+              <TabPanel
+                value={value}
+                key={index + (page - 1) * itemsPerPage}
+                index={index + (page - 1) * itemsPerPage}
               >
-                {alert.id}
-                {/* <span
+                <Typography
+                  variant="h5"
+                  fontWeight={500}
+                  paddingBottom={"10px"}
+                  component="div"
+                >
+                  {alert.id}
+                  {/* <span
                   style={{
                     display: "inline-block",
                     width: "10px",
@@ -135,297 +162,304 @@ export const PopupComponent: React.FC<PopupComponentProps> = ({
                     marginLeft: "10px",
                   }}
                 ></span> */}
-              </Typography>
+                </Typography>
 
-              <Typography variant="body2" component="div">
-                <span
-                  style={{ fontWeight: "bold", textTransform: "capitalize" }}
-                >
-                  Country:{" "}
-                </span>
-                {alerts[0].country?.name}{" "}
-              </Typography>
-              <Typography variant="body2" component="div">
-                <span
-                  style={{ fontWeight: "bold", textTransform: "capitalize" }}
-                >
-                  ISO3:{" "}
-                </span>
-                {alerts[0].country?.iso3}{" "}
-              </Typography>
-              <Typography variant="body2" component="div">
-                <span
-                  style={{ fontWeight: "bold", textTransform: "capitalize" }}
-                >
-                  Status:{" "}
-                </span>
-                {alert.status}{" "}
-              </Typography>
-              <Typography variant="body2" component="div">
-                <span
-                  style={{ fontWeight: "bold", textTransform: "capitalize" }}
-                >
-                  Source:{" "}
-                </span>
-                {alert.source}{" "}
-              </Typography>
-              <Typography variant="body2" component="div">
-                <span
-                  style={{ fontWeight: "bold", textTransform: "capitalize" }}
-                >
-                  Sent:{" "}
-                </span>
-                {alert.sent}{" "}
-              </Typography>
-              <Typography variant="body2" component="div">
-                <span
-                  style={{ fontWeight: "bold", textTransform: "capitalize" }}
-                >
-                  Scope:{" "}
-                </span>
-                {alert.scope}{" "}
-              </Typography>
-              <Typography variant="body2" component="div">
-                <span
-                  style={{ fontWeight: "bold", textTransform: "capitalize" }}
-                >
-                  restriction:{" "}
-                </span>
-                {alert.restriction}{" "}
-              </Typography>
-              <Typography variant="body2" component="div">
-                <span
-                  style={{ fontWeight: "bold", textTransform: "capitalize" }}
-                >
-                  references:{" "}
-                </span>
-                {alert.references}{" "}
-              </Typography>
+                <Typography variant="body2" component="div">
+                  <span
+                    style={{ fontWeight: "bold", textTransform: "capitalize" }}
+                  >
+                    Country:{" "}
+                  </span>
+                  {alerts[0]?.country?.name}{" "}
+                </Typography>
+                <Typography variant="body2" component="div">
+                  <span
+                    style={{ fontWeight: "bold", textTransform: "capitalize" }}
+                  >
+                    ISO3:{" "}
+                  </span>
+                  {alerts[0]?.country?.iso3}{" "}
+                </Typography>
+                <Typography variant="body2" component="div">
+                  <span
+                    style={{ fontWeight: "bold", textTransform: "capitalize" }}
+                  >
+                    Status:{" "}
+                  </span>
+                  {alert.status}{" "}
+                </Typography>
+                <Typography variant="body2" component="div">
+                  <span
+                    style={{ fontWeight: "bold", textTransform: "capitalize" }}
+                  >
+                    Source:{" "}
+                  </span>
+                  {alert.source}{" "}
+                </Typography>
+                <Typography variant="body2" component="div">
+                  <span
+                    style={{ fontWeight: "bold", textTransform: "capitalize" }}
+                  >
+                    Sent:{" "}
+                  </span>
+                  {alert.sent}{" "}
+                </Typography>
+                <Typography variant="body2" component="div">
+                  <span
+                    style={{ fontWeight: "bold", textTransform: "capitalize" }}
+                  >
+                    Scope:{" "}
+                  </span>
+                  {alert.scope}{" "}
+                </Typography>
+                <Typography variant="body2" component="div">
+                  <span
+                    style={{ fontWeight: "bold", textTransform: "capitalize" }}
+                  >
+                    restriction:{" "}
+                  </span>
+                  {alert.restriction}{" "}
+                </Typography>
+                <Typography variant="body2" component="div">
+                  <span
+                    style={{ fontWeight: "bold", textTransform: "capitalize" }}
+                  >
+                    references:{" "}
+                  </span>
+                  {alert.references}{" "}
+                </Typography>
 
-              {alert?.alertinfoSet?.map((info, index) => (
-                <React.Fragment key={index}>
-                  <Divider sx={{ paddingTop: "10px", paddingBottom: "10px" }} />
-                  <Typography>InfoSet {index + 1}</Typography>
+                {alert?.alertinfoSet?.map((info, infoIndex) => (
+                  <React.Fragment key={infoIndex}>
+                    <Divider
+                      sx={{ paddingTop: "10px", paddingBottom: "10px" }}
+                    />
+                    <Typography>InfoSet {infoIndex + 1}</Typography>
 
-                  <Typography variant="body2" component="div">
-                    <span
-                      style={{
-                        fontWeight: "bold",
-                        textTransform: "capitalize",
-                      }}
-                    >
-                      language:{" "}
-                    </span>
-                    {info.language}{" "}
-                  </Typography>
+                    <Typography variant="body2" component="div">
+                      <span
+                        style={{
+                          fontWeight: "bold",
+                          textTransform: "capitalize",
+                        }}
+                      >
+                        language:{" "}
+                      </span>
+                      {info.language}{" "}
+                    </Typography>
 
-                  <Typography variant="body2" component="div">
-                    <span
-                      style={{
-                        fontWeight: "bold",
-                        textTransform: "capitalize",
-                      }}
-                    >
-                      Event Category:{" "}
-                    </span>
-                    {info.category}{" "}
-                  </Typography>
+                    <Typography variant="body2" component="div">
+                      <span
+                        style={{
+                          fontWeight: "bold",
+                          textTransform: "capitalize",
+                        }}
+                      >
+                        Event Category:{" "}
+                      </span>
+                      {info.category}{" "}
+                    </Typography>
 
-                  <Typography variant="body2" component="div">
-                    <span
-                      style={{
-                        fontWeight: "bold",
-                        textTransform: "capitalize",
-                      }}
-                    >
-                      Event Type:{" "}
-                    </span>
-                    {info.event}{" "}
-                  </Typography>
+                    <Typography variant="body2" component="div">
+                      <span
+                        style={{
+                          fontWeight: "bold",
+                          textTransform: "capitalize",
+                        }}
+                      >
+                        Event Type:{" "}
+                      </span>
+                      {info.event}{" "}
+                    </Typography>
 
-                  <Typography variant="body2" component="div">
-                    <span
-                      style={{
-                        fontWeight: "bold",
-                        textTransform: "capitalize",
-                      }}
-                    >
-                      Response Type:{" "}
-                    </span>
-                    {info.responseType}{" "}
-                  </Typography>
+                    <Typography variant="body2" component="div">
+                      <span
+                        style={{
+                          fontWeight: "bold",
+                          textTransform: "capitalize",
+                        }}
+                      >
+                        Response Type:{" "}
+                      </span>
+                      {info.responseType}{" "}
+                    </Typography>
 
-                  <Typography variant="body2" component="div">
-                    <span
-                      style={{
-                        fontWeight: "bold",
-                        textTransform: "capitalize",
-                      }}
-                    >
-                      Urgency:{" "}
-                    </span>
-                    {info.urgency}{" "}
-                  </Typography>
+                    <Typography variant="body2" component="div">
+                      <span
+                        style={{
+                          fontWeight: "bold",
+                          textTransform: "capitalize",
+                        }}
+                      >
+                        Urgency:{" "}
+                      </span>
+                      {info.urgency}{" "}
+                    </Typography>
 
-                  <Typography variant="body2" component="div">
-                    <span
-                      style={{
-                        fontWeight: "bold",
-                        textTransform: "capitalize",
-                      }}
-                    >
-                      Severity:{" "}
-                    </span>
-                    {info.severity}{" "}
-                  </Typography>
+                    <Typography variant="body2" component="div">
+                      <span
+                        style={{
+                          fontWeight: "bold",
+                          textTransform: "capitalize",
+                        }}
+                      >
+                        Severity:{" "}
+                      </span>
+                      {info.severity}{" "}
+                    </Typography>
 
-                  <Typography variant="body2" component="div">
-                    <span
-                      style={{
-                        fontWeight: "bold",
-                        textTransform: "capitalize",
-                      }}
-                    >
-                      Certainty:{" "}
-                    </span>
-                    {info.certainty}{" "}
-                  </Typography>
+                    <Typography variant="body2" component="div">
+                      <span
+                        style={{
+                          fontWeight: "bold",
+                          textTransform: "capitalize",
+                        }}
+                      >
+                        Certainty:{" "}
+                      </span>
+                      {info.certainty}{" "}
+                    </Typography>
 
-                  <Typography variant="body2" component="div">
-                    <span
-                      style={{
-                        fontWeight: "bold",
-                        textTransform: "capitalize",
-                      }}
-                    >
-                      Audience:{" "}
-                    </span>
-                    {info.audience}{" "}
-                  </Typography>
+                    <Typography variant="body2" component="div">
+                      <span
+                        style={{
+                          fontWeight: "bold",
+                          textTransform: "capitalize",
+                        }}
+                      >
+                        Audience:{" "}
+                      </span>
+                      {info.audience}{" "}
+                    </Typography>
 
-                  <Typography variant="body2" component="div">
-                    <span
-                      style={{
-                        fontWeight: "bold",
-                        textTransform: "capitalize",
-                      }}
-                    >
-                      Event Code:{" "}
-                    </span>
-                    {info.eventCode}{" "}
-                  </Typography>
-                  <Typography variant="body2" component="div">
-                    <span
-                      style={{
-                        fontWeight: "bold",
-                        textTransform: "capitalize",
-                      }}
-                    >
-                      Effective Date/Time:{" "}
-                    </span>
-                    {modifyDateTime(info.effective as string)}{" "}
-                  </Typography>
+                    <Typography variant="body2" component="div">
+                      <span
+                        style={{
+                          fontWeight: "bold",
+                          textTransform: "capitalize",
+                        }}
+                      >
+                        Event Code:{" "}
+                      </span>
+                      {info.eventCode}{" "}
+                    </Typography>
+                    <Typography variant="body2" component="div">
+                      <span
+                        style={{
+                          fontWeight: "bold",
+                          textTransform: "capitalize",
+                        }}
+                      >
+                        Effective Date/Time:{" "}
+                      </span>
+                      {modifyDateTime(info.effective as string)}{" "}
+                    </Typography>
 
-                  <Typography variant="body2" component="div">
-                    <span
-                      style={{
-                        fontWeight: "bold",
-                        textTransform: "capitalize",
-                      }}
-                    >
-                      Onset Date/Time:{" "}
-                    </span>
-                    {modifyDateTime(info.onset as string)}{" "}
-                  </Typography>
+                    <Typography variant="body2" component="div">
+                      <span
+                        style={{
+                          fontWeight: "bold",
+                          textTransform: "capitalize",
+                        }}
+                      >
+                        Onset Date/Time:{" "}
+                      </span>
+                      {modifyDateTime(info.onset as string)}{" "}
+                    </Typography>
 
-                  <Typography variant="body2" component="div">
-                    <span
-                      style={{
-                        fontWeight: "bold",
-                        textTransform: "capitalize",
-                      }}
-                    >
-                      Expiration Date/Time:{" "}
-                    </span>
-                    {modifyDateTime(info.expires as string)}{" "}
-                  </Typography>
+                    <Typography variant="body2" component="div">
+                      <span
+                        style={{
+                          fontWeight: "bold",
+                          textTransform: "capitalize",
+                        }}
+                      >
+                        Expiration Date/Time:{" "}
+                      </span>
+                      {modifyDateTime(info.expires as string)}{" "}
+                    </Typography>
 
-                  <Typography variant="body2" component="div">
-                    <span
-                      style={{
-                        fontWeight: "bold",
-                        textTransform: "capitalize",
-                      }}
-                    >
-                      Sender Name:{" "}
-                    </span>
-                    {info.senderName}{" "}
-                  </Typography>
+                    <Typography variant="body2" component="div">
+                      <span
+                        style={{
+                          fontWeight: "bold",
+                          textTransform: "capitalize",
+                        }}
+                      >
+                        Sender Name:{" "}
+                      </span>
+                      {info.senderName}{" "}
+                    </Typography>
 
-                  <Typography variant="body2" component="div">
-                    <span
-                      style={{
-                        fontWeight: "bold",
-                        textTransform: "capitalize",
-                      }}
-                    >
-                      Headline:{" "}
-                    </span>
-                    {info.headline}{" "}
-                  </Typography>
+                    <Typography variant="body2" component="div">
+                      <span
+                        style={{
+                          fontWeight: "bold",
+                          textTransform: "capitalize",
+                        }}
+                      >
+                        Headline:{" "}
+                      </span>
+                      {info.headline}{" "}
+                    </Typography>
 
-                  <Typography variant="body2" component="div">
-                    <span
-                      style={{
-                        fontWeight: "bold",
-                        textTransform: "capitalize",
-                      }}
-                    >
-                      Event Description:{" "}
-                    </span>
-                    {info.description}{" "}
-                  </Typography>
+                    <Typography variant="body2" component="div">
+                      <span
+                        style={{
+                          fontWeight: "bold",
+                          textTransform: "capitalize",
+                        }}
+                      >
+                        Event Description:{" "}
+                      </span>
+                      {info.description}{" "}
+                    </Typography>
 
-                  <Typography variant="body2" component="div">
-                    <span
-                      style={{
-                        fontWeight: "bold",
-                        textTransform: "capitalize",
-                      }}
-                    >
-                      Instructions:{" "}
-                    </span>
-                    {info.instruction}{" "}
-                  </Typography>
+                    <Typography variant="body2" component="div">
+                      <span
+                        style={{
+                          fontWeight: "bold",
+                          textTransform: "capitalize",
+                        }}
+                      >
+                        Instructions:{" "}
+                      </span>
+                      {info.instruction}{" "}
+                    </Typography>
 
-                  <Typography variant="body2" component="div">
-                    <span
-                      style={{
-                        fontWeight: "bold",
-                        textTransform: "capitalize",
-                      }}
-                    >
-                      Information URL:{" "}
-                    </span>
-                    {info.web}{" "}
-                  </Typography>
+                    <Typography variant="body2" component="div">
+                      <span
+                        style={{
+                          fontWeight: "bold",
+                          textTransform: "capitalize",
+                        }}
+                      >
+                        Information URL:{" "}
+                      </span>
+                      {info.web}{" "}
+                    </Typography>
 
-                  <Typography variant="body2" component="div">
-                    <span
-                      style={{
-                        fontWeight: "bold",
-                        textTransform: "capitalize",
-                      }}
-                    >
-                      Contact Info:{" "}
-                    </span>
-                    {info.contact}{" "}
-                  </Typography>
-                </React.Fragment>
-              ))}
-            </TabPanel>
-          ))}
+                    <Typography variant="body2" component="div">
+                      <span
+                        style={{
+                          fontWeight: "bold",
+                          textTransform: "capitalize",
+                        }}
+                      >
+                        Contact Info:{" "}
+                      </span>
+                      {info.contact}{" "}
+                    </Typography>
+                  </React.Fragment>
+                ))}
+              </TabPanel>
+            ))}
         </Box>
+      </Box>
+      <Box
+        sx={{ display: "flex", justifyContent: "center", marginTop: "10px" }}
+      >
+        <Pagination count={pageCount} page={page} onChange={handlePageChange} />
       </Box>
     </>
   );
