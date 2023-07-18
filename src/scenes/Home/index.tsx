@@ -10,6 +10,7 @@ const Home = () => {
   const { formatMessage } = useIntl();
   const { loading, error, data } = useQuery(ALL_ALERTS, {
     client: cap_aggregator,
+    fetchPolicy: "no-cache",
   });
 
   return (
