@@ -14,6 +14,9 @@ import { useMutation } from "@apollo/client";
 import { UPDATE_PROFILE } from "../../API/mutations/profileMutation";
 import { auth_system } from "../../API/API_Links";
 import { GET_USER_DETAILS } from "../../API/queries/getUserDetails";
+import { useState } from "react";
+import SecurityModal from "./SecurityModal";
+import EmailChangeModal from "./EmailChangeModal";
 
 type PropsType = {
   user: User | null;
@@ -25,14 +28,14 @@ type PropsType = {
 const validationSchema = yup.object({
   firstName: yup
     .string()
-    .max(50, "First name should not be above 20 characters length"),
+    .max(20, "First name should not be above 20 characters length"),
   lastName: yup
     .string()
-    .max(50, "Last name should not be above 20 characters length"),
+    .max(20, "Last name should not be above 20 characters length"),
   country: yup
     .string()
-    .max(50, "Country should not be above 20 characters length"),
-  city: yup.string().max(50, "City should not be above 20 characters length"),
+    .max(20, "Country should not be above 20 characters length"),
+  city: yup.string().max(20, "City should not be above 20 characters length"),
 });
 
 const ProfileForm = ({
@@ -41,6 +44,11 @@ const ProfileForm = ({
   editStatus,
   setEditStatus,
 }: PropsType) => {
+  const [open, setOpen] = useState(false);
+  const [isVerified, setIsVerified] = useState(false);
+
+  const handleOpen = () => setOpen(true);
+
   const [updateProfile] = useMutation(UPDATE_PROFILE, {
     refetchQueries: [{ query: GET_USER_DETAILS }],
     client: auth_system,
@@ -162,26 +170,30 @@ const ProfileForm = ({
             value={user?.email || ""}
             disabled
             fullWidth
-            sx={{ p: "0px" }}
+            sx={{ p: 0 }}
             endAdornment={
               <InputAdornment position="end">
-                <Button
-                  variant="text"
-                  disabled={!editStatus}
-                  disableRipple
-                  sx={{
-                    color: "red",
-                    textTransform: "capitalize",
-                    "&:hover": { opacity: "0.5" },
-                  }}
-                >
-                  {"Switch"}
-                </Button>
+                <Box borderLeft={"1px solid #ccc"}>
+                  <Button
+                    variant="text"
+                    disabled={!editStatus}
+                    disableRipple
+                    onClick={handleOpen}
+                    sx={{
+                      color: "#d30210",
+                      p: "0px 10px 0px 10px",
+                      textTransform: "capitalize",
+                      "&:hover": { opacity: "0.5" },
+                    }}
+                  >
+                    {"Switch"}
+                  </Button>
+                </Box>
               </InputAdornment>
             }
           />
         </Grid>
-        <Grid item xs={12} m={{ xs: "0px 0px 20px 0px", sm: "0 30px 30px 0" }}>
+        {/* <Grid item xs={12} m={{ xs: "0px 0px 20px 0px", sm: "0 30px 30px 0" }}>
           <InputLabel htmlFor="phoneNumber">Phone Number</InputLabel>
           <OutlinedInput
             id="phoneNumber"
@@ -208,7 +220,7 @@ const ProfileForm = ({
               </InputAdornment>
             }
           />
-        </Grid>
+        </Grid> */}
 
         {editStatus ? (
           <div></div>
@@ -234,6 +246,8 @@ const ProfileForm = ({
           </Grid>
         )}
       </Grid>
+      <SecurityModal user={user as User} open={open} setOpen={setOpen} />
+      <EmailChangeModal isVerified={isVerified} setIsVerified={setIsVerified} />
     </Box>
   );
 };

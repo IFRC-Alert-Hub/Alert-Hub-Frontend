@@ -91,7 +91,7 @@ const AvatarDropdown = () => {
             <ListItemIcon>
               <Checklist fontSize="small" />
             </ListItemIcon>
-            My Subscription
+            My Subscriptions
           </MenuItem>
         </Link>
         <MenuItem onClick={handleLogout}>
