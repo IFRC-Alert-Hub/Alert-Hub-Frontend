@@ -4,7 +4,12 @@ import mapboxgl from "mapbox-gl";
 
 import TitleHeader from "../TitleHeader";
 import DatePickerComponent from "../DatePicker/DatePicker";
-import MapComponent, { AlertData, AlertInfoSet, Bbox } from "./MapComponent";
+import MapComponent, {
+  AlertData,
+  AlertInfoSet,
+  Bbox,
+  SourceFeed,
+} from "./MapComponent";
 
 interface MapComponentWithFilterProps {
   loading: boolean;
@@ -27,6 +32,8 @@ const MapComponentWithFilter: React.FC<MapComponentWithFilterProps> = ({
   const mapRef = useRef<mapboxgl.Map | null>(null);
 
   const originalAlerts = useRef<AlertData[] | null>(null);
+  const sourceAlerts = useRef<SourceFeed[] | null>(null);
+
   const [filteredAlerts, setFilteredAlerts] = useState<AlertData[]>(
     data?.listAlert ?? []
   );
@@ -104,6 +111,29 @@ const MapComponentWithFilter: React.FC<MapComponentWithFilterProps> = ({
           return { ...alert, country: updatedCountry };
         }
       );
+    }
+  }, [error, loading, data]);
+
+  useEffect(() => {
+    if (!loading && !error && data) {
+      const uniqueSourceFeeds: any = [];
+      const seenSourceUrls = new Set();
+
+      data.listAlert.forEach((alert: AlertData) => {
+        const sourceFeedString = JSON.stringify(alert.sourceFeed);
+        const sourceFeed = JSON.parse(sourceFeedString);
+
+        if (!seenSourceUrls.has(sourceFeed.url)) {
+          seenSourceUrls.add(sourceFeed.url);
+          uniqueSourceFeeds.push({
+            url: sourceFeed.url,
+            name: sourceFeed.name,
+          });
+        }
+      });
+
+      sourceAlerts.current = uniqueSourceFeeds;
+      console.log(sourceAlerts.current);
     }
   }, [error, loading, data]);
 
@@ -324,6 +354,7 @@ const MapComponentWithFilter: React.FC<MapComponentWithFilterProps> = ({
             boundingRegionCoordinates={boundingRegionCoordinates}
             alertsLoading={alertsLoading}
             setAlertsLoading={setAlertsLoading}
+            sources={sourceAlerts?.current as SourceFeed[]}
           />
         </>
       )}

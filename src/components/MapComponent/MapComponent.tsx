@@ -1,7 +1,8 @@
 import React, { ReactElement, useEffect, useRef, useState } from "react";
 import mapboxgl, { Map as MapboxMap } from "mapbox-gl";
-import { Dialog } from "@mui/material";
+import { Box, Dialog, Tab, Tabs } from "@mui/material";
 import { PopupComponent } from "./PopupComponent";
+import SourcesTableComponent from "../SourceTableComponent/SourceTableComponent";
 
 export const ExtremeThreatColour: string = "#f5333f";
 export const ModerateThreatColour: string = "#ff9e00";
@@ -22,6 +23,7 @@ type MapProps = {
   countries?: CountryType[];
   alertsLoading: boolean;
   setAlertsLoading: React.Dispatch<React.SetStateAction<boolean>>;
+  sources?: SourceFeed[];
 };
 
 type Region = {
@@ -29,6 +31,11 @@ type Region = {
   id: string;
   name: string;
   polygon: string;
+};
+
+export type SourceFeed = {
+  url?: string;
+  name?: string;
 };
 type CountryType = {
   centroid?: string;
@@ -80,6 +87,7 @@ export type AlertData = {
   id?: string;
   country?: CountryType;
   alertinfoSet?: AlertInfoSet[];
+  sourceFeed?: SourceFeed;
 };
 
 const MapComponent: React.FC<MapProps> = ({
@@ -92,6 +100,7 @@ const MapComponent: React.FC<MapProps> = ({
   countries = [],
   alertsLoading,
   setAlertsLoading,
+  sources = [],
 }) => {
   const [dialogLoaded, setDialogLoaded] = useState(false);
   const [tableID, setTableID] = useState<string>("");
@@ -100,6 +109,17 @@ const MapComponent: React.FC<MapProps> = ({
     [key: string]: { table: ReactElement; alerts: AlertData[] };
   }>({});
 
+  const [value, setValue] = React.useState("map-tab");
+
+  const handleChange = (event: React.SyntheticEvent, newValue: string) => {
+    setValue(newValue);
+  };
+
+  // useEffect(() => {
+  //   console.log(value);
+  //   console.log(mapContainerRef.current);
+  //   console.log(alerts);
+  // }, [value, mapContainerRef, alerts]);
   useEffect(() => {
     setAlertsLoading(true);
 
@@ -108,17 +128,19 @@ const MapComponent: React.FC<MapProps> = ({
       mapRef.current = null;
     }
 
-    mapRef.current = new mapboxgl.Map({
-      container: mapContainerRef.current!,
-      style: "mapbox://styles/go-ifrc/cki7aznup3hqz19rxliv3naf4",
-      center: [lng, lat],
-      zoom: zoom,
-      scrollZoom: false,
-      dragPan: true,
-    });
+    if (value === "map-tab") {
+      mapRef.current = new mapboxgl.Map({
+        container: mapContainerRef.current!,
+        style: "mapbox://styles/go-ifrc/cki7aznup3hqz19rxliv3naf4",
+        center: [lng, lat],
+        zoom: zoom,
+        scrollZoom: false,
+        dragPan: true,
+      });
 
-    mapRef.current.addControl(new mapboxgl.FullscreenControl(), "top-left");
-    mapRef.current.addControl(new mapboxgl.NavigationControl(), "top-left");
+      mapRef.current.addControl(new mapboxgl.FullscreenControl(), "top-left");
+      mapRef.current.addControl(new mapboxgl.NavigationControl(), "top-left");
+    }
 
     return () => {
       if (mapRef.current) {
@@ -126,7 +148,16 @@ const MapComponent: React.FC<MapProps> = ({
         mapRef.current = null;
       }
     };
-  }, [lat, lng, mapRef, mapContainerRef, zoom, alerts, setAlertsLoading]);
+  }, [
+    lat,
+    value,
+    lng,
+    mapRef,
+    mapContainerRef,
+    zoom,
+    alerts,
+    setAlertsLoading,
+  ]);
 
   // const determineColour = (currentColour: string, alert: AlertData) => {
   //   if (currentColour === ExtremeThreatColour) {
@@ -162,91 +193,93 @@ const MapComponent: React.FC<MapProps> = ({
     if (!mapRef.current || !alertsLoading || alerts.length === 0) {
       return;
     }
-    setAlertsLoading(true);
+    if (value === "map-tab") {
+      setAlertsLoading(true);
 
-    mapRef.current?.on("load", () => {
-      countryTables.current = {};
+      mapRef.current?.on("load", () => {
+        countryTables.current = {};
 
-      alerts.forEach((alert: AlertData) => {
-        const tableId = `alertTable-${alert?.country?.iso3}`;
-        const tableData = countryTables.current[tableId];
+        alerts.forEach((alert: AlertData) => {
+          const tableId = `alertTable-${alert?.country?.iso3}`;
+          const tableData = countryTables.current[tableId];
 
-        if (!tableData) {
-          const table = <PopupComponent alerts={[alert]} />;
-          countryTables.current[tableId] = { table, alerts: [alert] };
-        } else {
-          const updatedAlerts = [...tableData.alerts, alert];
-          const updatedTable = React.cloneElement(tableData.table, {
-            alerts: updatedAlerts,
-          });
-          countryTables.current[tableId] = {
-            table: updatedTable,
-            alerts: updatedAlerts,
-          };
-        }
-        if (
-          mapRef.current?.getSource(
-            `polygon-source-${alert?.country?.iso3}`
-          ) !== undefined
-        ) {
-          mapRef.current?.setPaintProperty(
-            `polygon-layer-${alert?.country?.iso3}`,
-            "fill-color",
-            ExtremeThreatColour
-          );
-        } else {
-          const sourceId = `polygon-source-${alert?.country?.iso3}`;
-          const layerId = `polygon-layer-${alert?.country?.iso3}`;
+          if (!tableData) {
+            const table = <PopupComponent alerts={[alert]} />;
+            countryTables.current[tableId] = { table, alerts: [alert] };
+          } else {
+            const updatedAlerts = [...tableData.alerts, alert];
+            const updatedTable = React.cloneElement(tableData.table, {
+              alerts: updatedAlerts,
+            });
+            countryTables.current[tableId] = {
+              table: updatedTable,
+              alerts: updatedAlerts,
+            };
+          }
+          if (
+            mapRef.current?.getSource(
+              `polygon-source-${alert?.country?.iso3}`
+            ) !== undefined
+          ) {
+            mapRef.current?.setPaintProperty(
+              `polygon-layer-${alert?.country?.iso3}`,
+              "fill-color",
+              ExtremeThreatColour
+            );
+          } else {
+            const sourceId = `polygon-source-${alert?.country?.iso3}`;
+            const layerId = `polygon-layer-${alert?.country?.iso3}`;
 
-          mapRef.current?.addSource(sourceId, {
-            type: "geojson",
+            mapRef.current?.addSource(sourceId, {
+              type: "geojson",
 
-            data: {
-              type: "Feature",
-              geometry: {
-                type: alert?.country?.type! as any,
-                coordinates: alert?.country?.countryPolygon! as any,
+              data: {
+                type: "Feature",
+                geometry: {
+                  type: alert?.country?.type! as any,
+                  coordinates: alert?.country?.countryPolygon! as any,
+                },
+                properties: {},
               },
-              properties: {},
-            },
-          });
+            });
 
-          // const colour = determineColour(ModerateThreatColour, alert);
+            // const colour = determineColour(ModerateThreatColour, alert);
 
-          // Add the border layer
-          mapRef.current?.addLayer({
-            id: `${layerId}-border`,
-            type: "line",
-            source: sourceId,
-            paint: {
-              "line-color": "black",
-              "line-width": 1.3,
-            },
-          });
-          mapRef.current?.addLayer({
-            id: `${layerId}`,
-            type: "fill",
-            source: sourceId,
-            paint: {
-              "fill-color": ExtremeThreatColour,
-              "fill-opacity": 0.8,
-            },
-          });
+            // Add the border layer
+            mapRef.current?.addLayer({
+              id: `${layerId}-border`,
+              type: "line",
+              source: sourceId,
+              paint: {
+                "line-color": "black",
+                "line-width": 1.3,
+              },
+            });
+            mapRef.current?.addLayer({
+              id: `${layerId}`,
+              type: "fill",
+              source: sourceId,
+              paint: {
+                "fill-color": ExtremeThreatColour,
+                "fill-opacity": 0.8,
+              },
+            });
 
-          mapRef.current?.on(
-            "click",
-            layerId,
-            (e: mapboxgl.MapMouseEvent & mapboxgl.EventData) => {
-              setDialogLoaded(true);
-              setTableID(tableId);
-            }
-          );
-        }
+            mapRef.current?.on(
+              "click",
+              layerId,
+              (e: mapboxgl.MapMouseEvent & mapboxgl.EventData) => {
+                setDialogLoaded(true);
+                setTableID(tableId);
+              }
+            );
+          }
+        });
+        // console.log(countryTables.current);
+
+        setAlertsLoading(false);
       });
-      console.log(countryTables.current);
-
-      setAlertsLoading(false);
-    });
+    }
   }, [
     alertsLoading,
     setAlertsLoading,
@@ -254,6 +287,7 @@ const MapComponent: React.FC<MapProps> = ({
     mapRef,
     countryTables,
     countries,
+    value,
   ]);
 
   const handleCloseDialog = () => {
@@ -262,7 +296,30 @@ const MapComponent: React.FC<MapProps> = ({
 
   return (
     <>
-      <div ref={mapContainerRef} className="map-container"></div>
+      <Box>
+        <Tabs
+          value={value}
+          onChange={handleChange}
+          textColor="secondary"
+          indicatorColor="secondary"
+          aria-label="secondary tabs example"
+        >
+          <Tab value="map-tab" label="Map" />
+          <Tab value="source-tab" label="Sources" />
+        </Tabs>
+
+        {value === "map-tab" && (
+          <Box p={3}>
+            <div ref={mapContainerRef} className="map-container"></div>
+          </Box>
+        )}
+        {value === "source-tab" && (
+          <Box p={3}>
+            <SourcesTableComponent sources={sources}></SourcesTableComponent>
+          </Box>
+        )}
+      </Box>
+
       <Dialog
         PaperProps={{
           sx: {
