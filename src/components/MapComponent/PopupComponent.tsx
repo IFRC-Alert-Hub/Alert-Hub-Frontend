@@ -146,9 +146,18 @@ export const PopupComponent: React.FC<PopupComponentProps> = ({
                 index={index + (page - 1) * itemsPerPage}
               >
                 <Typography
+                  sx={{
+                    overflow: "hidden",
+                    textOverflow: "ellipsis",
+                    hyphens: "auto",
+                    wordWrap: "break-word",
+                    display: "-webkit-box",
+                    "-webkit-box-orient": "vertical",
+                    "-webkit-line-clamp": 2,
+                    fontWeight: 500,
+                    paddingBottom: "10px",
+                  }}
                   variant="h5"
-                  fontWeight={500}
-                  paddingBottom={"10px"}
                   component="div"
                 >
                   {alert.id}

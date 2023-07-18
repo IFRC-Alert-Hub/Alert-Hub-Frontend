@@ -45,6 +45,10 @@ export const ALL_ALERTS = gql`
         id
         description
       }
+      sourceFeed {
+        url
+        name
+      }
     }
     listCountry {
       id
