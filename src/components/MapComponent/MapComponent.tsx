@@ -1,6 +1,6 @@
 import React, { ReactElement, useEffect, useRef, useState } from "react";
 import mapboxgl, { Map as MapboxMap } from "mapbox-gl";
-import { Box, Dialog, Tab, Tabs, Typography } from "@mui/material";
+import { Box, Dialog, Tab, Tabs } from "@mui/material";
 import { PopupComponent } from "./PopupComponent";
 import SourcesTableComponent from "../SourceTableComponent/SourceTableComponent";
 
