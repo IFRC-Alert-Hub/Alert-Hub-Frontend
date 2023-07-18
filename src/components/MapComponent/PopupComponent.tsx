@@ -241,7 +241,7 @@ export const PopupComponent: React.FC<PopupComponentProps> = ({
                           fontWeight={"bolder"}
                           sx={{ textDecoration: "underline" }}
                         >
-                          InfoSet Title {infoIndex + 1}
+                          InfoSet {infoIndex + 1}
                         </Typography>
                         <Typography variant="body2" component="div">
                           <span
