@@ -11,7 +11,6 @@ import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 import PageTitle from "../../components/PageTitle";
-import BreadcrumbsComponent from "../../components/Breadcrumbs/BreadcrumbsComponent";
 import { useMutation } from "@apollo/client";
 import { LOGIN } from "../../API/mutations/login";
 import { auth_system } from "../../API/API_Links";
@@ -73,7 +72,6 @@ const Login = () => {
   return (
     <>
       <Container maxWidth="lg" sx={{ paddingTop: "30px" }}>
-        <BreadcrumbsComponent />
         <PageTitle title="Login"></PageTitle>
         <Grid
           container
@@ -176,31 +174,17 @@ const Login = () => {
                   marginTop={"17px"}
                   marginBottom={"17px"}
                 >
-                  <Link href="/forget-password" style={{ marginRight: "8px" }}>
+                  <Link href="/forget-password" style={{ marginLeft: "0px" }}>
                     <Typography
                       variant="h5"
                       fontSize="13px"
                       color="#444850"
                       sx={{ textDecoration: "underline" }}
                     >
-                      Forgot Password
-                    </Typography>
-                  </Link>
-                  <Typography variant="h5" fontSize="12px" color="#444850">
-                    |
-                  </Typography>
-                  <Link href="#" style={{ marginLeft: "8px" }}>
-                    <Typography
-                      variant="h5"
-                      fontSize="13px"
-                      color="#444850"
-                      sx={{ textDecoration: "underline" }}
-                    >
-                      Re-send validation email
+                      Oops, Have You Forgot your Password?
                     </Typography>
                   </Link>
                 </Box>
-
                 <Button
                   type="submit"
                   fullWidth

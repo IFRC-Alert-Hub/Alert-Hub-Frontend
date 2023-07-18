@@ -16,8 +16,16 @@ export const RESET_PASSWORD = gql`
 `;
 
 export const RESET_PASSWORD_CONFIRM = gql`
-  mutation MyMutation($verifyCode: String!, $password: String!) {
-    resetPasswordConfirm(verifyCode: $verifyCode, password: $password) {
+  mutation MyMutation(
+    $verifyCode: String!
+    $password: String!
+    $email: String!
+  ) {
+    resetPasswordConfirm(
+      verifyCode: $verifyCode
+      password: $password
+      email: $email
+    ) {
       success
       errors {
         email

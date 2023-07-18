@@ -1,6 +1,8 @@
 import {
   Alert,
+  Checkbox,
   Container,
+  FormControlLabel,
   IconButton,
   InputAdornment,
   LinearProgress,
@@ -18,8 +20,12 @@ import Typography from "@mui/material/Typography";
 import PageTitle from "../../components/PageTitle";
 import { useMutation } from "@apollo/client";
 import { auth_system } from "../../API/API_Links";
+import { useNavigate } from "react-router-dom";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
-import { RESET_PASSWORD } from "../../API/mutations/resetPassword";
+import {
+  RESET_PASSWORD,
+  RESET_PASSWORD_CONFIRM,
+} from "../../API/mutations/resetPassword";
 // import Tooltip from "@mui/material/Tooltip";
 // import InfoIcon from "@mui/icons-material/Info";
 // import CancelIcon from "@mui/icons-material/Cancel";
@@ -31,39 +37,48 @@ const ForgotPassword = () => {
   const [isSendClicked, setIsSendClicked] = React.useState(false);
   const [isSendEnabled, setIsSendEnabled] = React.useState<boolean>(false);
   const [isEmailSent, setIsEmailSent] = React.useState(false);
+  const [emailError, setEmailError] = React.useState("");
 
-  const [resetPassword] = useMutation(RESET_PASSWORD, {
+  const navigate = useNavigate();
+  const [verifyEmail] = useMutation(RESET_PASSWORD, {
     client: auth_system,
     variables: {
       email: "",
     },
   });
 
-  // const [resetPasswordConfirm] = useMutation(RESET_PASSWORD_CONFIRM, {
-  //   client: auth_system,
-  //   variables: {
-  //     email: "",
-  //   },
-  // });
+  const [forgotPassword] = useMutation(RESET_PASSWORD_CONFIRM, {
+    client: auth_system,
+    variables: {
+      email: "",
+      password: "",
+      verifyCode: "",
+    },
+  });
+
   const sendEmail = async (email: string) => {
     try {
-      const resetPass = await resetPassword({
+      const verifyEmailResponse = await verifyEmail({
         variables: { email: email },
       });
-      if (resetPass.data.resetPassword.success) {
-        alert("Sent");
+      const { success, errors } = verifyEmailResponse.data.resetPassword;
+
+      if (success) {
         setIsEmailSent(true);
+        setEmailError("");
       } else {
-        alert("afsafafasa");
-        formik.setFieldError("email", "afasfafa");
+        setIsEmailSent(false);
+        setEmailError(errors.email);
+        console.log(errors.email);
       }
-    } catch (error: any) {
+    } catch (error) {
       alert(error);
+      setEmailError("");
     }
   };
   const calculatePasswordStrength = (password: string) => {
     const strengthRegex =
-      /^(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*()])[a-zA-Z0-9!@#$%^&*()]{8,}$/;
+      /^(?=.[A-Z])(?=.[0-9])(?=.[?!@#$%^&()])[a-zA-Z0-9!@#$%^&()]{8,}$/;
     if (password.length === 0) {
       return 0;
     } else if (strengthRegex.test(password)) {
@@ -72,10 +87,9 @@ const ForgotPassword = () => {
       const factors = [
         { regex: /[A-Z]/, factor: 20 },
         { regex: /[0-9]/, factor: 15 },
-        { regex: /[!@#$%^&*()]/, factor: 15 },
+        { regex: /[?!@#$%^&()]/, factor: 15 },
       ];
       const lengthFactor = Math.min(password.length / 8, 1) * 50;
-
       let totalFactor = lengthFactor;
       factors.forEach((item) => {
         if (item.regex.test(password)) {
@@ -86,6 +100,13 @@ const ForgotPassword = () => {
       return totalFactor;
     }
   };
+
+  const handlePasswordCopy = (
+    event: React.ClipboardEvent<HTMLInputElement>
+  ): void => {
+    event.preventDefault();
+  };
+
   const handlePasswordChange = (event: any) => {
     const password = event.target.value;
     const strength = calculatePasswordStrength(password);
@@ -96,6 +117,36 @@ const ForgotPassword = () => {
     setIsSendClicked(true);
     const { email } = formik.values;
     sendEmail(email);
+  };
+
+  const handleForgotPassword = async (values: any) => {
+    try {
+      const forgotPasswordData = await forgotPassword({
+        variables: {
+          email: values.email,
+          password: values.password,
+          verifyCode: values.verifyCode,
+        },
+      });
+      if (forgotPasswordData.data.resetPasswordConfirm.success) {
+        navigate("/login");
+      } else {
+        console.log(
+          "data: ",
+          forgotPasswordData.data.resetPasswordConfirm.errors
+        );
+        formik.setFieldError(
+          "email",
+          forgotPasswordData.data.resetPasswordConfirm.errors.email
+        );
+        formik.setFieldError(
+          "verifyCode",
+          forgotPasswordData.data.resetPasswordConfirm.errors.verifyCode
+        );
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const formik = useFormik({
@@ -110,7 +161,7 @@ const ForgotPassword = () => {
       password: Yup.string()
         .required("Required")
         .matches(
-          /^(?=.*[A-Z])(?=.*[0-9])(?=.*[?!@#$%^&*()])[a-zA-Z0-9!@#$%^&*()]{8,}$/,
+          /^(?=.*[A-Z])(?=.*[0-9])(?=.*[?!@#$%^&*()])[a-zA-Z0-9!?@#$%^&*()]{8,}$/,
           "Password must contain at least one uppercase letter, one number, and one special character"
         ),
       confirmPassword: Yup.string()
@@ -120,6 +171,7 @@ const ForgotPassword = () => {
     }),
     onSubmit: async (values) => {
       console.log(values);
+      handleForgotPassword(values);
     },
   });
 
@@ -132,6 +184,8 @@ const ForgotPassword = () => {
       .isValidSync(event.target.value);
     setIsSendEnabled(isValidEmail);
     formik.handleChange(event);
+    setEmailError("");
+    setIsEmailSent(false);
   };
 
   const [showPassword, setShowPassword] = React.useState(false);
@@ -192,7 +246,8 @@ const ForgotPassword = () => {
               padding="0 10px"
               marginBottom="3px"
             >
-              Enter the email you used during registration
+              Please use the email address associated with your account during
+              registration to initiate the password change process.
             </Typography>
             <Box
               component="form"
@@ -212,6 +267,7 @@ const ForgotPassword = () => {
                 sx={{ fontSize: "12px" }}
                 value={formik.values.email}
                 onChange={handleEmailChange}
+                onBlur={formik.handleBlur}
                 error={formik.touched.email && Boolean(formik.errors.email)}
                 helperText={formik.touched.email && formik.errors.email}
                 InputProps={{
@@ -238,6 +294,9 @@ const ForgotPassword = () => {
               {isEmailSent && (
                 <Alert severity="success">Email has been sent</Alert>
               )}
+              {emailError !== "" && (
+                <Alert severity="error">{emailError}</Alert>
+              )}
               <TextField
                 margin="normal"
                 required
@@ -250,6 +309,7 @@ const ForgotPassword = () => {
                 value={formik.values.verifyCode}
                 onChange={formik.handleChange}
                 disabled={!isSendClicked}
+                onBlur={formik.handleBlur}
                 error={
                   formik.touched.verifyCode && Boolean(formik.errors.verifyCode)
                 }
@@ -268,6 +328,7 @@ const ForgotPassword = () => {
                 autoComplete="new-password"
                 value={formik.values.password}
                 onChange={handlePasswordChange}
+                onBlur={formik.handleBlur}
                 error={
                   formik.touched.password && Boolean(formik.errors.password)
                 }
@@ -279,8 +340,8 @@ const ForgotPassword = () => {
                       </IconButton>
                     </InputAdornment>
                   ),
+                  onCopy: handlePasswordCopy, // Prevent password copying
                 }}
-                helperText={formik.touched.password && formik.errors.password}
               />
 
               <LinearProgress
@@ -302,6 +363,77 @@ const ForgotPassword = () => {
                     },
                 }}
               />
+
+              <Box textAlign={"left"} padding={"none"} color="green">
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      checked={/[A-Z]/.test(formik.values.password)}
+                      color="primary"
+                      disabled
+                      className={
+                        /^(?=.*[A-Z])(?=.*[0-9])(?=.*[?!@#$%^&*()])[a-zA-Z0-9!?@#$%^&*()]{8,}$/.test(
+                          formik.values.password
+                        )
+                          ? "fulfilled"
+                          : ""
+                      }
+                    />
+                  }
+                  label="At least one uppercase letter"
+                />
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      checked={/[0-9]/.test(formik.values.password)}
+                      color="primary"
+                      disabled
+                      className={
+                        /^(?=.*[A-Z])(?=.*[0-9])(?=.*[?!@#$%^&*()])[a-zA-Z0-9!?@#$%^&*()]{8,}$/.test(
+                          formik.values.password
+                        )
+                          ? "fulfilled"
+                          : ""
+                      }
+                    />
+                  }
+                  label="At least one number"
+                />
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      checked={/[?!@#$%^&()]/.test(formik.values.password)}
+                      color="primary"
+                      disabled
+                      className={
+                        /^(?=.*[A-Z])(?=.*[0-9])(?=.*[?!@#$%^&*()])[a-zA-Z0-9!?@#$%^&*()]{8,}$/.test(
+                          formik.values.password
+                        )
+                          ? "fulfilled"
+                          : ""
+                      }
+                    />
+                  }
+                  label="At least one special character [?!@#$%^&*()]"
+                />
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      checked={formik.values.password.length >= 8}
+                      color="primary"
+                      disabled
+                      className={
+                        /^(?=.*[A-Z])(?=.*[0-9])(?=.*[?!@#$%^&*()])[a-zA-Z0-9!?@#$%^&*()]{8,}$/.test(
+                          formik.values.password
+                        )
+                          ? "fulfilled"
+                          : ""
+                      }
+                    />
+                  }
+                  label="At least 8 characters"
+                />
+              </Box>
               <TextField
                 margin="normal"
                 required
@@ -314,6 +446,7 @@ const ForgotPassword = () => {
                 sx={{ fontSize: "12px", paddingBottom: "20px" }}
                 value={formik.values.confirmPassword}
                 onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
                 error={
                   formik.touched.confirmPassword &&
                   Boolean(formik.errors.confirmPassword)
@@ -359,27 +492,6 @@ const ForgotPassword = () => {
               >
                 Recover
               </Button>
-              <Box
-                textAlign="center"
-                display="flex"
-                justifyContent="center"
-                marginTop={"17px"}
-                marginBottom={"17px"}
-              >
-                <Typography variant="h5" fontSize="13px" color="#444850">
-                  Already have an account?
-                </Typography>
-                <Link href="#" style={{ marginLeft: "8px" }}>
-                  <Typography
-                    variant="h5"
-                    fontSize="13px"
-                    color="#444850"
-                    sx={{ textDecoration: "underline" }}
-                  >
-                    Log in
-                  </Typography>
-                </Link>
-              </Box>
             </Box>
           </Box>
         </Grid>
