@@ -46,6 +46,7 @@ const ProfileForm = ({
 }: PropsType) => {
   const [open, setOpen] = useState(false);
   const [isVerified, setIsVerified] = useState(false);
+  const [emailToken, setEmailToken] = useState("");
 
   const handleOpen = () => setOpen(true);
 
@@ -246,8 +247,21 @@ const ProfileForm = ({
           </Grid>
         )}
       </Grid>
-      <SecurityModal user={user as User} open={open} setOpen={setOpen} />
-      <EmailChangeModal isVerified={isVerified} setIsVerified={setIsVerified} />
+      {!isVerified ? (
+        <SecurityModal
+          user={user as User}
+          open={open}
+          setOpen={setOpen}
+          setIsVerified={setIsVerified}
+          setEmailToken={setEmailToken}
+        />
+      ) : (
+        <EmailChangeModal
+          isVerified={isVerified}
+          setIsVerified={setIsVerified}
+          emailToken={emailToken}
+        />
+      )}
     </Box>
   );
 };
