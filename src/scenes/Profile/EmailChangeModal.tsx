@@ -80,7 +80,7 @@ const EmailChangeModal = ({
           verifyCode: formik.values.verificationCode,
         },
       });
-      const { success, errors } = res.data.resetEmailConfirm;
+      const { success, errors } = res.data.newEmailConfirm;
       if (success) {
         alert("Email updated! Please login again");
         setIsVerified(false);
@@ -109,7 +109,7 @@ const EmailChangeModal = ({
 
   const handleLogout = () => {
     logoutHandler();
-    navigate("/");
+    navigate("/login");
     userContext.setUser(null);
   };
 
@@ -118,10 +118,10 @@ const EmailChangeModal = ({
     const res = await sendNewVerifyEmail({
       variables: {
         newEmail: formik.values.newEmail,
-        token: emailToken, // need to change the data type here
+        token: emailToken,
       },
     });
-    const { success, errors } = res.data.newEmailConfirm;
+    const { success, errors } = res.data.sendNewVerifyEmail;
     if (success) {
       alert("Email has been sent");
     } else {
@@ -135,7 +135,7 @@ const EmailChangeModal = ({
       open={isVerified}
       handleClose={handleClose}
     >
-      <Box component="form">
+      <Box component="form" onSubmit={formik.handleSubmit}>
         <TextField
           fullWidth
           id="newEmail"

@@ -32,7 +32,7 @@ export const RESET_EMAIL_CONFIRM = gql`
 `;
 
 export const SEND_NEW_VEIRFY_EMAIL = gql`
-  mutation SendNewVerifyEmail($newEmail: String = "", $token: UUID = "") {
+  mutation SendNewVerifyEmail($newEmail: String = "", $token: String = "") {
     sendNewVerifyEmail(newEmail: $newEmail, token: $token) {
       success
       errors {
