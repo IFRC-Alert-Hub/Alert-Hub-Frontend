@@ -11,16 +11,37 @@ import { useFormik } from "formik";
 import * as yup from "yup";
 import MessageModal from "./components/MessageModal";
 import ModalButton from "./components/ModalButton";
+import { useMutation } from "@apollo/client";
+import {
+  RESET_EMAIL,
+  RESET_EMAIL_CONFIRM,
+} from "../../API/mutations/resetEmailMutation";
+import { auth_system } from "../../API/API_Links";
 
 type PropsType = {
   user?: User;
   open: boolean;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  setIsVerified: React.Dispatch<React.SetStateAction<boolean>>;
+  setEmailToken: React.Dispatch<React.SetStateAction<string>>;
 };
 
-const SecurityModal = ({ user, open, setOpen }: PropsType) => {
+const SecurityModal = ({
+  user,
+  open,
+  setOpen,
+  setIsVerified,
+  setEmailToken,
+}: PropsType) => {
   const [isCodeSent, setIsCodeSent] = useState(false);
+  const [emailError, setEmailError] = useState(false);
+  const [emailRes, setEmailRes] = useState("");
   const [timeLeft, setTimeLeft] = useState(60);
+
+  const [resetEmail] = useMutation(RESET_EMAIL, { client: auth_system });
+  const [resetEmailConfirm] = useMutation(RESET_EMAIL_CONFIRM, {
+    client: auth_system,
+  });
 
   useEffect(() => {
     if (isCodeSent) {
@@ -49,17 +70,27 @@ const SecurityModal = ({ user, open, setOpen }: PropsType) => {
     validationSchema: yup.object({
       verificationCode: yup.string().required("Please enter the code"),
     }),
-    onSubmit: () => {
-      console.log("code sended");
+    onSubmit: async () => {
+      const res = await resetEmailConfirm({
+        variables: { verifyCode: formik.values.verificationCode },
+      });
+      const { success, token, errors } = res.data.resetEmailConfirm;
+      if (success) {
+        setOpen(false);
+        setIsVerified(true);
+        setEmailToken(token);
+      } else {
+        setEmailError(true);
+        setEmailRes(errors.verifyCode);
+      }
     },
   });
 
   const handleClose = () => setOpen(false);
-
   const handleCodeSent = () => {
     setIsCodeSent(true);
+    resetEmail();
   };
-
   return (
     <MessageModal
       header="Security Verification"
@@ -84,11 +115,15 @@ const SecurityModal = ({ user, open, setOpen }: PropsType) => {
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
             error={
-              formik.touched.verificationCode &&
-              Boolean(formik.errors.verificationCode)
+              emailError ||
+              (formik.touched.verificationCode &&
+                Boolean(formik.errors.verificationCode))
             }
             helperText={
-              formik.touched.verificationCode && formik.errors.verificationCode
+              emailError
+                ? emailRes
+                : formik.touched.verificationCode &&
+                  formik.errors.verificationCode
             }
             fullWidth
             sx={{
