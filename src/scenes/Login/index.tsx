@@ -29,7 +29,6 @@ const Login = () => {
     },
   });
 
-  // const [serverError, setServerError] = React.useState(false);
 
   const getTokenData = async (loginData: any) => {
     console.log("Login Data: ", loginData);
@@ -162,17 +161,6 @@ const Login = () => {
               >
                 Login
               </Button>
-
-              {/* {serverError && (
-                  <Typography
-                    variant="body2"
-                    color="error"
-                    align="center"
-                    sx={{ marginTop: "8px", textTransform: "Uppercase" }}
-                  >
-                    Cannot connect to the server
-                  </Typography>
-                )} */}
 
               <Box
                 textAlign="center"
