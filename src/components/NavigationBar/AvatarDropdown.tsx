@@ -11,7 +11,7 @@ import {
 import { useContext, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { auth_system } from "../../API/API_Links";
-import { LOGOUT } from "../../API/mutations/logout";
+import { LOGOUT } from "../../API/mutations/authMutations";
 import { UserContext } from "../../context/UserContext";
 
 const AvatarDropdown = () => {

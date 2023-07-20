@@ -15,7 +15,7 @@ import { useMutation } from "@apollo/client";
 import {
   RESET_EMAIL,
   RESET_EMAIL_CONFIRM,
-} from "../../API/mutations/resetEmailMutation";
+} from "../../API/mutations/authMutations";
 import { auth_system } from "../../API/API_Links";
 
 type PropsType = {

@@ -11,7 +11,7 @@ import { User } from "../../context/UserContext";
 import { useFormik } from "formik";
 import * as yup from "yup";
 import { useMutation } from "@apollo/client";
-import { UPDATE_PROFILE } from "../../API/mutations/profileMutation";
+import { UPDATE_PROFILE } from "../../API/mutations/profileMutations";
 import { auth_system } from "../../API/API_Links";
 import { useState } from "react";
 import SecurityModal from "./SecurityModal";

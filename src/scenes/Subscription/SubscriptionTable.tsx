@@ -20,7 +20,7 @@ import {
 } from "@mui/material";
 
 import { useMutation } from "@apollo/client";
-import { DELETE_SUBSCRIPTION } from "../../API/mutations/subscriptionMutation";
+import { DELETE_SUBSCRIPTION } from "../../API/mutations/subscriptionMutations";
 import { subscription_module } from "../../API/API_Links";
 import ModalForm from "./ModalForm";
 import { GET_SUBSCRIPTIONS } from "../../API/ALL_QUERIES";

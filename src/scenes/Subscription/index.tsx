@@ -22,6 +22,7 @@ import {
 import { GET_ALL_COUNTRIES, GET_SUBSCRIPTIONS } from "../../API/ALL_QUERIES";
 
 const Subscription = () => {
+  // fetch the data from backend
   const {
     loading: subscriptionLoading,
     error: subscriptionError,
@@ -49,6 +50,20 @@ const Subscription = () => {
     certainty: [],
     methods: [],
   });
+
+  useEffect(() => {
+    if (subscriptionData) {
+      setTableData(subscriptionData.listAllSubscription);
+    }
+  }, [subscriptionData]);
+
+  useEffect(() => {
+    if (countryData) {
+      setRegionList(countryData.listRegion);
+      setCountryList(countryData.listCountry);
+    }
+  }, [countryData]);
+
   const [open, setOpen] = useState(false);
 
   const handleOpen = (type: string, id?: string) => {
@@ -84,19 +99,6 @@ const Subscription = () => {
     setFormType("");
     setOpen(false);
   };
-
-  useEffect(() => {
-    if (subscriptionData) {
-      setTableData(subscriptionData.listAllSubscription);
-    }
-  }, [subscriptionData]);
-
-  useEffect(() => {
-    if (countryData) {
-      setRegionList(countryData.listRegion);
-      setCountryList(countryData.listCountry);
-    }
-  }, [countryData]);
 
   return (
     <Container maxWidth={"lg"}>

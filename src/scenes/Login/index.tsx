@@ -10,7 +10,7 @@ import Link from "@mui/material/Link";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import { useMutation } from "@apollo/client";
-import { LOGIN } from "../../API/mutations/login";
+import { LOGIN } from "../../API/mutations/authMutations";
 import { auth_system } from "../../API/API_Links";
 import { useNavigate } from "react-router-dom";
 import { UserContext } from "../../context/UserContext";
