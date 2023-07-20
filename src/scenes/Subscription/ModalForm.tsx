@@ -14,15 +14,16 @@ import {
   ADD_SUBSCRIPTION,
   UPDATE_SUBSCRIPTION,
 } from "../../API/mutations/subscriptionMutation";
+
+import { subscription_module } from "../../API/API_Links";
+import CountryAutocomplete from "./CountryAutocomplete";
+import { GET_SUBSCRIPTIONS } from "../../API/ALL_QUERIES";
 import {
   ContinentType,
   CountryType,
-  GET_SUBSCRIPTIONS,
   SubscriptionForm,
   SubscriptionItem,
-} from "../../API/queries/getSubscriptions";
-import { subscription_module } from "../../API/API_Links";
-import CountryAutocomplete from "./CountryAutocomplete";
+} from "../../API/TYPES";
 
 const style = {
   position: "absolute" as "absolute",

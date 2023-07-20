@@ -18,17 +18,18 @@ import {
   DialogContentText,
   DialogActions,
 } from "@mui/material";
-import {
-  ContinentType,
-  CountryType,
-  GET_SUBSCRIPTIONS,
-  SubscriptionForm,
-  SubscriptionItem,
-} from "../../API/queries/getSubscriptions";
+
 import { useMutation } from "@apollo/client";
 import { DELETE_SUBSCRIPTION } from "../../API/mutations/subscriptionMutation";
 import { subscription_module } from "../../API/API_Links";
 import ModalForm from "./ModalForm";
+import { GET_SUBSCRIPTIONS } from "../../API/ALL_QUERIES";
+import {
+  ContinentType,
+  CountryType,
+  SubscriptionForm,
+  SubscriptionItem,
+} from "../../API/TYPES";
 
 type PropsType = {
   selectedRow: SubscriptionForm;

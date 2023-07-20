@@ -3,11 +3,10 @@ import { useParams } from "react-router-dom";
 import TitleHeader from "../../components/TitleHeader";
 import { useEffect, useMemo } from "react";
 import CardCarousel from "../../components/Card/CardCarousel";
-import { GET_ALL_REGIONS } from "../../API/queries/getAllRegions";
 import { useQuery } from "@apollo/client";
-import { ALL_ALERTS } from "../../API/queries/getAllAlerts";
 import { cap_aggregator } from "../../API/API_Links";
 import MapComponentWithFilter from "../../components/MapComponent/MapComponentWithFilter";
+import { ALL_ALERTS, GET_ALL_REGIONS } from "../../API/ALL_QUERIES";
 
 export const cardData = [
   {

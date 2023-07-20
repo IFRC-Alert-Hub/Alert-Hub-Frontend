@@ -8,11 +8,7 @@ import {
 } from "@mui/material";
 import ContinentCollapse from "./ContinentCollapse";
 import SearchIcon from "@mui/icons-material/Search";
-import {
-  ContinentType,
-  CountryType,
-  SubscriptionForm,
-} from "../../API/queries/getSubscriptions";
+import { ContinentType, CountryType, SubscriptionForm } from "../../API/TYPES";
 
 interface FormErrors {
   [key: string]: boolean;

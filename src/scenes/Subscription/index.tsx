@@ -10,16 +10,16 @@ import SubscriptionTable from "./SubscriptionTable";
 import { useEffect, useState } from "react";
 import ModalForm from "./ModalForm";
 import { useQuery } from "@apollo/client";
+
+import { cap_aggregator, subscription_module } from "../../API/API_Links";
 import {
   ContinentType,
   CountryType,
-  GET_SUBSCRIPTIONS,
   SubscriptionForm,
   SubscriptionItem,
   SubscriptionQueryResult,
-} from "../../API/queries/getSubscriptions";
-import { cap_aggregator, subscription_module } from "../../API/API_Links";
-import { GET_ALL_COUNTRIES } from "../../API/queries/getAllCountries";
+} from "../../API/TYPES";
+import { GET_ALL_COUNTRIES, GET_SUBSCRIPTIONS } from "../../API/ALL_QUERIES";
 
 const Subscription = () => {
   const {
