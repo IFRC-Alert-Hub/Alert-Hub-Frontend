@@ -14,7 +14,6 @@ import Profile from "./scenes/Profile";
 import Subscription from "./scenes/Subscription";
 import Register from "./scenes/Register";
 import ForgotPassword from "./scenes/ForgotPassword";
-import ReSendValidationEmail from "./scenes/ReSendValidationEmail";
 import PrivateRoutes from "./utils/PrivateRoute";
 import { UserContextProvider } from "./context/UserContext";
 import PageNotFound from "./scenes/404_Page";
@@ -53,13 +52,9 @@ function App() {
                 <Route path="/login" element={<Login />} />
                 <Route path="/register" element={<Register />} />
                 <Route path="/forget-password" element={<ForgotPassword />} />
-                <Route
-                  path="/re-send-validation-email"
-                  element={<ReSendValidationEmail />}
-                />
+
                 <Route path="/regions/:id" element={<Region />} />
                 <Route path="/alerts/all" element={<AllAlerts />} />
-
 
                 <Route path="/account/" element={<PrivateRoutes />}>
                   <Route path="profile" element={<Profile />} />
