@@ -6,10 +6,7 @@ import {
   FormLabel,
   TextField,
 } from "@mui/material";
-import {
-  CountryType,
-  SubscriptionForm,
-} from "../../API/queries/getSubscriptions";
+import { CountryType, SubscriptionForm } from "../../API/TYPES";
 
 type optionsType = {
   id: string;

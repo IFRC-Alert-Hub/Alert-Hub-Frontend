@@ -1,35 +1,3 @@
-import { gql } from "@apollo/client";
-
-// export const GET_SUBSCRIPTIONS = gql`
-//   query FetchSubscriptions($userId: Int = 0) {
-//     listSubscriptionByUserId(userId: $userId) {
-//       certaintyArray
-//       countryIds
-//       id
-//       severityArray
-//       subscribeBy
-//       subscriptionName
-//       urgencyArray
-//       userId
-//     }
-//   }
-// `;
-
-export const GET_SUBSCRIPTIONS = gql`
-  query FetchSubscriptions {
-    listAllSubscription {
-      certaintyArray
-      countryIds
-      id
-      severityArray
-      subscribeBy
-      subscriptionName
-      urgencyArray
-      userId
-    }
-  }
-`;
-
 export interface SubscriptionItem {
   id: string;
   userId: number;

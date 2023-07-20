@@ -2,10 +2,7 @@ import { Box, Collapse, IconButton, Typography } from "@mui/material";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import { ChangeEvent, useState } from "react";
-import {
-  CountryType,
-  SubscriptionForm,
-} from "../../API/queries/getSubscriptions";
+import { CountryType, SubscriptionForm } from "../../API/TYPES";
 
 interface PropsType {
   continent: string;

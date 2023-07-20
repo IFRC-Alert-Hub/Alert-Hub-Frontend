@@ -7,7 +7,7 @@ import {
   FormHelperText,
   FormLabel,
 } from "@mui/material";
-import { SubscriptionForm } from "../../API/queries/getSubscriptions";
+import { SubscriptionForm } from "../../API/TYPES";
 
 interface FormErrors {
   [key: string]: boolean;
