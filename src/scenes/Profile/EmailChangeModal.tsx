@@ -7,12 +7,12 @@ import MessageModal from "./components/MessageModal";
 import ModalButton from "./components/ModalButton";
 import { useMutation } from "@apollo/client";
 import { auth_system } from "../../API/API_Links";
-import { LOGOUT } from "../../API/mutations/logout";
+import { LOGOUT } from "../../API/mutations/authMutations";
 import { UserContext } from "../../context/UserContext";
 import {
   NEW_EMAIL_CONFIRM,
   SEND_NEW_VEIRFY_EMAIL,
-} from "../../API/mutations/resetEmailMutation";
+} from "../../API/mutations/authMutations";
 
 type PropsType = {
   isVerified: boolean;

@@ -13,7 +13,7 @@ import { useNavigate } from "react-router-dom";
 import {
   RESET_PASSWORD,
   RESET_PASSWORD_CONFIRM,
-} from "../../API/mutations/resetPassword";
+} from "../../API/mutations/authMutations";
 import AuthComponent from "../../components/Authentication/AuthComponent";
 import PasswordComponent from "../../components/Authentication/PasswordComponent";
 

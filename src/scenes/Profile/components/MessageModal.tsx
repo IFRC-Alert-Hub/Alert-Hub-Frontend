@@ -8,7 +8,7 @@ const style = {
   transform: "translate(-50%, -50%)",
   maxWidth: 480,
   bgcolor: "background.paper",
-  boxShadow: 20,
+  boxShadow: 10,
   borderRadius: 1,
 };
 

@@ -13,7 +13,7 @@ import { useMutation } from "@apollo/client";
 import {
   ADD_SUBSCRIPTION,
   UPDATE_SUBSCRIPTION,
-} from "../../API/mutations/subscriptionMutation";
+} from "../../API/mutations/subscriptionMutations";
 
 import { subscription_module } from "../../API/API_Links";
 import CountryAutocomplete from "./CountryAutocomplete";
@@ -35,7 +35,7 @@ const style = {
   maxHeight: "600px",
   overflow: "auto",
   bgcolor: "background.paper",
-  boxShadow: 24,
+  boxShadow: 10,
   p: 4,
   borderRadius: "5px",
 };
