@@ -1,5 +1,5 @@
 import { Box, Grid, Typography } from "@mui/material";
-import PageTitle from "../PageTitle";
+import PageTitle from "../Layout/PageTitle";
 import { ReactNode } from "react";
 
 interface AuthComponentProps {

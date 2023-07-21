@@ -2,7 +2,6 @@ import React, { useEffect, useRef, useState } from "react";
 import { Autocomplete, Box, CircularProgress, TextField } from "@mui/material";
 import mapboxgl from "mapbox-gl";
 
-import TitleHeader from "../TitleHeader";
 import DatePickerComponent from "../DatePicker/DatePicker";
 import MapComponent, {
   AlertData,
@@ -10,6 +9,7 @@ import MapComponent, {
   Bbox,
   SourceFeed,
 } from "./MapComponent";
+import TitleHeader from "../Layout/TitleHeader";
 
 interface MapComponentWithFilterProps {
   loading: boolean;

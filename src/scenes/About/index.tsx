@@ -6,7 +6,7 @@ import {
   ListItem,
   Typography,
 } from "@mui/material";
-import TitleHeader from "../../components/TitleHeader";
+import TitleHeader from "../../components/Layout/TitleHeader";
 
 const About = () => {
   return (
