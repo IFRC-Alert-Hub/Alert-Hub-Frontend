@@ -16,6 +16,7 @@ interface FormErrors {
 interface CheckboxProps {
   verifyForm: boolean;
   formErrors: FormErrors;
+  checkboxTitle: string;
   legend: string;
   checkboxItems: string[];
   selectedRow: SubscriptionForm;
@@ -25,18 +26,17 @@ interface CheckboxProps {
 const FormCheckbox = ({
   verifyForm,
   formErrors,
+  checkboxTitle,
   legend,
   checkboxItems,
   selectedRow,
   handleChange,
 }: CheckboxProps) => {
-  const checkboxName = legend.toLowerCase();
-
   return (
     <div>
       <FormControl
         required
-        error={verifyForm && formErrors[checkboxName]}
+        error={verifyForm && formErrors[checkboxTitle]}
         component="fieldset"
         sx={{
           mt: 1,
@@ -50,7 +50,7 @@ const FormCheckbox = ({
             {legend}
           </FormLabel>
           {/* <Box ml={2} sx={{ color: "gray", fontSize: "10px" }}>
-            {selectedRow[checkboxName]?.length}/{checkboxItems.length} selected
+            {selectedRow[name]?.length}/{checkboxItems.length} selected
           </Box> */}
         </Box>
 
@@ -60,9 +60,11 @@ const FormCheckbox = ({
               key={item}
               control={
                 <Checkbox
-                  checked={selectedRow[checkboxName]?.includes(item)}
+                  checked={(selectedRow[checkboxTitle] as string[]).includes(
+                    item
+                  )}
                   onChange={handleChange}
-                  name={checkboxName}
+                  name={checkboxTitle}
                   value={item}
                   disableFocusRipple
                   disableRipple
@@ -75,7 +77,7 @@ const FormCheckbox = ({
         </FormGroup>
         <FormHelperText>
           {verifyForm &&
-            formErrors[checkboxName] &&
+            formErrors[checkboxTitle] &&
             "You need to select at least one"}
         </FormHelperText>
       </FormControl>

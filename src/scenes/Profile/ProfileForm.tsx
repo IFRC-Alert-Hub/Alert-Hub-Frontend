@@ -48,8 +48,6 @@ const ProfileForm = ({
   const [isVerified, setIsVerified] = useState(false);
   const [emailToken, setEmailToken] = useState("");
 
-  const handleOpen = () => setOpen(true);
-
   const [updateProfile] = useMutation(UPDATE_PROFILE, {
     refetchQueries: [{ query: GET_USER_DETAILS }],
     client: auth_system,
@@ -75,6 +73,8 @@ const ProfileForm = ({
       setEditStatus(true);
     },
   });
+
+  const handleOpen = () => setOpen(true);
 
   const handleCancel = () => {
     formik.values.firstName = user?.firstName as string;

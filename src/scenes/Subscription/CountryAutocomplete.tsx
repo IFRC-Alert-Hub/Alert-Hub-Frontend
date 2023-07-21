@@ -42,28 +42,28 @@ const CountryAutocomplete = ({
   });
 
   const displayValues = options.filter((item) =>
-    selectedRow.countries.includes(item.id)
+    selectedRow.countryIds.includes(Number(item.id))
   );
 
   const handleChange = (event: any, newValue: optionsType) => {
-    const countryIds = newValue?.map((item) => item.id);
+    const countryIds = newValue?.map((item) => Number(item.id));
     setSelectedRow((prevState) => ({
       ...prevState,
-      countries: countryIds,
+      countryIds: countryIds,
     }));
   };
 
   return (
     <FormControl
       required
-      error={verifyForm && formErrors["countries"]}
+      error={verifyForm && formErrors["countryIds"]}
       component="fieldset"
       sx={{ width: "100%" }}
     >
       <Box display="flex" sx={{ alignItems: "center" }}>
         <FormLabel className="subs-form-legend">Countries</FormLabel>
         <Box ml={2} sx={{ color: "gray", fontSize: "0.5em" }}>
-          {selectedRow.countries.length}/{countryList.length} selected
+          {selectedRow.countryIds.length}/{countryList.length} selected
         </Box>
       </Box>
       <Autocomplete
@@ -85,7 +85,7 @@ const CountryAutocomplete = ({
       />
       <FormHelperText>
         {verifyForm &&
-          formErrors["countries"] &&
+          formErrors["countryIds"] &&
           "You need to select at least one"}
       </FormHelperText>
     </FormControl>

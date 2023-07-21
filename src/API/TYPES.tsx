@@ -9,20 +9,32 @@ export interface SubscriptionItem {
   subscribeBy: string[];
 }
 
+export interface UpdatedSubscriptionItem {
+  id: string;
+  userId: number;
+  subscriptionName: string;
+  countryIds: number[];
+  urgencyArray: string[];
+  severityArray: string[];
+  certaintyArray: string[];
+  subscribeBy: string[];
+  countryNames: string[];
+}
+
 export interface SubscriptionQueryResult {
   [key: string]: any;
   subscriptionList: SubscriptionItem[];
 }
 
 export interface SubscriptionForm {
-  [key: string]: string | string[] | string[] | undefined;
+  [key: string]: string | string[] | number[] | undefined;
   id?: string;
-  title: string;
-  countries: string[];
-  urgency: string[];
-  severity: string[];
-  certainty: string[];
-  methods: string[];
+  subscriptionName: string;
+  countryIds: number[];
+  urgencyArray: string[];
+  severityArray: string[];
+  certaintyArray: string[];
+  subscribeBy: string[];
 }
 
 export interface CountryType {
