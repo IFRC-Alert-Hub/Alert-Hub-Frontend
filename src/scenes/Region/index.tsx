@@ -1,12 +1,12 @@
 import { Box, CircularProgress, Container, Typography } from "@mui/material";
 import { useParams } from "react-router-dom";
-import TitleHeader from "../../components/TitleHeader";
 import { useEffect, useMemo } from "react";
 import CardCarousel from "../../components/Card/CardCarousel";
 import { useQuery } from "@apollo/client";
 import { cap_aggregator } from "../../API/API_Links";
 import MapComponentWithFilter from "../../components/MapComponent/MapComponentWithFilter";
 import { ALL_ALERTS, GET_ALL_REGIONS } from "../../API/ALL_QUERIES";
+import TitleHeader from "../../components/Layout/TitleHeader";
 
 export const cardData = [
   {

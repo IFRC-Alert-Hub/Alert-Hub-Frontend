@@ -3,10 +3,10 @@ import { useQuery } from "@apollo/client";
 import { CircularProgress, Container } from "@mui/material";
 import { useLocation } from "react-router-dom";
 import { RowsData } from "./Table/Data";
-import TitleHeader from "../../components/TitleHeader";
 import FilterableTableComponent from "./Table/TableComponent";
 import { cap_aggregator } from "../../API/API_Links";
 import { ALL_ALERTS } from "../../API/ALL_QUERIES";
+import TitleHeader from "../../components/Layout/TitleHeader";
 
 interface AllAlertsProps {
   selectedFilter?: string;
