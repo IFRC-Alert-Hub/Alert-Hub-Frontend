@@ -19,6 +19,7 @@ import { auth_system } from "../API/API_Links";
 import { VERIFY_TOKEN } from "../API/mutations/authMutations";
 import { useContext, useEffect, useState } from "react";
 import { UserContext } from "../context/UserContext";
+import Progress from "../components/Progress";
 
 const PrivateRoutes = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -53,7 +54,7 @@ const PrivateRoutes = () => {
   }, [verify, userContext]);
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return <></>;
   }
 
   return isAuthenticated && !isLoading ? (
