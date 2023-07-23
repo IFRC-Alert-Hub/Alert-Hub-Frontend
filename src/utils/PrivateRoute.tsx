@@ -53,7 +53,7 @@ const PrivateRoutes = () => {
   }, [verify, userContext]);
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return <></>;
   }
 
   return isAuthenticated && !isLoading ? (

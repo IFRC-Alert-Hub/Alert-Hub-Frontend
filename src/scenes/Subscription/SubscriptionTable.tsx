@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import {
   Table,
   TableBody,
@@ -22,43 +22,23 @@ import {
 import { useMutation } from "@apollo/client";
 import { DELETE_SUBSCRIPTION } from "../../API/mutations/subscriptionMutations";
 import { subscription_module } from "../../API/API_Links";
-import ModalForm from "./ModalForm";
 import { GET_SUBSCRIPTIONS } from "../../API/ALL_QUERIES";
-import {
-  ContinentType,
-  CountryType,
-  SubscriptionForm,
-  SubscriptionItem,
-} from "../../API/TYPES";
+import { SubscriptionForm, UpdatedSubscriptionItem } from "../../API/TYPES";
 
 type PropsType = {
-  selectedRow: SubscriptionForm;
+  updatedSubscriptions: UpdatedSubscriptionItem[];
+  modalOpen: boolean;
+  handleModalOpen: () => void;
+  setFormType: React.Dispatch<React.SetStateAction<string>>;
   setSelectedRow: React.Dispatch<React.SetStateAction<SubscriptionForm>>;
-  formType: string;
-  countryList: CountryType[];
-  regionList: ContinentType[];
-  tableData: SubscriptionItem[];
-  setTableData: React.Dispatch<React.SetStateAction<SubscriptionItem[]>>;
-  open: boolean;
-  handleOpen: (type: string, id?: string) => void;
-  handleClose: () => void;
 };
 
-interface UpdatedRow extends SubscriptionItem {
-  filteredCountryNames: (string | undefined)[];
-}
-
 const SubscriptionTable = ({
-  selectedRow,
+  updatedSubscriptions,
+  modalOpen,
+  handleModalOpen,
+  setFormType,
   setSelectedRow,
-  formType,
-  countryList,
-  regionList,
-  tableData,
-  setTableData,
-  open,
-  handleOpen,
-  handleClose,
 }: PropsType) => {
   const [deleteSubscription] = useMutation(DELETE_SUBSCRIPTION, {
     refetchQueries: [GET_SUBSCRIPTIONS, "FetchSubscriptions"],
@@ -66,46 +46,24 @@ const SubscriptionTable = ({
   });
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
-  const [updatedRows, setUpdatedRows] = useState<UpdatedRow[]>();
+  const [deleteId, setDeleteId] = useState("");
   const [confirmDelete, setConfirmDelete] = useState(false);
-
-  // show the first three countries
-  useEffect(() => {
-    const updatedItems = tableData.map((row: SubscriptionItem) => {
-      if (row.countryIds?.length > 3) {
-        const filteredCountryIds = row.countryIds.slice(0, 3);
-        const filteredCountryNames = filteredCountryIds.map((countryId) => {
-          const foundCountry = countryList.find(
-            (country) => country.id === countryId.toString()
-          );
-          return foundCountry?.name;
-        });
-        filteredCountryNames.push("...");
-        return { ...row, filteredCountryNames };
-      } else {
-        const filteredCountryIds = row.countryIds;
-        const filteredCountryNames = filteredCountryIds.map((countryId) => {
-          const foundCountry = countryList?.find(
-            (country) => country.id === countryId.toString()
-          );
-          return foundCountry?.name;
-        });
-        return { ...row, filteredCountryNames };
-      }
-    });
-    setUpdatedRows(updatedItems);
-  }, [tableData, countryList]);
 
   // Avoid a layout jump when reaching the last page with empty rows.
   const emptyRows = useMemo(
     () =>
-      page > 0 ? Math.max(0, (1 + page) * rowsPerPage - tableData?.length) : 0,
-    [page, rowsPerPage, tableData]
+      page > 0
+        ? Math.max(0, (1 + page) * rowsPerPage - updatedSubscriptions?.length)
+        : 0,
+    [page, rowsPerPage, updatedSubscriptions]
   );
   const visibleRows = useMemo(
     () =>
-      updatedRows?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage),
-    [page, rowsPerPage, updatedRows]
+      updatedSubscriptions?.slice(
+        page * rowsPerPage,
+        page * rowsPerPage + rowsPerPage
+      ),
+    [page, rowsPerPage, updatedSubscriptions]
   );
 
   const handleChangePage = (
@@ -124,7 +82,6 @@ const SubscriptionTable = ({
 
   const handleDelete = (id: string) => {
     deleteSubscription({ variables: { subscriptionId: parseInt(id) } });
-    setTableData(tableData.filter((item) => item.id !== id));
   };
 
   return (
@@ -143,8 +100,11 @@ const SubscriptionTable = ({
               Title
             </TableCell>
             <TableCell
-              align="center"
-              sx={{ fontSize: "0.875rem", fontWeight: "600" }}
+              align="left"
+              sx={{
+                fontSize: "0.875rem",
+                fontWeight: "600",
+              }}
             >
               Subscribed Countries
             </TableCell>
@@ -181,7 +141,7 @@ const SubscriptionTable = ({
           </TableRow>
         </TableHead>
         <TableBody>
-          {visibleRows?.map((row: UpdatedRow) => (
+          {visibleRows?.map((row: UpdatedSubscriptionItem) => (
             <TableRow key={row.id}>
               <TableCell
                 align="center"
@@ -207,17 +167,26 @@ const SubscriptionTable = ({
                 </Button>
               </TableCell>
 
-              <TableCell align="center" sx={{ fontSize: "0.875rem" }}>
+              <TableCell align="left" sx={{ fontSize: "0.875rem" }}>
                 {row.countryIds?.length > 1 ? (
                   <Tooltip
                     title={`${row.countryIds?.length} countries are selected`}
                     arrow
                   >
-                    <Box>{row.filteredCountryNames?.join(", ")}</Box>
+                    <Box
+                      sx={{
+                        maxWidth: "150px",
+                        whiteSpace: "nowrap",
+                        overflow: "hidden",
+                        textOverflow: "ellipsis",
+                      }}
+                    >
+                      {row.countryNames?.join(", ")}
+                    </Box>
                   </Tooltip>
                 ) : (
                   <Tooltip title={"1 country is selected"} arrow>
-                    <Box>{row.filteredCountryNames?.join(", ")}</Box>
+                    <Box>{row.countryNames?.join(", ")}</Box>
                   </Tooltip>
                 )}
               </TableCell>
@@ -246,7 +215,19 @@ const SubscriptionTable = ({
                 <Button
                   variant="text"
                   size="small"
-                  onClick={() => handleOpen("Edit", row.id)}
+                  onClick={() => {
+                    handleModalOpen();
+                    setFormType("Edit");
+                    setSelectedRow({
+                      id: row.id,
+                      subscriptionName: row.subscriptionName,
+                      countryIds: row.countryIds,
+                      urgencyArray: row.urgencyArray,
+                      severityArray: row.severityArray,
+                      certaintyArray: row.certaintyArray,
+                      subscribeBy: row.subscribeBy,
+                    });
+                  }}
                   sx={{
                     color: "red",
                     minWidth: 0,
@@ -263,7 +244,10 @@ const SubscriptionTable = ({
                 <Button
                   variant="text"
                   size="small"
-                  onClick={() => setConfirmDelete(true)}
+                  onClick={() => {
+                    setConfirmDelete(true);
+                    setDeleteId(row.id);
+                  }}
                   sx={{
                     color: "red",
                     minWidth: 0,
@@ -276,47 +260,6 @@ const SubscriptionTable = ({
                 >
                   Delete
                 </Button>
-                <Dialog
-                  open={confirmDelete}
-                  onClose={() => {
-                    setConfirmDelete(false);
-                  }}
-                  aria-labelledby="alert-dialog-title"
-                  aria-describedby="alert-dialog-description"
-                >
-                  <DialogTitle id="alert-dialog-title">
-                    {"Delete the subscription"}
-                  </DialogTitle>
-                  <DialogContent>
-                    <DialogContentText id="alert-dialog-description">
-                      Are you sure to delete this subscription?
-                    </DialogContentText>
-                  </DialogContent>
-                  <DialogActions>
-                    <Button
-                      onClick={() => {
-                        setConfirmDelete(false);
-                      }}
-                      variant="outlined"
-                      color="error"
-                      size="small"
-                    >
-                      Cancel
-                    </Button>
-                    <Button
-                      onClick={() => {
-                        handleDelete(row.id);
-                        setConfirmDelete(false);
-                      }}
-                      autoFocus
-                      variant="contained"
-                      color="error"
-                      size="small"
-                    >
-                      Confirm
-                    </Button>
-                  </DialogActions>
-                </Dialog>
               </TableCell>
             </TableRow>
           ))}
@@ -345,23 +288,58 @@ const SubscriptionTable = ({
       <TablePagination
         rowsPerPageOptions={[5, 10]}
         component="div"
-        count={updatedRows ? updatedRows.length : 0}
+        count={updatedSubscriptions ? updatedSubscriptions.length : 0}
         rowsPerPage={rowsPerPage}
         page={page}
         onPageChange={handleChangePage}
         onRowsPerPageChange={handleChangeRowsPerPage}
       />
-      <ModalForm
-        selectedRow={selectedRow}
-        setSelectedRow={setSelectedRow}
-        formType={formType}
-        tableData={tableData}
-        setTableData={setTableData}
-        countryList={countryList}
-        regionList={regionList}
-        open={open}
-        handleClose={handleClose}
-      />
+      <Dialog
+        open={confirmDelete}
+        onClose={() => {
+          setConfirmDelete(false);
+        }}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+        sx={{
+          ".MuiDialog-paper": {
+            color: "transparent",
+          },
+        }}
+      >
+        <DialogTitle id="alert-dialog-title">
+          {"Delete the subscription"}
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            Are you sure to delete this subscription?
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button
+            onClick={() => {
+              setConfirmDelete(false);
+            }}
+            variant="outlined"
+            color="error"
+            size="small"
+          >
+            Cancel
+          </Button>
+          <Button
+            onClick={() => {
+              handleDelete(deleteId);
+              setConfirmDelete(false);
+            }}
+            autoFocus
+            variant="contained"
+            color="error"
+            size="small"
+          >
+            Confirm
+          </Button>
+        </DialogActions>
+      </Dialog>
     </TableContainer>
   );
 };

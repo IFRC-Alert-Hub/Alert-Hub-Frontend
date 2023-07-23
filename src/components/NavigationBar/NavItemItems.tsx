@@ -1,6 +1,6 @@
 export const firstNavBarItems = [
   { name: "About", path: "/about", exact: false },
-  { name: "Resources", path: "/resources", exact: false },
+  // { name: "Resources", path: "/resources", exact: false },
 ];
 
 export const secondNavBarItems = [{ name: "Home", path: "/", exact: true }];

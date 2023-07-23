@@ -1,28 +1,35 @@
-import {
-  Box,
-  Button,
-  CircularProgress,
-  Container,
-  Grid,
-  Typography,
-} from "@mui/material";
-import SubscriptionTable from "./SubscriptionTable";
-import { useEffect, useState } from "react";
-import ModalForm from "./ModalForm";
+import { Button, Container, Grid, Typography } from "@mui/material";
+import { useState } from "react";
 import { useQuery } from "@apollo/client";
-
 import { cap_aggregator, subscription_module } from "../../API/API_Links";
 import {
-  ContinentType,
   CountryType,
   SubscriptionForm,
   SubscriptionItem,
   SubscriptionQueryResult,
 } from "../../API/TYPES";
 import { GET_ALL_COUNTRIES, GET_SUBSCRIPTIONS } from "../../API/ALL_QUERIES";
+import SubscriptionTable from "./SubscriptionTable";
+import ModalForm from "./ModalForm";
+import Progress from "../../components/Progress";
+
+const INIT_ROW: SubscriptionForm = {
+  subscriptionName: "",
+  countryIds: [],
+  urgencyArray: [],
+  severityArray: [],
+  certaintyArray: [],
+  subscribeBy: [],
+};
 
 const Subscription = () => {
   // fetch the data from backend
+  const { loading: countryLoading, data: countryData } = useQuery(
+    GET_ALL_COUNTRIES,
+    {
+      client: cap_aggregator,
+    }
+  );
   const {
     loading: subscriptionLoading,
     error: subscriptionError,
@@ -30,75 +37,47 @@ const Subscription = () => {
   } = useQuery<SubscriptionQueryResult>(GET_SUBSCRIPTIONS, {
     client: subscription_module,
   });
-  const {
-    loading: countryLoading,
-    error: countryError,
-    data: countryData,
-  } = useQuery(GET_ALL_COUNTRIES, {
-    client: cap_aggregator,
-  });
 
-  const [regionList, setRegionList] = useState<ContinentType[]>([]);
-  const [countryList, setCountryList] = useState<CountryType[]>([]);
-  const [tableData, setTableData] = useState<SubscriptionItem[]>([]);
   const [formType, setFormType] = useState("");
-  const [selectedRow, setSelectedRow] = useState<SubscriptionForm>({
-    title: "",
-    countries: [],
-    urgency: [],
-    severity: [],
-    certainty: [],
-    methods: [],
-  });
+  const [modalOpen, setModalOpen] = useState(false);
+  const [selectedRow, setSelectedRow] = useState<SubscriptionForm>(INIT_ROW);
 
-  useEffect(() => {
-    if (subscriptionData) {
-      setTableData(subscriptionData.listAllSubscription);
-    }
-  }, [subscriptionData]);
-
-  useEffect(() => {
-    if (countryData) {
-      setRegionList(countryData.listRegion);
-      setCountryList(countryData.listCountry);
-    }
-  }, [countryData]);
-
-  const [open, setOpen] = useState(false);
-
-  const handleOpen = (type: string, id?: string) => {
-    if (id) {
-      const foundItem = tableData.find(
-        (item) => item.id.toString() === id.toString()
-      );
-      if (foundItem) {
-        setSelectedRow({
-          id: id,
-          title: foundItem.subscriptionName,
-          countries: foundItem.countryIds.map((number) => number.toString()),
-          urgency: foundItem.urgencyArray,
-          severity: foundItem.severityArray,
-          certainty: foundItem.certaintyArray,
-          methods: foundItem.subscribeBy,
-        });
-      }
-    } else {
-      setSelectedRow({
-        title: "",
-        countries: [],
-        urgency: [],
-        severity: [],
-        certainty: [],
-        methods: [],
-      });
-    }
-    setFormType(type);
-    setOpen(true);
+  const handleModalOpen = () => {
+    setModalOpen(true);
   };
-  const handleClose = () => {
+  const handleModalClose = () => {
     setFormType("");
-    setOpen(false);
+    setSelectedRow(INIT_ROW);
+    setModalOpen(false);
   };
+
+  let tableContent;
+  if (subscriptionLoading || countryLoading) {
+    tableContent = <Progress />;
+  } else if (subscriptionError) {
+    tableContent = <p>Something Error!</p>;
+  } else if (subscriptionData && countryData) {
+    const tableDetail = subscriptionData.listAllSubscription.map(
+      (item: SubscriptionItem) => {
+        const countryNames = item.countryIds.map((countryId: number) => {
+          const foundCountry = countryData.listCountry.find(
+            (country: CountryType) => country.id === countryId.toString()
+          );
+          return foundCountry?.name;
+        });
+        return { ...item, countryNames };
+      }
+    );
+    tableContent = (
+      <SubscriptionTable
+        updatedSubscriptions={tableDetail}
+        modalOpen={modalOpen}
+        handleModalOpen={handleModalOpen}
+        setFormType={setFormType}
+        setSelectedRow={setSelectedRow}
+      />
+    );
+  }
 
   return (
     <Container maxWidth={"lg"}>
@@ -118,48 +97,25 @@ const Subscription = () => {
           <Button
             variant="contained"
             color="error"
-            onClick={() => handleOpen("Add")}
+            onClick={() => {
+              handleModalOpen();
+              setFormType("Add");
+            }}
             sx={{ borderRadius: 3, marginRight: "10px" }}
           >
             Add
           </Button>
         </Grid>
       </Grid>
-      {subscriptionLoading ? (
-        <Box sx={{ display: "flex" }}>
-          <CircularProgress />
-        </Box>
-      ) : subscriptionError ? (
-        <p>Error: {subscriptionError.message}</p>
-      ) : (
-        <SubscriptionTable
-          selectedRow={selectedRow}
-          setSelectedRow={setSelectedRow}
-          formType={formType}
-          countryList={countryList}
-          regionList={regionList}
-          tableData={tableData}
-          setTableData={setTableData}
-          open={open}
-          handleOpen={handleOpen}
-          handleClose={handleClose}
-        />
-      )}
-      {countryLoading ? (
-        <div></div>
-      ) : countryError ? (
-        <p>Error: {countryError.message}</p>
-      ) : (
+      {tableContent}
+      {countryData && (
         <ModalForm
+          modalOpen={modalOpen}
+          handleModalClose={handleModalClose}
+          formType={formType}
+          countryList={countryData.listCountry}
           selectedRow={selectedRow}
           setSelectedRow={setSelectedRow}
-          formType={formType}
-          tableData={tableData}
-          setTableData={setTableData}
-          countryList={countryList}
-          regionList={regionList}
-          open={open}
-          handleClose={handleClose}
         />
       )}
     </Container>

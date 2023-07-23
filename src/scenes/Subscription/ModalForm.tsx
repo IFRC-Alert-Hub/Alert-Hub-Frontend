@@ -18,12 +18,7 @@ import {
 import { subscription_module } from "../../API/API_Links";
 import CountryAutocomplete from "./CountryAutocomplete";
 import { GET_SUBSCRIPTIONS } from "../../API/ALL_QUERIES";
-import {
-  ContinentType,
-  CountryType,
-  SubscriptionForm,
-  SubscriptionItem,
-} from "../../API/TYPES";
+import { CountryType, SubscriptionForm } from "../../API/TYPES";
 
 const style = {
   position: "absolute" as "absolute",
@@ -42,43 +37,41 @@ const style = {
 
 const checkBoxList = [
   {
+    name: "urgencyArray",
     legend: "Urgency",
     checkboxItems: ["Immediate", "Expected", "Future", "Past", "Unknown"],
   },
   {
+    name: "severityArray",
     legend: "Severity",
     checkboxItems: ["Extreme", "Severe", "Moderate", "Minor", "Unknown"],
   },
   {
+    name: "certaintyArray",
     legend: "Certainty",
     checkboxItems: ["Observed", "Likely", "Possible", "Unlikely", "Unknown"],
   },
   {
+    name: "subscribeBy",
     legend: "Methods",
     checkboxItems: ["Email"],
   },
 ];
 
 type PropsType = {
-  formType: String;
-  tableData: SubscriptionItem[];
-  setTableData: React.Dispatch<React.SetStateAction<SubscriptionItem[]>>;
+  modalOpen: boolean;
+  handleModalClose: () => void;
+  formType: string;
   countryList: CountryType[];
-  regionList: ContinentType[];
-  open: boolean;
-  handleClose: () => void;
   selectedRow: SubscriptionForm;
   setSelectedRow: React.Dispatch<React.SetStateAction<SubscriptionForm>>;
 };
 
 const ModalForm = ({
+  modalOpen,
+  handleModalClose,
   formType,
-  tableData,
-  setTableData,
   countryList,
-  regionList,
-  open,
-  handleClose,
   selectedRow,
   setSelectedRow,
 }: PropsType) => {
@@ -94,12 +87,12 @@ const ModalForm = ({
   const [verifyForm, setVerifyForm] = useState(false);
 
   const formErrors = {
-    title: selectedRow.title.length < 1,
-    countries: selectedRow.countries.length < 1,
-    urgency: selectedRow.urgency.length < 1,
-    severity: selectedRow.severity.length < 1,
-    certainty: selectedRow.certainty.length < 1,
-    methods: selectedRow.methods.length < 1,
+    subscriptionName: selectedRow.subscriptionName.length < 1,
+    countryIds: selectedRow.countryIds.length < 1,
+    urgencyArray: selectedRow.urgencyArray.length < 1,
+    severityArray: selectedRow.severityArray.length < 1,
+    certaintyArray: selectedRow.certaintyArray.length < 1,
+    subscribeBy: selectedRow.subscribeBy.length < 1,
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -123,65 +116,47 @@ const ModalForm = ({
     }
   };
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setVerifyForm(true);
 
     // Pass with no errors
     if (!Object.values(formErrors).includes(true)) {
-      const countryNumberIds: number[] = selectedRow.countries.map(
-        (str: string) => Number(str)
-      );
       if (selectedRow.id) {
-        const res = await updateSubscription({
+        updateSubscription({
           variables: {
             subscriptionId: parseInt(selectedRow.id),
-            subscriptionName: selectedRow.title,
-            countryIds: countryNumberIds,
-            urgencyArray: selectedRow.urgency,
-            severityArray: selectedRow.severity,
-            certaintyArray: selectedRow.certainty,
-            subscribeBy: selectedRow.methods,
+            subscriptionName: selectedRow.subscriptionName,
+            countryIds: selectedRow.countryIds,
+            urgencyArray: selectedRow.urgencyArray,
+            severityArray: selectedRow.severityArray,
+            certaintyArray: selectedRow.certaintyArray,
+            subscribeBy: selectedRow.subscribeBy,
           },
         });
-        console.log(res);
-        // const updatedData = tableData.map((item) =>
-        //   item.id === res.data.updateSubscription.subscription.id
-        //     ? res.data.updateSubscription.subscription
-        //     : item
-        // );
-        // setTableData(updatedData);
       } else {
-        const res = await addSubscription({
+        addSubscription({
           variables: {
-            subscriptionName: selectedRow.title,
-            countryIds: countryNumberIds,
-            urgencyArray: selectedRow.urgency,
-            severityArray: selectedRow.severity,
-            certaintyArray: selectedRow.certainty,
-            subscribeBy: selectedRow.methods,
+            subscriptionName: selectedRow.subscriptionName,
+            countryIds: selectedRow.countryIds,
+            urgencyArray: selectedRow.urgencyArray,
+            severityArray: selectedRow.severityArray,
+            certaintyArray: selectedRow.certaintyArray,
+            subscribeBy: selectedRow.subscribeBy,
           },
         });
-        console.log(res);
-        // setTableData([res.data.createSubscription.subscription, ...tableData]);
       }
-
-      setSelectedRow(selectedRow);
       setVerifyForm(false);
-      handleClose();
+      handleModalClose();
     }
-  };
-
-  const handleCancel = () => {
-    handleClose();
   };
 
   return (
     <Modal
-      open={open}
+      open={modalOpen}
       onClose={() => {
         setVerifyForm(false);
-        handleClose();
+        handleModalClose();
       }}
       aria-labelledby="modal-title"
     >
@@ -194,26 +169,28 @@ const ModalForm = ({
             <InputLabel
               htmlFor="title"
               required
-              error={verifyForm && formErrors.title}
+              error={verifyForm && formErrors.subscriptionName}
               className="subs-form-title"
             >
               Title
             </InputLabel>
             <TextField
-              id="title"
-              name="title"
+              id="subscriptionName"
+              name="subscriptionName"
               size="small"
               variant="outlined"
-              value={selectedRow.title}
+              value={selectedRow.subscriptionName}
               onChange={handleChange}
-              error={verifyForm && formErrors.title}
+              error={verifyForm && formErrors.subscriptionName}
               helperText={
-                verifyForm && formErrors.title && "You need to enter the title"
+                verifyForm &&
+                formErrors.subscriptionName &&
+                "You need to enter the title"
               }
               InputProps={{
                 endAdornment: (
                   <InputAdornment position="end">
-                    {selectedRow.title.length | 0}
+                    {selectedRow.subscriptionName.length | 0}
                     /20
                   </InputAdornment>
                 ),
@@ -232,7 +209,8 @@ const ModalForm = ({
             <FormCheckbox
               verifyForm={verifyForm}
               formErrors={formErrors}
-              key={item.legend}
+              key={item.name}
+              checkboxTitle={item.name}
               legend={item.legend}
               checkboxItems={item.checkboxItems}
               selectedRow={selectedRow}
@@ -244,7 +222,7 @@ const ModalForm = ({
               variant="outlined"
               color="error"
               sx={{ marginRight: "10px" }}
-              onClick={handleCancel}
+              onClick={handleModalClose}
             >
               Cancel
             </Button>
