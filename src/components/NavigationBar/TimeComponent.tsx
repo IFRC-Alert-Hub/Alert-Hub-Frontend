@@ -12,7 +12,7 @@ const TimeComponent: React.FC = () => {
         month: "long",
         day: "numeric",
         year: "numeric",
-        hour: "numeric",
+        hour: "2-digit",
         minute: "numeric",
         hour12: true,
         timeZone: "UTC",
