@@ -2,26 +2,22 @@ type Order = "asc" | "desc" | "";
 
 interface Data {
   identifier: string;
-  country: string;
   event: string;
-  sender: string;
-  effective: Date;
-  sent: Date;
   eventCategory: string;
+  sent: string;
+  sender: string;
+  region: string;
+  country: string;
 }
 
 type RowsData = {
   identifier: string;
-  eventCategory: string;
   event: string;
+  eventCategory: string;
+  sent: string;
+  sender: string;
   region: string;
   country: string;
-  severity: string;
-  urgency: string;
-  certainty: string;
-  sender: string;
-  effective: string;
-  sent: string;
   [key: string]: string;
 };
 

@@ -13,13 +13,6 @@ interface AllAlertsProps {
   filterKey?: string;
 }
 
-function modifyDateTime(timestamp: string) {
-  const date = new Date(timestamp);
-
-  // Format the date and time as desired
-  const formattedDateTime = date.toLocaleString("en-US");
-  return formattedDateTime;
-}
 
 const AllAlerts: React.FC<AllAlertsProps> = () => {
   const location = useLocation();
@@ -34,16 +27,11 @@ const AllAlerts: React.FC<AllAlertsProps> = () => {
     identifier: alert.identifier! || "",
     event: alert.alertinfoSet[0]?.event || "",
     eventCategory: alert.alertinfoSet[0]?.category || "",
-    sent: modifyDateTime(alert.sent!),
+    sent: alert.sent!,
     sender: alert.sender,
     region: alert.country?.region?.name,
     country: alert.country?.name,
-    infoSet: alert.country?.alertinfoSet,
-    severity: alert.severity,
-    urgency: alert.urgency,
-    certainty: alert.certainty,
-    effective: modifyDateTime(alert.effective!) || "",
-    expires: modifyDateTime(alert.expires),
+    infoSet: alert.country?.alertinfoSet || [],
   }));
 
   return (

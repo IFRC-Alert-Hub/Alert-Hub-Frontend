@@ -26,6 +26,13 @@ interface EnhancedTableProps {
   rowsData: RowsData[];
   setNumAlerts: (numAlerts: number) => void;
 }
+function modifyDateTime(timestamp: string) {
+  const date = new Date(timestamp);
+
+  // Format the date and time as desired
+  const formattedDateTime = date.toLocaleString("en-US");
+  return formattedDateTime;
+}
 
 const EnhancedTable = (props: EnhancedTableProps) => {
   const { selectedFilter, filterKey, rowsData, setNumAlerts } = props;
@@ -203,7 +210,9 @@ const EnhancedTable = (props: EnhancedTableProps) => {
                     <TableCell align="center">{row.identifier}</TableCell>
                     <TableCell align="center">{row.event}</TableCell>
                     <TableCell align="center">{row.eventCategory}</TableCell>
-                    <TableCell align="center">{row.sent}</TableCell>
+                    <TableCell align="center">
+                      {modifyDateTime(row.sent)})
+                    </TableCell>
                     <TableCell align="center">
                       <Link to={row.sender}>{row.sender}</Link>
                     </TableCell>
