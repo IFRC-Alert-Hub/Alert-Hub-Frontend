@@ -29,7 +29,6 @@ interface EnhancedTableProps {
 function modifyDateTime(timestamp: string) {
   const date = new Date(timestamp);
 
-  // Format the date and time as desired
   const formattedDateTime = date.toLocaleString("en-US");
   return formattedDateTime;
 }

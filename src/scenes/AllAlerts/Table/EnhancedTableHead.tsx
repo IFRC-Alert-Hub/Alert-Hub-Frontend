@@ -9,9 +9,10 @@ import {
   TableSortLabel,
   Checkbox,
 } from "@mui/material";
-import React from "react";
+import React, { useState } from "react";
 import DropdownFilter from "./DropdownFilter";
 import { Data, Order, RowsData, headCells } from "./Data";
+import DatePickerComponent from "../../../components/DatePicker/DatePicker";
 interface EnhancedTableProps {
   numSelected: number;
   onRequestSort: (
@@ -48,6 +49,10 @@ const EnhancedTableHead = (props: EnhancedTableProps) => {
       onRequestSort(event, property);
     };
 
+  const [selectedSent, setSelectedSent] = useState<
+    [number | null, number | null] | undefined
+  >([null, null]);
+
   return (
     <TableHead>
       <TableRow>
@@ -64,7 +69,20 @@ const EnhancedTableHead = (props: EnhancedTableProps) => {
         </TableCell>
 
         {headCells.map((headCell) =>
-          !headCell.isDropdownFilter ? (
+          headCell.isDatePicker ? (
+            <TableCell
+              key={headCell.id}
+              align={"center"}
+              padding={"normal"}
+              sx={{ minWidth: headCell.minWidth }}
+            >
+              <DatePickerComponent
+                datePickerTitle={headCell.label as string}
+                selectedDate={selectedSent}
+                setSelectedDate={setSelectedSent}
+              ></DatePickerComponent>
+            </TableCell>
+          ) : !headCell.isDropdownFilter ? (
             <TableCell
               key={headCell.id}
               align={"center"}

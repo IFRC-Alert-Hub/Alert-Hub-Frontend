@@ -10,6 +10,36 @@ interface Data {
   country: string;
 }
 
+const rows: RowsData[] = [
+  {
+    region: "Asia Pacific",
+    country: "Australia",
+    event: "Red thunderstorm warning",
+    eventCategory: "Moderate",
+    identifier: "Likely",
+    sender:
+      "https://feeds.meteoalarm.org/feeds/meteoalarm-legacy-atom-australia",
+    sent: "2022-06-01T18:59:59+00:00",
+  },
+  {
+    region: "Europe",
+    country: "Belgium",
+    event: "Yellow snow squall warning",
+    eventCategory: "Minor",
+    identifier: "Unlikely",
+    sender: "https://feeds.meteoalarm.org/feeds/meteoalarm-legacy-atom-belgium",
+    sent: "2023-06-20T18:59:59+00:00",
+  },
+  {
+    region: "Africa",
+    country: "Nigeria",
+    event: "Yellow heavy rain warning",
+    eventCategory: "Moderate",
+    identifier: "Likely",
+    sender: "https://feeds.meteoalarm.org/feeds/meteoalarm-legacy-atom-nigeria",
+    sent: "2022-01-19T18:59:59+00:00",
+  },
+];
 type RowsData = {
   identifier: string;
   event: string;
@@ -34,6 +64,7 @@ interface HeadCell {
   minWidth: string;
   hasFilter?: boolean;
   allMenuItemTitle?: string;
+  isDatePicker?: boolean;
 }
 
 const headCells: HeadCell[] = [
@@ -87,7 +118,8 @@ const headCells: HeadCell[] = [
     label: "Sent",
     isDropdownFilter: false,
     minWidth: "100px",
-    hasFilter: true,
+    hasFilter: false,
+    isDatePicker: true,
   },
   {
     id: "sender",
@@ -126,4 +158,4 @@ const headCells: HeadCell[] = [
 ];
 
 export type { Data, RowsData, Order };
-export { headCells };
+export { headCells, rows };
