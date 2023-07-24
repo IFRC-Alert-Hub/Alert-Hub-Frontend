@@ -8,12 +8,15 @@ import {
   TableRow,
   TableSortLabel,
   Checkbox,
+  TextField,
 } from "@mui/material";
 import React from "react";
 import DropdownFilter from "./DropdownFilter";
 import { Data, Order, RowsData, headCells } from "./Data";
+import DatePickerComponent from "../../../components/DatePicker/DatePicker";
 interface EnhancedTableProps {
   numSelected: number;
+
   onRequestSort: (
     event: React.MouseEvent<unknown>,
     property: keyof Data
@@ -22,10 +25,13 @@ interface EnhancedTableProps {
   order: Order;
   orderBy: string;
   rowCount: number;
-
   setSelected: React.Dispatch<React.SetStateAction<readonly RowsData[]>>;
   filters: typeof headCells;
   setFilters: React.Dispatch<React.SetStateAction<typeof headCells>>;
+  selectedSent: [number | null, number | null] | undefined;
+  setSelectedSent: React.Dispatch<
+    React.SetStateAction<[number | null, number | null] | undefined>
+  >;
 }
 const EnhancedTableHead = (props: EnhancedTableProps) => {
   const {
@@ -38,6 +44,8 @@ const EnhancedTableHead = (props: EnhancedTableProps) => {
     setSelected,
     filters,
     setFilters,
+    selectedSent,
+    setSelectedSent,
   } = props;
 
   const [sortedColumn, setSortedColumn] = React.useState("");
@@ -64,7 +72,20 @@ const EnhancedTableHead = (props: EnhancedTableProps) => {
         </TableCell>
 
         {headCells.map((headCell) =>
-          !headCell.isDropdownFilter ? (
+          headCell.isDatePicker ? (
+            <TableCell
+              key={headCell.id}
+              align={"center"}
+              padding={"normal"}
+              sx={{ minWidth: headCell.minWidth }}
+            >
+              <DatePickerComponent
+                datePickerTitle={headCell.label as string}
+                selectedDate={selectedSent}
+                setSelectedDate={setSelectedSent}
+              ></DatePickerComponent>
+            </TableCell>
+          ) : !headCell.isDropdownFilter ? (
             <TableCell
               key={headCell.id}
               align={"center"}
@@ -150,6 +171,16 @@ const EnhancedTableHead = (props: EnhancedTableProps) => {
                   {headCell.label}
                 </span>
               )}
+
+              {headCell.isSearchable ? (
+                <TextField
+                  id="outlined-basic"
+                  label="Outlined"
+                  variant="outlined"
+                />
+              ) : (
+                <></>
+              )}
             </TableCell>
           ) : (
             <>
@@ -166,6 +197,13 @@ const EnhancedTableHead = (props: EnhancedTableProps) => {
             </>
           )
         )}
+        <TableCell
+          align={"center"}
+          padding={"normal"}
+          sx={{ minWidth: "150px" }}
+        >
+          Info
+        </TableCell>
       </TableRow>
     </TableHead>
   );

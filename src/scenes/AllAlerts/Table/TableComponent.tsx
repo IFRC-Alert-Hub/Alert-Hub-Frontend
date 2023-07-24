@@ -29,7 +29,6 @@ interface EnhancedTableProps {
 function modifyDateTime(timestamp: string) {
   const date = new Date(timestamp);
 
-  // Format the date and time as desired
   const formattedDateTime = date.toLocaleString("en-US");
   return formattedDateTime;
 }
@@ -43,6 +42,10 @@ const EnhancedTable = (props: EnhancedTableProps) => {
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
 
   const [filters, setFilters] = React.useState(headCells);
+
+  const [selectedSent, setSelectedSent] = React.useState<
+    [number | null, number | null] | undefined
+  >([null, null]);
 
   React.useEffect(() => {
     setFilters((prevFilters) => {
@@ -82,8 +85,22 @@ const EnhancedTable = (props: EnhancedTableProps) => {
       }
     });
 
+    if (selectedSent && selectedSent[0] !== null && selectedSent[1] !== null) {
+      filteredData = filteredData.filter((alert) => {
+        const expiresTimestamp =
+          new Date(alert.sent as string).getTime() / 1000;
+        if (
+          expiresTimestamp >= selectedSent[0]! &&
+          expiresTimestamp <= selectedSent[1]!
+        ) {
+          return true;
+        }
+        return false;
+      });
+    }
+
     return filteredData;
-  }, [filters, rowsData]);
+  }, [filters, rowsData, selectedSent]);
 
   const visibleRows = React.useMemo(
     () =>
@@ -178,6 +195,8 @@ const EnhancedTable = (props: EnhancedTableProps) => {
               setSelected={setSelected}
               filters={filters}
               setFilters={setFilters}
+              selectedSent={selectedSent}
+              setSelectedSent={setSelectedSent}
             />
             <TableBody>
               {visibleRows.map((row, index) => {
@@ -211,13 +230,16 @@ const EnhancedTable = (props: EnhancedTableProps) => {
                     <TableCell align="center">{row.event}</TableCell>
                     <TableCell align="center">{row.eventCategory}</TableCell>
                     <TableCell align="center">
-                      {modifyDateTime(row.sent)})
+                      {modifyDateTime(row.sent)}
                     </TableCell>
                     <TableCell align="center">
                       <Link to={row.sender}>{row.sender}</Link>
                     </TableCell>
                     <TableCell align="center">{row.region}</TableCell>
                     <TableCell align="center">{row.country}</TableCell>
+                    <TableCell align="center">
+                      <Link to="https://www.google.com">View Alert Info</Link>{" "}
+                    </TableCell>
                   </TableRow>
                 );
               })}
