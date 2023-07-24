@@ -65,6 +65,7 @@ interface HeadCell {
   hasFilter?: boolean;
   allMenuItemTitle?: string;
   isDatePicker?: boolean;
+  isSearchable?: boolean;
 }
 
 const headCells: HeadCell[] = [
@@ -154,6 +155,7 @@ const headCells: HeadCell[] = [
     isDropdownFilter: false,
     minWidth: "150px",
     hasFilter: true,
+    isSearchable: true,
   },
 ];
 
