@@ -135,7 +135,7 @@ export const ALL_COUNTRIES = gql`
 `;
 
 export default function TestPerformance() {
-  const { loading, error, data } = useQuery(ALL_COUNTRIES, {
+  const { loading, error } = useQuery(ALL_COUNTRIES, {
     client: cap_aggregator,
     fetchPolicy: "no-cache",
   });
