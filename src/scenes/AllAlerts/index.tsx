@@ -31,13 +31,17 @@ const AllAlerts: React.FC<AllAlertsProps> = () => {
   const [numAlerts, setNumAlerts] = useState<number>(0);
 
   const rowsData: RowsData[] = data?.listAlert?.map((alert: any) => ({
+    identifier: alert.identifier! || "",
+    event: alert.alertinfoSet[0]?.event || "",
+    eventCategory: alert.alertinfoSet[0]?.category || "",
+    sent: modifyDateTime(alert.sent!),
+    sender: alert.sender,
     region: alert.country?.region?.name,
     country: alert.country?.name,
-    event: alert.event,
+    infoSet: alert.country?.alertinfoSet,
     severity: alert.severity,
     urgency: alert.urgency,
     certainty: alert.certainty,
-    sender: alert.sender,
     effective: modifyDateTime(alert.effective!) || "",
     expires: modifyDateTime(alert.expires),
   }));

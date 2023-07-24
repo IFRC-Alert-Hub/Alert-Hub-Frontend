@@ -30,6 +30,7 @@ const DropdownFilter = (props: DropdownFilterProps) => {
 
   const handleFilterClick = (value: string) => {
     const updatedFilters = filters.map((filter) => {
+      console.log("FILTER: ", filter);
       if (filter.title === TableCellTitle) {
         return { ...filter, selectedFilter: value };
       }

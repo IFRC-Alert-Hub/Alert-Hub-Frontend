@@ -68,7 +68,8 @@ const EnhancedTable = (props: EnhancedTableProps) => {
         if (filter.selectedFilter && filter.selectedFilter !== "All") {
           filteredData = filteredData.filter(
             (row) =>
-              getProperty(row, filter.filterKey) === filter.selectedFilter
+              getProperty(row, filter.filterKey).toLowerCase() ===
+              filter.selectedFilter?.toLowerCase()
           );
         }
       }
@@ -199,18 +200,15 @@ const EnhancedTable = (props: EnhancedTableProps) => {
                         }}
                       />
                     </TableCell>
-                    <TableCell align="center">{row.region}</TableCell>
-                    <TableCell align="center">{row.country}</TableCell>
+                    <TableCell align="center">{row.identifier}</TableCell>
                     <TableCell align="center">{row.event}</TableCell>
-                    <TableCell align="center">{row.effective}</TableCell>
-                    <TableCell align="center">{row.expires}</TableCell>
-                    <TableCell align="center">{row.urgency}</TableCell>
-                    <TableCell align="center">{row.severity}</TableCell>
-                    <TableCell align="center">{row.certainty}</TableCell>
-
+                    <TableCell align="center">{row.eventCategory}</TableCell>
+                    <TableCell align="center">{row.sent}</TableCell>
                     <TableCell align="center">
                       <Link to={row.sender}>{row.sender}</Link>
                     </TableCell>
+                    <TableCell align="center">{row.region}</TableCell>
+                    <TableCell align="center">{row.country}</TableCell>
                   </TableRow>
                 );
               })}
