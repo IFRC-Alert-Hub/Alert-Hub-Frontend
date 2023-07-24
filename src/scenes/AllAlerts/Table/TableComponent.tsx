@@ -10,7 +10,6 @@ import {
   Paper,
   Checkbox,
   Typography,
-  Button,
 } from "@mui/material";
 
 import { getComparator, stableSort } from "./Sorting";
