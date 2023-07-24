@@ -31,7 +31,6 @@ const style = {
   overflow: "auto",
   bgcolor: "background.paper",
   boxShadow: 10,
-  p: 4,
   borderRadius: "5px",
 };
 
@@ -161,10 +160,27 @@ const ModalForm = ({
       aria-labelledby="modal-title"
     >
       <Box sx={style}>
-        <Typography id="modal-title" variant="h3" fontWeight={"bold"} mb="10px">
+        <Box
+          sx={{
+            textAlign: "center",
+            backgroundColor: "#d30210",
+            p: 1.5,
+            borderRadius: "4px 4px 0 0",
+          }}
+        >
+          <Typography
+            id="modal-modal-title"
+            variant="h6"
+            component="h2"
+            sx={{ fontSize: "1.2rem", color: "#fff" }}
+          >
+            {formType} Subscription
+          </Typography>
+        </Box>
+        {/* <Typography id="modal-title" variant="h3" fontWeight={"bold"} mb="10px">
           {formType} Subscription
-        </Typography>
-        <Box component="form" onSubmit={handleSubmit} m={1}>
+        </Typography> */}
+        <Box component="form" onSubmit={handleSubmit} p={4}>
           <Box sx={{ mb: 1 }}>
             <InputLabel
               htmlFor="title"
