@@ -14,5 +14,19 @@
   "about.solution2": "Cela se fera par:",
   "about.solution.listitem1": "accroître l'accès des médias et des réseaux en ligne aux alertes gouvernementales officielles publiées à l'aide du protocole d'alerte commun (CAP), un format numérique d'échange d'alertes d'urgence, qui permet de diffuser simultanément un message d'alerte cohérent sur plusieurs voies de communication;",
   "about.solution.listitem2": "faciliter l'appariement des alertes de danger CAP avec des messages de sensibilisation et d'éducation du public contextualisés et exploitables au niveau local qui ont été élaborés et acceptés par les gouvernements nationaux et les organisations de gestion des urgences.",
-  "about.disclaimer": "L'IFRC Alert Hub publie uniquement les alertes officielles émises par des agences d'alerte gouvernementales reconnues. Les alertes ne sont pas émises ou publiées par la FICR ou ses Sociétés nationales membres de la Croix-Rouge et du Croissant-Rouge. La FICR n'assume aucune responsabilité pour les informations contenues dans les alertes, qui relèvent de la seule responsabilité de l'organisme émetteur. La FICR s'efforce d'identifier les flux d'alertes gouvernementaux défectueux et de mettre ces informations en évidence pour les utilisateurs de l'Alert Hub. Cependant, la FICR ne surveille pas 24 heures sur 24 et 7 jours sur 7 l'état des flux gouvernementaux et il incombe aux utilisateurs d'Alert Hub d'identifier les sources redondantes d'informations sur les alertes de danger."
+  "about.disclaimer": "L'IFRC Alert Hub publie uniquement les alertes officielles émises par des agences d'alerte gouvernementales reconnues. Les alertes ne sont pas émises ou publiées par la FICR ou ses Sociétés nationales membres de la Croix-Rouge et du Croissant-Rouge. La FICR n'assume aucune responsabilité pour les informations contenues dans les alertes, qui relèvent de la seule responsabilité de l'organisme émetteur. La FICR s'efforce d'identifier les flux d'alertes gouvernementaux défectueux et de mettre ces informations en évidence pour les utilisateurs de l'Alert Hub. Cependant, la FICR ne surveille pas 24 heures sur 24 et 7 jours sur 7 l'état des flux gouvernementaux et il incombe aux utilisateurs d'Alert Hub d'identifier les sources redondantes d'informations sur les alertes de danger.",
+
+  "ALL_ONGOING_ALERTS": "Toutes les alertes EN COURS",
+  "VIEW_ALL_ALERTS": "Afficher toutes les alertes",
+  "ALL_ALERTS": "Toutes les alertes",
+
+  "login.pageTitle": "Connexion",
+  "login.authTitle": "Content de te revoir",
+  "login.authSubtitle": "Si vous êtes membre du personnel, membre ou bénévole du Mouvement Croix-Rouge/Croissant (Sociétés nationales, FICR et CICR), connectez-vous avec votre adresse e-mail et votre mot de passe.",
+  "login.forgotPasswordLabel": "Oups, avez-vous oublié votre mot de passe?",
+  "login.accountLabel": "Vous n'avez pas de compte ?",
+  "login.signUpLabel": "S'inscrire",
+  "login.loginBtn": "Connexion",
+  "login.formLabel.emailaddress": "Adresse e-mail",
+  "login.formLabel.password": "Mot de passe"
 }

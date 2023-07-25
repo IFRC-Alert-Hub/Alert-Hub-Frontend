@@ -174,7 +174,7 @@ const Region = () => {
                 {region?.name}
               </Typography>
             </Box>
-            <TitleHeader
+            {/* <TitleHeader
               title="ONGOING Extreme Alerts"
               rightTitle="View all alerts"
               rightLinkURL="/alerts/all"
@@ -183,7 +183,7 @@ const Region = () => {
             />
             <Box margin="0px 25px 25px">
               <CardCarousel cards={cardData} />
-            </Box>
+            </Box> */}
 
             <MapComponentWithFilter
               data={data_alerts}

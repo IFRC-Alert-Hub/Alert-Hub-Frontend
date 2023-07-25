@@ -18,5 +18,19 @@
   "about.solution.listitem1": "increasing access for the media and online networks to official government alerts published using the Common Alerting Protocol (CAP), a digital format for exchanging emergency alerts, which allows a consistent alert message to be disseminated simultaneously over multiple communications pathways;",
   "about.solution.listitem2": "facilitate the pairing of the CAP hazard alerts with locally contextualized and actionable public awareness and public education messages that have been developed and agreed to by national governments and emergency management organizations.",
 
-  "about.disclaimer": "The IFRC Alert Hub publishes only official alerts issued by recognised government alerting agencies. Alerts are not issued or published by the IFRC or its member Red Cross and Red Crescent National Societies. The IFRC takes no responsibility for the information contained in the alerts, which is solely the responsibility of the issuing agency. The IFRC makes every effort to identify broken government alert feeds and to highlight this information for users of the Alert Hub. However, the IFRC does not maintain 24/7 monitoring of the status of the government feeds and it is the responsibility of Alert Hub users to identify redundant sources of hazard alert information."
+  "about.disclaimer": "The IFRC Alert Hub publishes only official alerts issued by recognised government alerting agencies. Alerts are not issued or published by the IFRC or its member Red Cross and Red Crescent National Societies. The IFRC takes no responsibility for the information contained in the alerts, which is solely the responsibility of the issuing agency. The IFRC makes every effort to identify broken government alert feeds and to highlight this information for users of the Alert Hub. However, the IFRC does not maintain 24/7 monitoring of the status of the government feeds and it is the responsibility of Alert Hub users to identify redundant sources of hazard alert information.",
+
+  "ALL_ONGOING_ALERTS": "All ONGOING Alerts",
+  "VIEW_ALL_ALERTS": "View All Alerts",
+  "ALL_ALERTS": "All Alerts",
+
+  "login.pageTitle": "Login",
+  "login.authTitle": "Welcome Back",
+  "login.authSubtitle": "If you are staff, member or volunteer of the Red Cross Re Crescent Movement (National Societies, the IFRC and the ICRC) login with you email and password.",
+  "login.forgotPasswordLabel": "Oops, Have You Forgot your Password?",
+  "login.accountLabel": "Don’t have an account?",
+  "login.signUpLabel": "Sign Up",
+  "login.loginBtn": "Login",
+  "login.formLabel.emailaddress": "Email Address",
+  "login.formLabel.password": "Password"
 }

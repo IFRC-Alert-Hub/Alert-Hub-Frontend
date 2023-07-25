@@ -7,16 +7,17 @@ import FilterableTableComponent from "./Table/TableComponent";
 import { cap_aggregator } from "../../API/API_Links";
 import { ALL_ALERTS } from "../../API/ALL_QUERIES";
 import TitleHeader from "../../components/Layout/TitleHeader";
+import { useIntl } from "react-intl";
 
 interface AllAlertsProps {
   selectedFilter?: string;
   filterKey?: string;
 }
 
-
 const AllAlerts: React.FC<AllAlertsProps> = () => {
   const location = useLocation();
   const { selectedFilter, filterKey } = location.state || {};
+  const { formatMessage } = useIntl();
 
   const { loading, error, data } = useQuery(ALL_ALERTS, {
     client: cap_aggregator,
@@ -37,7 +38,9 @@ const AllAlerts: React.FC<AllAlertsProps> = () => {
   return (
     <>
       <Container maxWidth="lg" sx={{ paddingTop: "30px" }}>
-        <TitleHeader title={`All Alerts (${numAlerts})`} />
+        <TitleHeader
+          title={`${formatMessage({ id: "ALL_ALERTS" })} (${numAlerts})`}
+        />
         {loading && (
           <CircularProgress sx={{ textAlign: "center" }} color="secondary" />
         )}
