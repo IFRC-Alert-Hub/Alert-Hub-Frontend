@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Autocomplete, Box, CircularProgress, TextField } from "@mui/material";
+import { Autocomplete, Box, TextField } from "@mui/material";
 import mapboxgl from "mapbox-gl";
 
 import DatePickerComponent from "../DatePicker/DatePicker";
@@ -11,6 +11,7 @@ import MapComponent, {
 } from "./MapComponent";
 import TitleHeader from "../Layout/TitleHeader";
 import { useIntl } from "react-intl";
+import Progress from "../Layout/Progress";
 
 interface MapComponentWithFilterProps {
   loading: boolean;
@@ -243,9 +244,7 @@ const MapComponentWithFilter: React.FC<MapComponentWithFilterProps> = ({
         selectedFilter={selectedFilter}
         filterKey={filterKey}
       />
-      {loading && alertsLoading && (
-        <CircularProgress sx={{ textAlign: "center" }} color="secondary" />
-      )}
+      {loading && alertsLoading && <Progress />}
       {error && <p>Error: {error.message}</p>}
       {!loading && !error && (
         <>
