@@ -173,6 +173,7 @@ const Register = () => {
               id="email"
               label="Email Address"
               name="email"
+              autoFocus
               autoComplete="email"
               sx={{ fontSize: "12px" }}
               value={formik.values.email}
@@ -190,7 +191,7 @@ const Register = () => {
                         disabled={isSendClicked}
                         sx={{
                           color: "#d30210",
-                          p: "0px 10px 0px 10px",
+                          p: "0px 0px 0px 10px",
                           minWidth: "50px",
                           textTransform: "capitalize",
                           "&:hover": { opacity: "0.5" },
