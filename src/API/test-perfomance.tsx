@@ -134,8 +134,36 @@ export const ALL_COUNTRIES = gql`
   }
 `;
 
+export const GET_ALL_COUNTRIES = gql`
+  query MyQuery {
+    listRegion {
+      id
+      name
+      countrySet {
+        id
+        name
+      }
+    }
+    listCountry {
+      id
+      name
+    }
+  }
+`;
+
+export const GET_ALL_REGIONS = gql`
+  query MyQuery {
+    listRegion {
+      centroid
+      id
+      name
+      polygon
+    }
+  }
+`;
+
 export default function TestPerformance() {
-  const { loading, error } = useQuery(ALL_COUNTRIES, {
+  const { loading, error } = useQuery(ALL_ALERTS_QUERY_2, {
     client: cap_aggregator,
     fetchPolicy: "no-cache",
   });
