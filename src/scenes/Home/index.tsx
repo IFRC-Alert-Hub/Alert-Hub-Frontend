@@ -6,14 +6,14 @@ import { cap_aggregator } from "../../API/API_Links";
 import MapComponentWithFilter from "../../components/MapComponent/MapComponentWithFilter";
 import { ALL_ALERTS } from "../../API/ALL_QUERIES";
 
-const Home = () => {
+const  Home = () => {
   const { formatMessage } = useIntl();
   const { loading, error, data } = useQuery(ALL_ALERTS, {
     client: cap_aggregator,
     fetchPolicy: "no-cache",
   });
 
-  return (
+  return ( 
     <Container maxWidth="lg">
       <Box sx={{ padding: "50px 0 50px 0" }}>
         <Typography

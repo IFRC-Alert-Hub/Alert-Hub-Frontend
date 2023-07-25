@@ -15,6 +15,7 @@ import { auth_system } from "../../API/API_Links";
 import { useNavigate } from "react-router-dom";
 import { UserContext } from "../../context/UserContext";
 import AuthComponent from "../../components/Authentication/AuthComponent";
+import { useIntl } from "react-intl";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -28,7 +29,6 @@ const Login = () => {
       password: "",
     },
   });
-
 
   const getTokenData = async (loginData: any) => {
     console.log("Login Data: ", loginData);
@@ -66,15 +66,15 @@ const Login = () => {
     setShowPassword(!showPassword);
   };
 
+  const { formatMessage } = useIntl();
+
   return (
     <>
       <Container maxWidth="lg" sx={{ paddingTop: "30px" }}>
         <AuthComponent
-          pageTitle="Login"
-          authTitle="Welcome Back"
-          authSubtitle="If you are staff, member or volunteer of the Red Cross Re
-                Crescent Movement (National Societies, the IFRC and the ICRC)
-                login with you email and password."
+          pageTitle={formatMessage({ id: "login.pageTitle" })}
+          authTitle={formatMessage({ id: "login.authTitle" })}
+          authSubtitle={formatMessage({ id: "login.authSubtitle" })}
           formComponent={
             <Box
               component="form"
@@ -87,7 +87,7 @@ const Login = () => {
                 required
                 fullWidth
                 id="email"
-                label="Email Address"
+                label={formatMessage({ id: "login.formLabel.emailaddress" })}
                 name="email"
                 autoComplete="email"
                 autoFocus
@@ -102,7 +102,7 @@ const Login = () => {
                 required
                 fullWidth
                 name="password"
-                label="Password"
+                label={formatMessage({ id: "login.formLabel.password" })}
                 type={showPassword ? "text" : "password"}
                 id="password"
                 autoComplete="current-password"
@@ -137,7 +137,7 @@ const Login = () => {
                     color="#444850"
                     sx={{ textDecoration: "underline" }}
                   >
-                    Oops, Have You Forgot your Password?
+                    {formatMessage({ id: "login.forgotPasswordLabel" })}
                   </Typography>
                 </Link>
               </Box>
@@ -159,7 +159,7 @@ const Login = () => {
                 }}
                 disabled={!formik.isValid || !formik.dirty}
               >
-                Login
+                {formatMessage({ id: "login.loginBtn" })}
               </Button>
 
               <Box
@@ -170,7 +170,7 @@ const Login = () => {
                 marginBottom={"17px"}
               >
                 <Typography variant="h5" fontSize="13px" color="#444850">
-                  Don’t have an account?
+                  {formatMessage({ id: "login.accountLabel" })}
                 </Typography>
                 <Link href="/register" style={{ marginLeft: "8px" }}>
                   <Typography
@@ -179,7 +179,7 @@ const Login = () => {
                     color="#444850"
                     sx={{ textDecoration: "underline" }}
                   >
-                    Sign up
+                    {formatMessage({ id: "login.signUpLabel" })}
                   </Typography>
                 </Link>
               </Box>

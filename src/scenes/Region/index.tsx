@@ -1,12 +1,10 @@
 import { Box, CircularProgress, Container, Typography } from "@mui/material";
 import { useParams } from "react-router-dom";
 import { useEffect, useMemo } from "react";
-import CardCarousel from "../../components/Card/CardCarousel";
 import { useQuery } from "@apollo/client";
 import { cap_aggregator } from "../../API/API_Links";
 import MapComponentWithFilter from "../../components/MapComponent/MapComponentWithFilter";
 import { ALL_ALERTS, GET_ALL_REGIONS } from "../../API/ALL_QUERIES";
-import TitleHeader from "../../components/Layout/TitleHeader";
 
 export const cardData = [
   {
@@ -174,7 +172,7 @@ const Region = () => {
                 {region?.name}
               </Typography>
             </Box>
-            <TitleHeader
+            {/* <TitleHeader
               title="ONGOING Extreme Alerts"
               rightTitle="View all alerts"
               rightLinkURL="/alerts/all"
@@ -183,7 +181,7 @@ const Region = () => {
             />
             <Box margin="0px 25px 25px">
               <CardCarousel cards={cardData} />
-            </Box>
+            </Box> */}
 
             <MapComponentWithFilter
               data={data_alerts}

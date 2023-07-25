@@ -16,6 +16,7 @@ import {
 } from "../../API/mutations/authMutations";
 import AuthComponent from "../../components/Authentication/AuthComponent";
 import PasswordComponent from "../../components/Authentication/PasswordComponent";
+import { useIntl } from "react-intl";
 
 const ForgotPassword = () => {
   const [isSendClicked, setIsSendClicked] = React.useState(false);
@@ -30,6 +31,8 @@ const ForgotPassword = () => {
       email: "",
     },
   });
+
+  const { formatMessage } = useIntl();
 
   const [forgotPassword] = useMutation(RESET_PASSWORD_CONFIRM, {
     client: auth_system,
@@ -139,10 +142,9 @@ const ForgotPassword = () => {
   return (
     <Container maxWidth="lg" sx={{ paddingTop: "30px" }}>
       <AuthComponent
-        pageTitle="Forgot Password"
-        authTitle="Forgot Password"
-        authSubtitle="Please use the email address associated with your account during
-              registration to initiate the password change process."
+        pageTitle={formatMessage({ id: "forgetPassword.pageTitle" })}
+        authTitle={formatMessage({ id: "forgetPassword.authTitle" })}
+        authSubtitle={formatMessage({ id: "forgetPassword.authSubtitle" })}
         formComponent={
           <Box
             component="form"
@@ -155,7 +157,9 @@ const ForgotPassword = () => {
               required
               fullWidth
               id="email"
-              label="Email Address"
+              label={formatMessage({
+                id: "forgetPassword.formLabel.emailaddress",
+              })}
               name="email"
               autoComplete="email"
               autoFocus
@@ -193,7 +197,9 @@ const ForgotPassword = () => {
               required
               fullWidth
               id="verifyCode"
-              label="Verification Code"
+              label={formatMessage({
+                id: "forgetPassword.formLabel.verificationCode",
+              })}
               name="verifyCode"
               autoComplete="off"
               sx={{ fontSize: "12px" }}

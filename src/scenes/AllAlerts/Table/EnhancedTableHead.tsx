@@ -92,6 +92,15 @@ const EnhancedTableHead = (props: EnhancedTableProps) => {
               padding={"normal"}
               sx={{ minWidth: headCell.minWidth }}
             >
+              {headCell.isSearchable ? (
+                <TextField
+                  id="outlined-basic"
+                  label="Outlined"
+                  variant="outlined"
+                />
+              ) : (
+                <></>
+              )}
               {headCell.hasFilter ? (
                 <TableSortLabel
                   active={orderBy === headCell.id}
@@ -170,16 +179,6 @@ const EnhancedTableHead = (props: EnhancedTableProps) => {
                 >
                   {headCell.label}
                 </span>
-              )}
-
-              {headCell.isSearchable ? (
-                <TextField
-                  id="outlined-basic"
-                  label="Outlined"
-                  variant="outlined"
-                />
-              ) : (
-                <></>
               )}
             </TableCell>
           ) : (

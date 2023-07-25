@@ -10,6 +10,7 @@ import MapComponent, {
   SourceFeed,
 } from "./MapComponent";
 import TitleHeader from "../Layout/TitleHeader";
+import { useIntl } from "react-intl";
 
 interface MapComponentWithFilterProps {
   loading: boolean;
@@ -229,11 +230,15 @@ const MapComponentWithFilter: React.FC<MapComponentWithFilterProps> = ({
     selectedExpiryDate,
   ]);
 
+  const { formatMessage } = useIntl();
+
   return (
     <>
       <TitleHeader
-        title={`All ONGOING Alerts (${filteredAlerts.length})`}
-        rightTitle={"View all alerts"}
+        title={`${formatMessage({ id: "ALL_ONGOING_ALERTS" })} (${
+          filteredAlerts.length
+        })`}
+        rightTitle={`${formatMessage({ id: "VIEW_ALL_ALERTS" })}`}
         rightLinkURL={"/alerts/all"}
         selectedFilter={selectedFilter}
         filterKey={filterKey}

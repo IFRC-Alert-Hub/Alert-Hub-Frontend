@@ -17,7 +17,7 @@ import ForgotPassword from "./scenes/ForgotPassword";
 import PrivateRoutes from "./utils/PrivateRoute";
 import { UserContextProvider } from "./context/UserContext";
 import PageNotFound from "./scenes/404_Page";
-import TestPerformance from "./API/test-perfomance";
+import TestPerformance from "./API/test-performance";
 
 function App() {
   // useEffect(() => {
