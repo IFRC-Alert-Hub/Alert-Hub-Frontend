@@ -79,7 +79,9 @@ const About = () => {
         </Container>
       </Box>
       <Container maxWidth="lg">
-        <TitleHeader title={"The Problem"} />
+        <TitleHeader
+          title={formatMessage({ id: "about.problem.titleHeader" })}
+        />
         <Typography variant="subtitle1">
           {formatMessage({ id: "about.problem1" })}
           <br />
@@ -108,7 +110,9 @@ const About = () => {
             </ListItem>
           </List>
         </Typography>
-        <TitleHeader title={"The Solution"} />
+        <TitleHeader
+          title={formatMessage({ id: "about.solution.titleHeader" })}
+        />
         <Typography variant="subtitle1">
           {formatMessage({ id: "about.solution1" })}
           <br />
@@ -132,7 +136,9 @@ const About = () => {
           </List>
         </Typography>
 
-        <TitleHeader title={"Disclaimer"} />
+        <TitleHeader
+          title={formatMessage({ id: "about.disclaimer.titleHeader" })}
+        />
         <Typography variant="subtitle1">
           {formatMessage({ id: "about.disclaimer" })}
         </Typography>

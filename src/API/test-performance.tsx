@@ -134,6 +134,19 @@ export const ALL_COUNTRIES = gql`
   }
 `;
 
+export const GET_COUNTRY_BY_ISO3 = gql`
+  query MyQuery($iso3: String) {
+    listCountry(iso3: $iso3) {
+      centroid
+      id
+      iso3
+      multipolygon
+      name
+      polygon
+    }
+  }
+`;
+
 export const GET_ALL_COUNTRIES = gql`
   query MyQuery {
     listRegion {
@@ -163,9 +176,12 @@ export const GET_ALL_REGIONS = gql`
 `;
 
 export default function TestPerformance() {
-  const { loading, error } = useQuery(ALL_ALERTS_QUERY_2, {
+  const { loading, error } = useQuery(GET_COUNTRY_BY_ISO3, {
     client: cap_aggregator,
     fetchPolicy: "no-cache",
+    variables: {
+      iso3: "USA",
+    },
   });
   return (
     <>
