@@ -122,7 +122,7 @@ const MapComponentWithFilter: React.FC<MapComponentWithFilterProps> = ({
       const seenSourceUrls = new Set();
 
       data.listAlert.forEach((alert: AlertData) => {
-        const sourceFeedString = JSON.stringify(alert.sourceFeed);
+        const sourceFeedString = JSON.stringify(alert.feed);
         const sourceFeed = JSON.parse(sourceFeedString);
 
         if (!seenSourceUrls.has(sourceFeed.url)) {

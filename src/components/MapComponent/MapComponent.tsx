@@ -87,7 +87,7 @@ export type AlertData = {
   id?: string;
   country?: CountryType;
   alertinfoSet?: AlertInfoSet[];
-  sourceFeed?: SourceFeed;
+  feed?: SourceFeed;
 };
 
 const MapComponent: React.FC<MapProps> = ({
