@@ -8,7 +8,7 @@ const Progress = () => {
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
-        height: "30vh",
+        height: "20vh",
       }}
     >
       <CircularProgress color="error" />

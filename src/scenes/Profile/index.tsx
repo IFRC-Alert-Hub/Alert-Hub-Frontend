@@ -1,6 +1,6 @@
 import { Box, Container, Grid, Typography } from "@mui/material";
-import ProfileForm from "./ProfileForm";
-import ProfileAvatar from "./ProfileAvatar";
+import ProfileForm from "./components/ProfileForm";
+import ProfileAvatar from "./components/ProfileAvatar";
 import { useContext, useState } from "react";
 
 import { UserContext } from "../../context/UserContext";

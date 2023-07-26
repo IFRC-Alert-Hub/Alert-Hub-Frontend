@@ -3,16 +3,16 @@ import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useFormik } from "formik";
 import * as yup from "yup";
-import MessageModal from "./components/MessageModal";
-import ModalButton from "./components/ModalButton";
+import MessageModal from "./MessageModal";
+import ModalButton from "./ModalButton";
 import { useMutation } from "@apollo/client";
-import { auth_system } from "../../API/API_Links";
-import { LOGOUT } from "../../API/mutations/authMutations";
-import { UserContext } from "../../context/UserContext";
+import { auth_system } from "../../../API/API_Links";
+import { LOGOUT } from "../../../API/mutations/authMutations";
+import { UserContext } from "../../../context/UserContext";
 import {
   NEW_EMAIL_CONFIRM,
   SEND_NEW_VEIRFY_EMAIL,
-} from "../../API/mutations/authMutations";
+} from "../../../API/mutations/authMutations";
 
 type PropsType = {
   isVerified: boolean;

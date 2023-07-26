@@ -11,7 +11,7 @@ import {
 import { GET_ALL_COUNTRIES, GET_SUBSCRIPTIONS } from "../../API/ALL_QUERIES";
 import SubscriptionTable from "./SubscriptionTable";
 import ModalForm from "./ModalForm";
-import Progress from "../../components/Progress";
+import Progress from "../../components/Layout/Progress";
 
 const INIT_ROW: SubscriptionForm = {
   subscriptionName: "",

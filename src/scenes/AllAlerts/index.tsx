@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useQuery } from "@apollo/client";
-import { CircularProgress, Container } from "@mui/material";
+import { Container } from "@mui/material";
 import { useLocation } from "react-router-dom";
 import { RowsData } from "./Table/Data";
 import FilterableTableComponent from "./Table/TableComponent";
@@ -8,6 +8,7 @@ import { cap_aggregator } from "../../API/API_Links";
 import { ALL_ALERTS } from "../../API/ALL_QUERIES";
 import TitleHeader from "../../components/Layout/TitleHeader";
 import { useIntl } from "react-intl";
+import Progress from "../../components/Layout/Progress";
 
 interface AllAlertsProps {
   selectedFilter?: string;
@@ -41,9 +42,7 @@ const AllAlerts: React.FC<AllAlertsProps> = () => {
         <TitleHeader
           title={`${formatMessage({ id: "ALL_ALERTS" })} (${numAlerts})`}
         />
-        {loading && (
-          <CircularProgress sx={{ textAlign: "center" }} color="secondary" />
-        )}
+        {loading && <Progress />}
         {error && <p>Error: {error.message}</p>}
         {!loading && !error && (
           <FilterableTableComponent

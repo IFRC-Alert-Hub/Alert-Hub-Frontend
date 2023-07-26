@@ -5,18 +5,18 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import { User } from "../../context/UserContext";
+import { User } from "../../../context/UserContext";
 import { useEffect, useState } from "react";
 import { useFormik } from "formik";
 import * as yup from "yup";
-import MessageModal from "./components/MessageModal";
-import ModalButton from "./components/ModalButton";
+import MessageModal from "./MessageModal";
+import ModalButton from "./ModalButton";
 import { useMutation } from "@apollo/client";
 import {
   RESET_EMAIL,
   RESET_EMAIL_CONFIRM,
-} from "../../API/mutations/authMutations";
-import { auth_system } from "../../API/API_Links";
+} from "../../../API/mutations/authMutations";
+import { auth_system } from "../../../API/API_Links";
 
 type PropsType = {
   user?: User;

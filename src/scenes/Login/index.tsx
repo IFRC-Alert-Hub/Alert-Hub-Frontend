@@ -5,14 +5,12 @@ import * as Yup from "yup";
 import Button from "@mui/material/Button";
 import { TextField, IconButton, InputAdornment } from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
-
-import Link from "@mui/material/Link";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import { useMutation } from "@apollo/client";
 import { LOGIN } from "../../API/mutations/authMutations";
 import { auth_system } from "../../API/API_Links";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { UserContext } from "../../context/UserContext";
 import AuthComponent from "../../components/Authentication/AuthComponent";
 import { useIntl } from "react-intl";
@@ -130,7 +128,7 @@ const Login = () => {
                 marginTop={"17px"}
                 marginBottom={"17px"}
               >
-                <Link href="/forget-password" style={{ marginLeft: "0px" }}>
+                <Link to="/forget-password" style={{ marginLeft: "0px" }}>
                   <Typography
                     variant="h5"
                     fontSize="13px"
@@ -172,7 +170,7 @@ const Login = () => {
                 <Typography variant="h5" fontSize="13px" color="#444850">
                   {formatMessage({ id: "login.accountLabel" })}
                 </Typography>
-                <Link href="/register" style={{ marginLeft: "8px" }}>
+                <Link to="/register" style={{ marginLeft: "8px" }}>
                   <Typography
                     variant="h5"
                     fontSize="13px"

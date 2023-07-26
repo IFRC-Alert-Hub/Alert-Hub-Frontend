@@ -4,22 +4,22 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
-
-import Link from "@mui/material/Link";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import { useMutation } from "@apollo/client";
 import { REGISTER, VERIFY_EMAIL } from "../../API/mutations/authMutations";
 import { auth_system } from "../../API/API_Links";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import AuthComponent from "../../components/Authentication/AuthComponent";
 import PasswordComponent from "../../components/Authentication/PasswordComponent";
+import { useState, useEffect } from "react";
 
 const Register = () => {
-  const [isSendClicked, setIsSendClicked] = React.useState(false);
-  const [isSendEnabled, setIsSendEnabled] = React.useState<boolean>(false);
-  const [isEmailSent, setIsEmailSent] = React.useState(false);
-  const [emailError, setEmailError] = React.useState("");
+  const [isSendClicked, setIsSendClicked] = useState(false);
+  const [isSendEnabled, setIsSendEnabled] = useState<boolean>(false);
+  const [isEmailSent, setIsEmailSent] = useState(false);
+  const [emailError, setEmailError] = useState("");
+  const [timeLeft, setTimeLeft] = useState(60);
 
   const navigate = useNavigate();
   const [verifyEmail] = useMutation(VERIFY_EMAIL, {
@@ -28,6 +28,26 @@ const Register = () => {
       email: "",
     },
   });
+
+  useEffect(() => {
+    if (isSendClicked) {
+      const timer = setInterval(() => {
+        setTimeLeft((prevTime) => {
+          if (prevTime > 0) {
+            return prevTime - 1;
+          } else {
+            setIsSendClicked(false);
+            clearInterval(timer);
+            return 60;
+          }
+        });
+      }, 1000);
+
+      return () => {
+        clearInterval(timer);
+      };
+    }
+  }, [isSendClicked]);
 
   const [register] = useMutation(REGISTER, {
     client: auth_system,
@@ -153,8 +173,8 @@ const Register = () => {
               id="email"
               label="Email Address"
               name="email"
-              autoComplete="email"
               autoFocus
+              autoComplete="email"
               sx={{ fontSize: "12px" }}
               value={formik.values.email}
               onChange={handleEmailChange}
@@ -164,18 +184,27 @@ const Register = () => {
               InputProps={{
                 endAdornment: (
                   <InputAdornment position="end">
-                    <span style={{ marginRight: "5px", color: "grey" }}>|</span>
-                    <Link
-                      sx={{
-                        fontSize: "12px",
-                        color: "grey",
-                        pointerEvents: !isSendEnabled ? "none" : "auto",
-                        cursor: isSendEnabled ? "pointer" : "default",
-                      }}
-                      onClick={isSendEnabled ? handleSendClick : undefined}
-                    >
-                      SEND
-                    </Link>
+                    <Box borderLeft={"1px solid #ccc"}>
+                      <Button
+                        variant="text"
+                        disableRipple
+                        disabled={isSendClicked}
+                        sx={{
+                          color: "#d30210",
+                          p: "0px 0px 0px 10px",
+                          minWidth: "50px",
+                          textTransform: "capitalize",
+                          "&:hover": { opacity: "0.5" },
+                        }}
+                        onClick={isSendEnabled ? handleSendClick : undefined}
+                      >
+                        {isSendClicked && timeLeft > 0 ? (
+                          <span>{timeLeft}s</span>
+                        ) : (
+                          <span>Send</span>
+                        )}
+                      </Button>
+                    </Box>
                   </InputAdornment>
                 ),
               }}
@@ -234,7 +263,7 @@ const Register = () => {
               <Typography variant="h5" fontSize="13px" color="#444850">
                 Already have an account?
               </Typography>
-              <Link href="/login" style={{ marginLeft: "8px" }}>
+              <Link to="/login" style={{ marginLeft: "8px" }}>
                 <Typography
                   variant="h5"
                   fontSize="13px"
