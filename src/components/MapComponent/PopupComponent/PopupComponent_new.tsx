@@ -5,7 +5,6 @@ import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import { AlertData } from "../MapComponent";
 import { Button, Pagination, PaginationItem } from "@mui/material";
-import { PopupHeader } from "./PopupHeader";
 import AttachFileIcon from "@mui/icons-material/AttachFile";
 
 interface TabPanelProps {
@@ -87,7 +86,6 @@ export const PopupComponent: React.FC<PopupComponentProps> = ({
 
   return (
     <div>
-      <PopupHeader alerts={alerts} />
       <Box
         sx={{
           flexGrow: 1,
