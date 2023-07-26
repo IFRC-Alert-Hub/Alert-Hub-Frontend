@@ -8,7 +8,7 @@ interface PopupContentTextProps {
 
 export const PopupContentText: React.FC<PopupContentTextProps> = (props) => {
   const { title, content } = props;
-  return content !== "" ? (
+  return (
     <Typography variant="body2" component="div">
       <span
         style={{
@@ -29,7 +29,5 @@ export const PopupContentText: React.FC<PopupContentTextProps> = (props) => {
         &nbsp;{content}
       </span>
     </Typography>
-  ) : (
-    <></>
   );
 };

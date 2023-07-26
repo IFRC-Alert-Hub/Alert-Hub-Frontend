@@ -4,9 +4,14 @@ import Tab from "@mui/material/Tab";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import { AlertData } from "../MapComponent";
-import { Button, Pagination, PaginationItem } from "@mui/material";
+import { Button, Grid, Pagination, PaginationItem } from "@mui/material";
+import { PopupHeader } from "./PopupHeader";
 import AttachFileIcon from "@mui/icons-material/AttachFile";
-
+import { PopupCard } from "./PopupCard";
+import EmailIcon from "@mui/icons-material/Email";
+import DateRangeIcon from "@mui/icons-material/DateRange";
+import { PopupContentText } from "./PopupContentText";
+import DynamicTabs from "./PopupHorizontalTab";
 interface TabPanelProps {
   children?: React.ReactNode;
   index: number;
@@ -86,6 +91,7 @@ export const PopupComponent: React.FC<PopupComponentProps> = ({
 
   return (
     <div>
+      <PopupHeader alerts={alerts} />
       <Box
         sx={{
           flexGrow: 1,
@@ -116,11 +122,11 @@ export const PopupComponent: React.FC<PopupComponentProps> = ({
               "& .MuiTabs-indicator": {
                 width: "0px",
               },
-              //   "& .MuiTabs-indicator": {
-              //     width: "10px",
-              //     backgroundColor: "#F5333F",
-              //     left: "0px",
-              //   },
+              // "& .MuiTabs-indicator": {
+              // width: "10px",
+              // backgroundColor: "#F5333F",
+              // left: "0px",
+              // },
             }}
           >
             {alerts
@@ -248,12 +254,12 @@ export const PopupComponent: React.FC<PopupComponentProps> = ({
                       whiteSpace: "nowrap",
                     }}
                   >
-                    <span>{alerts[0]?.alertinfoSet?.[0]?.event || ""}</span>
+                    <span>{alert.alertinfoSet?.[0]?.event || ""}</span>
                     {/* <Tooltip
-                      title={`Source: ${alerts[0]?.alertinfoSet?.[0]?.event}`}
-                    >
-                      <span>{alerts[0]?.alertinfoSet?.[0]?.event || ""}</span>
-                    </Tooltip> */}
+title={`Source: ${alerts[0]?.alertinfoSet?.[0]?.event}`}
+>
+<span>{alerts[0]?.alertinfoSet?.[0]?.event || ""}</span>
+</Tooltip> */}
                   </Typography>
 
                   <a href={alert.id} target="_blank" rel="noopener noreferrer">
@@ -286,288 +292,50 @@ export const PopupComponent: React.FC<PopupComponentProps> = ({
                   </a>
                 </Box>
 
-                <Typography variant="body2" component="div">
-                  <span
-                    style={{ fontWeight: "bold", textTransform: "capitalize" }}
-                  >
-                    Country 1:{" "}
-                  </span>
-                  {alerts[0]?.country?.name}{" "}
-                </Typography>
-                <Typography variant="body2" component="div">
-                  <span
-                    style={{ fontWeight: "bold", textTransform: "capitalize" }}
-                  >
-                    ISO3:{" "}
-                  </span>
-                  {alerts[0]?.country?.iso3}{" "}
-                </Typography>
-                <Typography variant="body2" component="div">
-                  <span
-                    style={{ fontWeight: "bold", textTransform: "capitalize" }}
-                  >
-                    Status:{" "}
-                  </span>
-                  {alert.status}{" "}
-                </Typography>
-                <Typography variant="body2" component="div">
-                  <span
-                    style={{ fontWeight: "bold", textTransform: "capitalize" }}
-                  >
-                    Source:{" "}
-                  </span>
-                  {alert.source}{" "}
-                </Typography>
-                <Typography variant="body2" component="div">
-                  <span
-                    style={{ fontWeight: "bold", textTransform: "capitalize" }}
-                  >
-                    Sent:{" "}
-                  </span>
-                  {alert.sent}{" "}
-                </Typography>
-                <Typography variant="body2" component="div">
-                  <span
-                    style={{ fontWeight: "bold", textTransform: "capitalize" }}
-                  >
-                    Scope:{" "}
-                  </span>
-                  {alert.scope}{" "}
-                </Typography>
-                <Typography variant="body2" component="div">
-                  <span
-                    style={{ fontWeight: "bold", textTransform: "capitalize" }}
-                  >
-                    restriction:{" "}
-                  </span>
-                  {alert.restriction}{" "}
-                </Typography>
-                <Typography
-                  variant="body2"
-                  component="div"
-                  sx={{ paddingBottom: "10px" }}
-                >
-                  <span
-                    style={{ fontWeight: "bold", textTransform: "capitalize" }}
-                  >
-                    references:{" "}
-                  </span>
-                  {alert.references}{" "}
-                </Typography>
+                <Grid container spacing={2} padding={"5px 0 5px 0"}>
+                  <Grid item xs={6}>
+                    <PopupCard
+                      iconComponent={<EmailIcon fontSize="medium"></EmailIcon>}
+                      iconText="Sender"
+                      rightText={"cap@zamg.ac.at"}
+                    ></PopupCard>
+                  </Grid>
+                  <Grid item xs={6}>
+                    <PopupCard
+                      iconComponent={
+                        <DateRangeIcon fontSize="medium"></DateRangeIcon>
+                      }
+                      iconText="Sent"
+                      rightText={modifyDateTime(alert.sent as string)}
+                    ></PopupCard>
+                  </Grid>
+                </Grid>
 
-                {alert?.alertinfoSet?.map((info, infoIndex) => (
-                  <Box sx={{ paddingBottom: "10px" }}>
-                    <React.Fragment key={infoIndex}>
-                      <Box sx={{ padding: "5px" }}>
-                        <Typography
-                          variant="h5"
-                          fontWeight={"bolder"}
-                          sx={{ textDecoration: "underline" }}
-                        >
-                          InfoSet {infoIndex + 1}
-                        </Typography>
-                        <Typography variant="body2" component="div">
-                          <span
-                            style={{
-                              fontWeight: "bold",
-                              textTransform: "capitalize",
-                            }}
-                          >
-                            language:{" "}
-                          </span>
-                          {info.language}{" "}
-                        </Typography>
-                        <Typography variant="body2" component="div">
-                          <span
-                            style={{
-                              fontWeight: "bold",
-                              textTransform: "capitalize",
-                            }}
-                          >
-                            Event Category:{" "}
-                          </span>
-                          {info.category}{" "}
-                        </Typography>
-                        <Typography variant="body2" component="div">
-                          <span
-                            style={{
-                              fontWeight: "bold",
-                              textTransform: "capitalize",
-                            }}
-                          >
-                            Event Type:{" "}
-                          </span>
-                          {info.event}{" "}
-                        </Typography>
-                        <Typography variant="body2" component="div">
-                          <span
-                            style={{
-                              fontWeight: "bold",
-                              textTransform: "capitalize",
-                            }}
-                          >
-                            Response Type:{" "}
-                          </span>
-                          {info.responseType}{" "}
-                        </Typography>
-                        <Typography variant="body2" component="div">
-                          <span
-                            style={{
-                              fontWeight: "bold",
-                              textTransform: "capitalize",
-                            }}
-                          >
-                            Urgency:{" "}
-                          </span>
-                          {info.urgency}{" "}
-                        </Typography>
-                        <Typography variant="body2" component="div">
-                          <span
-                            style={{
-                              fontWeight: "bold",
-                              textTransform: "capitalize",
-                            }}
-                          >
-                            Severity:{" "}
-                          </span>
-                          {info.severity}{" "}
-                        </Typography>
-                        <Typography variant="body2" component="div">
-                          <span
-                            style={{
-                              fontWeight: "bold",
-                              textTransform: "capitalize",
-                            }}
-                          >
-                            Certainty:{" "}
-                          </span>
-                          {info.certainty}{" "}
-                        </Typography>
-                        <Typography variant="body2" component="div">
-                          <span
-                            style={{
-                              fontWeight: "bold",
-                              textTransform: "capitalize",
-                            }}
-                          >
-                            Audience:{" "}
-                          </span>
-                          {info.audience}{" "}
-                        </Typography>
-                        <Typography variant="body2" component="div">
-                          <span
-                            style={{
-                              fontWeight: "bold",
-                              textTransform: "capitalize",
-                            }}
-                          >
-                            Event Code:{" "}
-                          </span>
-                          {info.eventCode}{" "}
-                        </Typography>
-                        <Typography variant="body2" component="div">
-                          <span
-                            style={{
-                              fontWeight: "bold",
-                              textTransform: "capitalize",
-                            }}
-                          >
-                            Effective Date/Time:{" "}
-                          </span>
-                          {modifyDateTime(info.effective as string)}{" "}
-                        </Typography>
-                        <Typography variant="body2" component="div">
-                          <span
-                            style={{
-                              fontWeight: "bold",
-                              textTransform: "capitalize",
-                            }}
-                          >
-                            Onset Date/Time:{" "}
-                          </span>
-                          {modifyDateTime(info.onset as string)}{" "}
-                        </Typography>
-                        <Typography variant="body2" component="div">
-                          <span
-                            style={{
-                              fontWeight: "bold",
-                              textTransform: "capitalize",
-                            }}
-                          >
-                            Expiration Date/Time:{" "}
-                          </span>
-                          {modifyDateTime(info.expires as string)}{" "}
-                        </Typography>
-                        <Typography variant="body2" component="div">
-                          <span
-                            style={{
-                              fontWeight: "bold",
-                              textTransform: "capitalize",
-                            }}
-                          >
-                            Sender Name:{" "}
-                          </span>
-                          {info.senderName}{" "}
-                        </Typography>
-                        <Typography variant="body2" component="div">
-                          <span
-                            style={{
-                              fontWeight: "bold",
-                              textTransform: "capitalize",
-                            }}
-                          >
-                            Headline:{" "}
-                          </span>
-                          {info.headline}{" "}
-                        </Typography>
-                        <Typography variant="body2" component="div">
-                          <span
-                            style={{
-                              fontWeight: "bold",
-                              textTransform: "capitalize",
-                            }}
-                          >
-                            Event Description:{" "}
-                          </span>
-                          {info.description}{" "}
-                        </Typography>
-                        <Typography variant="body2" component="div">
-                          <span
-                            style={{
-                              fontWeight: "bold",
-                              textTransform: "capitalize",
-                            }}
-                          >
-                            Instructions:{" "}
-                          </span>
-                          {info.instruction}{" "}
-                        </Typography>
-                        <Typography variant="body2" component="div">
-                          <span
-                            style={{
-                              fontWeight: "bold",
-                              textTransform: "capitalize",
-                            }}
-                          >
-                            Information URL:{" "}
-                          </span>
-                          {info.web}{" "}
-                        </Typography>
-                        <Typography variant="body2" component="div">
-                          <span
-                            style={{
-                              fontWeight: "bold",
-                              textTransform: "capitalize",
-                            }}
-                          >
-                            Contact Info:{" "}
-                          </span>
-                          {info.contact}{" "}
-                        </Typography>
-                      </Box>
-                    </React.Fragment>
-                  </Box>
-                ))}
+                <PopupContentText
+                  title="Identifier"
+                  content={alert.identifier!}
+                ></PopupContentText>
+
+                <PopupContentText
+                  title="Status"
+                  content={alert.status!}
+                ></PopupContentText>
+
+                <PopupContentText
+                  title="Scope"
+                  content={alert.scope!}
+                ></PopupContentText>
+
+                <PopupContentText
+                  title="restriction"
+                  content={alert.restriction!}
+                ></PopupContentText>
+
+                <PopupContentText
+                  title="references"
+                  content={alert.references!}
+                ></PopupContentText>
+                <DynamicTabs infoSets={alert?.alertinfoSet!}></DynamicTabs>
               </TabPanel>
             ))}
         </Box>
