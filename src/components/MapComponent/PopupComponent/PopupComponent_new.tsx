@@ -7,7 +7,6 @@ import { AlertData } from "../MapComponent";
 import { Button, Pagination, PaginationItem } from "@mui/material";
 import { PopupHeader } from "./PopupHeader";
 import AttachFileIcon from "@mui/icons-material/AttachFile";
-import { PopupCard } from "./PopupCard";
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -289,7 +288,6 @@ export const PopupComponent: React.FC<PopupComponentProps> = ({
                   </a>
                 </Box>
 
-                <PopupCard></PopupCard>
                 <Typography variant="body2" component="div">
                   <span
                     style={{ fontWeight: "bold", textTransform: "capitalize" }}
