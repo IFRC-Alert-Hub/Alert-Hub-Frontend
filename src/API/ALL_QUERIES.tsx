@@ -45,7 +45,7 @@ export const ALL_ALERTS = gql`
         id
         description
       }
-      sourceFeed {
+      feed {
         url
         name
       }
