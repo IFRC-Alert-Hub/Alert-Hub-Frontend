@@ -1,8 +1,8 @@
 import React, { ReactElement, useEffect, useRef, useState } from "react";
 import mapboxgl, { Map as MapboxMap } from "mapbox-gl";
 import { Box, Dialog, Tab, Tabs } from "@mui/material";
-import { PopupComponent } from "./PopupComponent";
 import SourcesTableComponent from "../SourceTableComponent/SourceTableComponent";
+import { PopupComponent } from "./PopupComponent/PopupComponent_new";
 
 export const ExtremeThreatColour: string = "#f5333f";
 export const ModerateThreatColour: string = "#ff9e00";
