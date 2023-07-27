@@ -84,7 +84,7 @@ export const PopupComponent: React.FC<PopupComponentProps> = ({
     newPage: number
   ) => {
     setPage(newPage);
-    setValue((newPage - 1) * itemsPerPage); // Update the value to display the correct tabs on the new page
+    setValue((newPage - 1) * itemsPerPage);
   };
 
   const pageCount = Math.ceil(alerts.length / itemsPerPage);
@@ -214,6 +214,17 @@ export const PopupComponent: React.FC<PopupComponentProps> = ({
                     "&.Mui-selected": {
                       backgroundColor: "#F5333F",
                       color: "white",
+                      "&:hover": {
+                        backgroundColor: "#F5333F",
+                      },
+                    },
+                    "&:hover": {
+                      backgroundColor: "#F5333F",
+                      color: "white",
+                    },
+                    "&:focus": {
+                      backgroundColor: "#F5333F",
+                      color: "white",
                     },
                   }}
                 />
@@ -280,19 +291,25 @@ title={`Source: ${alerts[0]?.alertinfoSet?.[0]?.event}`}
                         "&:hover": {
                           backgroundColor: "#f5333f",
                         },
-                        width: "150px",
+                        width: "80px",
                       }}
                     >
                       <AttachFileIcon
                         fontSize="small"
                         sx={{ width: "0.7em", height: "0.7rem" }}
                       />{" "}
-                      Original Source
+                      Origin
                     </Button>
                   </a>
                 </Box>
 
-                <Grid container spacing={2} padding={"5px 0 5px 0"}>
+                <Grid
+                  container
+                  spacing={2}
+                  padding={"5px 0 5px 0"}
+                  marginTop={"0px"}
+                  marginBottom={"5px"}
+                >
                   <Grid item xs={6}>
                     <PopupCard
                       iconComponent={<EmailIcon fontSize="medium"></EmailIcon>}
@@ -310,31 +327,33 @@ title={`Source: ${alerts[0]?.alertinfoSet?.[0]?.event}`}
                     ></PopupCard>
                   </Grid>
                 </Grid>
+                <Box sx={{ padding: "5px 0 5px 0" }}>
+                  <PopupContentText
+                    title="Identifier"
+                    content={alert.identifier!}
+                  ></PopupContentText>
 
-                <PopupContentText
-                  title="Identifier"
-                  content={alert.identifier!}
-                ></PopupContentText>
+                  <PopupContentText
+                    title="Status"
+                    content={alert.status!}
+                  ></PopupContentText>
 
-                <PopupContentText
-                  title="Status"
-                  content={alert.status!}
-                ></PopupContentText>
+                  <PopupContentText
+                    title="Scope"
+                    content={alert.scope!}
+                  ></PopupContentText>
 
-                <PopupContentText
-                  title="Scope"
-                  content={alert.scope!}
-                ></PopupContentText>
+                  <PopupContentText
+                    title="restriction"
+                    content={alert.restriction!}
+                  ></PopupContentText>
 
-                <PopupContentText
-                  title="restriction"
-                  content={alert.restriction!}
-                ></PopupContentText>
+                  <PopupContentText
+                    title="references"
+                    content={alert.references!}
+                  ></PopupContentText>
+                </Box>
 
-                <PopupContentText
-                  title="references"
-                  content={alert.references!}
-                ></PopupContentText>
                 <DynamicTabs infoSets={alert?.alertinfoSet!}></DynamicTabs>
               </TabPanel>
             ))}
