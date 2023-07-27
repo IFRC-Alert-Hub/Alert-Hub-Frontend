@@ -18,8 +18,9 @@ const About = () => {
       <Box
         sx={{
           minHeight: "555px",
-          background:
-            "url(https://go-user-library.ifrc.org/static/media/homepage_bg.59a1f73d.png) no-repeat center bottom",
+          backgroundImage: `url("${process.env.PUBLIC_URL}/assets/homepage_bg.png")`,
+          backgroundRepeat: "no-repeat",
+          backgroundPosition: "center bottom",
           backgroundSize: "cover",
           padding: 0,
         }}
@@ -69,9 +70,7 @@ const About = () => {
             <Grid item xs={12} sm={6} md={5} alignItems={"left"}>
               <img
                 alt="AboutLogo"
-                src={
-                  "https://go-user-library.ifrc.org/static/media/laptop.54818dce.png"
-                }
+                src={process.env.PUBLIC_URL + "/assets/laptop.png"}
                 width={"100%"}
               />
             </Grid>
