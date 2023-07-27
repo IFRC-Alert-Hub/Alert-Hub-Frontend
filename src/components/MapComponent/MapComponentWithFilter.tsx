@@ -244,112 +244,111 @@ const MapComponentWithFilter: React.FC<MapComponentWithFilterProps> = ({
         selectedFilter={selectedFilter}
         filterKey={filterKey}
       />
-      {loading && alertsLoading && <Progress />}
-      {error && <p>Error: {error.message}</p>}
-      {!loading && !error && (
-        <>
-          <Box
-            display="flex"
-            flexDirection="row"
-            marginBottom="20px"
-            marginTop="20px"
-          >
-            <Autocomplete
-              disablePortal
-              id="combo-box-urgency"
-              options={urgencyOptions}
-              getOptionLabel={(option) => option}
-              sx={{
-                width: 170,
-                backgroundColor: "#f4f4f4",
-                "& .MuiAutocomplete-input": {
-                  padding: "4px",
-                },
-                marginRight: "20px",
-              }}
-              renderInput={(params) => (
-                <TextField
-                  {...params}
-                  label="Urgency"
-                  size="small"
-                  sx={{
-                    "& .MuiInputLabel-root": {
-                      color: "#8D8D8D",
-                      fontSize: "12px",
-                    },
-                  }}
-                />
-              )}
-              onChange={handleUrgencyChange}
-            />
-            <Autocomplete
-              disablePortal
-              id="combo-box-severity"
-              options={severityOptions}
-              getOptionLabel={(option) => option}
-              sx={{
-                width: 170,
-                backgroundColor: "#f4f4f4",
-                "& .MuiAutocomplete-input": {
-                  padding: "4px",
-                },
-                marginRight: "20px",
-              }}
-              renderInput={(params) => (
-                <TextField
-                  {...params}
-                  label="Severity"
-                  size="small"
-                  sx={{
-                    "& .MuiInputLabel-root": {
-                      color: "#8D8D8D",
-                      fontSize: "12px",
-                    },
-                  }}
-                />
-              )}
-              onChange={handleSeverityChange}
-            />
 
-            <Autocomplete
-              disablePortal
-              id="combo-box-certainty"
-              options={certaintyOptions}
-              getOptionLabel={(option) => option}
-              sx={{
-                width: 170,
-                backgroundColor: "#f4f4f4",
-                "& .MuiAutocomplete-input": {
-                  padding: "4px",
-                },
-                marginRight: "20px",
-              }}
-              renderInput={(params) => (
-                <TextField
-                  {...params}
-                  label="Certainty"
-                  size="small"
-                  sx={{
-                    "& .MuiInputLabel-root": {
-                      color: "#8D8D8D",
-                      fontSize: "12px",
-                    },
-                  }}
-                />
-              )}
-              onChange={handleCertaintyChange}
-            />
-            <DatePickerComponent
-              datePickerTitle="Effective"
-              selectedDate={selectedEffectiveDate}
-              setSelectedDate={setSelectedEffectiveDate}
-            />
-            <DatePickerComponent
-              datePickerTitle="Expiry"
-              selectedDate={selectedExpiryDate}
-              setSelectedDate={setSelectedExpiryDate}
-            />
-          </Box>
+      <>
+        <Box
+          display="flex"
+          flexDirection={{ xs: "column", sm: "row" }}
+          marginBottom="20px"
+          marginTop="20px"
+        >
+          <Autocomplete
+            disablePortal
+            id="combo-box-urgency"
+            options={urgencyOptions}
+            getOptionLabel={(option) => option}
+            sx={{
+              width: 170,
+              backgroundColor: "#f4f4f4",
+              "& .MuiAutocomplete-input": {
+                padding: "4px",
+              },
+              marginRight: "20px",
+            }}
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                label="Urgency"
+                size="small"
+                sx={{
+                  "& .MuiInputLabel-root": {
+                    color: "#8D8D8D",
+                    fontSize: "12px",
+                  },
+                }}
+              />
+            )}
+            onChange={handleUrgencyChange}
+          />
+          <Autocomplete
+            disablePortal
+            id="combo-box-severity"
+            options={severityOptions}
+            getOptionLabel={(option) => option}
+            sx={{
+              width: 170,
+              backgroundColor: "#f4f4f4",
+              "& .MuiAutocomplete-input": {
+                padding: "4px",
+              },
+              marginRight: "20px",
+            }}
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                label="Severity"
+                size="small"
+                sx={{
+                  "& .MuiInputLabel-root": {
+                    color: "#8D8D8D",
+                    fontSize: "12px",
+                  },
+                }}
+              />
+            )}
+            onChange={handleSeverityChange}
+          />
+
+          <Autocomplete
+            disablePortal
+            id="combo-box-certainty"
+            options={certaintyOptions}
+            getOptionLabel={(option) => option}
+            sx={{
+              width: 170,
+              backgroundColor: "#f4f4f4",
+              "& .MuiAutocomplete-input": {
+                padding: "4px",
+              },
+              marginRight: "20px",
+            }}
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                label="Certainty"
+                size="small"
+                sx={{
+                  "& .MuiInputLabel-root": {
+                    color: "#8D8D8D",
+                    fontSize: "12px",
+                  },
+                }}
+              />
+            )}
+            onChange={handleCertaintyChange}
+          />
+          <DatePickerComponent
+            datePickerTitle="Effective"
+            selectedDate={selectedEffectiveDate}
+            setSelectedDate={setSelectedEffectiveDate}
+          />
+          <DatePickerComponent
+            datePickerTitle="Expiry"
+            selectedDate={selectedExpiryDate}
+            setSelectedDate={setSelectedExpiryDate}
+          />
+        </Box>
+        
           <MapComponent
             mapContainerRef={mapContainerRef}
             mapRef={mapRef}
@@ -359,9 +358,10 @@ const MapComponentWithFilter: React.FC<MapComponentWithFilterProps> = ({
             alertsLoading={alertsLoading}
             setAlertsLoading={setAlertsLoading}
             sources={sourceAlerts?.current as SourceFeed[]}
+            loading={loading}
+            error={error}
           />
-        </>
-      )}
+      </>
     </>
   );
 };

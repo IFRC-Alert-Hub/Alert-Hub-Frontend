@@ -1,8 +1,9 @@
 import React, { ReactElement, useEffect, useRef, useState } from "react";
 import mapboxgl, { Map as MapboxMap } from "mapbox-gl";
-import { Box, Dialog, Tab, Tabs } from "@mui/material";
+import { Box, Dialog, Skeleton, Tab, Tabs } from "@mui/material";
 import SourcesTableComponent from "../SourceTableComponent/SourceTableComponent";
 import { PopupComponent } from "./PopupComponent/PopupComponent_new";
+import Progress from "../Layout/Progress";
 
 export const ExtremeThreatColour: string = "#f5333f";
 export const ModerateThreatColour: string = "#ff9e00";
@@ -24,6 +25,8 @@ type MapProps = {
   alertsLoading: boolean;
   setAlertsLoading: React.Dispatch<React.SetStateAction<boolean>>;
   sources?: SourceFeed[];
+  loading?: any;
+  error?: any;
 };
 
 type Region = {
@@ -101,6 +104,8 @@ const MapComponent: React.FC<MapProps> = ({
   alertsLoading,
   setAlertsLoading,
   sources = [],
+  loading,
+  error,
 }) => {
   const [dialogLoaded, setDialogLoaded] = useState(false);
   const [tableID, setTableID] = useState<string>("");
@@ -310,7 +315,28 @@ const MapComponent: React.FC<MapProps> = ({
 
         {value === "map-tab" && (
           <Box p={3}>
-            <div ref={mapContainerRef} className="map-container"></div>
+            <div
+              style={{ position: "relative", height: "100%", width: "100%" }}
+            >
+              <div ref={mapContainerRef} className="map-container"></div>
+              {loading && alertsLoading && (
+                <Skeleton
+                  animation="wave"
+                  sx={{
+                    position: "absolute",
+                    top: 0,
+                    left: 0,
+                    bottom: 0,
+                    right: 0,
+                    width: "100%",
+                    height: "600px",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
+                />
+              )}
+            </div>
           </Box>
         )}
         {value === "source-tab" && (
