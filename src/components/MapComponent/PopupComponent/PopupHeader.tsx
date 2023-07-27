@@ -19,7 +19,11 @@ export const PopupHeader: React.FC<PopupHeaderProps> = (props) => {
       }}
     >
       <Typography variant="h4" fontWeight={"bold"} textTransform={"uppercase"}>
-        {alerts[0]?.country?.name}
+        {alerts[0]?.country?.name} (
+        {alerts.length > 1
+          ? `${alerts.length} Alerts`
+          : `${alerts.length} Alert`}
+        )
       </Typography>
       <Typography variant="h5" textTransform={"uppercase"}>
         ISO3: {alerts[0]?.country?.iso3}

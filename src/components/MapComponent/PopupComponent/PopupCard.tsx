@@ -11,7 +11,14 @@ type PopupCardProps = {
 export const PopupCard: React.FC<PopupCardProps> = (props) => {
   const { iconComponent, iconText, rightText } = props;
   return (
-    <Card sx={{ display: "flex", backgroundColor: "#f0ecec" }}>
+    <Card
+      sx={{
+        display: "flex",
+        alignItems: "center",
+        backgroundColor: "#f0ecec",
+        height: "50px",
+      }}
+    >
       <Box
         sx={{
           display: "flex",
