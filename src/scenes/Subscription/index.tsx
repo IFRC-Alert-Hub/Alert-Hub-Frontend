@@ -1,4 +1,4 @@
-import { Button, Container, Grid, Typography } from "@mui/material";
+import { Box, Button, Container, Grid, Typography } from "@mui/material";
 import { useState } from "react";
 import { useQuery } from "@apollo/client";
 import { cap_aggregator, subscription_module } from "../../API/API_Links";
@@ -12,6 +12,7 @@ import { GET_ALL_COUNTRIES, GET_SUBSCRIPTIONS } from "../../API/ALL_QUERIES";
 import SubscriptionTable from "./SubscriptionTable";
 import ModalForm from "./ModalForm";
 import Progress from "../../components/Layout/Progress";
+import AlertCard from "./AlertCard";
 
 const INIT_ROW: SubscriptionForm = {
   subscriptionName: "",
@@ -81,16 +82,39 @@ const Subscription = () => {
 
   return (
     <Container maxWidth={"lg"}>
-      <Grid container direction="row" margin="30px 0px 10px 0px">
+      <Box margin="2rem 0 1rem 0">
+        <Typography
+          variant="h3"
+          fontWeight={"bold"}
+          paddingBottom={"15px"}
+          textTransform={"capitalize"}
+          letterSpacing={"1.6px"}
+        >
+          Your Ongoing Alerts
+        </Typography>
+        <Box mt={2} display="flex" flexWrap="wrap">
+          {subscriptionData &&
+          subscriptionData.listAllSubscription.length > 0 ? (
+            subscriptionData.listAllSubscription.map(
+              (item: SubscriptionItem) => (
+                <AlertCard title={item.subscriptionName} />
+              )
+            )
+          ) : (
+            <p>No data</p>
+          )}
+        </Box>
+      </Box>
+      <Grid container direction="row" margin="3rem 0 1rem 0">
         <Grid item xs={12} sm={8}>
           <Typography
-            variant="h2"
+            variant="h3"
             fontWeight={"bold"}
             paddingBottom={"15px"}
             textTransform={"capitalize"}
             letterSpacing={"1.6px"}
           >
-            My Subscriptions
+            Subscription Management
           </Typography>
         </Grid>
         <Grid item xs={12} sm={4} className="subscription-add-btn">
@@ -101,7 +125,11 @@ const Subscription = () => {
               handleModalOpen();
               setFormType("Add");
             }}
-            sx={{ borderRadius: 3, marginRight: "10px" }}
+            sx={{
+              borderRadius: 10,
+              marginRight: "10px",
+              textTransform: "capitalize",
+            }}
           >
             Add
           </Button>
