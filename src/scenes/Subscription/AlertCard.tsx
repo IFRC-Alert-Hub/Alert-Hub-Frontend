@@ -6,7 +6,7 @@ type PropsType = {
 
 const AlertCard = ({ title }: PropsType) => {
   return (
-    <Card sx={{ flex: "0 0 300px", mr: 2, mb: 2 }}>
+    <Card sx={{ flex: "0 0 300px", mr: 3, mb: 3 }}>
       <CardContent sx={{ display: "flex", justifyContent: "space-between" }}>
         <Box>
           <Typography
