@@ -2,7 +2,11 @@ import * as React from "react";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import Box from "@mui/material/Box";
-import { AlertInfoSet } from "../MapComponent";
+import {
+  AlertInfoSet,
+  ExtremeThreatColour,
+  ModerateThreatColour,
+} from "../MapComponent";
 import { PopupContentText } from "./PopupContentText";
 
 interface TabPanelProps {
@@ -48,6 +52,21 @@ interface TabProps {
   infoSets: AlertInfoSet[];
 }
 
+const determineColour = (info: AlertInfoSet) => {
+  if (
+    info.urgency === "Immediate" ||
+    info.urgency === "Expected" ||
+    info.severity === "Extreme" ||
+    info.severity === "Severe" ||
+    info.certainty === "Observed" ||
+    info.certainty === "Likely"
+  ) {
+    return ExtremeThreatColour;
+  } else {
+    return ModerateThreatColour;
+  }
+};
+
 export default function DynamicTabs({ infoSets }: TabProps) {
   const [value, setValue] = React.useState(0);
 
@@ -66,12 +85,41 @@ export default function DynamicTabs({ infoSets }: TabProps) {
           variant="scrollable"
           scrollButtons={false}
           aria-label="scrollable prevent tabs example"
+          sx={{
+            "& .MuiTabs-indicator": {
+              height: "5px",
+            },
+          }}
         >
           {infoSets.map((info, index) => (
             <Tab
               key={index}
-              label={`Info ${index + 1}`}
+              label={
+                <div style={{ display: "flex", alignItems: "center" }}>
+                  {`Info ${index + 1}`}
+                  <span
+                    style={{
+                      display: "inline-block",
+                      width: "10px",
+                      height: "10px",
+                      borderRadius: "50%",
+                      backgroundColor: determineColour(info),
+                      marginLeft: "5px", // Add some spacing between the text and the circle
+                    }}
+                  ></span>
+                </div>
+              }
               {...a11yProps(index)}
+              sx={
+                value === index
+                  ? {
+                      backgroundColor: "#fcd4dc",
+                    }
+                  : {
+                      backgroundColor: "#DEDEDE",
+                      color: "#9A9797",
+                    }
+              }
             />
           ))}
         </Tabs>
@@ -124,17 +172,17 @@ export default function DynamicTabs({ infoSets }: TabProps) {
             ></PopupContentText>
 
             <PopupContentText
-              title="Effective Date/Time"
+              title="Effective"
               content={modifyDateTime(info.effective as string)}
             ></PopupContentText>
 
             <PopupContentText
-              title="Onset Date/Time"
+              title="Onset"
               content={modifyDateTime(info.onset as string)}
             ></PopupContentText>
 
             <PopupContentText
-              title="Expiration Date/Time"
+              title="Expiration"
               content={modifyDateTime(info.expires as string)}
             ></PopupContentText>
 
@@ -159,7 +207,7 @@ export default function DynamicTabs({ infoSets }: TabProps) {
             ></PopupContentText>
 
             <PopupContentText
-              title="Information URL"
+              title="Web"
               content={info.web!}
             ></PopupContentText>
 
