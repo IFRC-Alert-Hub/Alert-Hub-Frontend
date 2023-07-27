@@ -17,6 +17,7 @@ export const ALL_ALERTS = gql`
       code
       addresses
       id
+      url
       country {
         id
         name

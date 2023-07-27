@@ -85,6 +85,7 @@ export type AlertData = {
   code?: string;
   addresses?: string;
   id?: string;
+  url?: string;
   country?: CountryType;
   alertinfoSet?: AlertInfoSet[];
   feed?: SourceFeed;
