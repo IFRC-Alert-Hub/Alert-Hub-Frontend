@@ -97,11 +97,14 @@ const Subscription = () => {
           subscriptionData.listAllSubscription.length > 0 ? (
             subscriptionData.listAllSubscription.map(
               (item: SubscriptionItem) => (
-                <AlertCard title={item.subscriptionName} />
+                <AlertCard key={item.id} title={item.subscriptionName} />
               )
             )
           ) : (
-            <p>No data</p>
+            <Typography variant="h5" textAlign={"center"} color={"gray"}>
+              {" "}
+              No subscribed alerts.
+            </Typography>
           )}
         </Box>
       </Box>
