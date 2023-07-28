@@ -59,7 +59,7 @@ const HomeSubscriptionCard = () => {
             <CardMedia
               component="img"
               sx={{ width: 150 }}
-              image="/home/AlertHub.jpg"
+              image="/assets/home/AlertHub.jpg"
               alt="subscription logo"
             />
           </Box>
@@ -111,7 +111,7 @@ const HomeSubscriptionCard = () => {
             <CardMedia
               component="img"
               sx={{ width: 150 }}
-              image="/home/api1.png"
+              image="/assets/home/api1.png"
               alt="subscription logo"
             />
           </Box>
