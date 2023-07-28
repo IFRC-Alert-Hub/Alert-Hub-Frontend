@@ -203,15 +203,6 @@ const SubscriptionTable = ({
                 {row.subscribeBy.join(", ")}
               </TableCell>
               <TableCell align="center" sx={{ minWidth: "130px" }}>
-                {/* <Button
-                  variant="text"
-                  size="small"
-                  color="error"
-                  onClick={() => handleOpen("Edit", row.id)}
-                  sx={{ minWidth: 0, marginRight: "5px" }}
-                >
-                  View
-                </Button> */}
                 <Button
                   variant="text"
                   size="small"
@@ -232,6 +223,7 @@ const SubscriptionTable = ({
                     color: "red",
                     minWidth: 0,
                     padding: "5px",
+                    textTransform: "capitalize",
                     mr: "5px",
                     fontSize: "0.875rem",
                     "&:hover": {
@@ -252,6 +244,7 @@ const SubscriptionTable = ({
                     color: "red",
                     minWidth: 0,
                     padding: "5px",
+                    textTransform: "capitalize",
                     fontSize: "0.875rem",
                     "&:hover": {
                       opacity: "0.7",
