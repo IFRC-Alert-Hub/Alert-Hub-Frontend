@@ -49,6 +49,7 @@ const AvatarDropdown = () => {
     logoutHandler();
     navigate("/");
     userContext.setUser(null);
+    window.location.reload();
   };
 
   return (
