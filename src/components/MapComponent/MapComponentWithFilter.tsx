@@ -11,7 +11,6 @@ import MapComponent, {
 } from "./MapComponent";
 import TitleHeader from "../Layout/TitleHeader";
 import { useIntl } from "react-intl";
-import Progress from "../Layout/Progress";
 
 interface MapComponentWithFilterProps {
   loading: boolean;
@@ -348,19 +347,19 @@ const MapComponentWithFilter: React.FC<MapComponentWithFilterProps> = ({
             setSelectedDate={setSelectedExpiryDate}
           />
         </Box>
-        
-          <MapComponent
-            mapContainerRef={mapContainerRef}
-            mapRef={mapRef}
-            alerts={filteredAlerts}
-            countries={data?.listCountry}
-            boundingRegionCoordinates={boundingRegionCoordinates}
-            alertsLoading={alertsLoading}
-            setAlertsLoading={setAlertsLoading}
-            sources={sourceAlerts?.current as SourceFeed[]}
-            loading={loading}
-            error={error}
-          />
+
+        <MapComponent
+          mapContainerRef={mapContainerRef}
+          mapRef={mapRef}
+          alerts={filteredAlerts}
+          countries={data?.listCountry}
+          boundingRegionCoordinates={boundingRegionCoordinates}
+          alertsLoading={alertsLoading}
+          setAlertsLoading={setAlertsLoading}
+          sources={sourceAlerts?.current as SourceFeed[]}
+          loading={loading}
+          error={error}
+        />
       </>
     </>
   );

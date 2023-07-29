@@ -1,14 +1,6 @@
 import React, { ReactElement, useEffect, useRef, useState } from "react";
-import mapboxgl, { BoxZoomHandler, Map as MapboxMap } from "mapbox-gl";
-import {
-  Box,
-  Container,
-  Dialog,
-  Skeleton,
-  Tab,
-  Tabs,
-  Typography,
-} from "@mui/material";
+import mapboxgl, { Map as MapboxMap } from "mapbox-gl";
+import { Box, Dialog, Skeleton, Tab, Tabs, Typography } from "@mui/material";
 import SourcesTableComponent from "../SourceTableComponent/SourceTableComponent";
 import { PopupComponent } from "./PopupComponent/PopupComponent_new";
 import Progress from "../Layout/Progress";
