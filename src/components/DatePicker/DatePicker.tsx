@@ -3,8 +3,7 @@ import { Box, Button, Menu, Typography } from "@mui/material";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
-
+import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 interface EffectivePopupProps {
   open: boolean;
   onClose: () => void;
@@ -186,7 +185,7 @@ const DatePickerComponent: React.FC<DatePickerComponentProps> = ({
   };
 
   return (
-    <div>
+    <>
       <Button
         id="demo-customized-button"
         size="small"
@@ -195,23 +194,25 @@ const DatePickerComponent: React.FC<DatePickerComponentProps> = ({
         aria-haspopup="true"
         aria-expanded={anchorEl ? "true" : undefined}
         onClick={handleMenuOpen}
-        endIcon={<KeyboardArrowDownIcon sx={{ color: "#f5333f" }} />}
+        endIcon={<ArrowDropDownIcon sx={{ color: "#787474" }} />}
         sx={{
-          height: "100%",
-          padding: "0 10px",
+          display: "flex",
+          justifyContent: "space-between", // Places the Typography and icon on opposite ends
+          alignItems: "center", // Centers the content vertically within the Button
+          height: "36.71px",
+          width: "170px",
           backgroundColor: "#f4f4f4",
           borderColor: "#E0E3E7",
           "&:hover": {
             borderColor: "#B2BAC2",
             backgroundColor: "#f4f4f4",
           },
-          marginRight: "20px",
         }}
       >
         <Typography
           textTransform={"capitalize"}
-          paddingRight={"40px"}
           sx={{
+            textAlign: "left",
             color:
               selectedDate !== undefined &&
               selectedDate[0] !== null &&
@@ -236,7 +237,7 @@ const DatePickerComponent: React.FC<DatePickerComponentProps> = ({
         anchorEl={anchorEl}
         setSelectedDate={setSelectedDate}
       />
-    </div>
+    </>
   );
 };
 
