@@ -369,7 +369,12 @@ const MapComponent: React.FC<MapProps> = ({
                     }}
                   >
                     <Progress />
-                    <Typography variant="h4" fontWeight={800} color="f5333f">
+                    <Typography
+                      sx={{ paddingLeft: "5px" }}
+                      variant="h4"
+                      fontWeight={800}
+                      color="f5333f"
+                    >
                       Loading Alerts
                     </Typography>
                   </Box>
