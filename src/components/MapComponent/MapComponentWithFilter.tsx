@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Autocomplete, Box, Grid, TextField } from "@mui/material";
+import { Autocomplete, Grid, TextField } from "@mui/material";
 import mapboxgl from "mapbox-gl";
 
 import DatePickerComponent from "../DatePicker/DatePicker";
