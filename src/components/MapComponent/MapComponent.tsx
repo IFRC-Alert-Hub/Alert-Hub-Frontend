@@ -337,6 +337,7 @@ const MapComponent: React.FC<MapProps> = ({
               {loading && alertsLoading && (
                 <>
                   <Skeleton
+                    animation="wave"
                     sx={{
                       position: "absolute",
                       top: "50%",
@@ -368,7 +369,7 @@ const MapComponent: React.FC<MapProps> = ({
                     }}
                   >
                     <Progress />
-                    <Typography variant="h4" fontWeight={800}>
+                    <Typography variant="h4" fontWeight={800} color="f5333f">
                       Loading Alerts
                     </Typography>
                   </Box>
