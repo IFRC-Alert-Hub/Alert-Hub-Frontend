@@ -14,6 +14,7 @@ const AlertCard = ({ title }: PropsType) => {
             variant="h5"
             component="div"
             sx={{ fontWeight: 600 }}
+            textTransform="capitalize"
           >
             {title}
           </Typography>

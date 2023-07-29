@@ -140,10 +140,10 @@ export const PopupComponent: React.FC<PopupComponentProps> = ({
                       index + (page - 1) * itemsPerPage === value
                         ? "#fcd4dc"
                         : "#DEDEDE",
-                    borderLeft:
-                      index + (page - 1) * itemsPerPage === value
-                        ? "10px solid #F5333F"
-                        : "",
+                    // borderLeft:
+                    //   index + (page - 1) * itemsPerPage === value
+                    //     ? "10px solid #F5333F"
+                    //     : "",
 
                     paddingBottom: "1px",
                   }}
@@ -291,12 +291,16 @@ title={`Source: ${alerts[0]?.alertinfoSet?.[0]?.event}`}
                         "&:hover": {
                           backgroundColor: "#f5333f",
                         },
-                        width: "80px",
+                        width: "70px",
                       }}
                     >
                       <AttachFileIcon
                         fontSize="small"
-                        sx={{ width: "0.7em", height: "0.7rem" }}
+                        sx={{
+                          width: "1em",
+                          height: "1rem",
+                          paddingRight: "5px",
+                        }}
                       />{" "}
                       Origin
                     </Button>

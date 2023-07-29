@@ -4,8 +4,8 @@ import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
-import { Box, Typography } from "@mui/material";
-import { Link, useLocation } from "react-router-dom";
+import { Box, Link, Typography } from "@mui/material";
+import { useLocation } from "react-router-dom";
 
 export interface IDropdownItems {
   name: string;
@@ -87,7 +87,7 @@ const CustomNavItemDropdown = (props: {
         {props.DropdownItems.map((item) => (
           <Link
             key={item.name}
-            to={item.path}
+            href={item.path}
             style={{ textDecoration: "none", color: "inherit" }}
           >
             <MenuItem
