@@ -1,5 +1,5 @@
-import React, { useEffect, useRef, useState } from "react";
-import mapboxgl, { Map as MapboxMap } from "mapbox-gl";
+import React, { useEffect, useRef } from "react";
+import mapboxgl from "mapbox-gl";
 
 const TestMapComponentPopup = () => {
   const mapContainerRef = useRef<HTMLDivElement | null>(null);
