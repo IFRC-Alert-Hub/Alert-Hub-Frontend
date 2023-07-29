@@ -1,6 +1,14 @@
 import React, { ReactElement, useEffect, useRef, useState } from "react";
-import mapboxgl, { Map as MapboxMap } from "mapbox-gl";
-import { Box, Dialog, Skeleton, Tab, Tabs } from "@mui/material";
+import mapboxgl, { BoxZoomHandler, Map as MapboxMap } from "mapbox-gl";
+import {
+  Box,
+  Container,
+  Dialog,
+  Skeleton,
+  Tab,
+  Tabs,
+  Typography,
+} from "@mui/material";
 import SourcesTableComponent from "../SourceTableComponent/SourceTableComponent";
 import { PopupComponent } from "./PopupComponent/PopupComponent_new";
 import Progress from "../Layout/Progress";
@@ -316,25 +324,55 @@ const MapComponent: React.FC<MapProps> = ({
         {value === "map-tab" && (
           <Box p={3}>
             <div
-              style={{ position: "relative", height: "100%", width: "100%" }}
+              style={{
+                position: "relative",
+                height: "100%",
+                width: "100%",
+              }}
             >
-              <div ref={mapContainerRef} className="map-container"></div>
+              <div ref={mapContainerRef} className="map-container">
+                {" "}
+              </div>
+
               {loading && alertsLoading && (
-                <Skeleton
-                  animation="wave"
-                  sx={{
-                    position: "absolute",
-                    top: 0,
-                    left: 0,
-                    bottom: 0,
-                    right: 0,
-                    width: "100%",
-                    height: "600px",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                  }}
-                />
+                <>
+                  <Skeleton
+                    sx={{
+                      position: "absolute",
+                      top: "50%",
+                      left: "50%",
+                      width: "100%",
+                      height: "100%",
+                      transform: "translate(-50%, -50%)",
+                      backgroundColor: "#e0dcdc",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      padding: "none",
+                    }}
+                  ></Skeleton>
+
+                  <Box
+                    sx={{
+                      position: "absolute",
+                      top: "50%",
+                      left: "50%",
+                      transform: "translate(-50%, -50%)",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      padding: "30px",
+                      height: "60px",
+                      borderRadius: "30px",
+                      bgColor: "black",
+                    }}
+                  >
+                    <Progress />
+                    <Typography variant="h4" fontWeight={800}>
+                      Loading Alerts
+                    </Typography>
+                  </Box>
+                </>
               )}
             </div>
           </Box>
