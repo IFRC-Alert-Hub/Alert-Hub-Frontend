@@ -1,8 +1,17 @@
 import React, { ReactElement, useEffect, useRef, useState } from "react";
-import mapboxgl, { Map as MapboxMap } from "mapbox-gl";
-import { Box, Dialog, Tab, Tabs } from "@mui/material";
+import mapboxgl, { BoxZoomHandler, Map as MapboxMap } from "mapbox-gl";
+import {
+  Box,
+  Container,
+  Dialog,
+  Skeleton,
+  Tab,
+  Tabs,
+  Typography,
+} from "@mui/material";
 import SourcesTableComponent from "../SourceTableComponent/SourceTableComponent";
 import { PopupComponent } from "./PopupComponent/PopupComponent_new";
+import Progress from "../Layout/Progress";
 
 export const ExtremeThreatColour: string = "#f5333f";
 export const ModerateThreatColour: string = "#ff9e00";
@@ -24,6 +33,8 @@ type MapProps = {
   alertsLoading: boolean;
   setAlertsLoading: React.Dispatch<React.SetStateAction<boolean>>;
   sources?: SourceFeed[];
+  loading?: any;
+  error?: any;
 };
 
 type Region = {
@@ -102,6 +113,8 @@ const MapComponent: React.FC<MapProps> = ({
   alertsLoading,
   setAlertsLoading,
   sources = [],
+  loading,
+  error,
 }) => {
   const [dialogLoaded, setDialogLoaded] = useState(false);
   const [tableID, setTableID] = useState<string>("");
@@ -311,7 +324,64 @@ const MapComponent: React.FC<MapProps> = ({
 
         {value === "map-tab" && (
           <Box p={3}>
-            <div ref={mapContainerRef} className="map-container"></div>
+            <div
+              style={{
+                position: "relative",
+                height: "100%",
+                width: "100%",
+              }}
+            >
+              <div ref={mapContainerRef} className="map-container">
+                {" "}
+              </div>
+
+              {loading && alertsLoading && (
+                <>
+                  <Skeleton
+                    animation="wave"
+                    sx={{
+                      position: "absolute",
+                      top: "50%",
+                      left: "50%",
+                      width: "100%",
+                      height: "100%",
+                      transform: "translate(-50%, -50%)",
+                      backgroundColor: "#e0dcdc",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      padding: "none",
+                    }}
+                  ></Skeleton>
+
+                  <Box
+                    sx={{
+                      position: "absolute",
+                      top: "50%",
+                      left: "50%",
+                      transform: "translate(-50%, -50%)",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      padding: "30px",
+                      height: "60px",
+                      borderRadius: "30px",
+                      bgColor: "black",
+                    }}
+                  >
+                    <Progress />
+                    <Typography
+                      sx={{ paddingLeft: "5px" }}
+                      variant="h4"
+                      fontWeight={800}
+                      color="f5333f"
+                    >
+                      Loading Alerts
+                    </Typography>
+                  </Box>
+                </>
+              )}
+            </div>
           </Box>
         )}
         {value === "source-tab" && (
