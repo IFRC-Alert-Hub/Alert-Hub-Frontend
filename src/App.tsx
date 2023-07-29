@@ -60,7 +60,8 @@ function App() {
                   <Route path="subscription" element={<Subscription />} />
                 </Route>
                 <Route path="/test-performance" element={<TestPerformance />} />
-                t<Route path="*" element={<PageNotFound />}></Route>
+
+                <Route path="*" element={<PageNotFound />}></Route>
               </Routes>
             </Box>
             <Footer />
