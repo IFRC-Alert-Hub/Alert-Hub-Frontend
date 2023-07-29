@@ -152,7 +152,6 @@ const MapComponent: React.FC<MapProps> = ({
         return;
       }
       const mapBoundingBox = turfBbox(boundingRegionCoordinates);
-      console.log("afafafafa ;", mapBoundingBox);
       const [minX, minY, maxX, maxY] = mapBoundingBox;
 
       mapRef.current!.fitBounds([minX, minY, maxX, maxY] as LngLatBoundsLike, {
