@@ -1,6 +1,6 @@
 import React, { ReactElement, useEffect, useRef, useState } from "react";
 import mapboxgl, { LngLatBoundsLike, Map as MapboxMap } from "mapbox-gl";
-import { Box, Tab, Tabs, Typography } from "@mui/material";
+import { Box, Skeleton, Tab, Tabs, Typography } from "@mui/material";
 import SourcesTableComponent from "../SourceTableComponent/SourceTableComponent";
 import { PopupComponent } from "./PopupComponent/PopupComponent_new";
 import Progress from "../Layout/Progress";
@@ -362,9 +362,25 @@ const MapComponent: React.FC<MapProps> = ({
                       bgColor: "black",
                     }}
                   >
+                    <Skeleton
+                      animation="wave"
+                      sx={{
+                        position: "absolute",
+                        top: "50%",
+                        left: "50%",
+                        width: "100%",
+                        height: "100%",
+                        transform: "translate(-50%, -50%)",
+                        backgroundColor: "#e0dcdc",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        padding: "none",
+                      }}
+                    ></Skeleton>
                     <Progress />
                     <Typography
-                      sx={{ paddingLeft: "5px" }}
+                      sx={{ paddingLeft: "5px", zIndex: 1000 }}
                       variant="h4"
                       fontWeight={800}
                       color="f5333f"
