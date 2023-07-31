@@ -50,6 +50,10 @@ body,
   height: 600px;
 }
 
+.map-container-transition {
+  transition: width 0.3s ease-in-out;
+}
+
 .mapboxgl-popup-content {
   width: max-content;
   height: max-content;
