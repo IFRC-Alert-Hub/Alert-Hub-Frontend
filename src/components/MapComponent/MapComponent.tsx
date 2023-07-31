@@ -138,6 +138,14 @@ const MapComponent: React.FC<MapProps> = ({
   };
 
   useEffect(() => {
+    if (mapRef.current) {
+      if (mapContainerRef.current) {
+        mapRef.current!.resize();
+      }
+    }
+  }, [isPolygonClicked, mapContainerRef, mapRef]);
+
+  useEffect(() => {
     setAlertsLoading(true);
 
     if (mapRef.current) {
@@ -155,6 +163,7 @@ const MapComponent: React.FC<MapProps> = ({
         scrollZoom: false,
         dragPan: true,
       });
+      mapRef.current!.resize();
       console.log("boundingRegion Coord: ", boundingRegionCoordinates);
       if (
         boundingRegionCoordinates !== undefined &&
@@ -326,84 +335,80 @@ const MapComponent: React.FC<MapProps> = ({
         </Tabs>
 
         {value === "map-tab" && (
-          <Box p={3} sx={{ display: "flex", flexDirection: "row" }}>
-            {" "}
-            {/* <div
-              style={{
-                position: "relative",
-                height: "100%",
-                width: isPolygonClicked ? "35%" : "100%",
-              }}
-            > */}
-            <div
-              ref={mapContainerRef}
-              className="map-container"
-              style={{ width: isPolygonClicked ? "35%" : "100%" }}
-            ></div>
-            {/* {loading && alertsLoading && (
-                <>
-                  <Skeleton
-                    animation="wave"
-                    sx={{
-                      position: "absolute",
-                      top: "50%",
-                      left: "50%",
-                      width: "100%",
-                      height: "100%",
-                      transform: "translate(-50%, -50%)",
-                      backgroundColor: "#e0dcdc",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      padding: "none",
-                    }}
-                  ></Skeleton>
-
-                  <Box
-                    sx={{
-                      position: "absolute",
-                      top: "50%",
-                      left: "50%",
-                      transform: "translate(-50%, -50%)",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      padding: "30px",
-                      height: "60px",
-                      borderRadius: "30px",
-                      bgColor: "black",
-                    }}
-                  >
-                    <Progress />
-                    <Typography
-                      sx={{ paddingLeft: "5px" }}
-                      variant="h4"
-                      fontWeight={800}
-                      color="f5333f"
-                    >
-                      Loading Alerts
-                    </Typography>
-                  </Box>
-                </>
-              )}
-            </div> */}
-            {isPolygonClicked && (
-              <Box
-                sx={{
-                  width: "65%",
-                  height: "600px",
-                  backgroundColor: "lightgray",
-                  position: "relative",
-                  transform: `translateX(${isPolygonClicked ? "0%" : "100%"})`,
-                  transition: "transform 0.3s ease-in-out",
-                }}
+          <Box p={3}>
+            {loading && alertsLoading && (
+              <div
+                style={{ width: "100%", height: "600px", position: "relative" }}
               >
-                <PopupComponent
-                  handleClose={handleClose}
-                  alerts={countryTables.current[tableID].alerts}
-                />
-              </Box>
+                <div
+                  style={{
+                    position: "absolute",
+                    top: 0,
+                    left: 0,
+                    width: "100%",
+                    height: "600px", // Set the height to 600px
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    backgroundColor: "#e0dcdc",
+                    zIndex: 999,
+                  }}
+                >
+                  <div>
+                    <Box
+                      sx={{
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        padding: "30px",
+                        height: "60px",
+                        borderRadius: "30px",
+                        bgColor: "black",
+                      }}
+                    >
+                      <Progress />
+                      <Typography
+                        sx={{ paddingLeft: "5px" }}
+                        variant="h4"
+                        fontWeight={800}
+                        color="f5333f"
+                      >
+                        Loading Alerts
+                      </Typography>
+                    </Box>
+                  </div>
+                </div>
+              </div>
             )}
+
+            <Box sx={{ display: "flex", flexDirection: "row" }}>
+              <div
+                ref={mapContainerRef}
+                className="map-container"
+                style={{
+                  width: isPolygonClicked ? "35%" : "100%",
+                }}
+              ></div>
+              {isPolygonClicked && (
+                <Box
+                  sx={{
+                    width: "65%",
+                    height: "600px",
+                    backgroundColor: "lightgray",
+                    position: "relative",
+                    transform: `translateX(${
+                      isPolygonClicked ? "0%" : "100%"
+                    })`,
+                    transition: "transform 0.3s ease-in-out",
+                  }}
+                >
+                  <PopupComponent
+                    handleClose={handleClose}
+                    alerts={countryTables.current[tableID].alerts}
+                  />
+                </Box>
+              )}
+            </Box>
           </Box>
         )}
 
