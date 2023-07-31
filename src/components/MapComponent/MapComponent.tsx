@@ -107,7 +107,7 @@ const MapComponent: React.FC<MapProps> = ({
   sources = [],
   loading,
   error,
-  boundingRegionCoordinates = [],
+  boundingRegionCoordinates = undefined,
 }) => {
   const [dialogLoaded, setDialogLoaded] = useState(false);
   const [tableID, setTableID] = useState<string>("");
@@ -137,6 +137,7 @@ const MapComponent: React.FC<MapProps> = ({
     }
 
     if (value === "map-tab") {
+      console.log("SOURCES: ", sources);
       mapRef.current = new mapboxgl.Map({
         container: mapContainerRef.current!,
         style: "mapbox://styles/go-ifrc/cki7aznup3hqz19rxliv3naf4",
@@ -145,18 +146,21 @@ const MapComponent: React.FC<MapProps> = ({
         scrollZoom: false,
         dragPan: true,
       });
+      console.log("boundingRegion Coord: ", boundingRegionCoordinates);
       if (
-        !mapRef.current ||
-        Object.keys(boundingRegionCoordinates).length === 0
+        boundingRegionCoordinates !== undefined &&
+        boundingRegionCoordinates !== null
       ) {
-        return;
-      }
-      const mapBoundingBox = turfBbox(boundingRegionCoordinates);
-      const [minX, minY, maxX, maxY] = mapBoundingBox;
+        const mapBoundingBox = turfBbox(boundingRegionCoordinates);
+        const [minX, minY, maxX, maxY] = mapBoundingBox;
 
-      mapRef.current!.fitBounds([minX, minY, maxX, maxY] as LngLatBoundsLike, {
-        padding: { top: 10, bottom: 25, left: 15, right: 5 },
-      });
+        mapRef.current!.fitBounds(
+          [minX, minY, maxX, maxY] as LngLatBoundsLike,
+          {
+            padding: { top: 10, bottom: 25, left: 15, right: 5 },
+          }
+        );
+      }
 
       mapRef.current.addControl(new mapboxgl.FullscreenControl(), "top-left");
       mapRef.current.addControl(new mapboxgl.NavigationControl(), "top-left");
@@ -178,6 +182,7 @@ const MapComponent: React.FC<MapProps> = ({
     alerts,
     setAlertsLoading,
     boundingRegionCoordinates,
+    sources
   ]);
 
   // const determineColour = (currentColour: string, alert: AlertData) => {
@@ -326,7 +331,7 @@ const MapComponent: React.FC<MapProps> = ({
           aria-label="secondary tabs example"
         >
           <Tab value="map-tab" label="Map" />
-          <Tab value="source-tab" label="Sources" />
+          <Tab value="source-tab" label="Sources" disabled={sources === null} />
         </Tabs>
 
         {value === "map-tab" && (
