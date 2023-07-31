@@ -90,14 +90,14 @@ export const PopupComponent: React.FC<PopupComponentProps> = ({
   const pageCount = Math.ceil(alerts.length / itemsPerPage);
 
   return (
-    <div>
+    <Box>
       <PopupHeader alerts={alerts} />
       <Box
         sx={{
           flexGrow: 1,
           bgcolor: "background.paper",
           display: "flex",
-          height: "550px",
+          height: "533px",
           borderRadius: "5px !important",
         }}
       >
@@ -273,7 +273,7 @@ title={`Source: ${alerts[0]?.alertinfoSet?.[0]?.event}`}
 </Tooltip> */}
                   </Typography>
 
-                  <a href={alert.id} target="_blank" rel="noopener noreferrer">
+                  <a href={alert.url} target="_blank" rel="noopener noreferrer">
                     <Button
                       variant="contained"
                       color="success"
@@ -363,6 +363,6 @@ title={`Source: ${alerts[0]?.alertinfoSet?.[0]?.event}`}
             ))}
         </Box>
       </Box>
-    </div>
+    </Box>
   );
 };
