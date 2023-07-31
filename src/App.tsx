@@ -18,6 +18,7 @@ import PrivateRoutes from "./utils/PrivateRoute";
 import { UserContextProvider } from "./context/UserContext";
 import PageNotFound from "./scenes/404_Page";
 import TestPerformance from "./API/test-performance";
+import TestMapComponentPopup from "./components/MapComponent/TestMapComponentPopup";
 
 function App() {
   // useEffect(() => {
@@ -60,7 +61,9 @@ function App() {
                   <Route path="subscription" element={<Subscription />} />
                 </Route>
                 <Route path="/test-performance" element={<TestPerformance />} />
-                t<Route path="*" element={<PageNotFound />}></Route>
+                <Route path="/map-test" element={<TestMapComponentPopup />} />
+
+                <Route path="*" element={<PageNotFound />}></Route>
               </Routes>
             </Box>
             <Footer />

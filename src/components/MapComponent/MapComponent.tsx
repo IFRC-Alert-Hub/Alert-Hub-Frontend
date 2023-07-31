@@ -1,10 +1,10 @@
 import React, { ReactElement, useEffect, useRef, useState } from "react";
-import mapboxgl, { Map as MapboxMap } from "mapbox-gl";
+import mapboxgl, { LngLatBoundsLike, Map as MapboxMap } from "mapbox-gl";
 import { Box, Dialog, Skeleton, Tab, Tabs, Typography } from "@mui/material";
 import SourcesTableComponent from "../SourceTableComponent/SourceTableComponent";
 import { PopupComponent } from "./PopupComponent/PopupComponent_new";
 import Progress from "../Layout/Progress";
-
+import turfBbox from "@turf/bbox";
 export const ExtremeThreatColour: string = "#f5333f";
 export const ModerateThreatColour: string = "#ff9e00";
 export const OtherAlertsColour: string = "#95BF6E";
@@ -107,6 +107,7 @@ const MapComponent: React.FC<MapProps> = ({
   sources = [],
   loading,
   error,
+  boundingRegionCoordinates = [],
 }) => {
   const [dialogLoaded, setDialogLoaded] = useState(false);
   const [tableID, setTableID] = useState<string>("");
@@ -126,6 +127,7 @@ const MapComponent: React.FC<MapProps> = ({
   //   console.log(mapContainerRef.current);
   //   console.log(alerts);
   // }, [value, mapContainerRef, alerts]);
+
   useEffect(() => {
     setAlertsLoading(true);
 
@@ -142,6 +144,18 @@ const MapComponent: React.FC<MapProps> = ({
         zoom: zoom,
         scrollZoom: false,
         dragPan: true,
+      });
+      if (
+        !mapRef.current ||
+        Object.keys(boundingRegionCoordinates).length === 0
+      ) {
+        return;
+      }
+      const mapBoundingBox = turfBbox(boundingRegionCoordinates);
+      const [minX, minY, maxX, maxY] = mapBoundingBox;
+
+      mapRef.current!.fitBounds([minX, minY, maxX, maxY] as LngLatBoundsLike, {
+        padding: { top: 10, bottom: 25, left: 15, right: 5 },
       });
 
       mapRef.current.addControl(new mapboxgl.FullscreenControl(), "top-left");
@@ -163,6 +177,7 @@ const MapComponent: React.FC<MapProps> = ({
     zoom,
     alerts,
     setAlertsLoading,
+    boundingRegionCoordinates,
   ]);
 
   // const determineColour = (currentColour: string, alert: AlertData) => {
