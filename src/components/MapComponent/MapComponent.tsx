@@ -276,8 +276,9 @@ const MapComponent: React.FC<MapProps> = ({
               (e: mapboxgl.MapMouseEvent & mapboxgl.EventData) => {
                 setPolygonClicked(true);
                 setTableID(tableId);
-
-                mapContainerRef.current!.style.width = "auto";
+                mapContainerRef.current!.style.width = "35%";
+                mapRef.current!.resize();
+                console.log(alert.country);
                 const mapBoundingBox = turfBbox({
                   type: "Feature",
                   geometry: {
@@ -291,7 +292,6 @@ const MapComponent: React.FC<MapProps> = ({
                   [minX, minY, maxX, maxY] as LngLatBoundsLike,
                   { padding: { top: 10, bottom: 25, left: 15, right: 5 } }
                 );
-                setTableID(tableId);
               }
             );
           }
@@ -327,16 +327,20 @@ const MapComponent: React.FC<MapProps> = ({
 
         {value === "map-tab" && (
           <Box p={3} sx={{ display: "flex", flexDirection: "row" }}>
-            <div
+            {" "}
+            {/* <div
               style={{
                 position: "relative",
                 height: "100%",
                 width: isPolygonClicked ? "35%" : "100%",
               }}
-            >
-              <div ref={mapContainerRef} className="map-container"></div>
-
-              {loading && alertsLoading && (
+            > */}
+            <div
+              ref={mapContainerRef}
+              className="map-container"
+              style={{ width: isPolygonClicked ? "35%" : "100%" }}
+            ></div>
+            {/* {loading && alertsLoading && (
                 <>
                   <Skeleton
                     animation="wave"
@@ -382,8 +386,7 @@ const MapComponent: React.FC<MapProps> = ({
                   </Box>
                 </>
               )}
-            </div>
-
+            </div> */}
             {isPolygonClicked && (
               <Box
                 sx={{
