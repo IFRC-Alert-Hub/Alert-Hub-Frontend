@@ -57,10 +57,12 @@ function a11yProps(index: number) {
 
 interface PopupComponentProps {
   alerts: AlertData[];
+  handleClose?: () => void;
 }
 
 export const PopupComponent: React.FC<PopupComponentProps> = ({
   alerts = [],
+  handleClose,
 }) => {
   const [page, setPage] = React.useState(1);
   const [value, setValue] = React.useState(0);
@@ -90,8 +92,8 @@ export const PopupComponent: React.FC<PopupComponentProps> = ({
   const pageCount = Math.ceil(alerts.length / itemsPerPage);
 
   return (
-    <Box>
-      <PopupHeader alerts={alerts} />
+    <Box sx={{ height: "600px" }}>
+      <PopupHeader alerts={alerts} handleClose={handleClose} />
       <Box
         sx={{
           flexGrow: 1,

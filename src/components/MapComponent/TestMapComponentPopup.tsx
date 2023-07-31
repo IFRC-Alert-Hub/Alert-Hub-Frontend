@@ -1,8 +1,8 @@
 import React, { useEffect, useRef, useState } from "react";
 import mapboxgl, { LngLatBoundsLike } from "mapbox-gl";
-import { Container, Box, IconButton } from "@mui/material";
-import CloseIcon from "@mui/icons-material/Close";
+import { Container, Box } from "@mui/material";
 import turfBbox from "@turf/bbox";
+import { PopupComponent } from "./PopupComponent/PopupComponent_new";
 
 const TestMapComponentPopup = () => {
   const mapContainerRef = useRef<HTMLDivElement | null>(null);
@@ -26,6 +26,7 @@ const TestMapComponentPopup = () => {
       if (mapRef.current) {
         mapRef.current.remove();
         mapRef.current = null;
+        setPolygonClicked(false);
       }
     };
   }, []);
@@ -81,7 +82,7 @@ const TestMapComponentPopup = () => {
         (e: mapboxgl.MapMouseEvent & mapboxgl.EventData) => {
           setPolygonClicked(true);
           mapContainerRef.current!.style.width = "35%";
-
+          mapRef.current!.resize();
           const mapBoundingBox = turfBbox({
             type: "Feature",
             geometry: {
@@ -92,12 +93,10 @@ const TestMapComponentPopup = () => {
 
           const [minX, minY, maxX, maxY] = mapBoundingBox;
           console.log([minX, minY, maxX, maxY]);
-          mapRef.current!.fitBounds([
-            minX,
-            minY,
-            maxX,
-            maxY,
-          ] as LngLatBoundsLike);
+          mapRef.current!.fitBounds(
+            [minX, minY, maxX, maxY] as LngLatBoundsLike,
+            { padding: { top: 10, bottom: 25, left: 15, right: 5 } }
+          );
         }
       );
     });
@@ -105,8 +104,17 @@ const TestMapComponentPopup = () => {
 
   const handleClose = () => {
     setPolygonClicked(false);
-    mapRef.current?.setCenter([0, 0]);
-    mapRef.current?.setZoom(1);
+    mapContainerRef.current!.style.width = "100%";
+
+    mapContainerRef.current!.classList.add("map-container-transition");
+
+    setTimeout(() => {
+      mapRef.current!.resize();
+      mapRef.current?.setCenter([0, 0]);
+      mapRef.current?.setZoom(1);
+
+      mapContainerRef.current!.classList.remove("map-container-transition");
+    }, 300);
   };
 
   return (
@@ -114,26 +122,224 @@ const TestMapComponentPopup = () => {
       <Container maxWidth="lg" sx={{ paddingTop: "30px", display: "flex" }}>
         <div
           ref={mapContainerRef}
+          id="map"
           className="map-container"
           style={{ width: isPolygonClicked ? "35%" : "100%" }}
         />
         {isPolygonClicked && (
           <Box
-            style={{
+            sx={{
               width: "65%",
+              height: "600px",
               backgroundColor: "lightgray",
               position: "relative",
-              transition: "width 0.3s ease-in-out",
+              transform: `translateX(${isPolygonClicked ? "0%" : "100%"})`,
+              transition: "transform 0.3s ease-in-out",
             }}
           >
-            <IconButton
+            {/* <IconButton
               sx={{ position: "absolute", top: "10px", right: "10px" }}
               onClick={handleClose}
             >
               <CloseIcon />
-            </IconButton>
-            {/* Add the content for the box here */}
-            This is the box content
+            </IconButton> */}
+            <PopupComponent
+              handleClose={handleClose}
+              alerts={[
+                {
+                  addresses: "",
+                  code: "",
+                  identifier: "2.49.0.1.643.0.2023.7.30.11.46.1.47.EN",
+                  id: "178054",
+                  incidents: "",
+                  msgType: "UPDATE",
+                  note: "",
+                  references:
+                    "web@mecom.ru,2.49.0.1.643.0.2023.7.30.10.46.2.45.EN,2023-07-30T10:46:02-00:00",
+                  restriction: "",
+                  scope: "PUBLIC",
+                  sender: "web@mecom.ru",
+                  sent: "2023-07-30T11:46:01+00:00",
+                  source: "",
+                  status: "ACTUAL",
+                  url: "https://meteoinfo.ru/hmc-output/cap/cap-feed/en/20230730114601-47.xml",
+                  alertinfoSet: [
+                    {
+                      audience: "",
+                      category: "MET",
+                      certainty: "LIKELY",
+                      contact: "",
+                      description: "",
+                      effective: "2023-07-30T11:46:01+00:00",
+                      event: "Rain",
+                      eventCode: "",
+                      expires: "2023-07-31T03:00:00+00:00",
+                      headline: "Rain",
+                      id: "180894",
+                      senderName: "",
+                      responseType: "",
+                      language: "en-US",
+                      instruction: "",
+                      onset: "2023-07-30T11:00:00+00:00",
+                      urgency: "IMMEDIATE",
+                      web: "",
+                      severity: "MODERATE",
+                    },
+                  ],
+                  country: {
+                    centroid: "[96.5680544878298, 61.9494224376748]",
+                    polygon: "",
+                    name: "Russian Federation",
+                    iso3: "RUS",
+                    id: "26",
+                  },
+                },
+                {
+                  addresses: "",
+                  code: "",
+                  identifier: "2.49.0.1.643.0.2023.7.30.11.46.1.48.EN",
+                  id: "178055",
+                  incidents: "",
+                  msgType: "UPDATE",
+                  note: "",
+                  references:
+                    "web@mecom.ru,2.49.0.1.643.0.2023.7.30.10.46.2.46.EN,2023-07-30T10:46:02-00:00",
+                  restriction: "",
+                  scope: "PUBLIC",
+                  sender: "web@mecom.ru",
+                  sent: "2023-07-30T11:46:01+00:00",
+                  source: "",
+                  status: "ACTUAL",
+                  url: "https://meteoinfo.ru/hmc-output/cap/cap-feed/en/20230730114601-48.xml",
+                  alertinfoSet: [
+                    {
+                      audience: "",
+                      category: "MET",
+                      certainty: "LIKELY",
+                      contact: "",
+                      description: "",
+                      effective: "2023-07-30T11:46:01+00:00",
+                      event: "Wind",
+                      eventCode: "",
+                      expires: "2023-07-31T15:00:00+00:00",
+                      headline: "Wind",
+                      id: "180895",
+                      senderName: "",
+                      responseType: "",
+                      language: "en-US",
+                      instruction: "",
+                      onset: "2023-07-30T11:00:00+00:00",
+                      urgency: "IMMEDIATE",
+                      web: "",
+                      severity: "MODERATE",
+                    },
+                  ],
+                  country: {
+                    centroid: "[96.5680544878298, 61.9494224376748]",
+                    polygon: "",
+                    name: "Russian Federation",
+                    iso3: "RUS",
+                    id: "26",
+                  },
+                },
+                {
+                  addresses: "",
+                  code: "",
+                  identifier: "2.49.0.1.643.0.2023.7.30.11.46.1.49.EN",
+                  id: "178056",
+                  incidents: "",
+                  msgType: "UPDATE",
+                  note: "",
+                  references:
+                    "web@mecom.ru,2.49.0.1.643.0.2023.7.30.10.46.2.47.EN,2023-07-30T10:46:02-00:00",
+                  restriction: "",
+                  scope: "PUBLIC",
+                  sender: "web@mecom.ru",
+                  sent: "2023-07-30T11:46:01+00:00",
+                  source: "",
+                  status: "ACTUAL",
+                  url: "https://meteoinfo.ru/hmc-output/cap/cap-feed/en/20230730114601-49.xml",
+                  alertinfoSet: [
+                    {
+                      audience: "",
+                      category: "MET",
+                      certainty: "LIKELY",
+                      contact: "",
+                      description: "",
+                      effective: "2023-07-30T11:46:01+00:00",
+                      event: "Thunderstorms",
+                      eventCode: "",
+                      expires: "2023-07-31T15:00:00+00:00",
+                      headline: "Thunderstorms",
+                      id: "180896",
+                      senderName: "",
+                      responseType: "",
+                      language: "en-US",
+                      instruction: "",
+                      onset: "2023-07-30T11:00:00+00:00",
+                      urgency: "IMMEDIATE",
+                      web: "",
+                      severity: "MODERATE",
+                    },
+                  ],
+                  country: {
+                    centroid: "[96.5680544878298, 61.9494224376748]",
+                    polygon: "",
+                    name: "Russian Federation",
+                    iso3: "RUS",
+                    id: "26",
+                  },
+                },
+                {
+                  addresses: "",
+                  code: "",
+                  identifier: "2.49.0.1.643.0.2023.7.30.11.46.1.50.EN",
+                  id: "178057",
+                  incidents: "",
+                  msgType: "UPDATE",
+                  note: "",
+                  references:
+                    "web@mecom.ru,2.49.0.1.643.0.2023.7.30.10.46.2.48.EN,2023-07-30T10:46:02-00:00",
+                  restriction: "",
+                  scope: "PUBLIC",
+                  sender: "web@mecom.ru",
+                  sent: "2023-07-30T11:46:01+00:00",
+                  source: "",
+                  status: "ACTUAL",
+                  url: "https://meteoinfo.ru/hmc-output/cap/cap-feed/en/20230730114601-50.xml",
+                  alertinfoSet: [
+                    {
+                      audience: "",
+                      category: "MET",
+                      certainty: "LIKELY",
+                      contact: "",
+                      description: "",
+                      effective: "2023-07-30T11:46:01+00:00",
+                      event: "Fog",
+                      eventCode: "",
+                      expires: "2023-07-31T03:00:00+00:00",
+                      headline: "Fog",
+                      id: "180897",
+                      senderName: "",
+                      responseType: "",
+                      language: "en-US",
+                      instruction: "",
+                      onset: "2023-07-30T15:00:00+00:00",
+                      urgency: "FUTURE",
+                      web: "",
+                      severity: "MODERATE",
+                    },
+                  ],
+                  country: {
+                    centroid: "[96.5680544878298, 61.9494224376748]",
+                    polygon: "",
+                    name: "Russian Federation",
+                    iso3: "RUS",
+                    id: "26",
+                  },
+                },
+              ]}
+            />
           </Box>
         )}
       </Container>
