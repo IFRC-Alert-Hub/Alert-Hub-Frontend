@@ -1,6 +1,6 @@
 import React, { ReactElement, useEffect, useRef, useState } from "react";
 import mapboxgl, { LngLatBoundsLike, Map as MapboxMap } from "mapbox-gl";
-import { Box, Skeleton, Tab, Tabs, Typography } from "@mui/material";
+import { Box, Tab, Tabs, Typography } from "@mui/material";
 import SourcesTableComponent from "../SourceTableComponent/SourceTableComponent";
 import { PopupComponent } from "./PopupComponent/PopupComponent_new";
 import Progress from "../Layout/Progress";
@@ -335,48 +335,43 @@ const MapComponent: React.FC<MapProps> = ({
         </Tabs>
 
         {value === "map-tab" && (
-          <Box p={3}>
+          <Box p={3} style={{ position: "relative" }}>
             {loading && alertsLoading && (
               <div
-                style={{ width: "100%", height: "600px", position: "relative" }}
+                style={{
+                  position: "absolute",
+                  left: 0,
+                  width: "100%",
+                  height: "600px",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  backgroundColor: "#e0dcdc",
+                  zIndex: 999,
+                }}
               >
-                <div
-                  style={{
-                    position: "absolute",
-                    top: 0,
-                    left: 0,
-                    width: "100%",
-                    height: "600px", // Set the height to 600px
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    backgroundColor: "#e0dcdc",
-                    zIndex: 999,
-                  }}
-                >
-                  <div>
-                    <Box
-                      sx={{
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        padding: "30px",
-                        height: "60px",
-                        borderRadius: "30px",
-                        bgColor: "black",
-                      }}
+                <div>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      padding: "30px",
+                      height: "60px",
+                      borderRadius: "30px",
+                      bgColor: "black",
+                    }}
+                  >
+                    <Progress />
+                    <Typography
+                      sx={{ paddingLeft: "5px" }}
+                      variant="h4"
+                      fontWeight={800}
+                      color="f5333f"
                     >
-                      <Progress />
-                      <Typography
-                        sx={{ paddingLeft: "5px" }}
-                        variant="h4"
-                        fontWeight={800}
-                        color="f5333f"
-                      >
-                        Loading Alerts
-                      </Typography>
-                    </Box>
-                  </div>
+                      Loading Alerts
+                    </Typography>
+                  </Box>
                 </div>
               </div>
             )}
@@ -387,6 +382,7 @@ const MapComponent: React.FC<MapProps> = ({
                 className="map-container"
                 style={{
                   width: isPolygonClicked ? "35%" : "100%",
+                  zIndex: 1, // Make sure the map container is behind the loading element
                 }}
               ></div>
               {isPolygonClicked && (
@@ -400,6 +396,7 @@ const MapComponent: React.FC<MapProps> = ({
                       isPolygonClicked ? "0%" : "100%"
                     })`,
                     transition: "transform 0.3s ease-in-out",
+                    zIndex: 2, // Make sure the popup component is above the map container
                   }}
                 >
                   <PopupComponent
