@@ -1,6 +1,6 @@
 import React, { ReactElement, useEffect, useRef, useState } from "react";
 import mapboxgl, { LngLatBoundsLike, Map as MapboxMap } from "mapbox-gl";
-import { Box, Dialog, Skeleton, Tab, Tabs, Typography } from "@mui/material";
+import { Box, Skeleton, Tab, Tabs, Typography } from "@mui/material";
 import SourcesTableComponent from "../SourceTableComponent/SourceTableComponent";
 import { PopupComponent } from "./PopupComponent/PopupComponent_new";
 import Progress from "../Layout/Progress";
@@ -109,8 +109,8 @@ const MapComponent: React.FC<MapProps> = ({
   error,
   boundingRegionCoordinates = undefined,
 }) => {
-  const [dialogLoaded, setDialogLoaded] = useState(false);
   const [tableID, setTableID] = useState<string>("");
+  const [isPolygonClicked, setPolygonClicked] = useState(false);
 
   const countryTables = useRef<{
     [key: string]: { table: ReactElement; alerts: AlertData[] };
@@ -122,11 +122,28 @@ const MapComponent: React.FC<MapProps> = ({
     setValue(newValue);
   };
 
-  // useEffect(() => {
-  //   console.log(value);
-  //   console.log(mapContainerRef.current);
-  //   console.log(alerts);
-  // }, [value, mapContainerRef, alerts]);
+  const handleClose = () => {
+    setPolygonClicked(false);
+    mapContainerRef.current!.style.width = "100%";
+
+    mapContainerRef.current!.classList.add("map-container-transition");
+
+    setTimeout(() => {
+      mapRef.current!.resize();
+      mapRef.current?.setCenter([0, 0]);
+      mapRef.current?.setZoom(1);
+
+      mapContainerRef.current!.classList.remove("map-container-transition");
+    }, 300);
+  };
+
+  useEffect(() => {
+    if (mapRef.current) {
+      if (mapContainerRef.current) {
+        mapRef.current!.resize();
+      }
+    }
+  }, [isPolygonClicked, mapContainerRef, mapRef]);
 
   useEffect(() => {
     setAlertsLoading(true);
@@ -146,6 +163,7 @@ const MapComponent: React.FC<MapProps> = ({
         scrollZoom: false,
         dragPan: true,
       });
+      mapRef.current!.resize();
       console.log("boundingRegion Coord: ", boundingRegionCoordinates);
       if (
         boundingRegionCoordinates !== undefined &&
@@ -182,38 +200,8 @@ const MapComponent: React.FC<MapProps> = ({
     alerts,
     setAlertsLoading,
     boundingRegionCoordinates,
-    sources
+    sources,
   ]);
-
-  // const determineColour = (currentColour: string, alert: AlertData) => {
-  //   if (currentColour === ExtremeThreatColour) {
-  //     return currentColour;
-  //   } else {
-  //     if (
-  //       alert.urgency === "Immediate" ||
-  //       alert.urgency === "Expected" ||
-  //       alert.severity === "Extreme" ||
-  //       alert.severity === "Severe" ||
-  //       alert.certainty === "Observed" ||
-  //       alert.certainty === "Likely"
-  //     ) {
-  //       return ExtremeThreatColour;
-  //     }
-  //   }
-  //   return currentColour;
-  // };
-
-  // useEffect(() => {
-  //   console.log("NEW: ", countryTables);
-  // }, [countryTables]);
-
-  // useEffect(() => {
-  //   console.log("Alerts Loaded: ", alerts);
-  // }, [alerts]);
-
-  // useEffect(() => {
-  //   console.log("Countries Loaded: ", countries);
-  // }, [countries]);
 
   useEffect(() => {
     if (!mapRef.current || !alertsLoading || alerts.length === 0) {
@@ -295,13 +283,28 @@ const MapComponent: React.FC<MapProps> = ({
               "click",
               layerId,
               (e: mapboxgl.MapMouseEvent & mapboxgl.EventData) => {
-                setDialogLoaded(true);
+                setPolygonClicked(true);
                 setTableID(tableId);
+                mapContainerRef.current!.style.width = "35%";
+                mapRef.current!.resize();
+                console.log(alert.country);
+                const mapBoundingBox = turfBbox({
+                  type: "Feature",
+                  geometry: {
+                    type: alert?.country?.type! as any,
+                    coordinates: alert?.country?.countryPolygon! as any,
+                  },
+                });
+                const [minX, minY, maxX, maxY] = mapBoundingBox;
+                console.log([minX, minY, maxX, maxY]);
+                mapRef.current!.fitBounds(
+                  [minX, minY, maxX, maxY] as LngLatBoundsLike,
+                  { padding: { top: 10, bottom: 25, left: 15, right: 5 } }
+                );
               }
             );
           }
         });
-        // console.log(countryTables.current);
 
         setAlertsLoading(false);
       });
@@ -314,11 +317,8 @@ const MapComponent: React.FC<MapProps> = ({
     countryTables,
     countries,
     value,
+    mapContainerRef,
   ]);
-
-  const handleCloseDialog = () => {
-    setDialogLoaded(false);
-  };
 
   return (
     <>
@@ -335,43 +335,24 @@ const MapComponent: React.FC<MapProps> = ({
         </Tabs>
 
         {value === "map-tab" && (
-          <Box p={3}>
-            <div
-              style={{
-                position: "relative",
-                height: "100%",
-                width: "100%",
-              }}
-            >
-              <div ref={mapContainerRef} className="map-container">
-                {" "}
-              </div>
-
-              {loading && alertsLoading && (
-                <>
-                  <Skeleton
-                    animation="wave"
-                    sx={{
-                      position: "absolute",
-                      top: "50%",
-                      left: "50%",
-                      width: "100%",
-                      height: "100%",
-                      transform: "translate(-50%, -50%)",
-                      backgroundColor: "#e0dcdc",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      padding: "none",
-                    }}
-                  ></Skeleton>
-
+          <Box p={3} style={{ position: "relative" }}>
+            {loading && alertsLoading && (
+              <div
+                style={{
+                  position: "absolute",
+                  left: 0,
+                  width: "100%",
+                  height: "600px",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  backgroundColor: "#e0dcdc",
+                  zIndex: 999,
+                }}
+              >
+                <div>
                   <Box
                     sx={{
-                      position: "absolute",
-                      top: "50%",
-                      left: "50%",
-                      transform: "translate(-50%, -50%)",
                       display: "flex",
                       alignItems: "center",
                       justifyContent: "center",
@@ -381,9 +362,25 @@ const MapComponent: React.FC<MapProps> = ({
                       bgColor: "black",
                     }}
                   >
+                    <Skeleton
+                      animation="wave"
+                      sx={{
+                        position: "absolute",
+                        top: "50%",
+                        left: "50%",
+                        width: "100%",
+                        height: "100%",
+                        transform: "translate(-50%, -50%)",
+                        backgroundColor: "#e0dcdc",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        padding: "none",
+                      }}
+                    ></Skeleton>
                     <Progress />
                     <Typography
-                      sx={{ paddingLeft: "5px" }}
+                      sx={{ paddingLeft: "5px", zIndex: 1000 }}
                       variant="h4"
                       fontWeight={800}
                       color="f5333f"
@@ -391,34 +388,49 @@ const MapComponent: React.FC<MapProps> = ({
                       Loading Alerts
                     </Typography>
                   </Box>
-                </>
+                </div>
+              </div>
+            )}
+
+            <Box sx={{ display: "flex", flexDirection: "row" }}>
+              <div
+                ref={mapContainerRef}
+                className="map-container"
+                style={{
+                  width: isPolygonClicked ? "35%" : "100%",
+                  zIndex: 1, // Make sure the map container is behind the loading element
+                }}
+              ></div>
+              {isPolygonClicked && (
+                <Box
+                  sx={{
+                    width: "65%",
+                    height: "600px",
+                    backgroundColor: "lightgray",
+                    position: "relative",
+                    transform: `translateX(${
+                      isPolygonClicked ? "0%" : "100%"
+                    })`,
+                    transition: "transform 0.3s ease-in-out",
+                    zIndex: 2, // Make sure the popup component is above the map container
+                  }}
+                >
+                  <PopupComponent
+                    handleClose={handleClose}
+                    alerts={countryTables.current[tableID].alerts}
+                  />
+                </Box>
               )}
-            </div>
+            </Box>
           </Box>
         )}
+
         {value === "source-tab" && (
           <Box p={3}>
             <SourcesTableComponent sources={sources}></SourcesTableComponent>
           </Box>
         )}
       </Box>
-
-      <Dialog
-        PaperProps={{
-          sx: {
-            maxWidth: "800px",
-            margin: "none !important",
-          },
-        }}
-        open={dialogLoaded}
-        onClose={handleCloseDialog}
-      >
-        {tableID ? (
-          <PopupComponent alerts={countryTables.current[tableID].alerts} />
-        ) : (
-          ""
-        )}
-      </Dialog>
     </>
   );
 };

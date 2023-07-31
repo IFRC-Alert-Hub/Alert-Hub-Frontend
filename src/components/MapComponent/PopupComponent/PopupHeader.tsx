@@ -1,12 +1,13 @@
 import { Box, Typography } from "@mui/material";
 import React from "react";
-
+import DisabledByDefaultIcon from "@mui/icons-material/DisabledByDefault";
 type PopupHeaderProps = {
   alerts: any;
+  handleClose?: () => void;
 };
 
 export const PopupHeader: React.FC<PopupHeaderProps> = (props) => {
-  const { alerts } = props;
+  const { alerts, handleClose } = props;
 
   return (
     <Box
@@ -16,8 +17,18 @@ export const PopupHeader: React.FC<PopupHeaderProps> = (props) => {
         textAlign: "center",
         borderBottom: "1px solid black",
         padding: "10px",
+        position: "relative", // To make sure the close button is positioned relative to this Box
       }}
     >
+      <DisabledByDefaultIcon
+        sx={{
+          position: "absolute",
+          top: "5px",
+          right: "5px",
+          cursor: "pointer",
+        }}
+        onClick={handleClose}
+      />
       <Typography variant="h4" fontWeight={"bold"} textTransform={"uppercase"}>
         {alerts[0]?.country?.name} (
         {alerts.length > 1
