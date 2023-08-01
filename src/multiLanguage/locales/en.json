@@ -43,5 +43,29 @@
   "forgetPassword.formLabel.verificationCode": "Verification Code",
   "forgetPassword.formLabel.password": "Password",
   "forgetPassword.formLabel.confirmPassword": "Confirm Password",
-  "forgetPassword.recoverBtn": "Login"
+  "forgetPassword.recoverBtn": "Recover",
+
+  "firstNavBarItem.about": "About",
+  "firstNavBarItem.resources": "Resources",
+
+  "secondNavBarItems.home": "Home",
+
+  "RegionsDropdownItems.africa": "Africa",
+  "RegionsDropdownItems.america": "America",
+  "RegionsDropdownItems.asiaPacific": "Asia Pacific",
+  "RegionsDropdownItems.europe": "Europe",
+  "RegionsDropdownItems.middleEastNorthEast": "Middle East & North East",
+
+  "navbar.mySubscriptions": "My Subscriptions",
+  "navbar.regions": "Regions",
+
+  "navbar.loginbtn": "Login",
+
+  "home.heroCard.title1": "Add subscription to receive alerts in time",
+  "home.heroCard.subtitle1": "With real-time monitoring of potential risks and emergency events, receive timely and accurate alerts.",
+  "home.heroCard.btnTitle1": "Subscribe Alerts",
+
+  "home.heroCard.title2": "Use API to rebroadcast CAP alerts",
+  "home.heroCard.subtitle2": "With simple yet powerful API endpoints, you can tailor the alerts to suit your users' needs.",
+  "home.heroCard.btnTitle2": "API Reference"
 }

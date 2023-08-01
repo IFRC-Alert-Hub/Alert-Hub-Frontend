@@ -19,6 +19,7 @@ import { UserContextProvider } from "./context/UserContext";
 import PageNotFound from "./scenes/404_Page";
 import TestPerformance from "./API/test-performance";
 import TestMapComponentPopup from "./components/MapComponent/TestMapComponentPopup";
+import AlertInfo from "./scenes/Alert Info";
 
 function App() {
   // useEffect(() => {
@@ -56,12 +57,14 @@ function App() {
                 <Route path="/forget-password" element={<ForgotPassword />} />
                 <Route path="/regions/:id" element={<Region />} />
                 <Route path="/alerts/all" element={<AllAlerts />} />
+                <Route path="/alerts/:id" element={<AlertInfo />} />
                 <Route path="/account/" element={<PrivateRoutes />}>
                   <Route path="profile" element={<Profile />} />
                   <Route path="subscription" element={<Subscription />} />
                 </Route>
                 <Route path="/test-performance" element={<TestPerformance />} />
                 <Route path="/map-test" element={<TestMapComponentPopup />} />
+                <Route path="/404" element={<PageNotFound />} />
 
                 <Route path="*" element={<PageNotFound />}></Route>
               </Routes>

@@ -1,7 +1,10 @@
 import { Box, Button } from "@mui/material";
+import { useIntl } from "react-intl";
 import { Link } from "react-router-dom";
 
 const LoginButton = () => {
+  const { formatMessage } = useIntl();
+
   return (
     <Box padding={"6px 8px"}>
       <Link to={`/login`} style={{ textDecoration: "none", color: "inherit" }}>
@@ -25,7 +28,10 @@ const LoginButton = () => {
             },
           }}
         >
-          <Box sx={{ margin: "0 25px 0 25px" }}>Login</Box>
+          <Box sx={{ margin: "0 25px 0 25px" }}>
+            {" "}
+            {formatMessage({ id: "navbar.loginbtn" })}
+          </Box>
         </Button>
       </Link>
     </Box>

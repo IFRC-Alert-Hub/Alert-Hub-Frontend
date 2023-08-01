@@ -19,11 +19,7 @@ import {
 import MenuIcon from "@mui/icons-material/Menu";
 import { Link, useLocation } from "react-router-dom";
 import CustomNavItemDropdown from "./CustomNavItemDropdown";
-import {
-  RegionsDropdownItems,
-  firstNavBarItems,
-  secondNavBarItems,
-} from "./NavItemItems";
+
 import LoginButton from "./LoginButton";
 import TimeComponent from "./TimeComponent";
 import { useContext, useState } from "react";
@@ -31,10 +27,14 @@ import AvatarDropdown from "./AvatarDropdown";
 import ChangeLanguageDropdown from "./ChangeLanguageDropdown";
 import { ExpandLess, ExpandMore } from "@mui/icons-material";
 import { UserContext } from "../../context/UserContext";
+import NavItems from "./NavItemItems";
+import { useIntl } from "react-intl";
 
 const NavbarComponent = (props: any) => {
+  const { formatMessage } = useIntl();
   const userContext = useContext(UserContext);
-
+  const { RegionsDropdownItems, firstNavBarItems, secondNavBarItems } =
+    NavItems();
   const location = useLocation();
   const { window } = props;
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -263,7 +263,7 @@ const NavbarComponent = (props: any) => {
                   </Link>
                 ))}
                 <CustomNavItemDropdown
-                  NavItemTitle="Regions"
+                  NavItemTitle={formatMessage({ id: "navbar.regions" })}
                   DropdownItems={RegionsDropdownItems}
                 />
 
@@ -293,7 +293,7 @@ const NavbarComponent = (props: any) => {
                         }),
                       }}
                     >
-                      My Subscriptions
+                      {formatMessage({ id: "navbar.mySubscriptions" })}
                     </Typography>
                   </Button>
                 </Link>
