@@ -133,22 +133,29 @@ const Region = () => {
         (item: RegionInterface) => item.id.toString() === id
       );
 
+      if (!region) {
+        return null;
+      }
+
       let updatedRegion = {
         ...region,
-        centroid: JSON.parse(region.centroid),
+        centroid: region.centroid ? JSON.parse(region.centroid) : null,
         bbox: {
           type: "Polygon",
           coordinates: [convertCoordinates(region.polygon)],
         },
       };
-
       return updatedRegion;
     }
+    return null;
   }, [loading_regions, error_regions, data_regions, id]);
 
   useEffect(() => {
     console.log("Region:", region);
     if (!loading_regions && !error_regions && data_regions) {
+      if (!region) {
+        return;
+      }
       refetch_alerts({ regionId: region.id });
     }
   }, [loading_regions, error_regions, data_regions, region, refetch_alerts]);
@@ -159,38 +166,35 @@ const Region = () => {
           <CircularProgress sx={{ textAlign: "center" }} color="secondary" />
         ) : error_regions ? (
           <p>Error: {error_regions.message}</p>
+        ) : !region ? (
+          <Container maxWidth="lg">
+            <Typography variant="h1" textAlign="center" fontWeight="bold">
+              Region Not Found
+            </Typography>
+          </Container>
         ) : (
           <>
-            <Box sx={{ padding: "50px 0 30px 0" }}>
-              <Typography
-                variant="h1"
-                textAlign="center"
-                fontWeight="bold"
-                textTransform="capitalize"
-                letterSpacing="1.6px"
-              >
-                {region?.name}
-              </Typography>
-            </Box>
-            {/* <TitleHeader
-              title="ONGOING Extreme Alerts"
-              rightTitle="View all alerts"
-              rightLinkURL="/alerts/all"
-              filterKey="region"
-              selectedFilter={region?.name}
-            />
-            <Box margin="0px 25px 25px">
-              <CardCarousel cards={cardData} />
-            </Box> */}
-
-            <MapComponentWithFilter
-              data={data_alerts}
-              loading={loading_alerts}
-              error={error_alerts}
-              boundingRegionCoordinates={region?.bbox}
-              filterKey="region"
-              selectedFilter={region?.name}
-            />
+            <Container maxWidth="lg">
+              <Box sx={{ padding: "50px 0 30px 0" }}>
+                <Typography
+                  variant="h1"
+                  textAlign="center"
+                  fontWeight="bold"
+                  textTransform="capitalize"
+                  letterSpacing="1.6px"
+                >
+                  {region.name}
+                </Typography>
+              </Box>
+              <MapComponentWithFilter
+                data={data_alerts}
+                loading={loading_alerts}
+                error={error_alerts}
+                boundingRegionCoordinates={region.bbox}
+                filterKey="region"
+                selectedFilter={region.name}
+              />
+            </Container>
           </>
         )}
       </Container>
