@@ -59,5 +59,13 @@
   "navbar.mySubscriptions": "My Subscriptions",
   "navbar.regions": "Regions",
 
-  "navbar.loginbtn": "Login"
+  "navbar.loginbtn": "Login",
+
+  "home.heroCard.title1": "Add subscription to receive alerts in time",
+  "home.heroCard.subtitle1": "With real-time monitoring of potential risks and emergency events, receive timely and accurate alerts.",
+  "home.heroCard.btnTitle1": "Subscribe Alerts",
+
+  "home.heroCard.title2": "Use API to rebroadcast CAP alerts",
+  "home.heroCard.subtitle2": "With simple yet powerful API endpoints, you can tailor the alerts to suit your users' needs.",
+  "home.heroCard.btnTitle2": "API Reference"
 }

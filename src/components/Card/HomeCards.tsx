@@ -7,22 +7,29 @@ import {
   Grid,
   Typography,
 } from "@mui/material";
+import { useIntl } from "react-intl";
 import { Link } from "react-router-dom";
 
 const HomeSubscriptionCard = () => {
+  const { formatMessage } = useIntl();
+
   return (
-    <Grid container spacing={2}>
+    <Grid container spacing={2} sx={{ alignItems: "stretch" }}>
       <Grid
         item
         sm={12}
         md={6}
-        sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
       >
         <Card sx={{ display: "flex", maxWidth: "500px", mb: 4 }}>
           <Box sx={{ display: "flex", flexDirection: "column", flex: 1 }}>
             <CardContent sx={{ flex: "1 0 auto", p: 3 }}>
               <Typography component="div" variant="h4" sx={{ fontWeight: 600 }}>
-                Add subscription to receive alerts in time
+                {formatMessage({ id: "home.heroCard.title1" })}
               </Typography>
               <Typography
                 variant="subtitle1"
@@ -31,8 +38,7 @@ const HomeSubscriptionCard = () => {
                 mt={1}
                 sx={{ lineHeight: 1.5 }}
               >
-                With real-time monitoring of potential risks and emergency
-                events, receive timely and accurate alerts.
+                {formatMessage({ id: "home.heroCard.subtitle1" })}
               </Typography>
             </CardContent>
             <Box sx={{ display: "flex", alignItems: "center", pl: 3, pb: 3 }}>
@@ -43,7 +49,7 @@ const HomeSubscriptionCard = () => {
                   disableElevation
                   sx={{ borderRadius: "20px", textTransform: "capitalize" }}
                 >
-                  Subscribe Alerts
+                  {formatMessage({ id: "home.heroCard.btnTitle1" })}{" "}
                 </Button>
               </Link>
             </Box>
@@ -75,7 +81,7 @@ const HomeSubscriptionCard = () => {
           <Box sx={{ display: "flex", flexDirection: "column", flex: 1 }}>
             <CardContent sx={{ flex: "1 0 auto", p: 3 }}>
               <Typography component="div" variant="h4" sx={{ fontWeight: 600 }}>
-                Use API to rebroadcast CAP alerts
+                {formatMessage({ id: "home.heroCard.title2" })}{" "}
               </Typography>
               <Typography
                 variant="subtitle1"
@@ -84,8 +90,7 @@ const HomeSubscriptionCard = () => {
                 mt={1}
                 sx={{ lineHeight: 1.5 }}
               >
-                With simple yet powerful API endpoints, you can tailor the
-                alerts to suit your users' needs.
+                {formatMessage({ id: "home.heroCard.subtitle2" })}
               </Typography>
             </CardContent>
             <Box sx={{ display: "flex", alignItems: "center", pl: 3, pb: 3 }}>
@@ -95,7 +100,7 @@ const HomeSubscriptionCard = () => {
                   variant="outlined"
                   sx={{ borderRadius: "20px", textTransform: "capitalize" }}
                 >
-                  API Reference
+                  {formatMessage({ id: "home.heroCard.btnTitle2" })}
                 </Button>
               </Link>
             </Box>

@@ -59,5 +59,13 @@
   "navbar.mySubscriptions": "Mes abonnements",
   "navbar.regions": "Régions",
 
-  "navbar.loginbtn": "Connexion"
+  "navbar.loginbtn": "Connexion",
+
+  "home.heroCard.title1": "Ajouter un abonnement pour recevoir des alertes à temps",
+  "home.heroCard.subtitle1": "Grâce à la surveillance en temps réel des risques potentiels et des événements d'urgence, recevez des alertes précises et en temps opportun.",
+  "home.heroCard.btnTitle1": "Abonnez-vous Alertes",
+
+  "home.heroCard.title2": "Utiliser l'API pour rediffuser les alertes CAP",
+  "home.heroCard.subtitle2": "Avec des points de terminaison d'API simples mais puissants, vous pouvez personnaliser les alertes en fonction des besoins de vos utilisateurs.",
+  "home.heroCard.btnTitle2": "Référence API"
 }
