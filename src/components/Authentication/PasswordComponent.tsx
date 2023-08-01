@@ -9,15 +9,18 @@ import {
   TextField,
 } from "@mui/material";
 import { useState } from "react";
+import { useIntl } from "react-intl";
 
 interface PasswordComponentProps {
   formik: any;
 }
+
 const PasswordComponent: React.FC<PasswordComponentProps> = ({ formik }) => {
   const [passwordStrength, setPasswordStrength] = useState(0);
   const [showPassword, setShowPassword] = useState(false);
 
   const [showConfirmPassword, setConfirmPassword] = useState(false);
+  const { formatMessage } = useIntl();
 
   const calculatePasswordStrength = (password: string) => {
     const strengthRegex =
@@ -71,7 +74,7 @@ const PasswordComponent: React.FC<PasswordComponentProps> = ({ formik }) => {
         required
         fullWidth
         name="password"
-        label="Password"
+        label={formatMessage({ id: "passwordComponent.password" })}
         type={showPassword ? "text" : "password"}
         id="password"
         autoComplete="new-password"
@@ -125,7 +128,7 @@ const PasswordComponent: React.FC<PasswordComponentProps> = ({ formik }) => {
               }
             />
           }
-          label="At least one uppercase letter"
+          label={formatMessage({ id: "passwordComponent.rule1" })}
         />
         <FormControlLabel
           control={
@@ -142,7 +145,7 @@ const PasswordComponent: React.FC<PasswordComponentProps> = ({ formik }) => {
               }
             />
           }
-          label="At least one number"
+          label={formatMessage({ id: "passwordComponent.rule2" })}
         />
         <FormControlLabel
           control={
@@ -159,7 +162,7 @@ const PasswordComponent: React.FC<PasswordComponentProps> = ({ formik }) => {
               }
             />
           }
-          label="At least one special character [?!@#$%^&*()]"
+          label={formatMessage({ id: "passwordComponent.rule3" })}
         />
         <FormControlLabel
           control={
@@ -176,7 +179,7 @@ const PasswordComponent: React.FC<PasswordComponentProps> = ({ formik }) => {
               }
             />
           }
-          label="At least 8 characters"
+          label={formatMessage({ id: "passwordComponent.rule4" })}
         />
       </Box>
       <TextField
@@ -184,7 +187,7 @@ const PasswordComponent: React.FC<PasswordComponentProps> = ({ formik }) => {
         required
         fullWidth
         id="confirm-password"
-        label="Confirm Password"
+        label={formatMessage({ id: "passwordComponent.confirmPassword" })}
         name="confirmPassword"
         type={showConfirmPassword ? "text" : "password"}
         autoComplete="new-password"

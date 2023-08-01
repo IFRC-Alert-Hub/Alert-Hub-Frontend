@@ -13,6 +13,7 @@ import { useNavigate, Link } from "react-router-dom";
 import AuthComponent from "../../components/Authentication/AuthComponent";
 import PasswordComponent from "../../components/Authentication/PasswordComponent";
 import { useState, useEffect } from "react";
+import { useIntl } from "react-intl";
 
 const Register = () => {
   const [isSendClicked, setIsSendClicked] = useState(false);
@@ -20,6 +21,7 @@ const Register = () => {
   const [isEmailSent, setIsEmailSent] = useState(false);
   const [emailError, setEmailError] = useState("");
   const [timeLeft, setTimeLeft] = useState(60);
+  const { formatMessage } = useIntl();
 
   const navigate = useNavigate();
   const [verifyEmail] = useMutation(VERIFY_EMAIL, {
@@ -151,14 +153,9 @@ const Register = () => {
   return (
     <Container maxWidth="lg" sx={{ paddingTop: "30px" }}>
       <AuthComponent
-        pageTitle="Register"
-        authTitle="Create Account"
-        authSubtitle="Staff, members and volunteers of the Red Cross Red Crescent
-              Movement (National Societies, the IFRC and the ICRC) are welcome
-              to register for a user account on GO, to access information for
-              the Membership. Other responders and members of the public may
-              browse the public areas of the site without registering for an
-              account."
+        pageTitle={formatMessage({ id: "register.pageTitle" })}
+        authTitle={formatMessage({ id: "register.authTitle" })}
+        authSubtitle={formatMessage({ id: "register.authSubtitle" })}
         formComponent={
           <Box
             component="form"
