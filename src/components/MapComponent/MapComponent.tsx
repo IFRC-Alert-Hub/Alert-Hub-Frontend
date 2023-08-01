@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { ReactElement, useEffect, useRef, useState } from "react";
 import mapboxgl, {
   LngLatBoundsLike,
@@ -208,6 +209,40 @@ const MapComponent: React.FC<MapProps> = ({
     sources,
   ]);
 
+  function calculateZoomLevelForBounds(
+    mapBound: any,
+    polygonBound: any,
+    mapContainerRef: React.RefObject<HTMLDivElement>
+  ) {
+    const mapContainerWidthInPixels = mapContainerRef.current!.style.width; // Replace this with the actual width of your map container in pixels
+
+    const mapBounds = new mapboxgl.LngLatBounds(
+      new mapboxgl.LngLat(mapBound._sw.lng, mapBound._sw.lat),
+      new mapboxgl.LngLat(mapBound._ne.lng, mapBound._ne.lat)
+    );
+
+    const polygonBounds = new mapboxgl.LngLatBounds(
+      new mapboxgl.LngLat(polygonBound[0], polygonBound[1]),
+      new mapboxgl.LngLat(polygonBound[2], polygonBound[3])
+    );
+
+    const combinedBounds = mapBounds.extend(polygonBounds);
+
+    const bboxWidth = combinedBounds.getEast() - combinedBounds.getWest();
+
+    const bboxHeight = combinedBounds.getNorth() - combinedBounds.getSouth();
+
+    const maxBboxSize = Math.max(bboxWidth, bboxHeight);
+
+    const bboxSizeInPixelsAtZoom0 = (maxBboxSize / 360) * 2 ** 0 * 256;
+
+    const zoom = Math.log2(
+      ((mapContainerWidthInPixels as any) * 2 ** 0) / bboxSizeInPixelsAtZoom0
+    );
+
+    return zoom;
+  }
+
   useEffect(() => {
     if (!mapRef.current || !alertsLoading || alerts.length === 0) {
       return;
@@ -293,7 +328,7 @@ const MapComponent: React.FC<MapProps> = ({
                 mapContainerRef.current!.style.width = "35%";
                 mapRef.current!.resize();
 
-                const mapBoundingBox = turfBbox({
+                const polygonBoundingBox = turfBbox({
                   type: "Feature",
                   geometry: {
                     type: alert?.country?.type! as any,
@@ -301,20 +336,35 @@ const MapComponent: React.FC<MapProps> = ({
                   },
                 });
 
-                const [minX, minY, maxX, maxY] = mapBoundingBox;
-                console.log("MapBound", mapRef.current!.getBounds());
-                console.log("Country POlygon Bound: ", mapBoundingBox);
+                const [minX, minY, maxX, maxY] = polygonBoundingBox;
+                const mapBoundingBox = mapRef.current!.getBounds();
+
+                console.log("MapBound", mapBoundingBox);
+                console.log("Country POlygon Bound: ", polygonBoundingBox);
 
                 console.log("Country Zoom: ", mapRef.current!.getZoom());
 
                 console.log("centroid: ", alert?.country?.centroid!);
+
+                console.log([minX, minY, maxX, maxY]);
+
+                const polygonWidth = maxX - minX;
+                const polygonHeight = maxY - minY;
+                const mapWidth =
+                  mapBoundingBox.getEast() - mapBoundingBox.getWest();
+                const mapHeight =
+                  mapBoundingBox.getNorth() - mapBoundingBox.getSouth();
+                const zoomLevelWidth = Math.log2(mapWidth / polygonWidth);
+                const zoomLevelHeight = Math.log2(mapHeight / polygonHeight);
+                const zoomLevel = Math.max(zoomLevelWidth, zoomLevelHeight);
+
                 mapRef.current!.flyTo({
                   center: JSON.parse(
                     alert?.country?.centroid!
                   ) as unknown as LngLatLike,
+                  zoom: zoomLevel > 0 ? zoomLevel : mapRef.current!.getZoom(),
                 });
 
-                console.log([minX, minY, maxX, maxY]);
                 // mapRef.current!.fitBounds([
                 //   minX,
                 //   minY,
