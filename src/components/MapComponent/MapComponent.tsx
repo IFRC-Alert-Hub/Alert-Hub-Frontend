@@ -1,10 +1,15 @@
 import React, { ReactElement, useEffect, useRef, useState } from "react";
-import mapboxgl, { LngLatBoundsLike, Map as MapboxMap } from "mapbox-gl";
+import mapboxgl, {
+  LngLatBoundsLike,
+  LngLatLike,
+  Map as MapboxMap,
+} from "mapbox-gl";
 import { Box, Skeleton, Tab, Tabs, Typography } from "@mui/material";
 import SourcesTableComponent from "../SourceTableComponent/SourceTableComponent";
 import { PopupComponent } from "./PopupComponent/PopupComponent_new";
 import Progress from "../Layout/Progress";
 import turfBbox from "@turf/bbox";
+
 export const ExtremeThreatColour: string = "#f5333f";
 export const ModerateThreatColour: string = "#ff9e00";
 export const OtherAlertsColour: string = "#95BF6E";
@@ -287,7 +292,7 @@ const MapComponent: React.FC<MapProps> = ({
                 setTableID(tableId);
                 mapContainerRef.current!.style.width = "35%";
                 mapRef.current!.resize();
-                console.log(alert.country);
+
                 const mapBoundingBox = turfBbox({
                   type: "Feature",
                   geometry: {
@@ -295,12 +300,27 @@ const MapComponent: React.FC<MapProps> = ({
                     coordinates: alert?.country?.countryPolygon! as any,
                   },
                 });
+
                 const [minX, minY, maxX, maxY] = mapBoundingBox;
+                console.log("MapBound", mapRef.current!.getBounds());
+                console.log("Country POlygon Bound: ", mapBoundingBox);
+
+                console.log("Country Zoom: ", mapRef.current!.getZoom());
+
+                console.log("centroid: ", alert?.country?.centroid!);
+                mapRef.current!.flyTo({
+                  center: JSON.parse(
+                    alert?.country?.centroid!
+                  ) as unknown as LngLatLike,
+                });
+
                 console.log([minX, minY, maxX, maxY]);
-                mapRef.current!.fitBounds(
-                  [minX, minY, maxX, maxY] as LngLatBoundsLike,
-                  { padding: { top: 10, bottom: 25, left: 15, right: 5 } }
-                );
+                // mapRef.current!.fitBounds([
+                //   minX,
+                //   minY,
+                //   maxX,
+                //   maxY,
+                // ] as LngLatBoundsLike);
               }
             );
           }
