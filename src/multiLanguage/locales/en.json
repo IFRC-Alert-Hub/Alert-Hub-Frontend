@@ -43,5 +43,21 @@
   "forgetPassword.formLabel.verificationCode": "Verification Code",
   "forgetPassword.formLabel.password": "Password",
   "forgetPassword.formLabel.confirmPassword": "Confirm Password",
-  "forgetPassword.recoverBtn": "Login"
+  "forgetPassword.recoverBtn": "Recover",
+
+  "firstNavBarItem.about": "About",
+  "firstNavBarItem.resources": "Resources",
+
+  "secondNavBarItems.home": "Home",
+
+  "RegionsDropdownItems.africa": "Africa",
+  "RegionsDropdownItems.america": "America",
+  "RegionsDropdownItems.asiaPacific": "Asia Pacific",
+  "RegionsDropdownItems.europe": "Europe",
+  "RegionsDropdownItems.middleEastNorthEast": "Middle East & North East",
+
+  "navbar.mySubscriptions": "My Subscriptions",
+  "navbar.regions": "Regions",
+
+  "navbar.loginbtn": "Login"
 }

@@ -1,17 +1,60 @@
-export const firstNavBarItems = [
-  { name: "About", path: "/about", exact: false },
-  { name: "Resources", path: "/resources", exact: false },
-];
+import { useIntl } from "react-intl";
 
-export const secondNavBarItems = [{ name: "Home", path: "/", exact: true }];
+const NavItems = () => {
+  const { formatMessage } = useIntl();
 
-export const RegionsDropdownItems = [
-  { name: "Africa", path: "/regions/1", exact: false },
-  { name: "America", path: "/regions/2", exact: false },
-  { name: "Asia Pacific", path: "/regions/3", exact: false },
-  { name: "Europe", path: "/regions/4", exact: false },
-  { name: "Middle East & North East", path: "/regions/5", exact: false },
-];
+  const firstNavBarItems = [
+    {
+      name: formatMessage({ id: "firstNavBarItem.about" }),
+      path: "/about",
+      exact: false,
+    },
+    {
+      name: formatMessage({ id: "firstNavBarItem.resources" }),
+      path: "/resources",
+      exact: false,
+    },
+  ];
+  const secondNavBarItems = [
+    {
+      name: formatMessage({ id: "secondNavBarItems.home" }),
+      path: "/",
+      exact: true,
+    },
+  ];
+
+  const RegionsDropdownItems = [
+    {
+      name: formatMessage({ id: "RegionsDropdownItems.africa" }),
+      path: "/regions/1",
+      exact: false,
+    },
+    {
+      name: formatMessage({ id: "RegionsDropdownItems.america" }),
+      path: "/regions/2",
+      exact: false,
+    },
+    {
+      name: formatMessage({ id: "RegionsDropdownItems.asiaPacific" }),
+      path: "/regions/3",
+      exact: false,
+    },
+    {
+      name: formatMessage({ id: "RegionsDropdownItems.europe" }),
+      path: "/regions/4",
+      exact: false,
+    },
+    {
+      name: formatMessage({ id: "RegionsDropdownItems.middleEastNorthEast" }),
+      path: "/regions/5",
+      exact: false,
+    },
+  ];
+
+  return { firstNavBarItems, secondNavBarItems, RegionsDropdownItems };
+};
+
+export default NavItems;
 
 export const HazardTypeDropdownItems = [
   { name: "Hazard Type 1", path: "/hazard-type/0", exact: false },
