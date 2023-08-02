@@ -18,10 +18,10 @@ import {
 } from "@mui/material";
 
 import { useMutation } from "@apollo/client";
-import { DELETE_SUBSCRIPTION } from "../../API/mutations/subscriptionMutations";
-import { subscription_module } from "../../API/API_Links";
-import { GET_SUBSCRIPTIONS } from "../../API/ALL_QUERIES";
-import { SubscriptionForm, UpdatedSubscriptionItem } from "../../API/TYPES";
+import { DELETE_SUBSCRIPTION } from "../../../API/mutations/subscriptionMutations";
+import { subscription_module } from "../../../API/API_Links";
+import { GET_SUBSCRIPTIONS } from "../../../API/ALL_QUERIES";
+import { SubscriptionForm, UpdatedSubscriptionItem } from "../../../API/TYPES";
 import CollapsibleRow from "./CollapsibleRow";
 
 type PropsType = {
@@ -105,7 +105,16 @@ const SubscriptionTable = ({
                 fontWeight: "600",
               }}
             >
-              Subscribed Districts
+              Country
+            </TableCell>
+            <TableCell
+              align="left"
+              sx={{
+                fontSize: "0.875rem",
+                fontWeight: "600",
+              }}
+            >
+              Districts
             </TableCell>
             <TableCell
               align="left"
@@ -129,7 +138,7 @@ const SubscriptionTable = ({
               align="left"
               sx={{ fontSize: "0.875rem", fontWeight: "600" }}
             >
-              Notification Methods
+              Notification
             </TableCell>
             <TableCell
               align="left"

@@ -71,7 +71,7 @@ const AlertsTable = () => {
                 align="left"
                 sx={{ fontSize: "0.875rem", fontWeight: 600 }}
               >
-                Action
+                Operation
               </TableCell>
             </TableRow>
           </TableHead>

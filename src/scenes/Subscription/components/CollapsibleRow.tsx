@@ -10,7 +10,8 @@ import {
 } from "@mui/material";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
-import { SubscriptionForm, UpdatedSubscriptionItem } from "../../API/TYPES";
+import { SubscriptionForm, UpdatedSubscriptionItem } from "../../../API/TYPES";
+import { useNavigate } from "react-router-dom";
 
 type PropsType = {
   row: UpdatedSubscriptionItem;
@@ -30,6 +31,12 @@ const CollapsibleRow = ({
   setConfirmDelete,
 }: PropsType) => {
   const [open, setOpen] = useState(false);
+
+  const navigate = useNavigate();
+
+  const handleViewAlerts = () => {
+    navigate(`/account/subscription/${row.subscriptionName}`);
+  };
 
   return (
     <>
@@ -55,11 +62,22 @@ const CollapsibleRow = ({
             {row.subscriptionName}
           </Box>
         </TableCell>
-
         <TableCell align="left" sx={{ fontSize: "0.875rem" }}>
           <Box
             sx={{
-              width: "160px",
+              width: "100px",
+              whiteSpace: "nowrap",
+              overflow: "hidden",
+              textOverflow: "ellipsis",
+            }}
+          >
+            {row.countryNames[0]}
+          </Box>
+        </TableCell>
+        <TableCell align="left" sx={{ fontSize: "0.875rem" }}>
+          <Box
+            sx={{
+              width: "100px",
               whiteSpace: "nowrap",
               overflow: "hidden",
               textOverflow: "ellipsis",
@@ -107,7 +125,7 @@ const CollapsibleRow = ({
         <TableCell align="left" sx={{ fontSize: "0.875rem" }}>
           <Box
             sx={{
-              width: "150px",
+              width: "100px",
               whiteSpace: "nowrap",
               overflow: "hidden",
               textOverflow: "ellipsis",
@@ -116,7 +134,25 @@ const CollapsibleRow = ({
             {row.subscribeBy.join(", ")}
           </Box>
         </TableCell>
-        <TableCell align="left" sx={{ minWidth: "130px" }}>
+        <TableCell align="left" sx={{ minWidth: "200px" }}>
+          <Button
+            variant="text"
+            disableRipple
+            onClick={handleViewAlerts}
+            sx={{
+              color: "red",
+              minWidth: 0,
+              textTransform: "capitalize",
+              mr: "1rem",
+              p: 0,
+              fontSize: "0.875rem",
+              "&:hover": {
+                opacity: "0.7",
+              },
+            }}
+          >
+            View
+          </Button>
           <Button
             variant="text"
             size="small"
@@ -136,9 +172,9 @@ const CollapsibleRow = ({
             sx={{
               color: "red",
               minWidth: 0,
-              padding: "5px",
               textTransform: "capitalize",
-              mr: "5px",
+              mr: "1rem",
+              p: 0,
               fontSize: "0.875rem",
               "&:hover": {
                 opacity: "0.7",
@@ -157,8 +193,8 @@ const CollapsibleRow = ({
             sx={{
               color: "red",
               minWidth: 0,
-              padding: "5px",
               textTransform: "capitalize",
+              p: 0,
               fontSize: "0.875rem",
               "&:hover": {
                 opacity: "0.7",
@@ -170,7 +206,7 @@ const CollapsibleRow = ({
         </TableCell>
       </TableRow>
       <TableRow>
-        <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={8}>
+        <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={9}>
           <Collapse in={open} timeout="auto" unmountOnExit>
             <Box sx={{ mt: 0, ml: 2, mr: 2, mb: 2 }}>
               <Typography

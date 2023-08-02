@@ -13,12 +13,12 @@ import { useMutation } from "@apollo/client";
 import {
   ADD_SUBSCRIPTION,
   UPDATE_SUBSCRIPTION,
-} from "../../API/mutations/subscriptionMutations";
+} from "../../../API/mutations/subscriptionMutations";
 
-import { subscription_module } from "../../API/API_Links";
+import { subscription_module } from "../../../API/API_Links";
 // import CountryAutocomplete from "./CountryAutocomplete";
-import { GET_SUBSCRIPTIONS } from "../../API/ALL_QUERIES";
-import { CountryType, SubscriptionForm } from "../../API/TYPES";
+import { GET_SUBSCRIPTIONS } from "../../../API/ALL_QUERIES";
+import { CountryType, SubscriptionForm } from "../../../API/TYPES";
 import DistrictAutocomplete from "./DistrictAutocomplete";
 
 const style = {
