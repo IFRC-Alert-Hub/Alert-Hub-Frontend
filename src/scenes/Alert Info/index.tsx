@@ -51,16 +51,12 @@
 
 // export default AlertInfo;
 
-import { Box, Container, Grid, Typography } from "@mui/material";
+import { Box, Container, Typography } from "@mui/material";
 import React from "react";
-import { useParams } from "react-router-dom";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
-import TitleHeader from "../../components/Layout/TitleHeader";
-import { PopupContentText } from "../../components/MapComponent/PopupComponent/PopupContentText";
 import { AlertInfoText } from "./AlertInfoText";
 import AlertInfoTitleHeader from "./AlertInfoTitleHeader";
 import DynamicTabs from "./InfoSetsHorizontalTabs";
-import AlertInfoMap from "./AlertInfoMap";
 
 const data = {
   "Message ID":
@@ -77,7 +73,6 @@ const data = {
   Note: "",
   References: "",
   Incidents: "",
-  
 };
 const AlertInfo = () => {
   //const { id } = useParams();
@@ -110,7 +105,6 @@ const AlertInfo = () => {
           {" "}
           <DynamicTabs infoSets={[{ test: "1" }, { test2: "2" }]} />
         </Box>
-       
       </Container>
     </>
   );

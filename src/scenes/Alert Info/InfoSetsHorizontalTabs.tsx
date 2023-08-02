@@ -2,7 +2,7 @@ import * as React from "react";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import Box from "@mui/material/Box";
-import { Grid, Typography } from "@mui/material";
+import { Grid } from "@mui/material";
 import AlertInfoMap from "./AlertInfoMap";
 import { AlertInfoText } from "./AlertInfoText";
 
