@@ -44,7 +44,7 @@ type Region = {
 
 export type SourceFeed = {
   url?: string;
-  name?: string;
+  id?: string;
 };
 type CountryType = {
   centroid?: string;

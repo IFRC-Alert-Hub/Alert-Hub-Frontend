@@ -48,7 +48,7 @@ export const ALL_ALERTS = gql`
       }
       feed {
         url
-        name
+        id
       }
     }
     listCountry {

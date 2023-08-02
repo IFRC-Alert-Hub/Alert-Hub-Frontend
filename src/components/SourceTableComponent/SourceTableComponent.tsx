@@ -4,7 +4,7 @@ import { Box, Typography } from "@mui/material";
 import { SourceFeed } from "../MapComponent/MapComponent";
 
 const columns = [
-  { field: "name", headerName: "Source Name", width: 400 },
+  { field: "id", headerName: "Source Name", width: 400 },
   { field: "url", headerName: "URL", width: 500 },
 ];
 
