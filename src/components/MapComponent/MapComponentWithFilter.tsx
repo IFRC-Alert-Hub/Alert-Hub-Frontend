@@ -128,7 +128,7 @@ const MapComponentWithFilter: React.FC<MapComponentWithFilterProps> = ({
           seenSourceUrls.add(sourceFeed.url);
           uniqueSourceFeeds.push({
             url: sourceFeed.url,
-            name: sourceFeed.name,
+            id: sourceFeed.id,
           });
         }
       });

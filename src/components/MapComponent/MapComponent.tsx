@@ -44,7 +44,7 @@ type Region = {
 
 export type SourceFeed = {
   url?: string;
-  name?: string;
+  id?: string;
 };
 type CountryType = {
   centroid?: string;
@@ -242,6 +242,10 @@ const MapComponent: React.FC<MapProps> = ({
 
     return zoom;
   }
+
+  useEffect(() => {
+    console.log(tableID);
+  }, [tableID]);
 
   useEffect(() => {
     if (!mapRef.current || !alertsLoading || alerts.length === 0) {

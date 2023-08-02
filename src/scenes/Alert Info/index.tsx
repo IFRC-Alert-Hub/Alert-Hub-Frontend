@@ -51,20 +51,62 @@
 
 // export default AlertInfo;
 
-import { Container, Typography } from "@mui/material";
+import { Box, Container, Typography } from "@mui/material";
 import React from "react";
+import LocationOnIcon from "@mui/icons-material/LocationOn";
+import { AlertInfoText } from "./AlertInfoText";
+import AlertInfoTitleHeader from "./AlertInfoTitleHeader";
+import DynamicTabs from "./InfoSetsHorizontalTabs";
 
+const data = {
+  "Message ID":
+    "urn:oid:2.49.0.1.840.0.08397cac56a1b76c64d707f3e542a8b04308241b.001.3",
+  "Sender ID": "w-nws.webmaster@noaa.gov",
+  "Sent Date/Time": "2023-08-02T07:15:00+00:00",
+  "Message Status": "ACTUAL",
+  "Message Type": "ALERT",
+  Source: "",
+  Scope: "PUBLIC",
+  Restriction: "",
+  Addresses: "",
+  "Handling Code": "IPAWSv1.0",
+  Note: "",
+  References: "",
+  Incidents: "",
+};
 const AlertInfo = () => {
+  //const { id } = useParams();
+
   return (
-    <Container maxWidth="lg" sx={{ padding: "10px" }}>
-      <Typography
-        variant={"h1"}
-        fontWeight={"bolder"}
-        sx={{ textAlign: "center" }}
-      >
-        Alert ID
-      </Typography>
-    </Container>
+    <>
+      <Box padding={"40px"} sx={{ textAlign: "center" }}>
+        <Typography
+          variant={"h1"}
+          fontWeight={"600"}
+          sx={{ paddingBottom: "5px" }}
+        >
+          Excessive Heat warning
+        </Typography>
+        <Typography variant={"h4"}>
+          <LocationOnIcon />
+          UNITED STATES OF AMERICA (USA)
+        </Typography>
+      </Box>
+      <Container maxWidth="lg">
+        <AlertInfoTitleHeader title="Alert" />
+        {Object.entries(data).map(([key, value]) =>
+          value !== "" ? (
+            <AlertInfoText key={key} title={key} content={value} />
+          ) : (
+            <AlertInfoText key={key} title={key} content={"Not available"} />
+          )
+        )}
+        <Box sx={{ padding: "20px" }}>
+          {" "}
+          <DynamicTabs infoSets={[{ test: "1" }, { test2: "2" }]} />
+        </Box>
+      </Container>
+    </>
   );
 };
 
