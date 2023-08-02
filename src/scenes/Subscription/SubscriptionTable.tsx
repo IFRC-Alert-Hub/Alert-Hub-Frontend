@@ -9,8 +9,6 @@ import {
   Paper,
   TablePagination,
   Button,
-  Tooltip,
-  Box,
   Typography,
   Dialog,
   DialogTitle,
@@ -24,6 +22,7 @@ import { DELETE_SUBSCRIPTION } from "../../API/mutations/subscriptionMutations";
 import { subscription_module } from "../../API/API_Links";
 import { GET_SUBSCRIPTIONS } from "../../API/ALL_QUERIES";
 import { SubscriptionForm, UpdatedSubscriptionItem } from "../../API/TYPES";
+import CollapsibleRow from "./CollapsibleRow";
 
 type PropsType = {
   updatedSubscriptions: UpdatedSubscriptionItem[];
@@ -89,12 +88,12 @@ const SubscriptionTable = ({
       <Table sx={{ minWidth: 650 }} aria-label="subscription table">
         <TableHead>
           <TableRow>
+            <TableCell />
             <TableCell
-              align="center"
+              align="left"
               sx={{
                 fontSize: "0.875rem",
                 fontWeight: "600",
-                minWidth: "150px",
               }}
             >
               Title
@@ -106,34 +105,34 @@ const SubscriptionTable = ({
                 fontWeight: "600",
               }}
             >
-              Subscribed Countries
+              Subscribed Districts
             </TableCell>
             <TableCell
-              align="center"
+              align="left"
               sx={{ fontSize: "0.875rem", fontWeight: "600" }}
             >
               Urgency
             </TableCell>
             <TableCell
-              align="center"
+              align="left"
               sx={{ fontSize: "0.875rem", fontWeight: "600" }}
             >
               Severity
             </TableCell>
             <TableCell
-              align="center"
+              align="left"
               sx={{ fontSize: "0.875rem", fontWeight: "600" }}
             >
               Certainty
             </TableCell>
             <TableCell
-              align="center"
+              align="left"
               sx={{ fontSize: "0.875rem", fontWeight: "600" }}
             >
               Notification Methods
             </TableCell>
             <TableCell
-              align="center"
+              align="left"
               sx={{ fontSize: "0.875rem", fontWeight: "600" }}
             >
               Operations
@@ -142,119 +141,18 @@ const SubscriptionTable = ({
         </TableHead>
         <TableBody>
           {visibleRows?.map((row: UpdatedSubscriptionItem) => (
-            <TableRow key={row.id}>
-              <TableCell
-                align="center"
-                sx={{ fontSize: "0.875rem" }}
-                component="th"
-                scope="row"
-              >
-                <Button
-                  sx={{
-                    color: "black",
-                    fontSize: "0.875rem",
-                    fontWeight: "500",
-                    textDecoration: "underline",
-                    textTransform: "capitalize",
-                    "&:hover": {
-                      color: "red",
-                      textDecoration: "underline",
-                    },
-                  }}
-                  disableRipple
-                >
-                  {row.subscriptionName}
-                </Button>
-              </TableCell>
+            // <TableRow key={row.id}>
 
-              <TableCell align="left" sx={{ fontSize: "0.875rem" }}>
-                {row.countryIds?.length > 1 ? (
-                  <Tooltip
-                    title={`${row.countryIds?.length} countries are selected`}
-                    arrow
-                  >
-                    <Box
-                      sx={{
-                        maxWidth: "150px",
-                        whiteSpace: "nowrap",
-                        overflow: "hidden",
-                        textOverflow: "ellipsis",
-                      }}
-                    >
-                      {row.countryNames?.join(", ")}
-                    </Box>
-                  </Tooltip>
-                ) : (
-                  <Tooltip title={"1 country is selected"} arrow>
-                    <Box>{row.countryNames?.join(", ")}</Box>
-                  </Tooltip>
-                )}
-              </TableCell>
-              <TableCell align="center" sx={{ fontSize: "0.875rem" }}>
-                {row.urgencyArray.join(", ")}
-              </TableCell>
-              <TableCell align="center" sx={{ fontSize: "0.875rem" }}>
-                {row.severityArray.join(", ")}
-              </TableCell>
-              <TableCell align="center" sx={{ fontSize: "0.875rem" }}>
-                {row.certaintyArray.join(", ")}
-              </TableCell>
-              <TableCell align="center" sx={{ fontSize: "0.875rem" }}>
-                {row.subscribeBy.join(", ")}
-              </TableCell>
-              <TableCell align="center" sx={{ minWidth: "130px" }}>
-                <Button
-                  variant="text"
-                  size="small"
-                  onClick={() => {
-                    handleModalOpen();
-                    setFormType("Edit");
-                    setSelectedRow({
-                      id: row.id,
-                      subscriptionName: row.subscriptionName,
-                      countryIds: row.countryIds,
-                      urgencyArray: row.urgencyArray,
-                      severityArray: row.severityArray,
-                      certaintyArray: row.certaintyArray,
-                      subscribeBy: row.subscribeBy,
-                    });
-                  }}
-                  sx={{
-                    color: "red",
-                    minWidth: 0,
-                    padding: "5px",
-                    textTransform: "capitalize",
-                    mr: "5px",
-                    fontSize: "0.875rem",
-                    "&:hover": {
-                      opacity: "0.7",
-                    },
-                  }}
-                >
-                  Edit
-                </Button>
-                <Button
-                  variant="text"
-                  size="small"
-                  onClick={() => {
-                    setConfirmDelete(true);
-                    setDeleteId(row.id);
-                  }}
-                  sx={{
-                    color: "red",
-                    minWidth: 0,
-                    padding: "5px",
-                    textTransform: "capitalize",
-                    fontSize: "0.875rem",
-                    "&:hover": {
-                      opacity: "0.7",
-                    },
-                  }}
-                >
-                  Delete
-                </Button>
-              </TableCell>
-            </TableRow>
+            // </TableRow>
+            <CollapsibleRow
+              key={row.id}
+              row={row}
+              handleModalOpen={handleModalOpen}
+              setFormType={setFormType}
+              setSelectedRow={setSelectedRow}
+              setDeleteId={setDeleteId}
+              setConfirmDelete={setConfirmDelete}
+            />
           ))}
           {emptyRows > 0 && (
             <TableRow
@@ -262,7 +160,7 @@ const SubscriptionTable = ({
                 height: 62 * emptyRows,
               }}
             >
-              <TableCell colSpan={7} />
+              <TableCell colSpan={8} />
             </TableRow>
           )}
         </TableBody>
