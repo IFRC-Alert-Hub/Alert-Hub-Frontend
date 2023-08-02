@@ -20,6 +20,7 @@ import PageNotFound from "./scenes/404_Page";
 import TestPerformance from "./API/test-performance";
 import TestMapComponentPopup from "./components/MapComponent/TestMapComponentPopup";
 import AlertInfo from "./scenes/Alert Info";
+import SubscriptionAlerts from "./scenes/SubscriptionAlerts";
 
 function App() {
   // useEffect(() => {
@@ -61,6 +62,10 @@ function App() {
                 <Route path="/account/" element={<PrivateRoutes />}>
                   <Route path="profile" element={<Profile />} />
                   <Route path="subscription" element={<Subscription />} />
+                  <Route
+                    path="subscription/:title"
+                    element={<SubscriptionAlerts />}
+                  />
                 </Route>
                 <Route path="/test-performance" element={<TestPerformance />} />
                 <Route path="/map-test" element={<TestMapComponentPopup />} />
