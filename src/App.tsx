@@ -18,7 +18,7 @@ import PrivateRoutes from "./utils/PrivateRoute";
 import { UserContextProvider } from "./context/UserContext";
 import PageNotFound from "./scenes/404_Page";
 import TestPerformance from "./API/test-performance";
-import TestMapComponentPopup from "./components/MapComponent/TestMapComponentPopup";
+import TestMapComponentPopup from "./components/MapComponent/TestMapComponentPopup/TestMapComponentPopup";
 import AlertInfo from "./scenes/Alert Info";
 import SubscriptionAlerts from "./scenes/SubscriptionAlerts";
 
