@@ -244,6 +244,10 @@ const MapComponent: React.FC<MapProps> = ({
   }
 
   useEffect(() => {
+    console.log(tableID);
+  }, [tableID]);
+
+  useEffect(() => {
     if (!mapRef.current || !alertsLoading || alerts.length === 0) {
       return;
     }
