@@ -77,6 +77,7 @@ const data = {
   Note: "",
   References: "",
   Incidents: "",
+  
 };
 const AlertInfo = () => {
   //const { id } = useParams();
@@ -109,14 +110,7 @@ const AlertInfo = () => {
           {" "}
           <DynamicTabs infoSets={[{ test: "1" }, { test2: "2" }]} />
         </Box>
-        <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
-          <Grid item xs={6}>
-            <Typography variant="h4">afafa</Typography>
-          </Grid>
-          <Grid item xs={6}>
-            <AlertInfoMap></AlertInfoMap>
-          </Grid>
-        </Grid>
+       
       </Container>
     </>
   );
