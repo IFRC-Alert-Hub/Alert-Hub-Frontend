@@ -230,7 +230,9 @@ const ForgotPassword = () => {
               }}
               disabled={!formik.isValid || !formik.dirty}
             >
-              Recover
+              {formatMessage({
+                id: "forgetPassword.recoverBtn",
+              })}
             </Button>
           </Box>
         }

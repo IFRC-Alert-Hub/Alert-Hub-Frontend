@@ -45,6 +45,10 @@
   "forgetPassword.formLabel.confirmPassword": "Confirm Password",
   "forgetPassword.recoverBtn": "Recover",
 
+  "register.pageTitle": "Register",
+  "register.authTitle": "Create Account",
+  "register.authSubtitle": "Staff, members and volunteers of the Red Cross Red Crescent Movement (National Societies, the IFRC and the ICRC) are welcome to register for a user account on GO, to access information for the Membership. Other responders and members of the public may browse the public areas of the site without registering for an account.",
+
   "firstNavBarItem.about": "About",
   "firstNavBarItem.resources": "Resources",
 
@@ -67,5 +71,12 @@
 
   "home.heroCard.title2": "Use API to rebroadcast CAP alerts",
   "home.heroCard.subtitle2": "With simple yet powerful API endpoints, you can tailor the alerts to suit your users' needs.",
-  "home.heroCard.btnTitle2": "API Reference"
+  "home.heroCard.btnTitle2": "API Reference",
+
+  "passwordComponent.password": "Password",
+  "passwordComponent.confirmPassword": "Confirm Password",
+  "passwordComponent.rule1": "At least one uppercase letter",
+  "passwordComponent.rule2": "At least one number",
+  "passwordComponent.rule3": "At least one special character [?!@#$%^&*()]",
+  "passwordComponent.rule4": "At least 8 characters"
 }

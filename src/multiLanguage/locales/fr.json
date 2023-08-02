@@ -46,7 +46,7 @@
   "forgetPassword.recoverBtn": "Récupérer",
 
   "firstNavBarItem.about": "À propos",
-  "firstNavBarItem.resources": "Ressources",
+  "firstNavBarItem.resources": "Resources",
 
   "secondNavBarItems.home": "Maison",
 
@@ -67,5 +67,12 @@
 
   "home.heroCard.title2": "Utiliser l'API pour rediffuser les alertes CAP",
   "home.heroCard.subtitle2": "Avec des points de terminaison d'API simples mais puissants, vous pouvez personnaliser les alertes en fonction des besoins de vos utilisateurs.",
-  "home.heroCard.btnTitle2": "Référence API"
+  "home.heroCard.btnTitle2": "Référence API",
+
+  "passwordComponent.password": "Mot de passe",
+  "passwordComponent.confirmPassword": "Confirmez le mot de passe",
+  "passwordComponent.rule1": "Au moins une lettre majuscule",
+  "passwordComponent.rule2": "Au moins un numéro",
+  "passwordComponent.rule3": "Au moins un caractère spécial [?!@#$%^&*()]",
+  "passwordComponent.rule4": "Au moins 8 caractères"
 }
