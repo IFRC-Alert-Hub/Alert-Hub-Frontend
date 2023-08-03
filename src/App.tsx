@@ -21,6 +21,7 @@ import TestPerformance from "./API/test-performance";
 import TestMapComponentPopup from "./components/MapComponent/TestMapComponentPopup/TestMapComponentPopup";
 import AlertInfo from "./scenes/Alert Info";
 import SubscriptionAlerts from "./scenes/SubscriptionAlerts";
+import TestMapComponentPopup2 from "./components/MapComponent/TestMapComponentPopup2/TestMapComponentPopup2";
 
 function App() {
   // useEffect(() => {
@@ -69,6 +70,8 @@ function App() {
                 </Route>
                 <Route path="/test-performance" element={<TestPerformance />} />
                 <Route path="/map-test" element={<TestMapComponentPopup />} />
+                <Route path="/map-test2" element={<TestMapComponentPopup2 />} />
+
                 <Route path="/404" element={<PageNotFound />} />
 
                 <Route path="*" element={<PageNotFound />}></Route>
