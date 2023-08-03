@@ -4,7 +4,6 @@ import { useQuery } from "@apollo/client";
 import { cap_aggregator, subscription_module } from "../../API/API_Links";
 import {
   CountryOptionsType,
-  CountryType,
   SubscriptionForm,
   SubscriptionItem,
   SubscriptionQueryResult,
