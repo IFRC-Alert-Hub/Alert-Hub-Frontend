@@ -36,7 +36,7 @@ const CountryAutocomplete = ({
   );
 
   const handleChange = (event: any, newValue: CountryOptionsType | null) => {
-    const countryIds = [Number(newValue?.countryId)];
+    const countryIds = newValue ? [Number(newValue?.countryId)] : [];
     setSelectedRow((prevState) => ({
       ...prevState,
       countryIds: countryIds,
