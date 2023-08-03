@@ -4,90 +4,71 @@ import {
   Checkbox,
   FormControl,
   FormControlLabel,
+  FormHelperText,
   FormLabel,
   TextField,
 } from "@mui/material";
+import { DistrictOptionsType, SubscriptionForm } from "../../../API/TYPES";
+import { useEffect, useState } from "react";
 
-const MOCK_DISTRICTS = [
-  {
-    countryId: "1",
-    countryName: "Country1",
-    districts: [
-      {
-        districtId: "1",
-        districtName: "District1",
-      },
-      {
-        districtId: "2",
-        districtName: "District2",
-      },
-    ],
-  },
-  {
-    countryId: "2",
-    countryName: "Country2",
-    districts: [
-      {
-        districtId: "3",
-        districtName: "District3",
-      },
-      {
-        districtId: "4",
-        districtName: "District4",
-      },
-      {
-        districtId: "5",
-        districtName: "District5",
-      },
-    ],
-  },
-  {
-    countryId: "3",
-    countryName: "Country3",
-    districts: [
-      {
-        districtId: "6",
-        districtName: "District6",
-      },
-      {
-        districtId: "7",
-        districtName: "District7",
-      },
-      {
-        districtId: "8",
-        districtName: "District8",
-      },
-    ],
-  },
-];
+interface FormErrors {
+  [key: string]: boolean;
+}
 
-const MOCK_DISTRICTS_OPTIONS = MOCK_DISTRICTS.flatMap((country) => {
-  const { countryId, countryName, districts } = country;
-  return districts.map((district) => ({
-    districtId: district.districtId,
-    districtName: district.districtName,
-    countryId,
-    countryName,
-  }));
-});
+type PropsType = {
+  verifyForm: boolean;
+  formErrors: FormErrors;
+  districtList: DistrictOptionsType[];
+  selectedRow: SubscriptionForm;
+  setSelectedRow: React.Dispatch<React.SetStateAction<SubscriptionForm>>;
+};
 
-const CountryAutocomplete = () => {
+const CountryAutocomplete = ({
+  verifyForm,
+  formErrors,
+  districtList,
+  selectedRow,
+  setSelectedRow,
+}: PropsType) => {
+  const [value, setValue] = useState<DistrictOptionsType[]>([]);
+
+  useEffect(() => {
+    const initValue = districtList.filter((item) =>
+      selectedRow.districtIds.includes(Number(item.districtId))
+    );
+    setValue(initValue);
+  }, [districtList, selectedRow.countryIds, selectedRow.districtIds]);
+
+  const handleChange = (event: any, newValue: DistrictOptionsType[]) => {
+    const districtIds = newValue.map((item) => Number(item.districtId));
+    setSelectedRow((prevState) => ({
+      ...prevState,
+      districtIds: districtIds,
+    }));
+    setValue(newValue);
+  };
+
   return (
-    <FormControl required component="fieldset" sx={{ width: "100%" }}>
+    <FormControl
+      required
+      error={verifyForm && formErrors["districtIds"]}
+      component="fieldset"
+      sx={{ width: "100%" }}
+    >
       <Box display="flex" sx={{ alignItems: "center" }}>
         <FormLabel className="subs-form-legend">Districts</FormLabel>
-        <Box ml={2} sx={{ color: "gray", fontSize: "0.5em" }}>
-          0/10 selected
-        </Box>
       </Box>
       <Autocomplete
         multiple
+        value={value}
+        disabled={selectedRow.countryIds.length === 0}
         id="checkboxes-districts"
         size="small"
-        options={MOCK_DISTRICTS_OPTIONS}
+        options={districtList}
         groupBy={(option) => option.countryName}
         disableCloseOnSelect
         getOptionLabel={(option) => option.districtName}
+        onChange={handleChange}
         renderOption={(props, option, { selected }) => (
           <li {...props}>
             <FormControlLabel
@@ -99,6 +80,11 @@ const CountryAutocomplete = () => {
         renderInput={(params) => <TextField {...params} placeholder="Search" />}
         sx={{ mt: 1, mb: 1 }}
       />
+      <FormHelperText>
+        {verifyForm &&
+          formErrors["districtIds"] &&
+          "You need to select at least one"}
+      </FormHelperText>
     </FormControl>
   );
 };

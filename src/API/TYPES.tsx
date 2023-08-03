@@ -3,6 +3,7 @@ export interface SubscriptionItem {
   userId: number;
   subscriptionName: string;
   countryIds: number[];
+  districtIds: number[];
   urgencyArray: string[];
   severityArray: string[];
   certaintyArray: string[];
@@ -14,11 +15,13 @@ export interface UpdatedSubscriptionItem {
   userId: number;
   subscriptionName: string;
   countryIds: number[];
+  districtIds: number[];
   urgencyArray: string[];
   severityArray: string[];
   certaintyArray: string[];
   subscribeBy: string[];
   countryNames: string[];
+  districtNames: string[];
 }
 
 export interface SubscriptionQueryResult {
@@ -31,6 +34,7 @@ export interface SubscriptionForm {
   id?: string;
   subscriptionName: string;
   countryIds: number[];
+  districtIds: number[];
   urgencyArray: string[];
   severityArray: string[];
   certaintyArray: string[];
@@ -48,3 +52,19 @@ export interface ContinentType {
   name: string;
   countrySet: CountryType[];
 }
+
+export type CountryOptionsType = {
+  countryId: string;
+  countryName: string;
+  districts: {
+    districtId: string;
+    districtName: string;
+  }[];
+};
+
+export type DistrictOptionsType = {
+  districtId: string;
+  districtName: string;
+  countryId: string;
+  countryName: string;
+};

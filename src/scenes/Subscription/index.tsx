@@ -3,6 +3,7 @@ import { useState } from "react";
 import { useQuery } from "@apollo/client";
 import { cap_aggregator, subscription_module } from "../../API/API_Links";
 import {
+  CountryOptionsType,
   CountryType,
   SubscriptionForm,
   SubscriptionItem,
@@ -16,11 +17,47 @@ import Progress from "../../components/Layout/Progress";
 const INIT_ROW: SubscriptionForm = {
   subscriptionName: "",
   countryIds: [],
+  districtIds: [],
   urgencyArray: [],
   severityArray: [],
   certaintyArray: [],
   subscribeBy: [],
 };
+
+const testCountryData: CountryOptionsType[] = [
+  {
+    countryId: "1",
+    countryName: "country1",
+    districts: [
+      {
+        districtId: "1",
+        districtName: "district1",
+      },
+      {
+        districtId: "2",
+        districtName: "district2",
+      },
+      {
+        districtId: "3",
+        districtName: "district3",
+      },
+    ],
+  },
+  {
+    countryId: "2",
+    countryName: "country2",
+    districts: [
+      {
+        districtId: "4",
+        districtName: "district4",
+      },
+      {
+        districtId: "5",
+        districtName: "district5",
+      },
+    ],
+  },
+];
 
 const Subscription = () => {
   // fetch the data from backend
@@ -63,13 +100,23 @@ const Subscription = () => {
   } else if (subscriptionData && countryData) {
     const tableDetail = subscriptionData.listAllSubscription.map(
       (item: SubscriptionItem) => {
-        const countryNames = item.countryIds.map((countryId: number) => {
-          const foundCountry = countryData.listCountry.find(
-            (country: CountryType) => country.id === countryId.toString()
+        const countryNames = item.countryIds.map((id: number) => {
+          const foundCountry = testCountryData.find(
+            (country) => country.countryId === id.toString()
           );
-          return foundCountry?.name;
+          return foundCountry?.countryName;
         });
-        return { ...item, countryNames };
+        const districtNames = item.districtIds.map((id: number) => {
+          const foundCountry = testCountryData.find(
+            (country) => country.countryId === item.countryIds[0].toString()
+          );
+          const districtsList = foundCountry?.districts;
+          const foundDistricts = districtsList?.find(
+            (district) => district.districtId === id.toString()
+          );
+          return foundDistricts?.districtName;
+        });
+        return { ...item, countryNames, districtNames };
       }
     );
     tableContent = (
@@ -121,7 +168,8 @@ const Subscription = () => {
           modalOpen={modalOpen}
           handleModalClose={handleModalClose}
           formType={formType}
-          countryList={countryData.listCountry}
+          // countryList={countryData.listCountry}
+          countryList={testCountryData}
           selectedRow={selectedRow}
           setSelectedRow={setSelectedRow}
         />
