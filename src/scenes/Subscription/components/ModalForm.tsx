@@ -13,12 +13,13 @@ import { useMutation } from "@apollo/client";
 import {
   ADD_SUBSCRIPTION,
   UPDATE_SUBSCRIPTION,
-} from "../../API/mutations/subscriptionMutations";
+} from "../../../API/mutations/subscriptionMutations";
 
-import { subscription_module } from "../../API/API_Links";
-import CountryAutocomplete from "./CountryAutocomplete";
-import { GET_SUBSCRIPTIONS } from "../../API/ALL_QUERIES";
-import { CountryType, SubscriptionForm } from "../../API/TYPES";
+import { subscription_module } from "../../../API/API_Links";
+// import CountryAutocomplete from "./CountryAutocomplete";
+import { GET_SUBSCRIPTIONS } from "../../../API/ALL_QUERIES";
+import { CountryType, SubscriptionForm } from "../../../API/TYPES";
+import DistrictAutocomplete from "./DistrictAutocomplete";
 
 const style = {
   position: "absolute" as "absolute",
@@ -107,7 +108,7 @@ const ModalForm = ({
         [name]: updatedValues,
       }));
     } else {
-      if (value.toString().length <= 20)
+      if (value.toString().length <= 50)
         setSelectedRow((prevState) => ({
           ...prevState,
           [name]: value,
@@ -177,9 +178,6 @@ const ModalForm = ({
             {formType} Subscription
           </Typography>
         </Box>
-        {/* <Typography id="modal-title" variant="h3" fontWeight={"bold"} mb="10px">
-          {formType} Subscription
-        </Typography> */}
         <Box component="form" onSubmit={handleSubmit} p={4}>
           <Box sx={{ mb: 1 }}>
             <InputLabel
@@ -207,20 +205,21 @@ const ModalForm = ({
                 endAdornment: (
                   <InputAdornment position="end">
                     {selectedRow.subscriptionName.length | 0}
-                    /20
+                    /50
                   </InputAdornment>
                 ),
               }}
               sx={{ width: "100%", mt: 1, mb: 1 }}
             />
           </Box>
-          <CountryAutocomplete
+          {/* <CountryAutocomplete
             verifyForm={verifyForm}
             formErrors={formErrors}
             countryList={countryList}
             selectedRow={selectedRow}
             setSelectedRow={setSelectedRow}
-          />
+          /> */}
+          <DistrictAutocomplete />
           {checkBoxList.map((item) => (
             <FormCheckbox
               verifyForm={verifyForm}

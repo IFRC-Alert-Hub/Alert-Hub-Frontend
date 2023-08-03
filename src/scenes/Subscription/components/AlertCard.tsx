@@ -1,10 +1,17 @@
 import { Box, Button, Card, CardContent, Typography } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 
 type PropsType = {
   title: string;
 };
 
 const AlertCard = ({ title }: PropsType) => {
+  const navigate = useNavigate();
+
+  const handleViewAlerts = () => {
+    navigate(`/account/subscription/${title}`);
+  };
+
   return (
     <Card sx={{ flex: "0 0 300px", mr: 3, mb: 3 }}>
       <CardContent sx={{ display: "flex", justifyContent: "space-between" }}>
@@ -27,6 +34,7 @@ const AlertCard = ({ title }: PropsType) => {
           <Button
             variant="text"
             disableRipple
+            onClick={handleViewAlerts}
             sx={{
               color: "red",
               minWidth: 0,

@@ -1,4 +1,4 @@
-import { Box, Button, Container, Grid, Typography } from "@mui/material";
+import { Button, Container, Grid, Typography } from "@mui/material";
 import { useState } from "react";
 import { useQuery } from "@apollo/client";
 import { cap_aggregator, subscription_module } from "../../API/API_Links";
@@ -9,10 +9,9 @@ import {
   SubscriptionQueryResult,
 } from "../../API/TYPES";
 import { GET_ALL_COUNTRIES, GET_SUBSCRIPTIONS } from "../../API/ALL_QUERIES";
-import SubscriptionTable from "./SubscriptionTable";
-import ModalForm from "./ModalForm";
+import SubscriptionTable from "./components/SubscriptionTable";
+import ModalForm from "./components/ModalForm";
 import Progress from "../../components/Layout/Progress";
-import AlertCard from "./AlertCard";
 
 const INIT_ROW: SubscriptionForm = {
   subscriptionName: "",
@@ -56,7 +55,11 @@ const Subscription = () => {
   if (subscriptionLoading || countryLoading) {
     tableContent = <Progress />;
   } else if (subscriptionError) {
-    tableContent = <p>Something Error!</p>;
+    tableContent = (
+      <Typography variant="h5" textAlign={"center"} color={"gray"} mt={10}>
+        Something error! Please contact the application administrator.
+      </Typography>
+    );
   } else if (subscriptionData && countryData) {
     const tableDetail = subscriptionData.listAllSubscription.map(
       (item: SubscriptionItem) => {
@@ -82,32 +85,6 @@ const Subscription = () => {
 
   return (
     <Container maxWidth={"lg"}>
-      <Box margin="2rem 0 1rem 0">
-        <Typography
-          variant="h3"
-          fontWeight={"bold"}
-          paddingBottom={"15px"}
-          textTransform={"capitalize"}
-          letterSpacing={"1.6px"}
-        >
-          Your Ongoing Alerts
-        </Typography>
-        <Box mt={2} display="flex" flexWrap="wrap">
-          {subscriptionData &&
-          subscriptionData.listAllSubscription.length > 0 ? (
-            subscriptionData.listAllSubscription.map(
-              (item: SubscriptionItem) => (
-                <AlertCard key={item.id} title={item.subscriptionName} />
-              )
-            )
-          ) : (
-            <Typography variant="h5" textAlign={"center"} color={"gray"}>
-              {" "}
-              No subscribed alerts.
-            </Typography>
-          )}
-        </Box>
-      </Box>
       <Grid container direction="row" margin="3rem 0 1rem 0">
         <Grid item xs={12} sm={8}>
           <Typography
@@ -117,7 +94,7 @@ const Subscription = () => {
             textTransform={"capitalize"}
             letterSpacing={"1.6px"}
           >
-            Subscription Management
+            My Subscriptions
           </Typography>
         </Grid>
         <Grid item xs={12} sm={4} className="subscription-add-btn">
