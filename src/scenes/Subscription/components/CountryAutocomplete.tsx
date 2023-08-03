@@ -53,7 +53,7 @@ const CountryAutocomplete = ({
       sx={{ width: "100%", mb: 1 }}
     >
       <Box display="flex" sx={{ alignItems: "center" }}>
-        <FormLabel className="subs-form-legend">Countries</FormLabel>
+        <FormLabel className="subs-form-legend">Country</FormLabel>
       </Box>
       <Autocomplete
         disablePortal

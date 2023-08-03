@@ -35,7 +35,9 @@ const CollapsibleRow = ({
   const navigate = useNavigate();
 
   const handleViewAlerts = () => {
-    navigate(`/account/subscription/${row.subscriptionName}`);
+    navigate(
+      `/account/subscription/${row.subscriptionName}?country=${row.countryNames[0]}`
+    );
   };
 
   return (
@@ -57,6 +59,7 @@ const CollapsibleRow = ({
               whiteSpace: "nowrap",
               overflow: "hidden",
               textOverflow: "ellipsis",
+              textTransform: "capitalize",
             }}
           >
             {row.subscriptionName}
