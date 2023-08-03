@@ -34,10 +34,10 @@ const AlertInfoMap: React.FC<MapProps> = ({
         zoom: zoom,
       });
 
-      mapRef.current.addControl(new mapboxgl.FullscreenControl(), "top-left");
-      mapRef.current.addControl(new mapboxgl.NavigationControl(), "top-left");
+      // mapRef.current.addControl(new mapboxgl.FullscreenControl(), "top-left");
+      // mapRef.current.addControl(new mapboxgl.NavigationControl(), "top-left");
     }
-
+    mapRef.current!.resize();
     return () => {
       if (mapRef.current) {
         mapRef.current.remove();
@@ -106,7 +106,7 @@ const AlertInfoMap: React.FC<MapProps> = ({
         ""
       )}
 
-      <div ref={mapContainerRef} className="map-container" />
+      <div ref={mapContainerRef} style={{ height: "300px", width: "100%" }} />
     </>
   );
 };

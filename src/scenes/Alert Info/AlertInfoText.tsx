@@ -9,11 +9,12 @@ interface AlertInfoTextProps {
 export const AlertInfoText: React.FC<AlertInfoTextProps> = (props) => {
   const { title, content } = props;
   return (
-    <Typography sx={{ fontSize: "14px" }} component="div">
+    <Typography sx={{ fontSize: "14px", textTransform: "capitalize" }} component="div">
       <span
         style={{
           textDecoration: "underline",
           fontWeight: "bold",
+
         }}
       >
         {title}:
