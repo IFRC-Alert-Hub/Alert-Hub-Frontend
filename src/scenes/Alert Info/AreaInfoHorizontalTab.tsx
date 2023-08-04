@@ -2,11 +2,8 @@ import * as React from "react";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import Box from "@mui/material/Box";
-import { Grid } from "@mui/material";
-import { AlertInfoText } from "./AlertInfoText";
-import { Card } from "@mui/material";
 
-import AreaInfoHorizontalTab from "./AreaInfoHorizontalTab";
+import SingleAreaView from "./SingleAreaView";
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -36,7 +33,7 @@ function CustomTabPanel(props: TabPanelProps) {
     </div>
   );
 }
-export default function DynamicTabs({ infoSets }: any) {
+export default function AreaInfoHorizontalTab({ areaData }: any) {
   const [value, setValue] = React.useState(0);
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
@@ -45,11 +42,7 @@ export default function DynamicTabs({ infoSets }: any) {
 
   return (
     <Box>
-      <Box
-        display="flex"
-        width="100%"
-        sx={{ borderBottom: 1, borderColor: "divider" }}
-      >
+      <Box display="flex" width="100%" justifyContent={"center"}>
         <Tabs
           value={value}
           onChange={handleChange}
@@ -68,12 +61,12 @@ export default function DynamicTabs({ infoSets }: any) {
             },
           }}
         >
-          {infoSets.map((info: any, index: any) => (
+          {areaData.map((info: any, index: any) => (
             <Tab
               key={index}
               label={
                 <div style={{ display: "flex", alignItems: "center" }}>
-                  {`Info ${index + 1}`}
+                  {`Area ${index + 1}`}
                 </div>
               }
               {...a11yProps(index)}
@@ -91,41 +84,9 @@ export default function DynamicTabs({ infoSets }: any) {
           ))}
         </Tabs>
       </Box>
-      {infoSets.map((info: any, index: any) => (
+      {areaData.map((info: any, index: any) => (
         <CustomTabPanel key={index} value={value} index={index}>
-          <React.Fragment key={index}>
-            <Card sx={{ padding: "20px" }}>
-              <Grid
-                container
-                rowSpacing={1}
-                columnSpacing={{ xs: 1, sm: 2, md: 3 }}
-                alignItems="center"
-              >
-                <Grid item xs={12} sm={12} md={6}>
-                  {Object.entries(info).map(([key, value]) =>
-                    value !== "" ? (
-                      <AlertInfoText
-                        key={key}
-                        title={key}
-                        content={value as string}
-                      />
-                    ) : (
-                      <AlertInfoText
-                        key={key}
-                        title={key}
-                        content={"Not available"}
-                      />
-                    )
-                  )}
-                </Grid>
-                <Grid item xs={12} sm={12} md={6}>
-                  <Card>
-                    <AreaInfoHorizontalTab areaData={[{ id: 1 }, { id: 2 }]} />
-                  </Card>
-                </Grid>
-              </Grid>
-            </Card>
-          </React.Fragment>
+          <SingleAreaView />
         </CustomTabPanel>
       ))}
     </Box>
