@@ -12,11 +12,8 @@ const infoSets = [
   {
     title: "Area Circle",
   },
-  // {
-  //   title: "Area Geocode",
-  // },
   {
-    title: "Additional Info",
+    title: "Area Geocode",
   },
 ];
 
@@ -43,6 +40,11 @@ const AreaHorizontalTab = () => {
 
   return (
     <Box sx={{ minHeight: "420px" }}>
+      <Box sx={{ padding: "20px", textAlign: "center" }}>
+        <AlertInfoText title={"Altitude"} content={"Not Available"} />
+        <AlertInfoText title={"Area Desc"} content={"Komi Republic"} />
+        <AlertInfoText title={"Ceiling"} content={"Not Available"} />
+      </Box>
       <Box
         display="flex"
         justifyContent="center"
@@ -100,26 +102,10 @@ const AreaHorizontalTab = () => {
                     }}
                   />
                 )}
-                {/* {info.title === "Area Geocode" && (
+                {info.title === "Area Geocode" && (
                   <Card sx={{ padding: "20px" }}>
                     <AlertInfoText title={"value Name"} content={"HMCSTD"} />
                     <AlertInfoText title={"Value"} content={"2_30"} />
-                  </Card>
-                )} */}
-                {info.title === "Additional Info" && (
-                  <Card sx={{ padding: "20px" }}>
-                    <AlertInfoText title={"Altitude"} content={""} />
-                    <AlertInfoText
-                      title={"Area Desc"}
-                      content={"Komi Republic"}
-                    />
-                    <br />
-                    <AlertInfoText title={"Ceiling"} content={""} />
-                    <AlertInfoText
-                      title={"Geocode value Name"}
-                      content={"HMCSTD"}
-                    />
-                    <AlertInfoText title={"Geocode Value"} content={"2_30"} />
                   </Card>
                 )}
               </>
