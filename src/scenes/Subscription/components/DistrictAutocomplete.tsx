@@ -1,6 +1,7 @@
 import {
   Autocomplete,
   Box,
+  Button,
   Checkbox,
   FormControl,
   FormControlLabel,
@@ -9,7 +10,7 @@ import {
   TextField,
 } from "@mui/material";
 import { DistrictOptionsType, SubscriptionForm } from "../../../API/TYPES";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 
 interface FormErrors {
   [key: string]: boolean;
@@ -48,6 +49,15 @@ const CountryAutocomplete = ({
     setValue(newValue);
   };
 
+  const handleSelectAll = () => {
+    const districtIds = districtList.map((item) => Number(item.districtId));
+    setSelectedRow((prevState) => ({
+      ...prevState,
+      districtIds: districtIds,
+    }));
+    setValue(districtList);
+  };
+
   return (
     <FormControl
       required
@@ -57,6 +67,24 @@ const CountryAutocomplete = ({
     >
       <Box display="flex" sx={{ alignItems: "center" }}>
         <FormLabel className="subs-form-legend">Districts</FormLabel>
+        {selectedRow.countryIds.length === 0 ? (
+          <></>
+        ) : (
+          <Button
+            variant="text"
+            size="small"
+            onClick={handleSelectAll}
+            sx={{
+              ml: 1.5,
+              p: 0,
+              color: "gray",
+              textTransform: "capitalize",
+              "&:hover": { backgroundColor: "#F8F8F8" },
+            }}
+          >
+            select all
+          </Button>
+        )}
       </Box>
       <Autocomplete
         multiple
