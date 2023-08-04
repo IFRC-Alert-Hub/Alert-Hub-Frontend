@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
-import { Region } from "./types";
 import { convertCoordinates } from "./helperFunctions";
+import { Country, CountryRegionData } from "./types";
 
 type ResponseRegionType = {
   id: number;
@@ -26,7 +26,7 @@ interface ResponseType {
 }
 
 export const useLevel1Data = () => {
-  const [regions, setRegions] = useState<any[]>([]);
+  const [data, setData] = useState<CountryRegionData[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -91,7 +91,7 @@ export const useLevel1Data = () => {
           return region;
         });
 
-        setRegions(updatedRegions);
+        setData(updatedRegions);
 
         console.log(updatedRegions);
         setLoading(false);
@@ -104,11 +104,11 @@ export const useLevel1Data = () => {
     fetchData();
   }, []);
 
-  return { regions, loading, error };
+  return { data, loading, error };
 };
 
 const Level1: React.FC = () => {
-  const { regions, loading, error } = useLevel1Data();
+  const { data, loading, error } = useLevel1Data();
 
   return (
     <div>
@@ -117,11 +117,11 @@ const Level1: React.FC = () => {
 
       {!loading && !error && (
         <ul>
-          {regions.map((region: Region) => (
+          {data.map((region: CountryRegionData) => (
             <li key={region.id}>
               {region.name}
               <ul>
-                {region.countries?.map((country: any) => (
+                {region.countries?.map((country: Country) => (
                   <li key={country.id}>{country.name}</li>
                 ))}
               </ul>

@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
+import { Admin1_Alert_Data } from "./types";
 
 type ResponseAlertType = {
   id: number;
@@ -56,7 +57,7 @@ interface ResponseType {
 }
 
 export const useLevel2Data = ({ admin1_ID }: { admin1_ID: number }) => {
-  const [data, setData] = useState<any>();
+  const [data, setData] = useState<Admin1_Alert_Data>();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -74,7 +75,7 @@ export const useLevel2Data = ({ admin1_ID }: { admin1_ID: number }) => {
         } else {
           throw new Error("Alerts is empty");
         }
-        setData(response.data);
+        setData(response.data as any);
         console.log(response.data);
 
         setLoading(false);
@@ -99,7 +100,7 @@ const Level3: React.FC = () => {
       {error && <p>{error}</p>}
       {!loading && !error && (
         <ul>
-          <li key={data.admin1_id}>
+          <li key={data?.admin1_id}>
             {data?.admin1_name}
             <ul>
               {data?.alerts?.map((alert: any) => (

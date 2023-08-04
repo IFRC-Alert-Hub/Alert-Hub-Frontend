@@ -129,8 +129,8 @@ const MapComponent: React.FC<MapProps> = ({
   };
 
   useEffect(() => {
-    setPolygonClicked(false)
-  }, [value])
+    setPolygonClicked(false);
+  }, [value]);
   const handleClose = () => {
     setPolygonClicked(false);
     mapContainerRef.current!.style.width = "100%";

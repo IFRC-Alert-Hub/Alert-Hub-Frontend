@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { convertCoordinates } from "./helperFunctions";
+import { AlertInfoArea } from "./types";
 
 type ResponseAreaType = {
   id: number;
@@ -36,7 +37,7 @@ interface ResponseType {
 }
 
 export const useLevel2Data = ({ info_ID }: { info_ID: number }) => {
-  const [data, setData] = useState<any>();
+  const [data, setData] = useState<AlertInfoArea>();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
