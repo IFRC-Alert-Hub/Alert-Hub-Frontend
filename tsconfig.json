@@ -17,9 +17,9 @@
     "jsx": "react-jsx",
     "types": ["node", "mapbox-gl", "@mui/x-date-pickers"]
   },
-  "include": ["src"],
-  "exclude": [
-    "/src/components/MapComponent/TestMapComponentPopup",
-    "/src/components/MapComponent/TestMapComponentPopup2"
-  ]
+  "include": ["src"]
+  // "exclude": [
+  //   "/src/components/MapComponent/TestMapComponentPopup",
+  //   "/src/components/MapComponent/TestMapComponentPopup2"
+  // ]
 }
