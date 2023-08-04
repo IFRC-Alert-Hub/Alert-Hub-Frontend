@@ -5,7 +5,7 @@ import Box from "@mui/material/Box";
 import { Grid } from "@mui/material";
 import { AlertInfoText } from "./AlertInfoText";
 import { Card } from "@mui/material";
-import AreaHorizontalTab from "./AreaHorizontalTabs";
+import SingleAreaView from "./SingleAreaView";
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -46,7 +46,6 @@ export default function DynamicTabs({ infoSets }: any) {
     <Box>
       <Box
         display="flex"
-        justifyContent="center"
         width="100%"
         sx={{ borderBottom: 1, borderColor: "divider" }}
       >
@@ -121,7 +120,7 @@ export default function DynamicTabs({ infoSets }: any) {
                 <Grid item xs={12} sm={12} md={6}>
                   <Card>
                     {" "}
-                    <AreaHorizontalTab />
+                    <SingleAreaView />
                   </Card>
                 </Grid>
               </Grid>
