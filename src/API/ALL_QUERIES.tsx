@@ -100,6 +100,7 @@ export const GET_SUBSCRIPTIONS = gql`
     listAllSubscription {
       certaintyArray
       countryIds
+      districtIds
       id
       severityArray
       subscribeBy

@@ -35,7 +35,9 @@ const CollapsibleRow = ({
   const navigate = useNavigate();
 
   const handleViewAlerts = () => {
-    navigate(`/account/subscription/${row.subscriptionName}`);
+    navigate(
+      `/account/subscription/${row.subscriptionName}?country=${row.countryNames[0]}`
+    );
   };
 
   return (
@@ -57,6 +59,7 @@ const CollapsibleRow = ({
               whiteSpace: "nowrap",
               overflow: "hidden",
               textOverflow: "ellipsis",
+              textTransform: "capitalize",
             }}
           >
             {row.subscriptionName}
@@ -83,7 +86,7 @@ const CollapsibleRow = ({
               textOverflow: "ellipsis",
             }}
           >
-            {row.countryNames?.join(", ")}
+            {row.districtNames.join(", ")}
           </Box>
         </TableCell>
         <TableCell align="left" sx={{ fontSize: "0.875rem" }}>
@@ -163,6 +166,7 @@ const CollapsibleRow = ({
                 id: row.id,
                 subscriptionName: row.subscriptionName,
                 countryIds: row.countryIds,
+                districtIds: row.districtIds,
                 urgencyArray: row.urgencyArray,
                 severityArray: row.severityArray,
                 certaintyArray: row.certaintyArray,
@@ -232,8 +236,17 @@ const CollapsibleRow = ({
                 component="div"
                 sx={{ fontWeight: 400 }}
               >
+                <span style={{ color: "gray" }}>Subscribed Country:</span>{" "}
+                {row.countryNames[0]}
+              </Typography>
+              <Typography
+                variant="h6"
+                gutterBottom
+                component="div"
+                sx={{ fontWeight: 400 }}
+              >
                 <span style={{ color: "gray" }}>Subscribed Districts:</span>{" "}
-                {row.countryNames.join(", ")}
+                {row.districtNames.join(", ")}
               </Typography>
               <Typography
                 variant="h6"
