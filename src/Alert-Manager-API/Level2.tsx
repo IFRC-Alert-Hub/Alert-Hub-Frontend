@@ -11,7 +11,7 @@ type ResponseAdmin1Type = {
 interface ResponseType {
   data: {
     country_id: number;
-    country_name: string;
+    country_name?: string;
     admin1s?: ResponseAdmin1Type[];
   };
 }

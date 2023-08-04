@@ -24,6 +24,7 @@ import SubscriptionAlerts from "./scenes/SubscriptionAlerts";
 import TestMapComponentPopup2 from "./components/MapComponent/TestMapComponentPopup2/TestMapComponentPopup2";
 import Level1 from "./Alert-Manager-API/Level1";
 import Level2 from "./Alert-Manager-API/Level2";
+import Level3 from "./Alert-Manager-API/Level3";
 
 function App() {
   // useEffect(() => {
@@ -75,6 +76,7 @@ function App() {
                 <Route path="/map-test2" element={<TestMapComponentPopup2 />} />
                 <Route path="/level-1" element={<Level1 />} />
                 <Route path="/level-2" element={<Level2 />} />
+                <Route path="/level-3" element={<Level3 />} />
 
                 <Route path="/404" element={<PageNotFound />} />
 
