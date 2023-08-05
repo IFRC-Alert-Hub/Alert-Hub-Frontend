@@ -186,14 +186,14 @@ const Region = () => {
                   {region.name}
                 </Typography>
               </Box>
-              <MapComponentWithFilter
+              {/* <MapComponentWithFilter
                 data={data_alerts}
                 loading={loading_alerts}
                 error={error_alerts}
                 boundingRegionCoordinates={region.bbox}
                 filterKey="region"
                 selectedFilter={region.name}
-              />
+              /> */}
             </Container>
           </>
         )}

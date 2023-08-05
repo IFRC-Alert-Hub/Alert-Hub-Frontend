@@ -1,5 +1,5 @@
 // Level 1
-type Bbox = {
+export type Bbox = {
   type: string;
   coordinates: number[][][];
 };
@@ -17,6 +17,7 @@ export type Country = {
   iso3: string;
   coordinates: any[];
   type: string;
+  centroid: any[];
 };
 
 // Level 2

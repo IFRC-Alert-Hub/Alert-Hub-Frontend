@@ -61,7 +61,7 @@ function App() {
                 <Route path="/login" element={<Login />} />
                 <Route path="/register" element={<Register />} />
                 <Route path="/forget-password" element={<ForgotPassword />} />
-                <Route path="/regions/:id" element={<Region />} />
+                {/* <Route path="/regions/:id" element={<Region />} /> */}
                 <Route path="/alerts/all" element={<AllAlerts />} />
                 <Route path="/alerts/:id" element={<AlertInfo />} />
                 <Route path="/account/" element={<PrivateRoutes />}>

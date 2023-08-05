@@ -36,7 +36,7 @@ interface ResponseType {
   };
 }
 
-export const useLevel2Data = ({ info_ID }: { info_ID: number }) => {
+export const useLevel4Data = ({ info_ID }: { info_ID: number }) => {
   const [data, setData] = useState<AlertInfoArea>();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -82,7 +82,7 @@ export const useLevel2Data = ({ info_ID }: { info_ID: number }) => {
 };
 
 const Level4: React.FC = () => {
-  const { data, loading, error } = useLevel2Data({ info_ID: 456 });
+  const { data, loading, error } = useLevel4Data({ info_ID: 456 });
   return (
     <div>
       {loading && <p>Loading...</p>}

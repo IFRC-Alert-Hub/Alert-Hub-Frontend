@@ -1,18 +1,13 @@
 import { Box, Container, Grid, Typography } from "@mui/material";
 import { useIntl } from "react-intl";
-import { useQuery } from "@apollo/client";
 
-import { cap_aggregator } from "../../API/API_Links";
 import MapComponentWithFilter from "../../components/MapComponent/MapComponentWithFilter";
-import { ALL_ALERTS } from "../../API/ALL_QUERIES";
 import HomeCards from "../../components/Card/HomeCards";
+import { useLevel1Data } from "../../Alert-Manager-API/Level1";
 
 const Home = () => {
   const { formatMessage } = useIntl();
-  const { loading, error, data } = useQuery(ALL_ALERTS, {
-    client: cap_aggregator,
-    fetchPolicy: "no-cache",
-  });
+  const { data, loading, error } = useLevel1Data();
 
   return (
     <Container maxWidth="lg">

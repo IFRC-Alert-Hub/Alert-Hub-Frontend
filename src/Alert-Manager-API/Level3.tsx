@@ -56,12 +56,11 @@ interface ResponseType {
   };
 }
 
-export const useLevel2Data = ({ admin1_ID }: { admin1_ID: number }) => {
+export const useLevel3Data = () => {
   const [data, setData] = useState<Admin1_Alert_Data>();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-
-  useEffect(() => {
+  const refetch = async (admin1_ID: number) => {
     const fetchData = async () => {
       try {
         const response: ResponseType = await axios.get(
@@ -85,15 +84,14 @@ export const useLevel2Data = ({ admin1_ID }: { admin1_ID: number }) => {
         setLoading(false);
       }
     };
-
     fetchData();
-  }, [admin1_ID]);
+  };
 
-  return { data, loading, error };
+  return { data, loading, error, refetch };
 };
 
 const Level3: React.FC = () => {
-  const { data, loading, error } = useLevel2Data({ admin1_ID: 99 });
+  const { data, loading, error } = useLevel3Data();
   return (
     <div>
       {loading && <p>Loading...</p>}

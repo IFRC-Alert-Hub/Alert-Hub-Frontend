@@ -27,7 +27,7 @@ interface ResponseType {
 
 export const useLevel1Data = () => {
   const [data, setData] = useState<CountryRegionData[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
@@ -44,7 +44,6 @@ export const useLevel1Data = () => {
         if (!response.data.regions || response.data.regions.length === 0) {
           throw new Error("Data is empty or invalid.");
         }
-
         const updatedRegions = response.data.regions.map((region: any) => {
           try {
             region.centroid = JSON.parse(region?.centroid);
@@ -68,7 +67,7 @@ export const useLevel1Data = () => {
             region.countries = region.countries.map((country: any) => {
               try {
                 country.centroid = JSON.parse(country?.centroid);
-                if (country.polygon === "") {
+                if (country.polygon === null) {
                   country.type = "MultiPolygon";
                   country.coordinates = JSON.parse(country.multipolygon);
                   delete country.polygon;
@@ -90,13 +89,10 @@ export const useLevel1Data = () => {
 
           return region;
         });
-
-        setData(updatedRegions);
-
         console.log(updatedRegions);
+        setData(updatedRegions);
         setLoading(false);
       } catch (error: any) {
-        console.error("Error fetching data:", error.message);
         setError(error.message);
         setLoading(false);
       }

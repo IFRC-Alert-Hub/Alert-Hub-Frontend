@@ -17,23 +17,31 @@ interface ResponseType {
   };
 }
 
-export const useLevel2Data = ({ countryID }: { countryID: number }) => {
+export const useLevel2Data = () => {
   const [data, setData] = useState<Country_Admin1s_Data>();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
+  const refetch = async (countryID: number) => {
+    setLoading(true);
+    setError(null);
     const fetchData = async () => {
       try {
+        if (countryID === null) {
+          throw new Error("Country ID is not provided.");
+        }
         const response: ResponseType = await axios.get(
-          `https://alert-manager.azurewebsites.net/countries/${countryID}`
+          `https://alert-manager.azurewebsites.net/countries/${countryID}/`
         );
 
         if (!response.data || Object.keys(response.data).length === 0) {
           throw new Error("Data is empty or invalid.");
         }
-        if (response.data.admin1s && response.data.admin1s.length > 0) {
-          response.data.admin1s = response.data.admin1s.map((admin1: any) => {
+
+        let modifiedData: any = { ...response.data };
+
+        if (modifiedData.admin1s && modifiedData.admin1s.length > 0) {
+          modifiedData.admin1s = modifiedData.admin1s.map((admin1: any) => {
             if (admin1.polygon === null) {
               admin1.type = "MultiPolygon";
               admin1.coordinates = JSON.parse(admin1.multipolygon);
@@ -51,25 +59,22 @@ export const useLevel2Data = ({ countryID }: { countryID: number }) => {
         } else {
           throw new Error("admin1 is empty");
         }
-        setData(response.data as any);
-        console.log(response.data);
-
+        setData(modifiedData as any);
         setLoading(false);
       } catch (error: any) {
-        console.error("Error fetching data:", error.message);
+        console.log(error.message);
         setError(error.message);
         setLoading(false);
       }
     };
-
     fetchData();
-  }, [countryID]);
+  };
 
-  return { data, loading, error };
+  return { data, loading, error, refetch };
 };
 
 const Level2: React.FC = () => {
-  const { data, loading, error } = useLevel2Data({ countryID: 161 });
+  const { data, loading, error } = useLevel2Data();
   return (
     <div>
       {loading && <p>Loading...</p>}
