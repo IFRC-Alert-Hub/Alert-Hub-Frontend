@@ -27,6 +27,7 @@ import {
   Country_Admin1s_Data,
 } from "../../Alert-Manager-API/types";
 import { useLevel2Data } from "../../Alert-Manager-API/Level2";
+import { useLevel3Data } from "../../Alert-Manager-API/Level3";
 
 export const ExtremeThreatColour: string = "#f5333f";
 export const ModerateThreatColour: string = "#ff9e00";
@@ -140,10 +141,10 @@ const MapComponent: React.FC<MapProps> = ({
       const layerId = countryIDs![1];
 
       admin1Data?.admin1s.forEach((admin1, index) => {
-        const districtSourceID = `${sourceId}-district-${admin1.id}`;
-        const districtLayerID = `${layerId}-district-${admin1.id}`;
-        if (!mapRef.current?.getSource(districtSourceID)) {
-          mapRef.current?.addSource(districtSourceID, {
+        const admin1SourceID = `${sourceId}-admin1-${admin1.id}`;
+        const admin1LayerID = `${layerId}-admin1-${admin1.id}`;
+        if (!mapRef.current?.getSource(admin1SourceID)) {
+          mapRef.current?.addSource(admin1SourceID, {
             type: "geojson",
             data: {
               type: "Feature",
@@ -155,18 +156,18 @@ const MapComponent: React.FC<MapProps> = ({
             },
           });
           mapRef.current?.addLayer({
-            id: `${districtLayerID}-border`,
+            id: `${admin1LayerID}-border`,
             type: "line",
-            source: districtSourceID,
+            source: admin1SourceID,
             paint: {
               "line-color": "black",
               "line-width": 1.3,
             },
           });
           mapRef.current?.addLayer({
-            id: `${districtLayerID}`,
+            id: `${admin1LayerID}`,
             type: "fill",
-            source: districtSourceID,
+            source: admin1SourceID,
             paint: {
               "fill-color": "#000000",
               "fill-opacity": 0.8,
@@ -174,9 +175,9 @@ const MapComponent: React.FC<MapProps> = ({
           });
 
           mapRef.current?.addLayer({
-            id: `${districtLayerID}-text`,
+            id: `${admin1LayerID}-text`,
             type: "symbol",
-            source: districtSourceID,
+            source: admin1SourceID,
             layout: {
               "text-field": `${index}`,
               "text-font": ["Open Sans Bold"],
@@ -189,6 +190,14 @@ const MapComponent: React.FC<MapProps> = ({
               "text-color": "#000000",
             },
           });
+
+          mapRef.current?.on(
+            "click",
+            admin1LayerID,
+            (e: mapboxgl.MapMouseEvent & mapboxgl.EventData) => {
+              console.log(admin1.id);
+            }
+          );
         }
       });
     }
@@ -284,6 +293,8 @@ const MapComponent: React.FC<MapProps> = ({
                 },
               });
 
+              console.log(mapRef.current?.getStyle().layers);
+
               const [minX, minY, maxX, maxY] = polygonBoundingBox;
               const mapBoundingBox = mapRef.current!.getBounds();
               mapRef.current?.setCenter([0, 0]);
@@ -366,25 +377,25 @@ const MapComponent: React.FC<MapProps> = ({
 
     const sourceId = countryIDs![0];
     const layerId = countryIDs![1];
-
+    console.log(mapRef.current?.getStyle().layers);
     admin1Data?.admin1s.forEach((admin1, index) => {
-      const districtLayerId = `${layerId}-district-${admin1.id}`;
-      const districtSourceId = `${sourceId}-district-${admin1.id}`;
-      const districtBorderLayerId = `${districtLayerId}-border`;
-      const districtTextLayerId = `${districtLayerId}-text`;
-      mapRef.current?.getLayer(districtBorderLayerId) &&
-        mapRef.current?.removeLayer(districtBorderLayerId);
-      mapRef.current?.getLayer(districtTextLayerId) &&
-        mapRef.current?.removeLayer(districtTextLayerId);
-      mapRef.current?.getLayer(districtLayerId) &&
-        mapRef.current?.removeLayer(districtLayerId);
-      mapRef.current?.getSource(districtSourceId) &&
-        mapRef.current?.removeSource(districtSourceId);
+      const admin1LayerId = `${layerId}-admin1-${admin1.id}`;
+      const admin1SourceId = `${sourceId}-admin1-${admin1.id}`;
+      const admin1BorderLayerId = `${admin1LayerId}-border`;
+      const admin1TextLayerId = `${admin1LayerId}-text`;
+      mapRef.current?.getLayer(admin1BorderLayerId) &&
+        mapRef.current?.removeLayer(admin1BorderLayerId);
+      mapRef.current?.getLayer(admin1TextLayerId) &&
+        mapRef.current?.removeLayer(admin1TextLayerId);
+      mapRef.current?.getLayer(admin1LayerId) &&
+        mapRef.current?.removeLayer(admin1LayerId);
+      mapRef.current?.getSource(admin1SourceId) &&
+        mapRef.current?.removeSource(admin1SourceId);
     });
 
     mapRef.current?.setCenter([0, 0]);
     mapRef.current?.setZoom(1);
-    mapRef.current?.resize();
+    console.log(mapRef.current?.getStyle().layers);
   };
 
   return (

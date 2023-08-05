@@ -61,6 +61,8 @@ export const useLevel3Data = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const refetch = async (admin1_ID: number) => {
+    setLoading(true);
+    setError(null);
     const fetchData = async () => {
       try {
         const response: ResponseType = await axios.get(
