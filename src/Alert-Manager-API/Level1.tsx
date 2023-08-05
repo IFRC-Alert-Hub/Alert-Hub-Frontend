@@ -89,7 +89,6 @@ export const useLevel1Data = () => {
 
           return region;
         });
-        console.log(updatedRegions);
         setData(updatedRegions);
         setLoading(false);
       } catch (error: any) {

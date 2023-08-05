@@ -77,7 +77,6 @@ export const useLevel3Data = () => {
           throw new Error("Alerts is empty");
         }
         setData(response.data as any);
-        console.log(response.data);
 
         setLoading(false);
       } catch (error: any) {

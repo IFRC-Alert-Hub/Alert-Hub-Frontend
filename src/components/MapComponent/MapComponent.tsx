@@ -135,8 +135,35 @@ const MapComponent: React.FC<MapProps> = ({
     refetch: refetchAdmin1,
   } = useLevel2Data();
 
+  const {
+    data: alertData,
+    loading: alertLoading,
+    error: alertError,
+    refetch: refetchAlertData,
+  } = useLevel3Data();
+
+  const latestRefetchAlertData = useRef<number | null>(null);
+
   useEffect(() => {
-    if (!admin1Error && !admin1Loading && countryIDs) {
+    if (!mapRef.current || !mapRef.current.loaded()) return;
+
+    console.log(alertLoading);
+    console.log(alertError);
+
+    if (!alertLoading && !alertError) {
+      console.log("AlertData: ", alertData);
+    }
+  }, [alertData, alertError, alertLoading, mapRef]);
+
+  useEffect(() => {
+    if (
+      !mapRef.current ||
+      !mapRef.current.loaded() ||
+      admin1Error ||
+      admin1Loading
+    )
+      return;
+    if (countryIDs) {
       const sourceId = countryIDs![0];
       const layerId = countryIDs![1];
 
@@ -195,13 +222,28 @@ const MapComponent: React.FC<MapProps> = ({
             "click",
             admin1LayerID,
             (e: mapboxgl.MapMouseEvent & mapboxgl.EventData) => {
-              console.log(admin1.id);
+              if (latestRefetchAlertData.current === null) {
+                latestRefetchAlertData.current = admin1.id;
+                refetchAlertData(admin1.id);
+              }
+
+              if (latestRefetchAlertData.current !== admin1.id) {
+                latestRefetchAlertData.current = admin1.id;
+                refetchAlertData(admin1.id);
+              }
             }
           );
         }
       });
     }
-  }, [admin1Error, admin1Loading, admin1Data, countryIDs, mapRef]);
+  }, [
+    admin1Error,
+    admin1Loading,
+    admin1Data,
+    refetchAlertData,
+    mapRef,
+    countryIDs,
+  ]);
 
   useEffect(() => {
     setCountryRegionDataLoading(true);
@@ -232,9 +274,10 @@ const MapComponent: React.FC<MapProps> = ({
       !mapRef.current ||
       !countryRegionDataLoading ||
       CountryRegionData.length === 0 ||
-      !mapRef.current?.loaded()
+      !mapRef.current.loaded()
     )
       return;
+
     if (!loading && !error) {
       CountryRegionData.forEach((region: CountryRegionData, index: number) => {
         region.countries?.forEach((country: Country, index: number) => {
@@ -396,6 +439,7 @@ const MapComponent: React.FC<MapProps> = ({
     mapRef.current?.setCenter([0, 0]);
     mapRef.current?.setZoom(1);
     console.log(mapRef.current?.getStyle().layers);
+    setCountryIDs(null);
   };
 
   return (
