@@ -96,9 +96,9 @@ const AreaHorizontalTab = () => {
                 )}
                 {info.title === "Area Circle" && (
                   <AlertInfoMap
-                    areaPolygon={{
-                      geometryType: "Polygon",
-                      coordinates: coordinatesArray2,
+                    areaCircle={{
+                      coordinates: [-5.380571851623813, 38.61525108318435],
+                      radius: 100,
                     }}
                   />
                 )}
