@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import axios from "axios";
 import { Country_Admin1s_Data, admin1 } from "./types";
 
@@ -30,12 +30,19 @@ export const useLevel2Data = () => {
         if (countryID === null) {
           throw new Error("Country ID is not provided.");
         }
+
         const response: ResponseType = await axios.get(
-          `https://alert-manager.azurewebsites.net/countries/${countryID}/`
+          `https://dl.dropboxusercontent.com/scl/fi/51o4u4nukvauqu98x2hcd/countries.json?rlkey=r1ekrn2nquvrcaxeha1pih5ta&dl=0`
         );
 
         if (!response.data || Object.keys(response.data).length === 0) {
           throw new Error("Data is empty or invalid.");
+        }
+        if (
+          response.data.country_id &&
+          response.data.country_id !== countryID
+        ) {
+          throw new Error("ID does not exist");
         }
 
         let modifiedData: any = { ...response.data };

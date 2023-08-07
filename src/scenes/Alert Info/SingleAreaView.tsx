@@ -7,11 +7,9 @@ import AlertInfoMap from "./AlertInfoMap";
 
 const infoSets = [
   {
-    title: "Area Polygon",
+    title: "Area Polygon & Circle",
   },
-  {
-    title: "Area Circle",
-  },
+
   {
     title: "Area Geocode",
   },
@@ -26,13 +24,9 @@ const coordinatesArray = coordinatesString.split(" ").map((pair) => {
   const [longitude, latitude] = pair.split(",").map(Number);
   return [longitude, latitude];
 });
-const coordinatesArray2 = coordinatesString2.split(" ").map((pair) => {
-  const [longitude, latitude] = pair.split(",").map(Number);
-  return [longitude, latitude];
-});
 
 const AreaHorizontalTab = () => {
-  const [selectedButton, setSelectedButton] = useState("Area Polygon"); // Initialize to null
+  const [selectedButton, setSelectedButton] = useState("Area Polygon & Circle"); // Initialize to null
 
   const handleButtonClick = (title: string) => {
     setSelectedButton(title);
@@ -86,7 +80,7 @@ const AreaHorizontalTab = () => {
           >
             {selectedButton === info.title && (
               <>
-                {info.title === "Area Polygon" && (
+                {info.title === "Area Polygon & Circle" && (
                   <AlertInfoMap
                     areaPolygon={{
                       geometryType: "Polygon",

@@ -66,12 +66,17 @@ export const useLevel3Data = () => {
     const fetchData = async () => {
       try {
         const response: ResponseType = await axios.get(
-          `https://alert-manager.azurewebsites.net/admin1s/${admin1_ID}`
+          `https://dl.dropboxusercontent.com/scl/fi/q8h87fbcr1t1unu2qoi4t/admin1s.json?rlkey=bfh45i0qw3s7a4he81j5awk1e&dl=0`
         );
 
         if (!response.data || Object.keys(response.data).length === 0) {
           throw new Error("Data is empty or invalid.");
         }
+
+        if (response.data.admin1_id && response.data.admin1_id !== admin1_ID) {
+          throw new Error("ID does not exist");
+        }
+
         if (response.data.alerts && response.data.alerts.length > 0) {
         } else {
           throw new Error("Alerts is empty");

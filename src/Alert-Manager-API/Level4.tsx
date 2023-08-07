@@ -45,11 +45,15 @@ export const useLevel4Data = ({ info_ID }: { info_ID: number }) => {
     const fetchData = async () => {
       try {
         const response: ResponseType = await axios.get(
-          `https://alert-manager.azurewebsites.net/infos/${info_ID}/`
+          `https://dl.dropboxusercontent.com/scl/fi/tifx0x4hgxqeou5v6gyfr/infos.json?dl=0&rlkey=f8ug3fjzznjwse7ucprleig7c`
         );
 
         if (!response.data || Object.keys(response.data).length === 0) {
           throw new Error("Data is empty or invalid.");
+        }
+
+        if (response.data.info_id && response.data.info_id !== info_ID) {
+          throw new Error("ID does not exist");
         }
         if (response.data.areas && response.data.areas.length > 0) {
           response.data.areas = response.data.areas.map((area: any) => {

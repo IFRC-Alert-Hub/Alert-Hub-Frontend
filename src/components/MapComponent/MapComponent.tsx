@@ -149,16 +149,19 @@ const MapComponent: React.FC<MapProps> = ({
   useEffect(() => {
     if (
       !mapRef.current ||
-      !mapRef.current.loaded() ||
+      //!mapRef.current.loaded() ||
       admin1Error ||
       admin1Loading
     )
       return;
-    if (countryIDs) {
+
+    console.log("admin1Data", admin1Data);
+    console.log(countryIDs);
+    const loadAdmin1Data = () => {
       const sourceId = countryIDs![0];
       const layerId = countryIDs![1];
-
       admin1Data?.admin1s.forEach((admin1, index) => {
+        console.log(admin1);
         const admin1SourceID = `${sourceId}-admin1-${admin1.id}`;
         const admin1LayerID = `${layerId}-admin1-${admin1.id}`;
         if (!mapRef.current?.getSource(admin1SourceID)) {
@@ -216,31 +219,36 @@ const MapComponent: React.FC<MapProps> = ({
               if (latestRefetchAlertData.current === null) {
                 latestRefetchAlertData.current = admin1.id;
                 refetchAlertData(admin1.id);
-                setAdmin1Clicked(true);
-                mapContainerRef.current!.style.width = "35%";
-                mapRef.current!.resize();
               }
 
               if (latestRefetchAlertData.current !== admin1.id) {
                 latestRefetchAlertData.current = admin1.id;
                 refetchAlertData(admin1.id);
-                setAdmin1Clicked(true);
-                mapContainerRef.current!.style.width = "35%";
-                mapRef.current!.resize();
               }
+
+              setAdmin1Clicked(true);
+              mapContainerRef.current!.style.width = "35%";
+              mapRef.current!.resize();
             }
           );
         }
       });
+    };
+    if (countryIDs && admin1Data) {
+      console.log("INSIDE 1");
+
+      loadAdmin1Data();
     }
   }, [
+    admin1Data,
     admin1Error,
     admin1Loading,
-    admin1Data,
-    refetchAlertData,
-    mapRef,
     countryIDs,
     mapContainerRef,
+    mapRef,
+    refetchAdmin1,
+    refetchAlertData,
+    countrySelected,
   ]);
 
   useEffect(() => {
@@ -271,12 +279,11 @@ const MapComponent: React.FC<MapProps> = ({
     if (
       !mapRef.current ||
       !countryRegionDataLoading ||
-      CountryRegionData.length === 0 ||
-      !mapRef.current.loaded()
+      CountryRegionData.length === 0
+      //|| !mapRef.current.loaded()
     )
       return;
-
-    if (!loading && !error) {
+    const loadCountryRegionData = () => {
       CountryRegionData.forEach((region: CountryRegionData, index: number) => {
         region.countries?.forEach((country: Country, index: number) => {
           const sourceId = `country-source-${country.id}`;
@@ -380,13 +387,22 @@ const MapComponent: React.FC<MapProps> = ({
                   );
                 }
               );
-
+              console.log("COUNTRY ID: ", country.id);
               refetchAdmin1(country.id);
             }
           );
         });
       });
       setCountryRegionDataLoading(false);
+    };
+    if (!loading && !error) {
+      if (mapRef.current.loaded()) {
+        loadCountryRegionData();
+      } else {
+        mapRef.current.on("load", () => {
+          loadCountryRegionData();
+        });
+      }
     }
   }, [
     CountryRegionData,
@@ -401,6 +417,8 @@ const MapComponent: React.FC<MapProps> = ({
     countryIDs,
   ]);
   const countryControlChange = () => {
+    handleClose();
+
     setCountrySelected(false);
     CountryRegionData.forEach((region: CountryRegionData, index: number) => {
       region.countries?.forEach((country: Country, index: number) => {
@@ -455,7 +473,7 @@ const MapComponent: React.FC<MapProps> = ({
   return (
     <>
       <Container maxWidth="lg">
-        {error || admin1Error ? (
+        {error || admin1Error || alertError ? (
           <h1>Error</h1>
         ) : (
           <>
