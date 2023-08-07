@@ -42,7 +42,7 @@ export type Admin1_Alert_Data = {
   alerts: Alert[];
 };
 
-type Alert = {
+export type Alert = {
   id: number;
   url: string;
   identifier: string;
@@ -60,7 +60,7 @@ type Alert = {
   info: AlertInfo[];
 };
 
-type AlertInfo = {
+export type AlertInfo = {
   id: number;
   language: string;
   category: string;

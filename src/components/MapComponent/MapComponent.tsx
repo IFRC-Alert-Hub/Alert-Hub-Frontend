@@ -17,7 +17,7 @@ import {
   Typography,
 } from "@mui/material";
 import SourcesTableComponent from "../SourceTableComponent/SourceTableComponent";
-import { PopupComponent } from "./PopupComponent/PopupComponent_new";
+import { PopupComponent } from "./PopupComponent/PopupComponent";
 import Progress from "../Layout/Progress";
 import turfBbox from "@turf/bbox";
 import {
@@ -32,70 +32,7 @@ import { useLevel3Data } from "../../Alert-Manager-API/Level3";
 export const ExtremeThreatColour: string = "#f5333f";
 export const ModerateThreatColour: string = "#ff9e00";
 export const OtherAlertsColour: string = "#95BF6E";
-type Region = {
-  centroid: string;
-  id: string;
-  name: string;
-  polygon: string;
-};
 
-export type SourceFeed = {
-  url?: string;
-  id?: string;
-};
-type CountryType = {
-  centroid?: string;
-  id?: string;
-  iso3?: string;
-  name?: string;
-  polygon?: string;
-  multipolygon?: string;
-  region?: Region[];
-  type?: string;
-  countryPolygon?: number[][];
-};
-
-export type AlertInfoSet = {
-  web?: string;
-  urgency?: string;
-  audience?: string;
-  category?: string;
-  certainty?: string;
-  contact?: string;
-  effective?: string;
-  event?: string;
-  eventCode?: string;
-  headline?: string;
-  expires?: string;
-  instruction?: string;
-  language?: string;
-  onset?: string;
-  responseType?: string;
-  senderName?: string;
-  severity?: string;
-  id?: string;
-  description?: string;
-};
-export type AlertData = {
-  status?: string;
-  source?: string;
-  sent?: string;
-  sender?: string;
-  references?: string;
-  scope?: string;
-  restriction?: string;
-  note?: string;
-  msgType?: string;
-  incidents?: string;
-  identifier?: string;
-  code?: string;
-  addresses?: string;
-  id?: string;
-  url?: string;
-  country?: CountryType;
-  alertinfoSet?: AlertInfoSet[];
-  feed?: SourceFeed;
-};
 type MapProps = {
   lng?: number;
   lat?: number;
@@ -208,7 +145,7 @@ const MapComponent: React.FC<MapProps> = ({
               "text-offset": [0, 0],
             },
             paint: {
-              "text-color": "#000000",
+              "text-color": "#ffffff",
             },
           });
 
@@ -571,11 +508,10 @@ const MapComponent: React.FC<MapProps> = ({
                   <Box
                     sx={{
                       width: "65%",
-                      backgroundColor: "lightgray",
                       position: "relative",
                       transform: `translateX(${admin1Clicked ? "0%" : "100%"})`,
                       transition: "transform 0.3s ease-in-out",
-                      zIndex: 2, // Make sure the popup component is above the map container
+                      zIndex: 2,
                     }}
                   >
                     <PopupComponent

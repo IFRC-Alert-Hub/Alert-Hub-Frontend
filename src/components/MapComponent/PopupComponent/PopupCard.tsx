@@ -1,8 +1,8 @@
 import { Box, Card, CardContent, Typography } from "@mui/material";
 import React, { ReactNode } from "react";
-import { AlertData } from "../MapComponent";
+import { Alert } from "../../../Alert-Manager-API/types";
 type PopupCardProps = {
-  alerts?: AlertData[];
+  alerts?: Alert[];
   iconComponent?: ReactNode;
   iconText?: string;
   rightText?: String;

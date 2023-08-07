@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import mapboxgl, { LngLatBoundsLike } from "mapbox-gl";
 import { Container, Box, Button } from "@mui/material";
 import turfBbox from "@turf/bbox";
-import { PopupComponent } from "../PopupComponent/PopupComponent_new";
+import { PopupComponent } from "../PopupComponent/PopupComponent";
 import { IndiaPolygonCoordinates } from "./India";
 import { UttarPradesh } from "./UttarPradesh";
 

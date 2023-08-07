@@ -3,17 +3,11 @@ import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
-import { AlertData } from "../MapComponent";
-import { Button, Grid, Pagination, PaginationItem } from "@mui/material";
-import { PopupHeader } from "./PopupHeader";
-import AttachFileIcon from "@mui/icons-material/AttachFile";
-import { PopupCard } from "./PopupCard";
-import EmailIcon from "@mui/icons-material/Email";
-import DateRangeIcon from "@mui/icons-material/DateRange";
-import { PopupContentText } from "./PopupContentText";
-import DynamicTabs from "./PopupHorizontalTab";
+
 import { Admin1_Alert_Data } from "../../../Alert-Manager-API/types";
 import DisabledByDefaultIcon from "@mui/icons-material/DisabledByDefault";
+import PopupTabPanel from "./PopupTabPanel";
+import { Pagination, PaginationItem } from "@mui/material";
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -21,17 +15,7 @@ interface TabPanelProps {
   value: number;
 }
 
-function modifyDateTime(timestamp: string) {
-  if (timestamp === "") {
-    return "";
-  }
-
-  const date = new Date(timestamp);
-  const formattedDateTime = date.toLocaleString("en-US", { timeZone: "UTC" });
-  return formattedDateTime;
-}
-
-function TabPanel(props: TabPanelProps) {
+const TabPanel = (props: TabPanelProps) => {
   const { children, value, index, ...other } = props;
 
   return (
@@ -49,7 +33,7 @@ function TabPanel(props: TabPanelProps) {
       )}
     </div>
   );
-}
+};
 
 function a11yProps(index: number) {
   return {
@@ -107,8 +91,16 @@ export const PopupComponent: React.FC<PopupComponentProps> = ({
   return (
     <>
       {" "}
+      {loading && <h1>Loading</h1>}
+      {error && <h1>{error}</h1>}
       {!loading && !error && (
-        <Box sx={{ height: "700px" }}>
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            height: "100%",
+          }}
+        >
           {/* <PopupHeader alerts={alerts} handleClose={handleClose} /> */}
           <Box
             sx={{
@@ -117,7 +109,7 @@ export const PopupComponent: React.FC<PopupComponentProps> = ({
               textAlign: "center",
               borderBottom: "1px solid black",
               padding: "10px",
-              position: "relative", // To make sure the close button is positioned relative to this Box
+              position: "relative",
             }}
           >
             <DisabledByDefaultIcon
@@ -243,6 +235,7 @@ export const PopupComponent: React.FC<PopupComponentProps> = ({
                   marginTop: "auto",
                   paddingBottom: "5px",
                   paddingTop: "5px",
+                  bottom: "0px",
                 }}
               >
                 <Pagination
@@ -288,129 +281,14 @@ export const PopupComponent: React.FC<PopupComponentProps> = ({
               {data?.alerts
                 .slice((page - 1) * itemsPerPage, page * itemsPerPage)
                 .map((alert, index) => (
-                  <TabPanel
+                  <PopupTabPanel
+                    alert={alert}
                     value={value}
-                    key={index + (page - 1) * itemsPerPage}
-                    index={index + (page - 1) * itemsPerPage}
-                  >
-                    <Box
-                      sx={{
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "space-between",
-                      }}
-                    >
-                      <Typography
-                        variant="h4"
-                        fontWeight="bold"
-                        textTransform="uppercase"
-                        sx={{
-                          textOverflow: "ellipsis",
-                          overflow: "hidden",
-                          whiteSpace: "nowrap",
-                        }}
-                      >
-                        <span>{alert.info?.[0]?.event || ""}</span>
-                        {/* <Tooltip
-title={`Source: ${alerts[0]?.alertinfoSet?.[0]?.event}`}
->
-<span>{alerts[0]?.alertinfoSet?.[0]?.event || ""}</span>
-</Tooltip> */}
-                      </Typography>
-
-                      <a
-                        href={alert.url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
-                        <Button
-                          variant="contained"
-                          color="success"
-                          disableTouchRipple
-                          disableRipple
-                          disableElevation
-                          disableFocusRipple
-                          sx={{
-                            color: "#fff",
-                            outline: "red",
-                            textTransform: "uppercase",
-                            padding: "5px",
-                            borderRadius: "10px",
-                            backgroundColor: "#f5333f",
-                            "&:hover": {
-                              backgroundColor: "#f5333f",
-                            },
-                            width: "70px",
-                          }}
-                        >
-                          <AttachFileIcon
-                            fontSize="small"
-                            sx={{
-                              width: "1em",
-                              height: "1rem",
-                              paddingRight: "5px",
-                            }}
-                          />{" "}
-                          Origin
-                        </Button>
-                      </a>
-                    </Box>
-
-                    <Grid
-                      container
-                      spacing={2}
-                      padding={"5px 0 5px 0"}
-                      marginTop={"0px"}
-                      marginBottom={"5px"}
-                    >
-                      <Grid item xs={6}>
-                        <PopupCard
-                          iconComponent={
-                            <EmailIcon fontSize="medium"></EmailIcon>
-                          }
-                          iconText="Sender"
-                          rightText={"cap@zamg.ac.at"}
-                        ></PopupCard>
-                      </Grid>
-                      <Grid item xs={6}>
-                        <PopupCard
-                          iconComponent={
-                            <DateRangeIcon fontSize="medium"></DateRangeIcon>
-                          }
-                          iconText="Sent"
-                          rightText={modifyDateTime(alert.sent as string)}
-                        ></PopupCard>
-                      </Grid>
-                    </Grid>
-                    <Box sx={{ padding: "5px 0 5px 0" }}>
-                      <PopupContentText
-                        title="Identifier"
-                        content={alert.identifier!}
-                      ></PopupContentText>
-
-                      {/* <PopupContentText
-                        title="Status"
-                        content={alert.status!}
-                      ></PopupContentText> */}
-
-                      <PopupContentText
-                        title="Scope"
-                        content={alert.scope!}
-                      ></PopupContentText>
-
-                      <PopupContentText
-                        title="restriction"
-                        content={alert.restriction!}
-                      ></PopupContentText>
-
-                      <PopupContentText
-                        title="references"
-                        content={alert.references!}
-                      ></PopupContentText>
-                    </Box>
-
-                    {/* <DynamicTabs infoSets={alert?.alertinfoSet!}></DynamicTabs> */}
-                  </TabPanel>
+                    index={index}
+                    key={index}
+                    page={page}
+                    itemsPerPage={itemsPerPage}
+                  />
                 ))}
             </Box>
           </Box>

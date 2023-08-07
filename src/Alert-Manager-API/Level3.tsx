@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { Admin1_Alert_Data } from "./types";
+import { Box } from "@mui/material";
 
 type ResponseAlertType = {
   id: number;
@@ -99,7 +100,7 @@ export const useLevel3Data = () => {
 const Level3: React.FC = () => {
   const { data, loading, error } = useLevel3Data();
   return (
-    <div>
+    <Box>
       {loading && <p>Loading...</p>}
       {error && <p>{error}</p>}
       {!loading && !error && (
@@ -114,7 +115,7 @@ const Level3: React.FC = () => {
           </li>
         </ul>
       )}
-    </div>
+    </Box>
   );
 };
 
