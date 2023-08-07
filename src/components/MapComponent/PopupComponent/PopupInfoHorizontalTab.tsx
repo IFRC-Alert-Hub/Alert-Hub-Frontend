@@ -4,7 +4,7 @@ import Tab from "@mui/material/Tab";
 import Box from "@mui/material/Box";
 import { ExtremeThreatColour, ModerateThreatColour } from "../MapComponent";
 import { PopupContentText } from "./PopupContentText";
-import { a11yProps } from "./helper";
+import { CustomTabPanel, a11yProps, modifyDateTime } from "./helper";
 import { AlertInfo } from "../../../Alert-Manager-API/types";
 
 interface TabProps {
@@ -84,99 +84,100 @@ export const PopupInfoHorizontalTab = ({ alertInfo }: TabProps) => {
         </Tabs>
       </Box>
       {alertInfo.map((info, index) => (
-        <h1>test</h1>
-        // <CustomTabPanel key={index} value={value} index={index}>
-        //   <React.Fragment key={index}>
-        //     <PopupContentText
-        //       title="language"
-        //       content={info.language!}
-        //     ></PopupContentText>
-        //     <PopupContentText
-        //       title="Category"
-        //       content={info.category!}
-        //     ></PopupContentText>
+        <Box padding="10px">
+          <CustomTabPanel key={index} value={value} index={index}>
+            <React.Fragment key={index}>
+              <PopupContentText
+                title="language"
+                content={info.language!}
+              ></PopupContentText>
+              <PopupContentText
+                title="Category"
+                content={info.category!}
+              ></PopupContentText>
 
-        //     <PopupContentText
-        //       title="Event"
-        //       content={info.event!}
-        //     ></PopupContentText>
+              <PopupContentText
+                title="Event"
+                content={info.event!}
+              ></PopupContentText>
 
-        //     <PopupContentText
-        //       title="Response Type"
-        //       content={info.responseType!}
-        //     ></PopupContentText>
+              <PopupContentText
+                title="Response Type"
+                content={info.response_type!}
+              ></PopupContentText>
 
-        //     <PopupContentText
-        //       title="Urgency"
-        //       content={info.urgency!}
-        //     ></PopupContentText>
+              <PopupContentText
+                title="Urgency"
+                content={info.urgency!}
+              ></PopupContentText>
 
-        //     <PopupContentText
-        //       title="severity"
-        //       content={info.severity!}
-        //     ></PopupContentText>
+              <PopupContentText
+                title="severity"
+                content={info.severity!}
+              ></PopupContentText>
 
-        //     <PopupContentText
-        //       title="Certainty"
-        //       content={info.certainty!}
-        //     ></PopupContentText>
+              <PopupContentText
+                title="Certainty"
+                content={info.certainty!}
+              ></PopupContentText>
 
-        //     <PopupContentText
-        //       title="Audience"
-        //       content={info.audience!}
-        //     ></PopupContentText>
+              <PopupContentText
+                title="Audience"
+                content={info.audience!}
+              ></PopupContentText>
 
-        //     <PopupContentText
-        //       title="Event Code"
-        //       content={info.eventCode!}
-        //     ></PopupContentText>
+              <PopupContentText
+                title="Event Code"
+                content={info.event_code!}
+              ></PopupContentText>
 
-        //     <PopupContentText
-        //       title="Effective"
-        //       content={modifyDateTime(info.effective as string)}
-        //     ></PopupContentText>
+              <PopupContentText
+                title="Effective"
+                content={modifyDateTime(info.effective as string)}
+              ></PopupContentText>
 
-        //     <PopupContentText
-        //       title="Onset"
-        //       content={modifyDateTime(info.onset as string)}
-        //     ></PopupContentText>
+              <PopupContentText
+                title="Onset"
+                content={modifyDateTime(info.onset as string)}
+              ></PopupContentText>
 
-        //     <PopupContentText
-        //       title="Expiration"
-        //       content={modifyDateTime(info.expires as string)}
-        //     ></PopupContentText>
+              <PopupContentText
+                title="Expiration"
+                content={modifyDateTime(info.expires as string)}
+              ></PopupContentText>
 
-        //     <PopupContentText
-        //       title="Sender Name"
-        //       content={info.senderName!}
-        //     ></PopupContentText>
+              <PopupContentText
+                title="Sender Name"
+                content={info.sender_name!}
+              ></PopupContentText>
 
-        //     <PopupContentText
-        //       title="Headline"
-        //       content={info.headline!}
-        //     ></PopupContentText>
+              <PopupContentText
+                title="Headline"
+                content={info.headline!}
+              ></PopupContentText>
 
-        //     <PopupContentText
-        //       title="Description"
-        //       content={info.description!}
-        //     ></PopupContentText>
+              <PopupContentText
+                title="Description"
+                content={info.description!}
+              ></PopupContentText>
 
-        //     <PopupContentText
-        //       title="Instructions"
-        //       content={info.instruction!}
-        //     ></PopupContentText>
+              <PopupContentText
+                title="Instructions"
+                content={info.instruction!}
+              ></PopupContentText>
 
-        //     <PopupContentText
-        //       title="Web"
-        //       content={info.web!}
-        //     ></PopupContentText>
+              <PopupContentText
+                title="Web"
+                content={info.web!}
+              ></PopupContentText>
 
-        //     <PopupContentText
-        //       title="Contact Info"
-        //       content={info.contact!}
-        //     ></PopupContentText>
-        //   </React.Fragment>
-        // </CustomTabPanel>
+              <PopupContentText
+                title="Contact Info"
+                content={info.contact!}
+              ></PopupContentText>
+            </React.Fragment>
+          </CustomTabPanel>
+        </Box>
       ))}
     </Box>
   );

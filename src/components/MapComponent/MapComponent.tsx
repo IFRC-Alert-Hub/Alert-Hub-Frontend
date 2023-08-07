@@ -409,7 +409,7 @@ const MapComponent: React.FC<MapProps> = ({
 
   return (
     <>
-      <Container maxWidth="lg">
+      <>
         {error || admin1Error || alertError ? (
           <h1>Error</h1>
         ) : (
@@ -526,7 +526,7 @@ const MapComponent: React.FC<MapProps> = ({
             </Box>
           </>
         )}
-      </Container>
+      </>
     </>
   );
 };
