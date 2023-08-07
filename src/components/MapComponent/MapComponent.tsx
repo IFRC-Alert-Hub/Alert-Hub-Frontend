@@ -125,6 +125,8 @@ const MapComponent: React.FC<MapProps> = ({
 
   const [countryIDs, setCountryIDs] = useState<[string, string] | null>(null);
   const [countrySelected, setCountrySelected] = useState<boolean>(false);
+
+  const [admin1Clicked, setAdmin1Clicked] = useState<boolean>(false);
   const [countryRegionDataLoading, setCountryRegionDataLoading] =
     useState<boolean>(true);
 
@@ -143,17 +145,6 @@ const MapComponent: React.FC<MapProps> = ({
   } = useLevel3Data();
 
   const latestRefetchAlertData = useRef<number | null>(null);
-
-  useEffect(() => {
-    if (!mapRef.current || !mapRef.current.loaded()) return;
-
-    console.log(alertLoading);
-    console.log(alertError);
-
-    if (!alertLoading && !alertError) {
-      console.log("AlertData: ", alertData);
-    }
-  }, [alertData, alertError, alertLoading, mapRef]);
 
   useEffect(() => {
     if (
@@ -225,11 +216,17 @@ const MapComponent: React.FC<MapProps> = ({
               if (latestRefetchAlertData.current === null) {
                 latestRefetchAlertData.current = admin1.id;
                 refetchAlertData(admin1.id);
+                setAdmin1Clicked(true);
+                mapContainerRef.current!.style.width = "35%";
+                mapRef.current!.resize();
               }
 
               if (latestRefetchAlertData.current !== admin1.id) {
                 latestRefetchAlertData.current = admin1.id;
                 refetchAlertData(admin1.id);
+                setAdmin1Clicked(true);
+                mapContainerRef.current!.style.width = "35%";
+                mapRef.current!.resize();
               }
             }
           );
@@ -243,6 +240,7 @@ const MapComponent: React.FC<MapProps> = ({
     refetchAlertData,
     mapRef,
     countryIDs,
+    mapContainerRef,
   ]);
 
   useEffect(() => {
@@ -442,41 +440,138 @@ const MapComponent: React.FC<MapProps> = ({
     setCountryIDs(null);
   };
 
+  const handleClose = () => {
+    setAdmin1Clicked(false);
+    mapContainerRef.current!.style.width = "100%";
+
+    mapContainerRef.current!.classList.add("map-container-transition");
+
+    setTimeout(() => {
+      mapRef.current!.resize();
+      mapContainerRef.current!.classList.remove("map-container-transition");
+    }, 300);
+  };
+
   return (
     <>
       <Container maxWidth="lg">
-        <Box sx={{ height: "20px", padding: "20px" }}>
-          {admin1Error && <h1>Error</h1>}
-          {countrySelected &&
-            countryPolygonNameClicked &&
-            countryPolygonNameClicked.length === 3 && (
-              <>
-                <Chip
-                  label={
-                    <>
-                      {countryPolygonNameClicked[0]} (
-                      {countryPolygonNameClicked[1]})
-                      {admin1Loading && (
-                        <IconButton aria-label="loading" disabled>
-                          <CircularProgress size={20} color="secondary" />
-                        </IconButton>
-                      )}
-                    </>
-                  }
-                  variant="outlined"
-                  onDelete={countryControlChange}
-                  disabled={admin1Loading ? true : false}
-                />
-              </>
-            )}
-        </Box>
-        <Box sx={{ paddingTop: "30px", display: "flex" }}>
-          <div
-            ref={mapContainerRef}
-            className="map-container"
-            style={{ width: "100%" }}
-          />
-        </Box>
+        {error || admin1Error ? (
+          <h1>Error</h1>
+        ) : (
+          <>
+            <Box sx={{ height: "20px", padding: "20px" }}>
+              {countrySelected &&
+                countryPolygonNameClicked &&
+                countryPolygonNameClicked.length === 3 && (
+                  <>
+                    <Chip
+                      label={
+                        <>
+                          {countryPolygonNameClicked[0]} (
+                          {countryPolygonNameClicked[1]})
+                          {admin1Loading && (
+                            <IconButton aria-label="loading" disabled>
+                              <CircularProgress size={20} color="secondary" />
+                            </IconButton>
+                          )}
+                        </>
+                      }
+                      variant="outlined"
+                      onDelete={countryControlChange}
+                      disabled={admin1Loading ? true : false}
+                    />
+                  </>
+                )}
+            </Box>
+            <Box p={3} style={{ position: "relative" }}>
+              {loading && countryRegionDataLoading && (
+                <div
+                  style={{
+                    position: "absolute",
+                    left: 0,
+                    width: "100%",
+                    height: "700px",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    backgroundColor: "#e0dcdc",
+                    zIndex: 999,
+                  }}
+                >
+                  <div>
+                    <Box
+                      sx={{
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        padding: "30px",
+                        height: "60px",
+                        borderRadius: "30px",
+                        bgColor: "black",
+                      }}
+                    >
+                      <Skeleton
+                        animation="wave"
+                        sx={{
+                          position: "absolute",
+                          top: "50%",
+                          left: "50%",
+                          width: "100%",
+                          height: "100%",
+                          transform: "translate(-50%, -50%)",
+                          backgroundColor: "#e0dcdc",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          padding: "none",
+                        }}
+                      ></Skeleton>
+                      <Progress />
+                      <Typography
+                        sx={{ paddingLeft: "5px", zIndex: 1000 }}
+                        variant="h4"
+                        fontWeight={800}
+                        color="f5333f"
+                      >
+                        Loading Alerts
+                      </Typography>
+                    </Box>
+                  </div>
+                </div>
+              )}
+
+              <Box sx={{ display: "flex", flexDirection: "row" }}>
+                <div
+                  ref={mapContainerRef}
+                  className="map-container"
+                  style={{
+                    width: admin1Clicked ? "35%" : "100%",
+                    zIndex: 1, // Make sure the map container is behind the loading element
+                  }}
+                ></div>
+                {admin1Clicked && (
+                  <Box
+                    sx={{
+                      width: "65%",
+                      backgroundColor: "lightgray",
+                      position: "relative",
+                      transform: `translateX(${admin1Clicked ? "0%" : "100%"})`,
+                      transition: "transform 0.3s ease-in-out",
+                      zIndex: 2, // Make sure the popup component is above the map container
+                    }}
+                  >
+                    <PopupComponent
+                      handleClose={handleClose}
+                      loading={alertLoading}
+                      error={alertError}
+                      data={alertData}
+                    />
+                  </Box>
+                )}
+              </Box>
+            </Box>
+          </>
+        )}
       </Container>
     </>
   );

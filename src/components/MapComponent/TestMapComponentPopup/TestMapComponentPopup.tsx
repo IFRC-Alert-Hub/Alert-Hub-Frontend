@@ -203,7 +203,7 @@ const TestMapComponentPopup = () => {
                 transition: "transform 0.3s ease-in-out",
               }}
             >
-              <PopupComponent
+              {/* <PopupComponent
                 handleClose={handleClose}
                 alerts={[
                   {
@@ -399,7 +399,7 @@ const TestMapComponentPopup = () => {
                     },
                   },
                 ]}
-              />
+              /> */}
             </Box>
           )}
         </Box>
