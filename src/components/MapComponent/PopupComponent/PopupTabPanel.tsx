@@ -8,7 +8,7 @@ import { PopupContentText } from "./PopupContentText";
 import { Alert } from "../../../Alert-Manager-API/types";
 import { TabPanelProps, modifyDateTime } from "./helper";
 import { PopupInfoHorizontalTab } from "./PopupInfoHorizontalTab";
-
+import { Map as MapboxMap } from "mapbox-gl";
 const TabPanel = (props: TabPanelProps) => {
   const { children, value, index, ...other } = props;
 
@@ -34,6 +34,7 @@ interface PopupTabPanelProps {
   index: number;
   itemsPerPage: number;
   page: number;
+  mapRef: React.MutableRefObject<MapboxMap | null>;
 }
 
 export const PopupTabPanel: React.FC<PopupTabPanelProps> = ({
@@ -42,6 +43,7 @@ export const PopupTabPanel: React.FC<PopupTabPanelProps> = ({
   index,
   itemsPerPage,
   page,
+  mapRef,
 }) => {
   return (
     <div>
@@ -152,7 +154,11 @@ export const PopupTabPanel: React.FC<PopupTabPanelProps> = ({
             content={alert.references!}
           ></PopupContentText>
         </Box>
-        <PopupInfoHorizontalTab key={index} alertInfo={alert.info} />
+        <PopupInfoHorizontalTab
+          mapRef={mapRef}
+          key={index}
+          alertInfo={alert.info}
+        />
       </TabPanel>
     </div>
   );

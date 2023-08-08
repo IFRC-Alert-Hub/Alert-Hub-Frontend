@@ -8,13 +8,14 @@ import DisabledByDefaultIcon from "@mui/icons-material/DisabledByDefault";
 import PopupTabPanel from "./PopupTabPanel";
 import { Divider, Pagination, PaginationItem, Skeleton } from "@mui/material";
 import { a11yProps } from "./helper";
-
+import { Map as MapboxMap } from "mapbox-gl";
 interface PopupComponentProps {
   handleClose?: () => void;
   loading?: boolean;
   error?: string | null;
   data?: Admin1_Alert_Data;
   countryPolygonNameClicked?: [string, string] | null;
+  mapRef: React.MutableRefObject<MapboxMap | null>;
 }
 
 export const PopupComponent: React.FC<PopupComponentProps> = ({
@@ -23,6 +24,7 @@ export const PopupComponent: React.FC<PopupComponentProps> = ({
   error,
   loading,
   countryPolygonNameClicked,
+  mapRef,
 }) => {
   const [page, setPage] = React.useState(1);
   const [value, setValue] = React.useState(0);
@@ -354,6 +356,7 @@ export const PopupComponent: React.FC<PopupComponentProps> = ({
                     key={index}
                     page={page}
                     itemsPerPage={itemsPerPage}
+                    mapRef={mapRef}
                   />
                 ))}
             </Box>

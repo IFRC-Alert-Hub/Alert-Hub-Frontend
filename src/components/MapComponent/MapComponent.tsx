@@ -404,11 +404,14 @@ const MapComponent: React.FC<MapProps> = ({
   const handleClose = () => {
     setAdmin1Clicked(false);
     mapContainerRef.current!.style.width = "100%";
+    const mapContainer = document.getElementById("mapContainer");
 
+    mapContainer?.classList.add("map-container-transition");
     mapContainerRef.current!.classList.add("map-container-transition");
 
     setTimeout(() => {
       mapRef.current!.resize();
+      mapContainer?.classList.remove("map-container-transition");
       mapContainerRef.current!.classList.remove("map-container-transition");
       if (currentCountryBoundingBox.current !== null) {
         mapRef.current!.flyTo({
@@ -420,7 +423,7 @@ const MapComponent: React.FC<MapProps> = ({
               : mapRef.current!.getZoom(),
         });
       }
-    }, 600);
+    }, 300);
   };
 
   return (
@@ -515,6 +518,7 @@ const MapComponent: React.FC<MapProps> = ({
                 <div
                   ref={mapContainerRef}
                   className="map-container"
+                  id="mapContainer"
                   style={{
                     width: admin1Clicked ? "35%" : "100%",
                     zIndex: 1,
@@ -536,6 +540,7 @@ const MapComponent: React.FC<MapProps> = ({
                       error={alertError}
                       data={alertData}
                       countryPolygonNameClicked={countryPolygonNameClicked}
+                      mapRef={mapRef}
                     />
                   </Box>
                 )}

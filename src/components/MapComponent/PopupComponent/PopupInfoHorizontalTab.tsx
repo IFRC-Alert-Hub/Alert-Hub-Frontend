@@ -6,16 +6,12 @@ import { ExtremeThreatColour, ModerateThreatColour } from "../MapComponent";
 import { PopupContentText } from "./PopupContentText";
 import { CustomTabPanel, a11yProps, modifyDateTime } from "./helper";
 import { AlertInfo } from "../../../Alert-Manager-API/types";
-import {
-  FormControl,
-  InputLabel,
-  MenuItem,
-  Select,
-  Typography,
-} from "@mui/material";
+import { Map as MapboxMap } from "mapbox-gl";
+import { PopupArea } from "./PopupArea";
 
 interface TabProps {
   alertInfo: AlertInfo[];
+  mapRef: React.MutableRefObject<MapboxMap | null>;
 }
 
 const determineColour = (info: AlertInfo) => {
@@ -33,17 +29,13 @@ const determineColour = (info: AlertInfo) => {
   }
 };
 
-export const PopupInfoHorizontalTab = ({ alertInfo }: TabProps) => {
+export const PopupInfoHorizontalTab = ({ alertInfo, mapRef }: TabProps) => {
   const [value, setValue] = React.useState(0);
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
   };
 
-  const handleClick = () => {
-    console.log("handleClick");
-    console.log("ALERTINFO :", alertInfo[0].id);
-  };
   return (
     <Box sx={{ width: "100%" }}>
       <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
@@ -74,7 +66,7 @@ export const PopupInfoHorizontalTab = ({ alertInfo }: TabProps) => {
                       height: "10px",
                       borderRadius: "50%",
                       backgroundColor: determineColour(info),
-                      marginLeft: "5px", // Add some spacing between the text and the circle
+                      marginLeft: "5px",
                     }}
                   ></span>
                 </div>
@@ -98,6 +90,8 @@ export const PopupInfoHorizontalTab = ({ alertInfo }: TabProps) => {
         <Box padding="10px" key={index}>
           <CustomTabPanel key={index} value={value} index={index}>
             <React.Fragment key={index}>
+              <PopupArea mapRef={mapRef} />
+
               <PopupContentText
                 title="language"
                 content={info.language!}
@@ -186,24 +180,6 @@ export const PopupInfoHorizontalTab = ({ alertInfo }: TabProps) => {
                 title="Contact Info"
                 content={info.contact!}
               ></PopupContentText>
-              <div>
-                <Typography paddingTop="20px" variant="h5" fontWeight={"bold"}>
-                  Show on Map
-                </Typography>
-
-                <FormControl>
-                  <InputLabel>Choose an Option</InputLabel>
-                  <Select
-                    value={""}
-                    // onChange={handleOptionChange}
-                    style={{ marginTop: "10px" }}
-                  >
-                    <MenuItem value="option1">Option 1</MenuItem>
-                    <MenuItem value="option2">Option 2</MenuItem>
-                    <MenuItem value="option3">Option 3</MenuItem>
-                  </Select>
-                </FormControl>
-              </div>
             </React.Fragment>
           </CustomTabPanel>
         </Box>
