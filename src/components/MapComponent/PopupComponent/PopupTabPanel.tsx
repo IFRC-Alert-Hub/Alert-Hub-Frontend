@@ -44,13 +44,7 @@ export const PopupTabPanel: React.FC<PopupTabPanelProps> = ({
   page,
 }) => {
   return (
-    <div
-      style={{
-        overflowY: "scroll",
-        display: "flex",
-        height: "100%",
-      }}
-    >
+    <div>
       <TabPanel
         value={value}
         key={index + (page - 1) * itemsPerPage}

@@ -34,7 +34,7 @@ export const useLevel1Data = () => {
     const fetchData = async () => {
       try {
         const response: ResponseType = await axios.get(
-          "https://dl.dropboxusercontent.com/scl/fi/ut9lwitdmffhcubt02h0f/regions.json?rlkey=5nmjs92cwcp7cs96ljo2aqvyx&dl=0"
+          "https://alert-manager.azurewebsites.net/regions/"
         );
 
         if (!response.data || Object.keys(response.data).length === 0) {

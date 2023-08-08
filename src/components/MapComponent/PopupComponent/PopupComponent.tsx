@@ -6,13 +6,7 @@ import Box from "@mui/material/Box";
 import { Admin1_Alert_Data } from "../../../Alert-Manager-API/types";
 import DisabledByDefaultIcon from "@mui/icons-material/DisabledByDefault";
 import PopupTabPanel from "./PopupTabPanel";
-import {
-  Button,
-  Divider,
-  Pagination,
-  PaginationItem,
-  Skeleton,
-} from "@mui/material";
+import { Divider, Pagination, PaginationItem, Skeleton } from "@mui/material";
 import { a11yProps } from "./helper";
 
 interface PopupComponentProps {
@@ -35,7 +29,7 @@ export const PopupComponent: React.FC<PopupComponentProps> = ({
   const [pageCount, setPageCount] = React.useState(0);
 
   const tabPanelRef = React.useRef<HTMLDivElement | null>(null);
-  const itemsPerPage = 7;
+  const itemsPerPage = 5;
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     if (tabPanelRef.current) {
       tabPanelRef.current.scrollTop = 0;
@@ -345,6 +339,8 @@ export const PopupComponent: React.FC<PopupComponentProps> = ({
             <Box
               sx={{
                 height: "600px",
+                overflowY: "scroll",
+                display: "flex",
               }}
               ref={tabPanelRef}
             >

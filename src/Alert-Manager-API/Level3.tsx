@@ -67,7 +67,7 @@ export const useLevel3Data = () => {
     const fetchData = async () => {
       try {
         const response: ResponseType = await axios.get(
-          `https://dl.dropboxusercontent.com/scl/fi/q8h87fbcr1t1unu2qoi4t/admin1s.json?rlkey=bfh45i0qw3s7a4he81j5awk1e&dl=0`
+          `https://alert-manager.azurewebsites.net/admin1s/${admin1_ID}`
         );
 
         if (!response.data || Object.keys(response.data).length === 0) {

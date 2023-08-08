@@ -32,7 +32,7 @@ export const useLevel2Data = () => {
         }
 
         const response: ResponseType = await axios.get(
-          `https://dl.dropboxusercontent.com/scl/fi/51o4u4nukvauqu98x2hcd/countries.json?rlkey=r1ekrn2nquvrcaxeha1pih5ta&dl=0`
+          `https://alert-manager.azurewebsites.net/countries/${countryID}`
         );
 
         if (!response.data || Object.keys(response.data).length === 0) {

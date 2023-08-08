@@ -44,7 +44,7 @@ export const useLevel4Data = ({ info_ID }: { info_ID: number }) => {
   const fetchData = async () => {
     try {
       const response: ResponseType = await axios.get(
-        `https://dl.dropboxusercontent.com/scl/fi/tifx0x4hgxqeou5v6gyfr/infos.json?dl=0&rlkey=f8ug3fjzznjwse7ucprleig7c`
+        `https://alert-manager.azurewebsites.net/infos/${info_ID}`
       );
 
       if (!response.data || Object.keys(response.data).length === 0) {
