@@ -44,7 +44,13 @@ export const PopupTabPanel: React.FC<PopupTabPanelProps> = ({
   page,
 }) => {
   return (
-    <>
+    <div
+      style={{
+        overflowY: "scroll",
+        display: "flex",
+        height: "100%",
+      }}
+    >
       <TabPanel
         value={value}
         key={index + (page - 1) * itemsPerPage}
@@ -69,11 +75,6 @@ export const PopupTabPanel: React.FC<PopupTabPanelProps> = ({
             }}
           >
             <span>{alert.info?.[0]?.event || ""}</span>
-            {/* <Tooltip
-          title={`Source: ${alerts[0]?.alertinfoSet?.[0]?.event}`}
-          >
-          <span>{alerts[0]?.alertinfoSet?.[0]?.event || ""}</span>
-          </Tooltip> */}
           </Typography>
 
           <a href={alert.url} target="_blank" rel="noopener noreferrer">
@@ -157,9 +158,9 @@ export const PopupTabPanel: React.FC<PopupTabPanelProps> = ({
             content={alert.references!}
           ></PopupContentText>
         </Box>
-        <PopupInfoHorizontalTab alertInfo={alert.info} />
+        <PopupInfoHorizontalTab key={index} alertInfo={alert.info} />
       </TabPanel>
-    </>
+    </div>
   );
 };
 

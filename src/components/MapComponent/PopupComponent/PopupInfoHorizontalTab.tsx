@@ -84,7 +84,7 @@ export const PopupInfoHorizontalTab = ({ alertInfo }: TabProps) => {
         </Tabs>
       </Box>
       {alertInfo.map((info, index) => (
-        <Box padding="10px">
+        <Box padding="10px" key={index}>
           <CustomTabPanel key={index} value={value} index={index}>
             <React.Fragment key={index}>
               <PopupContentText
