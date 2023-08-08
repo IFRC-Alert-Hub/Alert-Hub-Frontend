@@ -6,7 +6,13 @@ import Box from "@mui/material/Box";
 import { Admin1_Alert_Data } from "../../../Alert-Manager-API/types";
 import DisabledByDefaultIcon from "@mui/icons-material/DisabledByDefault";
 import PopupTabPanel from "./PopupTabPanel";
-import { Pagination, PaginationItem } from "@mui/material";
+import {
+  Button,
+  Divider,
+  Pagination,
+  PaginationItem,
+  Skeleton,
+} from "@mui/material";
 import { a11yProps } from "./helper";
 
 interface PopupComponentProps {
@@ -14,6 +20,7 @@ interface PopupComponentProps {
   loading?: boolean;
   error?: string | null;
   data?: Admin1_Alert_Data;
+  countryPolygonNameClicked?: [string, string] | null;
 }
 
 export const PopupComponent: React.FC<PopupComponentProps> = ({
@@ -21,6 +28,7 @@ export const PopupComponent: React.FC<PopupComponentProps> = ({
   data,
   error,
   loading,
+  countryPolygonNameClicked,
 }) => {
   const [page, setPage] = React.useState(1);
   const [value, setValue] = React.useState(0);
@@ -58,7 +66,80 @@ export const PopupComponent: React.FC<PopupComponentProps> = ({
   return (
     <>
       {" "}
-      {loading && <h1>Loading</h1>}
+      {loading && (
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            height: "700px",
+            border: "1px black solid",
+          }}
+        >
+          <Box
+            sx={{
+              backgroundColor: "white",
+              color: "black",
+              textAlign: "center",
+              borderBottom: "1px solid black",
+              padding: "10px",
+              position: "relative",
+            }}
+          >
+            <Typography
+              variant="h4"
+              fontWeight={"bold"}
+              textTransform={"uppercase"}
+            >
+              <Skeleton />
+            </Typography>
+            <Typography variant="h5" textTransform={"uppercase"}>
+              <Skeleton />
+            </Typography>
+          </Box>
+          <Box
+            sx={{
+              flexGrow: 1,
+              bgcolor: "background.paper",
+              display: "flex",
+              borderRadius: "5px !important",
+            }}
+          >
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                borderRight: "1px solid black",
+              }}
+            >
+              <Skeleton variant="rectangular" width={220} height={100} />
+              <Divider /> <Divider />
+              <Skeleton variant="rectangular" width={220} height={100} />
+              <Divider /> <Divider />
+              <Skeleton variant="rectangular" width={220} height={100} />
+              <Divider /> <Divider />
+              <Skeleton variant="rectangular" width={220} height={100} />
+              <Box
+                sx={{
+                  display: "flex",
+                  justifyContent: "center",
+                  marginTop: "auto",
+                  bottom: "0px",
+                }}
+              >
+                <Skeleton variant="rectangular" width={220} height={50} />
+              </Box>
+            </div>
+
+            <Box
+              style={{
+                overflowY: "scroll",
+                display: "flex",
+                width: "100%",
+              }}
+            ></Box>
+          </Box>
+        </Box>
+      )}
       {error && <h1>{error}</h1>}
       {!loading && !error && (
         <Box
@@ -66,9 +147,9 @@ export const PopupComponent: React.FC<PopupComponentProps> = ({
             display: "flex",
             flexDirection: "column",
             height: "100%",
+            border: "1px black solid",
           }}
         >
-          {/* <PopupHeader alerts={alerts} handleClose={handleClose} /> */}
           <Box
             sx={{
               backgroundColor: "white",
@@ -100,7 +181,9 @@ export const PopupComponent: React.FC<PopupComponentProps> = ({
               )
             </Typography>
             <Typography variant="h5" textTransform={"uppercase"}>
-              Country Name (ISO3)
+              {countryPolygonNameClicked?.length === 2
+                ? `${countryPolygonNameClicked[0]} (${countryPolygonNameClicked[1]})`
+                : "Unknown Country (Unknown ISO3)"}
             </Typography>
           </Box>
           <Box
@@ -139,23 +222,43 @@ export const PopupComponent: React.FC<PopupComponentProps> = ({
                     <Tab
                       key={index + (page - 1) * itemsPerPage}
                       sx={{
-                        minHeight: "70px",
+                        minHeight: "100px",
                         backgroundColor:
                           index + (page - 1) * itemsPerPage === value
                             ? "#fcd4dc"
                             : "#DEDEDE",
-                        // borderLeft:
-                        //   index + (page - 1) * itemsPerPage === value
-                        //     ? "10px solid #F5333F"
-                        //     : "",
-
-                        paddingBottom: "1px",
+                        borderLeft:
+                          index + (page - 1) * itemsPerPage === value
+                            ? "10px solid #F5333F"
+                            : "",
                       }}
                       label={
-                        <span>
+                        <span style={{ justifyItems: "center" }}>
                           {alert.info!.length > 0 ? (
                             <>
-                              {" "}
+                              <Box
+                                sx={{
+                                  display: "flex",
+                                  justifyContent: "center",
+                                  paddingBottom: "4px",
+                                }}
+                              >
+                                <Box
+                                  sx={{
+                                    padding: "4px",
+                                    fontSize: "9px",
+                                    backgroundColor: "black",
+                                    color: "white",
+                                    ":hover": {
+                                      backgroundColor: "black",
+                                      border: "none",
+                                    },
+                                    border: "none",
+                                  }}
+                                >
+                                  Unknown Admin1
+                                </Box>
+                              </Box>
                               <Typography
                                 variant="h5"
                                 fontSize={"13px"}
@@ -178,6 +281,7 @@ export const PopupComponent: React.FC<PopupComponentProps> = ({
                                     ? "#9A9797 !important"
                                     : ""
                                 }
+                                paddingBottom="4px"
                               >
                                 ({alert.info![0].category})
                               </Typography>
@@ -240,8 +344,7 @@ export const PopupComponent: React.FC<PopupComponentProps> = ({
 
             <Box
               sx={{
-                overflowY: "scroll",
-                display: "flex",
+                height: "600px",
               }}
               ref={tabPanelRef}
             >

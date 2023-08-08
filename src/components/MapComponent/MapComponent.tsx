@@ -57,7 +57,7 @@ const MapComponent: React.FC<MapProps> = ({
   boundingRegionCoordinates = undefined,
 }) => {
   const [countryPolygonNameClicked, setCountryPolygonNameClicked] = useState<
-    [string, string, number] | null
+    [string, string] | null
   >(null);
 
   const [countryIDs, setCountryIDs] = useState<[string, string] | null>(null);
@@ -67,7 +67,7 @@ const MapComponent: React.FC<MapProps> = ({
   const [countryRegionDataLoading, setCountryRegionDataLoading] =
     useState<boolean>(true);
 
-  const [currentCountryBoundingBox, setCurrentCountryBoundingBox] = useState<{
+  const currentCountryBoundingBox = useRef<{
     countryCentroid: LngLatLike;
     zoom: number;
   } | null>(null);
@@ -162,14 +162,16 @@ const MapComponent: React.FC<MapProps> = ({
               setAdmin1Clicked(true);
               mapContainerRef.current!.style.width = "35%";
               mapRef.current!.resize();
-              mapRef.current!.flyTo({
-                center:
-                  currentCountryBoundingBox?.countryCentroid as unknown as LngLatLike,
-                zoom:
-                  currentCountryBoundingBox!.zoom > 0
-                    ? currentCountryBoundingBox!.zoom * 0.75
-                    : mapRef.current!.getZoom(),
-              });
+              if (currentCountryBoundingBox.current !== null) {
+                mapRef.current!.flyTo({
+                  center: currentCountryBoundingBox.current
+                    ?.countryCentroid as unknown as LngLatLike,
+                  zoom:
+                    currentCountryBoundingBox.current!.zoom > 0
+                      ? currentCountryBoundingBox.current!.zoom * 0.75
+                      : mapRef.current!.getZoom(),
+                });
+              }
             }
           );
         }
@@ -264,11 +266,7 @@ const MapComponent: React.FC<MapProps> = ({
             "click",
             layerId,
             (e: mapboxgl.MapMouseEvent & mapboxgl.EventData) => {
-              setCountryPolygonNameClicked([
-                country.name,
-                country.iso3,
-                country.id,
-              ]);
+              setCountryPolygonNameClicked([country.name, country.iso3]);
               setCountrySelected(true);
               setCountryIDs([sourceId, layerId]);
               mapRef.current?.resize();
@@ -297,10 +295,10 @@ const MapComponent: React.FC<MapProps> = ({
               const zoomLevelWidth = Math.log2(mapWidth / polygonWidth);
               const zoomLevelHeight = Math.log2(mapHeight / polygonHeight);
               const zoomLevel = Math.max(zoomLevelWidth, zoomLevelHeight);
-              setCurrentCountryBoundingBox({
+              currentCountryBoundingBox.current = {
                 countryCentroid: country.centroid as unknown as LngLatLike,
                 zoom: zoomLevel,
-              });
+              };
 
               mapRef.current!.flyTo({
                 center: country.centroid as unknown as LngLatLike,
@@ -361,6 +359,7 @@ const MapComponent: React.FC<MapProps> = ({
     countryIDs,
   ]);
   const countryControlChange = () => {
+    currentCountryBoundingBox.current = null;
     handleClose();
 
     setCountrySelected(false);
@@ -411,14 +410,16 @@ const MapComponent: React.FC<MapProps> = ({
     setTimeout(() => {
       mapRef.current!.resize();
       mapContainerRef.current!.classList.remove("map-container-transition");
-      mapRef.current!.flyTo({
-        center:
-          currentCountryBoundingBox?.countryCentroid as unknown as LngLatLike,
-        zoom:
-          currentCountryBoundingBox!.zoom > 0
-            ? currentCountryBoundingBox!.zoom * 0.75
-            : mapRef.current!.getZoom(),
-      });
+      if (currentCountryBoundingBox.current !== null) {
+        mapRef.current!.flyTo({
+          center: currentCountryBoundingBox?.current!
+            .countryCentroid as unknown as LngLatLike,
+          zoom:
+            currentCountryBoundingBox!.current!.zoom > 0
+              ? currentCountryBoundingBox!.current!.zoom * 0.75
+              : mapRef.current!.getZoom(),
+        });
+      }
     }, 600);
   };
 
@@ -432,7 +433,7 @@ const MapComponent: React.FC<MapProps> = ({
             <Box sx={{ height: "40px" }}>
               {countrySelected &&
                 countryPolygonNameClicked &&
-                countryPolygonNameClicked.length === 3 && (
+                countryPolygonNameClicked.length === 2 && (
                   <>
                     <Chip
                       label={
@@ -534,6 +535,7 @@ const MapComponent: React.FC<MapProps> = ({
                       loading={alertLoading}
                       error={alertError}
                       data={alertData}
+                      countryPolygonNameClicked={countryPolygonNameClicked}
                     />
                   </Box>
                 )}
