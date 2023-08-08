@@ -67,6 +67,11 @@ const MapComponent: React.FC<MapProps> = ({
   const [countryRegionDataLoading, setCountryRegionDataLoading] =
     useState<boolean>(true);
 
+  const [currentCountryBoundingBox, setCurrentCountryBoundingBox] = useState<{
+    countryCentroid: LngLatLike;
+    zoom: number;
+  } | null>(null);
+
   const {
     data: admin1Data,
     loading: admin1Loading,
@@ -84,21 +89,12 @@ const MapComponent: React.FC<MapProps> = ({
   const latestRefetchAlertData = useRef<number | null>(null);
 
   useEffect(() => {
-    if (
-      !mapRef.current ||
-      //!mapRef.current.loaded() ||
-      admin1Error ||
-      admin1Loading
-    )
-      return;
+    if (!mapRef.current || admin1Error || admin1Loading) return;
 
-    console.log("admin1Data", admin1Data);
-    console.log(countryIDs);
     const loadAdmin1Data = () => {
       const sourceId = countryIDs![0];
       const layerId = countryIDs![1];
       admin1Data?.admin1s.forEach((admin1, index) => {
-        console.log(admin1);
         const admin1SourceID = `${sourceId}-admin1-${admin1.id}`;
         const admin1LayerID = `${layerId}-admin1-${admin1.id}`;
         if (!mapRef.current?.getSource(admin1SourceID)) {
@@ -166,6 +162,14 @@ const MapComponent: React.FC<MapProps> = ({
               setAdmin1Clicked(true);
               mapContainerRef.current!.style.width = "35%";
               mapRef.current!.resize();
+              mapRef.current!.flyTo({
+                center:
+                  currentCountryBoundingBox?.countryCentroid as unknown as LngLatLike,
+                zoom:
+                  currentCountryBoundingBox!.zoom > 0
+                    ? currentCountryBoundingBox!.zoom * 0.75
+                    : mapRef.current!.getZoom(),
+              });
             }
           );
         }
@@ -173,7 +177,6 @@ const MapComponent: React.FC<MapProps> = ({
     };
     if (countryIDs && admin1Data) {
       console.log("INSIDE 1");
-
       loadAdmin1Data();
     }
   }, [
@@ -181,11 +184,11 @@ const MapComponent: React.FC<MapProps> = ({
     admin1Error,
     admin1Loading,
     countryIDs,
+    currentCountryBoundingBox,
     mapContainerRef,
     mapRef,
     refetchAdmin1,
     refetchAlertData,
-    countrySelected,
   ]);
 
   useEffect(() => {
@@ -294,6 +297,10 @@ const MapComponent: React.FC<MapProps> = ({
               const zoomLevelWidth = Math.log2(mapWidth / polygonWidth);
               const zoomLevelHeight = Math.log2(mapHeight / polygonHeight);
               const zoomLevel = Math.max(zoomLevelWidth, zoomLevelHeight);
+              setCurrentCountryBoundingBox({
+                countryCentroid: country.centroid as unknown as LngLatLike,
+                zoom: zoomLevel,
+              });
 
               mapRef.current!.flyTo({
                 center: country.centroid as unknown as LngLatLike,
@@ -404,7 +411,15 @@ const MapComponent: React.FC<MapProps> = ({
     setTimeout(() => {
       mapRef.current!.resize();
       mapContainerRef.current!.classList.remove("map-container-transition");
-    }, 300);
+      mapRef.current!.flyTo({
+        center:
+          currentCountryBoundingBox?.countryCentroid as unknown as LngLatLike,
+        zoom:
+          currentCountryBoundingBox!.zoom > 0
+            ? currentCountryBoundingBox!.zoom * 0.75
+            : mapRef.current!.getZoom(),
+      });
+    }, 600);
   };
 
   return (
@@ -414,7 +429,7 @@ const MapComponent: React.FC<MapProps> = ({
           <h1>Error</h1>
         ) : (
           <>
-            <Box sx={{ height: "20px", padding: "20px" }}>
+            <Box sx={{ height: "40px" }}>
               {countrySelected &&
                 countryPolygonNameClicked &&
                 countryPolygonNameClicked.length === 3 && (
@@ -438,7 +453,7 @@ const MapComponent: React.FC<MapProps> = ({
                   </>
                 )}
             </Box>
-            <Box p={3} style={{ position: "relative" }}>
+            <Box style={{ position: "relative" }}>
               {loading && countryRegionDataLoading && (
                 <div
                   style={{
@@ -501,7 +516,7 @@ const MapComponent: React.FC<MapProps> = ({
                   className="map-container"
                   style={{
                     width: admin1Clicked ? "35%" : "100%",
-                    zIndex: 1, // Make sure the map container is behind the loading element
+                    zIndex: 1,
                   }}
                 ></div>
                 {admin1Clicked && (
