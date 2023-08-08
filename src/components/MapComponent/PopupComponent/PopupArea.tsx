@@ -1,5 +1,6 @@
 import {
   Box,
+  Button,
   Card,
   FormControl,
   MenuItem,
@@ -69,19 +70,22 @@ export const PopupArea = ({ mapRef }: PopupAreaProps) => {
     }
   };
 
+  const handleClearSelection = (event: any) => {
+    setSelectedShape(null);
+    setSelectedIndex(-1);
+  };
+
   useEffect(() => {
     console.log(selectedShape);
-    if (!mapRef.current || selectedShape === null) {
-      return;
-    }
-
     const sourceID = "infoArea-source";
     const layerID = "infoArea-layer";
     if (mapRef.current?.getSource(sourceID)) {
       mapRef.current?.removeLayer(layerID);
       mapRef.current?.removeSource(sourceID);
     }
-
+    if (!mapRef.current || selectedShape === null) {
+      return;
+    }
     mapRef.current?.addSource(sourceID, {
       type: "geojson",
       data: {
@@ -106,17 +110,22 @@ export const PopupArea = ({ mapRef }: PopupAreaProps) => {
 
   return (
     <>
-      <Card sx={{ padding: "20px" }}>
+      <Card sx={{ padding: "5px" }}>
         {" "}
         <Box display="flex" alignItems="center">
-          <Typography variant="h5" fontWeight={600}>
-            See on the map
+          <Typography
+            variant="h5"
+            sx={{ fontSize: "0.75rem" }}
+            fontWeight={600}
+            paddingRight={"10px"}
+          >
+            See on the map:
           </Typography>
           <FormControl>
             <Select
               value={selectedIndex}
               onChange={handleShapeChange}
-              style={{ marginTop: "10px" }}
+              style={{ marginTop: "10px", marginRight: "10px" }}
             >
               <MenuItem value={-1}>Select an option</MenuItem>
               {combinedShapes.map((shape, index) => (
@@ -125,6 +134,13 @@ export const PopupArea = ({ mapRef }: PopupAreaProps) => {
                 </MenuItem>
               ))}
             </Select>
+            <Button
+              variant="outlined"
+              color="secondary"
+              onClick={handleClearSelection}
+            >
+              Clear Selection
+            </Button>
           </FormControl>
         </Box>
       </Card>
