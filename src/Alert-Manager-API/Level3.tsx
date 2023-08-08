@@ -1,7 +1,6 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import axios from "axios";
 import { Admin1_Alert_Data } from "./types";
-import { Box } from "@mui/material";
 
 type ResponseAlertType = {
   id: number;

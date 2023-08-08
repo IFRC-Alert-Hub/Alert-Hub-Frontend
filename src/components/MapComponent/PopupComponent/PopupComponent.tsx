@@ -3,7 +3,10 @@ import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
-import { Admin1_Alert_Data } from "../../../Alert-Manager-API/types";
+import {
+  Admin1_Alert_Data,
+  AlertInfoArea,
+} from "../../../Alert-Manager-API/types";
 import DisabledByDefaultIcon from "@mui/icons-material/DisabledByDefault";
 import PopupTabPanel from "./PopupTabPanel";
 import { Divider, Pagination, PaginationItem, Skeleton } from "@mui/material";
@@ -16,6 +19,12 @@ interface PopupComponentProps {
   data?: Admin1_Alert_Data;
   countryPolygonNameClicked?: [string, string] | null;
   mapRef: React.MutableRefObject<MapboxMap | null>;
+  infoDataHandler: {
+    data: AlertInfoArea | undefined;
+    loading: Boolean;
+    error: string | null;
+    refetch: any;
+  };
 }
 
 export const PopupComponent: React.FC<PopupComponentProps> = ({
@@ -25,6 +34,7 @@ export const PopupComponent: React.FC<PopupComponentProps> = ({
   loading,
   countryPolygonNameClicked,
   mapRef,
+  infoDataHandler,
 }) => {
   const [page, setPage] = React.useState(1);
   const [value, setValue] = React.useState(0);
@@ -357,6 +367,7 @@ export const PopupComponent: React.FC<PopupComponentProps> = ({
                     page={page}
                     itemsPerPage={itemsPerPage}
                     mapRef={mapRef}
+                    infoDataHandler={infoDataHandler}
                   />
                 ))}
             </Box>

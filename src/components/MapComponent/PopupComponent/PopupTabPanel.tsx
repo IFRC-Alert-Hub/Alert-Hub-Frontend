@@ -5,7 +5,7 @@ import { PopupCard } from "./PopupCard";
 import EmailIcon from "@mui/icons-material/Email";
 import DateRangeIcon from "@mui/icons-material/DateRange";
 import { PopupContentText } from "./PopupContentText";
-import { Alert } from "../../../Alert-Manager-API/types";
+import { Alert, AlertInfoArea } from "../../../Alert-Manager-API/types";
 import { TabPanelProps, modifyDateTime } from "./helper";
 import { PopupInfoHorizontalTab } from "./PopupInfoHorizontalTab";
 import { Map as MapboxMap } from "mapbox-gl";
@@ -35,6 +35,12 @@ interface PopupTabPanelProps {
   itemsPerPage: number;
   page: number;
   mapRef: React.MutableRefObject<MapboxMap | null>;
+  infoDataHandler: {
+    data: AlertInfoArea | undefined;
+    loading: Boolean;
+    error: string | null;
+    refetch: any;
+  };
 }
 
 export const PopupTabPanel: React.FC<PopupTabPanelProps> = ({
@@ -44,6 +50,7 @@ export const PopupTabPanel: React.FC<PopupTabPanelProps> = ({
   itemsPerPage,
   page,
   mapRef,
+  infoDataHandler,
 }) => {
   return (
     <div>
@@ -158,6 +165,7 @@ export const PopupTabPanel: React.FC<PopupTabPanelProps> = ({
           mapRef={mapRef}
           key={index}
           alertInfo={alert.info}
+          infoDataHandler={infoDataHandler}
         />
       </TabPanel>
     </div>

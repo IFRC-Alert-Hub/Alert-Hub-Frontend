@@ -5,13 +5,19 @@ import Box from "@mui/material/Box";
 import { ExtremeThreatColour, ModerateThreatColour } from "../MapComponent";
 import { PopupContentText } from "./PopupContentText";
 import { CustomTabPanel, a11yProps, modifyDateTime } from "./helper";
-import { AlertInfo } from "../../../Alert-Manager-API/types";
+import { AlertInfo, AlertInfoArea } from "../../../Alert-Manager-API/types";
 import { Map as MapboxMap } from "mapbox-gl";
 import { PopupArea } from "./PopupArea";
 
 interface TabProps {
   alertInfo: AlertInfo[];
   mapRef: React.MutableRefObject<MapboxMap | null>;
+  infoDataHandler: {
+    data: AlertInfoArea | undefined;
+    loading: Boolean;
+    error: string | null;
+    refetch: any;
+  };
 }
 
 const determineColour = (info: AlertInfo) => {
@@ -29,7 +35,11 @@ const determineColour = (info: AlertInfo) => {
   }
 };
 
-export const PopupInfoHorizontalTab = ({ alertInfo, mapRef }: TabProps) => {
+export const PopupInfoHorizontalTab = ({
+  alertInfo,
+  mapRef,
+  infoDataHandler,
+}: TabProps) => {
   const [value, setValue] = React.useState(0);
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
@@ -90,7 +100,11 @@ export const PopupInfoHorizontalTab = ({ alertInfo, mapRef }: TabProps) => {
         <Box padding="10px" key={index}>
           <CustomTabPanel key={index} value={value} index={index}>
             <React.Fragment key={index}>
-              <PopupArea mapRef={mapRef} />
+              <PopupArea
+                mapRef={mapRef}
+                infoID={info.id}
+                infoDataHandler={infoDataHandler}
+              />
 
               <PopupContentText
                 title="language"

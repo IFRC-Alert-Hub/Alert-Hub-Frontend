@@ -28,6 +28,7 @@ import {
 } from "../../Alert-Manager-API/types";
 import { useLevel2Data } from "../../Alert-Manager-API/Level2";
 import { useLevel3Data } from "../../Alert-Manager-API/Level3";
+import { useLevel4Data } from "../../Alert-Manager-API/Level4";
 
 export const ExtremeThreatColour: string = "#f5333f";
 export const ModerateThreatColour: string = "#ff9e00";
@@ -85,6 +86,13 @@ const MapComponent: React.FC<MapProps> = ({
     error: alertError,
     refetch: refetchAlertData,
   } = useLevel3Data();
+
+  const {
+    data: infoData,
+    loading: infoLoading,
+    error: infoError,
+    refetch: refectInfoData,
+  } = useLevel4Data();
 
   const latestRefetchAlertData = useRef<number | null>(null);
 
@@ -360,6 +368,12 @@ const MapComponent: React.FC<MapProps> = ({
   ]);
   const countryControlChange = () => {
     currentCountryBoundingBox.current = null;
+    const sourceID = "infoArea-source";
+    const layerID = "infoArea-layer";
+    if (mapRef.current?.getSource(sourceID)) {
+      mapRef.current?.removeLayer(layerID);
+      mapRef.current?.removeSource(sourceID);
+    }
     handleClose();
 
     setCountrySelected(false);
@@ -402,6 +416,12 @@ const MapComponent: React.FC<MapProps> = ({
   };
 
   const handleClose = () => {
+    const sourceID = "infoArea-source";
+    const layerID = "infoArea-layer";
+    if (mapRef.current?.getSource(sourceID)) {
+      mapRef.current?.removeLayer(layerID);
+      mapRef.current?.removeSource(sourceID);
+    }
     setAdmin1Clicked(false);
     mapContainerRef.current!.style.width = "100%";
     const mapContainer = document.getElementById("mapContainer");
@@ -541,6 +561,12 @@ const MapComponent: React.FC<MapProps> = ({
                       data={alertData}
                       countryPolygonNameClicked={countryPolygonNameClicked}
                       mapRef={mapRef}
+                      infoDataHandler={{
+                        data: infoData,
+                        loading: infoLoading,
+                        error: infoError,
+                        refetch: refectInfoData,
+                      }}
                     />
                   </Box>
                 )}
