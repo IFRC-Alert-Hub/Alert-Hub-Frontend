@@ -6,7 +6,13 @@ import { ExtremeThreatColour, ModerateThreatColour } from "../MapComponent";
 import { PopupContentText } from "./PopupContentText";
 import { CustomTabPanel, a11yProps, modifyDateTime } from "./helper";
 import { AlertInfo } from "../../../Alert-Manager-API/types";
-import { Button } from "@mui/material";
+import {
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Select,
+  Typography,
+} from "@mui/material";
 
 interface TabProps {
   alertInfo: AlertInfo[];
@@ -92,9 +98,6 @@ export const PopupInfoHorizontalTab = ({ alertInfo }: TabProps) => {
         <Box padding="10px" key={index}>
           <CustomTabPanel key={index} value={value} index={index}>
             <React.Fragment key={index}>
-              {/* <Button color="secondary" onClick={handleClick}>
-                Show Polygon
-              </Button> */}
               <PopupContentText
                 title="language"
                 content={info.language!}
@@ -183,6 +186,24 @@ export const PopupInfoHorizontalTab = ({ alertInfo }: TabProps) => {
                 title="Contact Info"
                 content={info.contact!}
               ></PopupContentText>
+              <div>
+                <Typography paddingTop="20px" variant="h5" fontWeight={"bold"}>
+                  Show on Map
+                </Typography>
+
+                <FormControl>
+                  <InputLabel>Choose an Option</InputLabel>
+                  <Select
+                    value={""}
+                    // onChange={handleOptionChange}
+                    style={{ marginTop: "10px" }}
+                  >
+                    <MenuItem value="option1">Option 1</MenuItem>
+                    <MenuItem value="option2">Option 2</MenuItem>
+                    <MenuItem value="option3">Option 3</MenuItem>
+                  </Select>
+                </FormControl>
+              </div>
             </React.Fragment>
           </CustomTabPanel>
         </Box>
