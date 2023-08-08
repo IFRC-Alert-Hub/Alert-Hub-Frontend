@@ -98,24 +98,37 @@ export const useLevel3Data = () => {
 };
 
 const Level3: React.FC = () => {
-  const { data, loading, error } = useLevel3Data();
+  const [admin1ID, setAdmin1ID] = useState<number>(1765);
+  const { data, loading, error, refetch } = useLevel3Data();
+
+  const handleFetch = () => {
+    if (admin1ID) {
+      refetch(admin1ID);
+    }
+  };
+
   return (
-    <Box>
+    <div>
+      <label>
+        Admin1 ID:
+        <input
+          type="number"
+          value={admin1ID}
+          onChange={(e) => setAdmin1ID(Number(e.target.value))}
+        />
+      </label>
+      <button onClick={handleFetch}>Fetch Data</button>
+
       {loading && <p>Loading...</p>}
-      {error && <p>{error}</p>}
-      {!loading && !error && (
+      {!loading && !error && data && (
         <ul>
-          <li key={data?.admin1_id}>
-            {data?.admin1_name}
-            <ul>
-              {data?.alerts?.map((alert: any) => (
-                <li key={alert.id}>{alert.url}</li>
-              ))}
-            </ul>
-          </li>
+          {data.alerts?.map((alert) => (
+            <li key={alert.id}>Alert ID: {alert.id}</li>
+          ))}
         </ul>
       )}
-    </Box>
+      {error && <p>{error}</p>}
+    </div>
   );
 };
 

@@ -41,52 +41,50 @@ export const useLevel4Data = ({ info_ID }: { info_ID: number }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response: ResponseType = await axios.get(
-          `https://dl.dropboxusercontent.com/scl/fi/tifx0x4hgxqeou5v6gyfr/infos.json?dl=0&rlkey=f8ug3fjzznjwse7ucprleig7c`
-        );
+  const fetchData = async () => {
+    try {
+      const response: ResponseType = await axios.get(
+        `https://dl.dropboxusercontent.com/scl/fi/tifx0x4hgxqeou5v6gyfr/infos.json?dl=0&rlkey=f8ug3fjzznjwse7ucprleig7c`
+      );
 
-        if (!response.data || Object.keys(response.data).length === 0) {
-          throw new Error("Data is empty or invalid.");
-        }
-
-        if (response.data.info_id && response.data.info_id !== info_ID) {
-          throw new Error("ID does not exist");
-        }
-        if (response.data.areas && response.data.areas.length > 0) {
-          response.data.areas = response.data.areas.map((area: any) => {
-            if (area.polygons !== "") {
-              area.polygons = area.polygons.map((polygon: any) => {
-                polygon.value = convertCoordinates(polygon.value);
-                return polygon;
-              });
-            }
-            return area;
-          });
-        } else {
-          throw new Error("areas is empty");
-        }
-        setData(response.data);
-        console.log(response.data);
-
-        setLoading(false);
-      } catch (error: any) {
-        console.error("Error fetching data:", error.message);
-        setError(error.message);
-        setLoading(false);
+      if (!response.data || Object.keys(response.data).length === 0) {
+        throw new Error("Data is empty or invalid.");
       }
-    };
 
-    fetchData();
-  }, [info_ID]);
+      if (response.data.info_id && response.data.info_id !== info_ID) {
+        throw new Error("ID does not exist");
+      }
+      if (response.data.areas && response.data.areas.length > 0) {
+        response.data.areas = response.data.areas.map((area: any) => {
+          if (area.polygons !== "") {
+            area.polygons = area.polygons.map((polygon: any) => {
+              polygon.value = convertCoordinates(polygon.value);
+              return polygon;
+            });
+          }
+          return area;
+        });
+      } else {
+        throw new Error("areas is empty");
+      }
+      setData(response.data);
+      console.log(response.data);
+
+      setLoading(false);
+    } catch (error: any) {
+      console.error("Error fetching data:", error.message);
+      setError(error.message);
+      setLoading(false);
+    }
+  };
+
+  fetchData();
 
   return { data, loading, error };
 };
 
 const Level4: React.FC = () => {
-  const { data, loading, error } = useLevel4Data({ info_ID: 456 });
+  const { data, loading, error } = useLevel4Data({ info_ID: 1309 });
   return (
     <div>
       {loading && <p>Loading...</p>}

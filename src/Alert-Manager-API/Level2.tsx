@@ -81,16 +81,34 @@ export const useLevel2Data = () => {
 };
 
 const Level2: React.FC = () => {
-  const { data, loading, error } = useLevel2Data();
+  const [countryID, setCountryID] = useState<number>(146);
+  const { data, loading, error, refetch } = useLevel2Data();
+
+  const handleFetch = () => {
+    if (countryID) {
+      refetch(countryID);
+    }
+  };
+
   return (
     <div>
+      <label>
+        Country ID:
+        <input
+          type="number"
+          value={countryID}
+          onChange={(e) => setCountryID(Number(e.target.value))}
+        />
+      </label>
+      <button onClick={handleFetch}>Fetch Data</button>
+
       {loading && <p>Loading...</p>}
-      {!loading && !error && (
+      {!loading && !error && data && (
         <ul>
-          <li key={data?.country_id}>
-            {data?.country_name}
+          <li>
+            {data.country_name}
             <ul>
-              {data?.admin1s?.map((admin1: admin1) => (
+              {data.admin1s?.map((admin1) => (
                 <li key={admin1.id}>{admin1.name}</li>
               ))}
             </ul>

@@ -6,6 +6,7 @@ import { ExtremeThreatColour, ModerateThreatColour } from "../MapComponent";
 import { PopupContentText } from "./PopupContentText";
 import { CustomTabPanel, a11yProps, modifyDateTime } from "./helper";
 import { AlertInfo } from "../../../Alert-Manager-API/types";
+import { Button } from "@mui/material";
 
 interface TabProps {
   alertInfo: AlertInfo[];
@@ -33,6 +34,10 @@ export const PopupInfoHorizontalTab = ({ alertInfo }: TabProps) => {
     setValue(newValue);
   };
 
+  const handleClick = () => {
+    console.log("handleClick");
+    console.log("ALERTINFO :", alertInfo[0].id);
+  };
   return (
     <Box sx={{ width: "100%" }}>
       <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
@@ -87,6 +92,9 @@ export const PopupInfoHorizontalTab = ({ alertInfo }: TabProps) => {
         <Box padding="10px" key={index}>
           <CustomTabPanel key={index} value={value} index={index}>
             <React.Fragment key={index}>
+              {/* <Button color="secondary" onClick={handleClick}>
+                Show Polygon
+              </Button> */}
               <PopupContentText
                 title="language"
                 content={info.language!}
