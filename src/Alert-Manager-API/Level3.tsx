@@ -74,8 +74,6 @@ export const useLevel3Data = () => {
         }
 
         if (response.data.admin1_id && response.data.admin1_id !== admin1_ID) {
-          console.log(admin1_ID);
-          console.log(response.data.admin1_id);
           throw new Error("ID does not exist");
         }
 

@@ -69,6 +69,7 @@ const AreaPolygonCircle = () => {
 
   return (
     <>
+      <Typography>Polygon & Circle</Typography>
       <FormControl>
         <Select
           value={selectedIndex}

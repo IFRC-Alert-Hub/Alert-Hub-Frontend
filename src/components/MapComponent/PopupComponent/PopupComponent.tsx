@@ -36,17 +36,21 @@ export const PopupComponent: React.FC<PopupComponentProps> = ({
   mapRef,
   infoDataHandler,
 }) => {
+  React.useEffect(() => {
+    setPage(1);
+    setValue(0);
+    setPageCount(0);
+  }, [data]);
   const [page, setPage] = React.useState(1);
   const [value, setValue] = React.useState(0);
   const [pageCount, setPageCount] = React.useState(0);
-  console.log("data: ", data);
   const tabPanelRef = React.useRef<HTMLDivElement | null>(null);
   const itemsPerPage = 6;
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     if (tabPanelRef.current) {
       tabPanelRef.current.scrollTop = 0;
     }
-    setValue(newValue + (page - 1) * itemsPerPage); // Adjust the value based on the current page
+    setValue(newValue + (page - 1) * itemsPerPage);
   };
 
   React.useEffect(() => {
@@ -210,7 +214,7 @@ export const PopupComponent: React.FC<PopupComponentProps> = ({
               <Tabs
                 orientation="vertical"
                 variant="scrollable"
-                value={value}
+                value={value - (page - 1) * itemsPerPage}
                 onChange={handleChange}
                 aria-label="Vertical tabs example"
                 sx={{

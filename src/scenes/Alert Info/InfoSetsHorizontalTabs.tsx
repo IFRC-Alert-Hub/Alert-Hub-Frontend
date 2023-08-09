@@ -119,7 +119,7 @@ export default function DynamicTabs({ infoSets }: any) {
                   )}
                 </Grid>
                 <Grid item xs={12} sm={12} md={6}>
-                  <Card>
+                  <Card sx={{ padding: "20px" }}>
                     <AreaInfoHorizontalTab areaData={[{ id: 1 }, { id: 2 }]} />
                   </Card>
                 </Grid>

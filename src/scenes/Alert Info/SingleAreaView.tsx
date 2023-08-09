@@ -63,7 +63,7 @@ const AreaHorizontalTab = () => {
 
   return (
     <Box sx={{ minHeight: "420px" }}>
-      <Box sx={{ padding: "20px", textAlign: "center" }}>
+      <Box>
         <AlertInfoText title={"Altitude"} content={"Not Available"} />
         <AlertInfoText title={"Area Desc"} content={"Komi Republic"} />
         <AlertInfoText title={"Ceiling"} content={"Not Available"} />

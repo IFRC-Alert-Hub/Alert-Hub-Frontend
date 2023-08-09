@@ -42,7 +42,7 @@ export default function AreaInfoHorizontalTab({ areaData }: any) {
 
   return (
     <Box>
-      <Box display="flex" width="100%" justifyContent={"center"}>
+      <Box display="flex" width="100%">
         <Tabs
           value={value}
           onChange={handleChange}
