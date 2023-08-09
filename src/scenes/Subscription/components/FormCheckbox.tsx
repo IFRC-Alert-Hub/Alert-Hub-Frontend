@@ -49,9 +49,6 @@ const FormCheckbox = ({
           >
             {legend}
           </FormLabel>
-          {/* <Box ml={2} sx={{ color: "gray", fontSize: "10px" }}>
-            {selectedRow[name]?.length}/{checkboxItems.length} selected
-          </Box> */}
         </Box>
 
         <FormGroup sx={{ flexDirection: "row", marginLeft: "14px" }}>

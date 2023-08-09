@@ -2,33 +2,36 @@ import { gql } from "@apollo/client";
 
 export const ADD_SUBSCRIPTION = gql`
   mutation AddSubscription(
-    $certaintyArray: [String] = []
-    $countryIds: [Int] = []
-    $districtIds: [Int] = []
-    $severityArray: [String] = []
-    $subscribeBy: [String] = []
+    $certaintyArray: [String] = ""
+    $countryIds: [Int]!
+    $districtIds: [Int]!
+    $sentFlag: Int!
+    $severityArray: [String] = ""
+    $subscribeBy: [String] = ""
     $subscriptionName: String = ""
-    $urgencyArray: [String] = []
+    $urgencyArray: [String] = ""
   ) {
     createSubscription(
+      sentFlag: $sentFlag
       subscriptionName: $subscriptionName
-      countryIds: $countryIds
-      districtIds: $districtIds
       urgencyArray: $urgencyArray
-      severityArray: $severityArray
-      certaintyArray: $certaintyArray
       subscribeBy: $subscribeBy
+      severityArray: $severityArray
+      countryIds: $countryIds
+      certaintyArray: $certaintyArray
+      districtIds: $districtIds
     ) {
       subscription {
-        id
-        userId
-        subscriptionName
+        certaintyArray
         countryIds
         districtIds
-        urgencyArray
+        id
+        sentFlag
         severityArray
-        certaintyArray
         subscribeBy
+        subscriptionName
+        urgencyArray
+        userId
       }
     }
   }
@@ -50,11 +53,13 @@ export const UPDATE_SUBSCRIPTION = gql`
     $certaintyArray: [String] = ""
     $countryIds: [Int]!
     $districtIds: [Int]!
+    $sentFlag: Int!
     $severityArray: [String] = ""
     $subscribeBy: [String] = ""
     $urgencyArray: [String] = ""
   ) {
     updateSubscription(
+      sentFlag: $sentFlag
       subscriptionId: $subscriptionId
       subscriptionName: $subscriptionName
       countryIds: $countryIds

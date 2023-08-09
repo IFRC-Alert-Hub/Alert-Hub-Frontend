@@ -66,7 +66,7 @@ const CountryAutocomplete = ({
       sx={{ width: "100%" }}
     >
       <Box display="flex" sx={{ alignItems: "center" }}>
-        <FormLabel className="subs-form-legend">Districts</FormLabel>
+        <FormLabel className="subs-form-legend">Admin1s</FormLabel>
         {selectedRow.countryIds.length === 0 ? (
           <></>
         ) : (

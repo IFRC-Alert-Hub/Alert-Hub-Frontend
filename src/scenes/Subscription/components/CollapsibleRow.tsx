@@ -125,19 +125,7 @@ const CollapsibleRow = ({
             {row.certaintyArray.join(", ")}
           </Box>
         </TableCell>
-        <TableCell align="left" sx={{ fontSize: "0.875rem" }}>
-          <Box
-            sx={{
-              width: "100px",
-              whiteSpace: "nowrap",
-              overflow: "hidden",
-              textOverflow: "ellipsis",
-            }}
-          >
-            {row.subscribeBy.join(", ")}
-          </Box>
-        </TableCell>
-        <TableCell align="left" sx={{ minWidth: "200px" }}>
+        <TableCell align="left" sx={{ minWidth: "180px" }}>
           <Button
             variant="text"
             disableRipple
@@ -171,6 +159,7 @@ const CollapsibleRow = ({
                 severityArray: row.severityArray,
                 certaintyArray: row.certaintyArray,
                 subscribeBy: row.subscribeBy,
+                sentFlag: row.sentFlag,
               });
             }}
             sx={{
@@ -210,7 +199,7 @@ const CollapsibleRow = ({
         </TableCell>
       </TableRow>
       <TableRow>
-        <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={9}>
+        <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={8}>
           <Collapse in={open} timeout="auto" unmountOnExit>
             <Box sx={{ mt: 0, ml: 2, mr: 2, mb: 2 }}>
               <Typography
@@ -245,7 +234,7 @@ const CollapsibleRow = ({
                 component="div"
                 sx={{ fontWeight: 400 }}
               >
-                <span style={{ color: "gray" }}>Subscribed Districts:</span>{" "}
+                <span style={{ color: "gray" }}>Subscribed Admin1s:</span>{" "}
                 {row.districtNames.join(", ")}
               </Typography>
               <Typography
@@ -283,6 +272,15 @@ const CollapsibleRow = ({
               >
                 <span style={{ color: "gray" }}>Notification Methods:</span>{" "}
                 {row.subscribeBy.join(", ")}
+              </Typography>
+              <Typography
+                variant="h6"
+                gutterBottom
+                component="div"
+                sx={{ fontWeight: 400 }}
+              >
+                <span style={{ color: "gray" }}>Send Interval:</span>{" "}
+                {row.sentFlagName}
               </Typography>
             </Box>
           </Collapse>

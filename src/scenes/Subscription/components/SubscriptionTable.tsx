@@ -114,7 +114,7 @@ const SubscriptionTable = ({
                 fontWeight: "600",
               }}
             >
-              Districts
+              Admin1s
             </TableCell>
             <TableCell
               align="left"
@@ -133,12 +133,6 @@ const SubscriptionTable = ({
               sx={{ fontSize: "0.875rem", fontWeight: "600" }}
             >
               Certainty
-            </TableCell>
-            <TableCell
-              align="left"
-              sx={{ fontSize: "0.875rem", fontWeight: "600" }}
-            >
-              Notification
             </TableCell>
             <TableCell
               align="left"
