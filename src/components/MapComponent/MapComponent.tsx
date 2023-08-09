@@ -252,8 +252,11 @@ const MapComponent: React.FC<MapProps> = ({
         mapRef.current = null;
       }
     };
-  }, [lat, lng, mapContainerRef, mapRef, zoom]);
+  }, [lat, lng, mapContainerRef, mapRef, zoom, CountryRegionData]);
 
+  useEffect(() => {
+    console.log(CountryRegionData);
+  }, [CountryRegionData]);
   useEffect(() => {
     if (
       !mapRef.current ||
