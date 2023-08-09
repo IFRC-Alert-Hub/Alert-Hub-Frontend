@@ -29,6 +29,7 @@ import {
 import { useLevel2Data } from "../../Alert-Manager-API/Level2";
 import { useLevel3Data } from "../../Alert-Manager-API/Level3";
 import { useLevel4Data } from "../../Alert-Manager-API/Level4";
+import { feature } from "@turf/turf";
 
 export const ExtremeThreatColour: string = "#f5333f";
 export const ModerateThreatColour: string = "#ff9e00";
@@ -95,6 +96,7 @@ const MapComponent: React.FC<MapProps> = ({
   } = useLevel4Data();
 
   const latestRefetchAlertData = useRef<number | null>(null);
+  const currentCountryPolygonData = useRef<any | null>(null);
 
   useEffect(() => {
     if (!mapRef.current || admin1Error || admin1Loading) return;
@@ -102,7 +104,15 @@ const MapComponent: React.FC<MapProps> = ({
     const loadAdmin1Data = () => {
       const sourceId = countryIDs![0];
       const layerId = countryIDs![1];
+      const Country_ID = sourceId.match(/\d+/g)?.map(Number);
+      const unknownLayerID = `${layerId}-admin1--${Country_ID}`;
+      const unknownSourceID = `${sourceId}-admin1--${Country_ID}`;
+
       admin1Data?.admin1s.forEach((admin1, index) => {
+        if (admin1.id < 0) {
+          admin1.coordinates = currentCountryPolygonData.current.coordinates;
+          admin1.type = currentCountryPolygonData.current.type;
+        }
         const admin1SourceID = `${sourceId}-admin1-${admin1.id}`;
         const admin1LayerID = `${layerId}-admin1-${admin1.id}`;
         if (!mapRef.current?.getSource(admin1SourceID)) {
@@ -132,7 +142,7 @@ const MapComponent: React.FC<MapProps> = ({
             source: admin1SourceID,
             paint: {
               "fill-color": "#000000",
-              "fill-opacity": 0.8,
+              "fill-opacity": admin1.id < 0 ? 0.2 : 0.8,
             },
           });
 
@@ -157,14 +167,34 @@ const MapComponent: React.FC<MapProps> = ({
             "click",
             admin1LayerID,
             (e: mapboxgl.MapMouseEvent & mapboxgl.EventData) => {
-              if (latestRefetchAlertData.current === null) {
-                latestRefetchAlertData.current = admin1.id;
-                refetchAlertData(admin1.id);
-              }
+              const clickedFeatures = mapRef.current?.queryRenderedFeatures(
+                e.point
+              );
+              let layersClicked = new Set();
 
-              if (latestRefetchAlertData.current !== admin1.id) {
-                latestRefetchAlertData.current = admin1.id;
-                refetchAlertData(admin1.id);
+              clickedFeatures?.forEach((feature, index) => {
+                console.log(feature.layer.id);
+
+                if (
+                  feature.layer.id.includes(`${layerId}-admin1-`) &&
+                  !feature.layer.id.includes("-text")
+                ) {
+                  layersClicked.add(
+                    feature.layer.id.slice(`${layerId}-admin1-`.length)
+                  );
+                }
+              });
+
+              const layersClickedArray = Array.from(layersClicked);
+              const indexToRemove = layersClickedArray.indexOf(Country_ID);
+              if (indexToRemove !== -1) {
+                layersClickedArray.splice(indexToRemove, 1);
+              }
+              const firstValue = Number(layersClickedArray[0]);
+              console.log(firstValue);
+              if (latestRefetchAlertData.current !== (firstValue as any)) {
+                latestRefetchAlertData.current = firstValue as any;
+                refetchAlertData(firstValue);
               }
 
               setAdmin1Clicked(true);
@@ -186,7 +216,6 @@ const MapComponent: React.FC<MapProps> = ({
       });
     };
     if (countryIDs && admin1Data) {
-      console.log("INSIDE 1");
       loadAdmin1Data();
     }
   }, [
@@ -277,6 +306,10 @@ const MapComponent: React.FC<MapProps> = ({
               setCountryPolygonNameClicked([country.name, country.iso3]);
               setCountrySelected(true);
               setCountryIDs([sourceId, layerId]);
+              currentCountryPolygonData.current = {
+                coordinates: country.coordinates,
+                type: country.type,
+              };
               mapRef.current?.resize();
 
               const polygonBoundingBox = turfBbox({
@@ -287,7 +320,7 @@ const MapComponent: React.FC<MapProps> = ({
                 },
               });
 
-              console.log(mapRef.current?.getStyle().layers);
+              //console.log(mapRef.current?.getStyle().layers);
 
               const [minX, minY, maxX, maxY] = polygonBoundingBox;
               const mapBoundingBox = mapRef.current!.getBounds();
@@ -337,7 +370,7 @@ const MapComponent: React.FC<MapProps> = ({
                   );
                 }
               );
-              console.log("COUNTRY ID: ", country.id);
+              //console.log("COUNTRY ID: ", country.id);
               refetchAdmin1(country.id);
             }
           );
@@ -393,7 +426,7 @@ const MapComponent: React.FC<MapProps> = ({
 
     const sourceId = countryIDs![0];
     const layerId = countryIDs![1];
-    console.log(mapRef.current?.getStyle().layers);
+    //console.log(mapRef.current?.getStyle().layers);
     admin1Data?.admin1s.forEach((admin1, index) => {
       const admin1LayerId = `${layerId}-admin1-${admin1.id}`;
       const admin1SourceId = `${sourceId}-admin1-${admin1.id}`;
@@ -449,7 +482,7 @@ const MapComponent: React.FC<MapProps> = ({
   return (
     <>
       <>
-        {error || admin1Error || alertError ? (
+        {error || admin1Error || alertError || infoError ? (
           <h1>Error</h1>
         ) : (
           <>

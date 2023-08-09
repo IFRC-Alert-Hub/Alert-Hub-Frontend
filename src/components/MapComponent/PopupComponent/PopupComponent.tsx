@@ -39,9 +39,9 @@ export const PopupComponent: React.FC<PopupComponentProps> = ({
   const [page, setPage] = React.useState(1);
   const [value, setValue] = React.useState(0);
   const [pageCount, setPageCount] = React.useState(0);
-
+  console.log("data: ", data);
   const tabPanelRef = React.useRef<HTMLDivElement | null>(null);
-  const itemsPerPage = 5;
+  const itemsPerPage = 6;
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     if (tabPanelRef.current) {
       tabPanelRef.current.scrollTop = 0;
@@ -242,29 +242,31 @@ export const PopupComponent: React.FC<PopupComponentProps> = ({
                         <span style={{ justifyItems: "center" }}>
                           {alert.info!.length > 0 ? (
                             <>
-                              <Box
-                                sx={{
-                                  display: "flex",
-                                  justifyContent: "center",
-                                  paddingBottom: "4px",
-                                }}
-                              >
+                              {data?.admin1_name === "Unknown" && (
                                 <Box
                                   sx={{
-                                    padding: "4px",
-                                    fontSize: "9px",
-                                    backgroundColor: "black",
-                                    color: "white",
-                                    ":hover": {
-                                      backgroundColor: "black",
-                                      border: "none",
-                                    },
-                                    border: "none",
+                                    display: "flex",
+                                    justifyContent: "center",
+                                    paddingBottom: "4px",
                                   }}
                                 >
-                                  Unknown Admin1
+                                  <Box
+                                    sx={{
+                                      padding: "4px",
+                                      fontSize: "9px",
+                                      backgroundColor: "black",
+                                      color: "white",
+                                      ":hover": {
+                                        backgroundColor: "black",
+                                        border: "none",
+                                      },
+                                      border: "none",
+                                    }}
+                                  >
+                                    Unknown Admin1
+                                  </Box>
                                 </Box>
-                              </Box>
+                              )}
                               <Typography
                                 variant="h5"
                                 fontSize={"13px"}

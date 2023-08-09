@@ -70,7 +70,7 @@ export const PopupArea = ({
 }: PopupAreaProps) => {
   const { data, loading, error, refetch } = infoDataHandler;
   useEffect(() => {
-    console.log(infoID);
+    //console.log(infoID);
     refetch(infoID);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [infoID]);
@@ -102,7 +102,7 @@ export const PopupArea = ({
     }
 
     if (!loading && !error) {
-      console.log("data", data);
+      // console.log("data", data);
       if (!mapRef.current || selectedShape === null) {
         return;
       }

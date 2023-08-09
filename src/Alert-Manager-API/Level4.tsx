@@ -71,7 +71,6 @@ export const useLevel4Data = () => {
           throw new Error("areas is empty");
         }
         setData(response.data);
-        console.log(response.data);
         setLoading(false);
       } catch (error: any) {
         console.error("Error fetching data:", error.message);

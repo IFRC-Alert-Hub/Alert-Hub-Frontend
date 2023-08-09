@@ -63,6 +63,7 @@ export const useLevel2Data = () => {
 
             return admin1;
           });
+          modifiedData.admin1s.reverse();
         } else {
           throw new Error("admin1 is empty");
         }
