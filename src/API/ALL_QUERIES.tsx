@@ -101,6 +101,7 @@ export const GET_SUBSCRIPTIONS = gql`
       certaintyArray
       countryIds
       districtIds
+      sentFlag
       id
       severityArray
       subscribeBy
