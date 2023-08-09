@@ -1,6 +1,7 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 import { Admin1_Alert_Data } from "./types";
+import { Autocomplete, TextField } from "@mui/material";
 
 type ResponseAlertType = {
   id: number;
@@ -60,50 +61,126 @@ export const useLevel3Data = () => {
   const [data, setData] = useState<Admin1_Alert_Data>();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [admin1_ID, setAdmin1_ID] = useState<number | null>(null);
+  const [filters, setFilters] = useState<any>({});
+
   const refetch = async (admin1_ID: number) => {
-    setLoading(true);
-    setError(null);
-    const fetchData = async () => {
-      try {
-        const response: ResponseType = await axios.get(
-          `https://alert-manager.azurewebsites.net/admin1s/${admin1_ID}`
-        );
-
-        if (!response.data || Object.keys(response.data).length === 0) {
-          throw new Error("Data is empty or invalid.");
-        }
-
-        if (response.data.admin1_id && response.data.admin1_id !== admin1_ID) {
-          throw new Error("ID does not exist");
-        }
-
-        if (response.data.alerts && response.data.alerts.length > 0) {
-        } else {
-          throw new Error("Alerts is empty");
-        }
-        setData(response.data as any);
-
-        setLoading(false);
-      } catch (error: any) {
-        console.error("Error fetching data:", error.message);
-        setError(error.message);
-        setLoading(false);
-      }
-    };
-    fetchData();
+    setAdmin1_ID(admin1_ID);
   };
 
-  return { data, loading, error, refetch };
+  useEffect(() => {
+    setLoading(true);
+    setError(null);
+    if (admin1_ID !== null) {
+      const fetchData = async () => {
+        try {
+          const response: ResponseType = await axios.get(
+            `https://alert-manager.azurewebsites.net/admin1s/${admin1_ID}`
+          );
+
+          if (!response.data || Object.keys(response.data).length === 0) {
+            throw new Error("Data is empty or invalid.");
+          }
+
+          if (
+            response.data.admin1_id &&
+            response.data.admin1_id !== admin1_ID
+          ) {
+            throw new Error("ID does not exist");
+          }
+          let modifiedData: any = { ...response.data };
+
+          if (response.data.alerts && response.data.alerts.length > 0) {
+            const filteredAlerts = modifiedData.alerts.filter(
+              (alert: ResponseAlertType) => {
+                const filteredInfo = alert.info.filter(
+                  (info: ResponseInfoType) => {
+                    const shouldIncludeInfo = Object.keys(filters).every(
+                      (filterKey) => {
+                        console.log("filterKey: ", filterKey.toLowerCase());
+                        const filteredValue = filters[filterKey].toLowerCase();
+                        if (filteredValue === null || filteredValue === "") {
+                          return true;
+                        }
+                        const infoValue = String(
+                          info[filterKey as keyof ResponseInfoType]
+                        ).toLowerCase();
+
+                        return infoValue === filteredValue;
+                      }
+                    );
+                    return shouldIncludeInfo;
+                  }
+                );
+                return filteredInfo.length > 0;
+              }
+            );
+
+            const finalFilteredAlerts = filteredAlerts.filter(
+              (alert: ResponseAlertType) => {
+                return alert.info.length > 0;
+              }
+            );
+
+            const filteredData = {
+              ...modifiedData,
+              alerts: finalFilteredAlerts,
+            };
+            setData(filteredData as any);
+          } else {
+            throw new Error("Alerts is empty");
+          }
+
+          setLoading(false);
+        } catch (error: any) {
+          console.error("Error fetching data:", error.message);
+          setError(error.message);
+          setLoading(false);
+        }
+      };
+      fetchData();
+    }
+  }, [admin1_ID, filters]);
+
+  return { data, loading, error, refetch, setFilters };
 };
+const urgencyOptions: string[] = [
+  "Immediate",
+  "Expected",
+  "Future",
+  "Past",
+  "Unknown",
+];
 
 const Level3: React.FC = () => {
   const [admin1ID, setAdmin1ID] = useState<number>(1765);
-  const { data, loading, error, refetch } = useLevel3Data();
+  const { data, loading, error, refetch, setFilters } = useLevel3Data();
 
   const handleFetch = () => {
     if (admin1ID) {
       refetch(admin1ID);
     }
+  };
+
+  useEffect(() => {
+    if (!loading || !error) {
+      console.log("DATA: ", data);
+    }
+  }, [data, error, loading]);
+
+  const [selectedUrgency, setSelectedUrgency] = useState<string>("");
+
+  const handleUrgencyChange = (
+    event: React.ChangeEvent<{}>,
+    value: string | null
+  ) => {
+    console.log(value);
+    setSelectedUrgency(value || "");
+    setFilters({
+      urgency: value || "",
+      severity: "",
+      certainty: "",
+    });
   };
 
   return (
@@ -120,11 +197,48 @@ const Level3: React.FC = () => {
 
       {loading && <p>Loading...</p>}
       {!loading && !error && data && (
-        <ul>
-          {data.alerts?.map((alert) => (
-            <li key={alert.id}>Alert ID: {alert.id}</li>
-          ))}
-        </ul>
+        <>
+          <Autocomplete
+            disablePortal
+            id="combo-box-urgency"
+            options={urgencyOptions}
+            getOptionLabel={(option) => option}
+            sx={{
+              width: 170,
+              backgroundColor: "#f4f4f4",
+              "& .MuiAutocomplete-input": {
+                padding: "4px",
+              },
+              marginRight: "20px",
+            }}
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                label="Urgency"
+                size="small"
+                sx={{
+                  "& .MuiInputLabel-root": {
+                    color: "#8D8D8D",
+                    fontSize: "12px",
+                  },
+                }}
+              />
+            )}
+            onChange={handleUrgencyChange}
+            value={selectedUrgency}
+            isOptionEqualToValue={(option: any, value: any) => {
+              if (option === null || value === null) {
+                return option === value;
+              }
+              return option.value === value.value;
+            }}
+          />
+          <ul>
+            {data.alerts?.map((alert) => (
+              <li key={alert.id}>Alert ID: {alert.id}</li>
+            ))}
+          </ul>
+        </>
       )}
       {error && <p>{error}</p>}
     </div>
