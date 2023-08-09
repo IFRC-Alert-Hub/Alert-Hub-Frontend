@@ -69,6 +69,8 @@ export const useLevel3Data = () => {
   };
 
   useEffect(() => {
+    console.log("LEVEL 3 filters", filters);
+
     setLoading(true);
     setError(null);
     if (admin1_ID !== null) {

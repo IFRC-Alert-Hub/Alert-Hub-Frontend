@@ -30,6 +30,7 @@ export const useLevel2Data = () => {
   };
 
   useEffect(() => {
+    console.log("LEVEL 2 filters", filters);
     setLoading(true);
     setError(null);
     if (countryID !== null) {
