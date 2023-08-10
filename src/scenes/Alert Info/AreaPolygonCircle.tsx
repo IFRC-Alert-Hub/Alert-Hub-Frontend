@@ -7,6 +7,7 @@ import {
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import AlertInfoMap from "./AlertInfoMap";
+import { Area } from "../../Alert-Manager-API/types";
 
 const coordinatesString =
   "-9.7639,33.8818 -10.4129,34.1455 -11.0605,34.2773 -11.5346,34.8486 -11.4054,35.5078 -11.6637,36.2549 -11.6637,37.0020 -11.6637,37.5293 -11.3192,38.1885 -10.4993,37.9688 -10.1102,37.1338 -9.6340,36.6064 -9.5040,35.9912 -9.0269,35.6396 -8.7229,35.0684 -8.6361,34.2773 -9.1137,33.7061 -9.7639,33.8818";
@@ -16,37 +17,43 @@ const coordinatesArray = coordinatesString.split(" ").map((pair) => {
   return [longitude, latitude];
 });
 
-const polygons: any = [
-  {
-    type: "Polygon",
-    name: "Polygon 1",
-    coordinates: coordinatesArray,
-  },
-  {
-    type: "Polygon",
-    name: "Polygon 2",
-    coordinates: coordinatesArray,
-  },
-];
+// const polygons: any = [
+//   {
+//     type: "Polygon",
+//     name: "Polygon 1",
+//     coordinates: coordinatesArray,
+//   },
+//   {
+//     type: "Polygon",
+//     name: "Polygon 2",
+//     coordinates: coordinatesArray,
+//   },
+// ];
 
-const circles: any = [
-  {
-    type: "Circle",
-    name: "Circle 1",
-    center: [-5.917401, 38.90551541],
-    radius: 100,
-  },
-  {
-    type: "Circle",
-    name: "Circle 2",
-    center: [-5.380571851623813, 38.61525108318435],
-    radius: 100,
-  },
-];
+// const circles: any = [
+//   {
+//     type: "Circle",
+//     name: "Circle 1",
+//     center: [-5.917401, 38.90551541],
+//     radius: 100,
+//   },
+//   {
+//     type: "Circle",
+//     name: "Circle 2",
+//     center: [-5.380571851623813, 38.61525108318435],
+//     radius: 100,
+//   },
+// ];
 
-const combinedShapes = [...polygons, ...circles];
+// const combinedShapes = [...polygons, ...circles];
 
-const AreaPolygonCircle = () => {
+interface AreaPolygonCircleProps {
+  areaSets: any;
+}
+
+export const AreaPolygonCircle: React.FC<AreaPolygonCircleProps> = ({
+  areaSets,
+}) => {
   const [selectedIndex, setSelectedIndex] = useState(-1);
   const [selectedShape, setSelectedShape] = useState<any>(null);
 
@@ -62,14 +69,11 @@ const AreaPolygonCircle = () => {
     }
   };
 
-  useEffect(() => {
-    console.log("Selected Shape: ", selectedShape);
-    console.log("Selected Index: ", selectedIndex);
-  }, [selectedShape, selectedIndex]);
+  let combinedShapes: any = [];
+  combinedShapes.push(...areaSets.polygon, ...areaSets.circle);
 
   return (
     <>
-      <Typography>Polygon & Circle</Typography>
       <FormControl>
         <Select
           value={selectedIndex}
@@ -77,7 +81,7 @@ const AreaPolygonCircle = () => {
           style={{ marginTop: "10px" }}
         >
           <MenuItem value={-1}>Select an option</MenuItem>
-          {combinedShapes.map((shape, index) => (
+          {combinedShapes.map((shape: any, index: number) => (
             <MenuItem key={index} value={index}>
               {shape.name}
             </MenuItem>
@@ -113,5 +117,3 @@ const AreaPolygonCircle = () => {
     </>
   );
 };
-
-export default AreaPolygonCircle;

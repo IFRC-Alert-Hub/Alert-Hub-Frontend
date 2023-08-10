@@ -98,24 +98,24 @@ export type AlertInfoArea = {
   areas?: Area[];
 };
 
-type Area = {
+export type Area = {
   id: number;
   area_desc: string;
   altitude: string;
   ceiling: string;
   polygons: AreaPolygon[];
   circle: AreaCircle[];
-  geocodes: AreaGeocodes[];
+  geocode: AreaGeocodes[];
 };
 
-type AreaPolygon = {
+export type AreaPolygon = {
   id: number;
   coordinates: any[];
   type: string;
   name: string;
 };
 
-type AreaCircle = {
+export type AreaCircle = {
   id: number;
   type: string;
   name: string;
@@ -123,7 +123,7 @@ type AreaCircle = {
   radius: number;
 };
 
-type AreaGeocodes = {
+export type AreaGeocodes = {
   id: number;
   value_name: string;
   value: string;

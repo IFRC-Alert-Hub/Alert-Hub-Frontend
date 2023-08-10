@@ -1,10 +1,11 @@
-import { useState } from "react";
+import { Fragment, useState } from "react";
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
-import { Card } from "@mui/material";
+import { Card, Divider, Typography } from "@mui/material";
 import { AlertInfoText } from "./AlertInfoText";
 import AlertInfoMap from "./AlertInfoMap";
-import AreaPolygonCircle from "./AreaPolygonCircle";
+import { AreaPolygonCircle } from "./AreaPolygonCircle";
+import { Area, AreaGeocodes } from "../../Alert-Manager-API/types";
 
 const infoSets = [
   {
@@ -54,7 +55,11 @@ const circles = [
 
 const combinedPolygons = [...polygons, ...circles];
 
-const AreaHorizontalTab = () => {
+interface SingleAreaViewProps {
+  areaSets: Area;
+}
+
+export const SingleAreaView: React.FC<SingleAreaViewProps> = ({ areaSets }) => {
   const [selectedButton, setSelectedButton] = useState("Area Polygon & Circle"); // Initialize to null
 
   const handleButtonClick = (title: string) => {
@@ -64,77 +69,40 @@ const AreaHorizontalTab = () => {
   return (
     <Box sx={{ minHeight: "420px" }}>
       <Box>
-        <AlertInfoText title={"Altitude"} content={"Not Available"} />
-        <AlertInfoText title={"Area Desc"} content={"Komi Republic"} />
-        <AlertInfoText title={"Ceiling"} content={"Not Available"} />
-      </Box>
-      <Box
-        display="flex"
-        justifyContent="center"
-        width="100%"
-        sx={{ padding: "20px" }}
-      >
-        {infoSets.map((info, index) => (
-          <Button
-            key={index}
-            onClick={() => handleButtonClick(info.title)}
-            variant={selectedButton === info.title ? "contained" : "outlined"}
-            sx={{
-              borderRadius: "20px",
-              padding: "12px 24px",
-              fontWeight: 600,
-              textTransform: "none",
-              backgroundColor:
-                selectedButton === info.title ? "#fcd4dc" : "#DEDEDE",
-              color: selectedButton === info.title ? "red" : "#9A9797",
-              "&:hover": {
-                backgroundColor: "#fcd4dc",
-              },
-              marginRight: "10px",
-              marginLeft: "10px",
-            }}
-          >
-            {info.title}
-          </Button>
-        ))}
+        {Object.entries(areaSets).map(
+          ([key, value]) =>
+            !Array.isArray(value) &&
+            ((value as unknown) !== "" ? (
+              <AlertInfoText key={key} title={key} content={value as any} />
+            ) : (
+              <AlertInfoText key={key} title={key} content={"Not available"} />
+            ))
+        )}
       </Box>
 
-      <Box paddingRight="30px" paddingLeft="30px" paddingBottom={"20px"}>
-        {infoSets.map((info, index) => (
-          <div
-            key={index}
-            style={{
-              display: selectedButton === info.title ? "block" : "none",
-            }}
-          >
-            {selectedButton === info.title && (
-              <>
-                {info.title === "Area Polygon & Circle" && (
-                  <>
-                    <AreaPolygonCircle />
-                  </>
-                )}
-                {/* {info.title === "Area Circle" && (
-                  <AlertInfoMap
-                    areaCircle={{
-                      coordinates: [-5.380571851623813, 38.61525108318435],
-                      radius: 100,
-                    }}
-                  />
-                )} */}
-                {info.title === "Area Geocode" && (
-                  <Card sx={{ padding: "20px" }}>
-                    <AlertInfoText title={"value Name"} content={"HMCSTD"} />
-                    <AlertInfoText title={"Value"} content={"2_30"} />
-                  </Card>
-                )}
-              </>
-            )}
-          </div>
-        ))}
+      <Box>
+        <Typography variant="h4">Area Polygon & Circle</Typography>
+
+        <AreaPolygonCircle areaSets={areaSets} />
+        <Divider />
+        <Typography variant="h4">Gecode</Typography>
+
+        <Box sx={{ height: "150px", overflowY: "auto" }}>
+          {areaSets.geocode.map((geocode: AreaGeocodes, index: number) => (
+            <Card key={index} sx={{ padding: "20px" }}>
+              <Fragment>
+                <AlertInfoText
+                  title={"Value Name"}
+                  content={geocode.value_name}
+                />
+                <AlertInfoText title={"Value"} content={geocode.value} />
+              </Fragment>
+            </Card>
+          ))}
+        </Box>
       </Box>
     </Box>
   );
 };
 
-export default AreaHorizontalTab;
+export default SingleAreaView;

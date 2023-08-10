@@ -1,10 +1,19 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import axios from "axios";
-import { Alert, Country_Admin1s_Data, admin1 } from "./types";
+import {
+  Alert,
+  AlertInfo,
+  Area,
+  AreaPolygon,
+  Country_Admin1s_Data,
+  admin1,
+} from "./types";
 import { Autocomplete, TextField } from "@mui/material";
 
 import React from "react";
 import { useParams } from "react-router-dom";
+import { number } from "yup";
+import { convertCoordinates } from "./helperFunctions";
 
 type ResponseAdmin1Type = {
   id: number;
@@ -18,8 +27,8 @@ interface ResponseType {
   data: Alert;
 }
 
-const GetAlertInfoByAlertID = () => {
-  const [data, setData] = useState<any | null>(null);
+export const GetAlertInfoByAlertID = () => {
+  const [data, setData] = useState<Alert | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const currentAlertID = useRef<number | null>(null);
@@ -43,13 +52,36 @@ const GetAlertInfoByAlertID = () => {
         if (!response.data || Object.keys(response.data).length === 0) {
           throw new Error("Data is empty or invalid.");
         }
-        const info = response.data.info;
+
         let data = response.data;
-        delete data.info;
-        setData({
-          main_data: data,
-          info: info,
+        data.info!.forEach((alert_info: AlertInfo) => {
+          alert_info.area.forEach((area: any) => {
+            if (area.polygon.length > 0) {
+              area.polygon = area.polygon.map((polygon: any, index: number) => {
+                polygon.name = `Polygon ${index + 1}`;
+                polygon.coordinates = convertCoordinates(polygon.value).map(
+                  ([x, y]) => [y, x]
+                );
+                polygon.type = "Polygon";
+                delete polygon.value;
+                return polygon;
+              });
+            }
+            if (area.circle.length > 0) {
+              area.circle = area.circle.map((circle: any, index: number) => {
+                circle.name = `Circle ${index + 1}`;
+                const [coordinatesStr, radius] = circle.value.split(" ");
+                const coordinates = coordinatesStr.split(",").map(parseFloat);
+                circle.center = [coordinates[1], coordinates[0]];
+                circle.type = "Circle";
+                circle.radius = radius as number;
+                delete circle.value;
+                return circle;
+              });
+            }
+          });
         });
+        setData(data);
         setLoading(false);
         currentAlertID.current = alertID;
       } catch (error: any) {
@@ -83,7 +115,7 @@ export const AlertInfoTest = () => {
       {error && <h1>Error</h1>}
       {data && !loading && !error && (
         <div>
-          <h1>{data.main_data.id}</h1>
+          <h1>{data.id}</h1>
         </div>
       )}
     </>

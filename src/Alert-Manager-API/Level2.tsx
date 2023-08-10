@@ -98,7 +98,7 @@ export const useLevel2Data = () => {
 
                 return admin1;
               });
-              modifiedData.admin1s.reverse();
+              //modifiedData.admin1s.reverse();
             }
             if (modifiedData.admin1s.length === 0) {
               console.log("EMPTY", modifiedData);
