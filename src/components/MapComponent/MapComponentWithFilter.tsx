@@ -125,7 +125,7 @@ const MapComponentWithFilter: React.FC<MapComponentWithFilterProps> = ({
             }
             return option.value === value.value;
           }}
-          disabled={countrySelected}
+          //disabled={countrySelected}
         />
 
         <Autocomplete
@@ -161,7 +161,7 @@ const MapComponentWithFilter: React.FC<MapComponentWithFilterProps> = ({
             }
             return option.value === value.value;
           }}
-          disabled={countrySelected}
+          // disabled={countrySelected}
         />
         <Autocomplete
           disablePortal
@@ -196,7 +196,7 @@ const MapComponentWithFilter: React.FC<MapComponentWithFilterProps> = ({
             }
             return option.value === value.value;
           }}
-          disabled={countrySelected}
+          // disabled={countrySelected}
         />
 
         <Button color="secondary" onClick={handleSearch}>

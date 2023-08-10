@@ -258,7 +258,14 @@ const MapComponent: React.FC<MapProps> = ({
 
   useEffect(() => {
     setCountryRegionDataLoading(true);
-    setCountrySelected(false);
+    if (countrySelected) {
+      countryControlChange();
+      setCountrySelected(false);
+    }
+    if (admin1Clicked) {
+      handleClose();
+      setAdmin1Clicked(false);
+    }
 
     if (!mapRef.current) {
       mapRef.current = new mapboxgl.Map({
