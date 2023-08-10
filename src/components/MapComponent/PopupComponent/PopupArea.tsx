@@ -1,17 +1,16 @@
 import {
   Box,
-  Button,
   Card,
   FormControl,
-  IconButton,
   MenuItem,
   Select,
   Typography,
 } from "@mui/material";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Map as MapboxMap } from "mapbox-gl";
-import CancelPresentationIcon from "@mui/icons-material/CancelPresentation";
 import { AlertInfoArea } from "../../../Alert-Manager-API/types";
+import turfCircle from "@turf/circle";
+
 const coordinatesArray = [
   [
     [46.402337365920744, -17.803245312080932],
@@ -76,16 +75,80 @@ export const PopupArea = ({
 
   const [selectedIndex, setSelectedIndex] = useState(-1);
   const [selectedShape, setSelectedShape] = useState<any>(null);
-
+  const [combinedShapes, setCombinedShapes] = useState<any>(null);
+  const sourceID = "infoArea-source";
+  const layerID = "infoArea-layer";
   const handleShapeChange = (event: any) => {
     const newSelectedIndex = event.target.value;
     if (newSelectedIndex !== -1) {
       setSelectedIndex(newSelectedIndex);
-      setSelectedShape(null);
       setSelectedShape(combinedShapes[newSelectedIndex]);
+
+      if (mapRef.current?.getSource(sourceID)) {
+        mapRef.current?.removeLayer(layerID);
+        mapRef.current?.removeSource(sourceID);
+      }
+      console.log(combinedShapes[newSelectedIndex].coordinates);
+
+      if (combinedShapes[newSelectedIndex].type === "Polygon") {
+        mapRef.current?.addSource(sourceID, {
+          type: "geojson",
+          data: {
+            type: "Feature",
+            geometry: {
+              type: "Polygon" as any,
+              coordinates: [
+                combinedShapes[newSelectedIndex].coordinates,
+              ] as any,
+            },
+            properties: {},
+          },
+        });
+        mapRef.current?.addLayer({
+          id: layerID,
+          type: "fill",
+          source: sourceID,
+          paint: {
+            "fill-color": "#f6333f",
+            "fill-opacity": 1,
+          },
+        });
+        console.log(mapRef.current?.getStyle().layers);
+      } else {
+        var circle = turfCircle(
+          combinedShapes[newSelectedIndex]?.center as any,
+          combinedShapes[newSelectedIndex]?.radius as any,
+          {
+            units: "kilometers",
+            // properties: { foo: "bar" },
+          }
+        );
+
+        console.log("CIRCLE: ", circle);
+
+        mapRef.current?.addSource(sourceID, {
+          type: "geojson",
+          data: circle,
+        });
+
+        mapRef.current?.addLayer({
+          id: layerID,
+          type: "fill",
+          source: sourceID,
+          paint: {
+            "fill-color": "#0000FF",
+            "fill-opacity": 0.8,
+          },
+        });
+      }
     } else {
       setSelectedIndex(newSelectedIndex);
       setSelectedShape(null);
+
+      if (mapRef.current?.getSource(sourceID)) {
+        mapRef.current?.removeLayer(layerID);
+        mapRef.current?.removeSource(sourceID);
+      }
     }
   };
 
@@ -94,83 +157,75 @@ export const PopupArea = ({
   //   setSelectedIndex(-1);
   // };
   useEffect(() => {
-    const sourceID = "infoArea-source";
-    const layerID = "infoArea-layer";
-    if (mapRef.current?.getSource(sourceID)) {
-      mapRef.current?.removeLayer(layerID);
-      mapRef.current?.removeSource(sourceID);
-    }
-
     if (!loading && !error) {
-      // console.log("data", data);
-      if (!mapRef.current || selectedShape === null) {
+      console.log("info_id: ", data?.info_id);
+      let combinedShapesIn: any = [];
+      if (!mapRef.current) {
         return;
       }
-      mapRef.current?.addSource(sourceID, {
-        type: "geojson",
-        data: {
-          type: "Feature",
-          geometry: {
-            type: "Polygon" as any,
-            coordinates: coordinatesArray as any,
-          },
-          properties: {},
-        },
+      console.log("DATA AREAS: ", data?.areas);
+      data?.areas?.forEach((area: any) => {
+        combinedShapesIn.push(...area.polygons, ...area.circles);
       });
-      mapRef.current?.addLayer({
-        id: layerID,
-        type: "fill",
-        source: sourceID,
-        paint: {
-          "fill-color": "#f6333f",
-          "fill-opacity": 0.8,
-        },
-      });
+
+      setCombinedShapes(combinedShapesIn);
     }
-  }, [selectedShape, mapRef, loading, error]);
+  }, [data?.areas, loading, error, data?.info_id, mapRef]); // Add data.areas, loading, and error as dependencies
 
   return (
     <>
-      <Card sx={{ padding: "5px" }}>
-        <Box display="flex" alignItems="center">
-          <Typography
-            variant="h5"
-            sx={{ fontSize: "0.75rem" }}
-            fontWeight={600}
-            paddingRight={"10px"}
-          >
-            See on the map:
-          </Typography>
-          <FormControl
-            sx={{
-              display: "flex",
-              alignItems: "center",
-              "& .MuiInputBase-root": {
-                margin: "0px !important",
-                height: "30px",
-              },
-            }}
-          >
-            <Select
-              value={selectedIndex}
-              onChange={handleShapeChange}
-              style={{ marginTop: "10px", marginRight: "10px" }}
-              sx={{
-                width: 170,
-                backgroundColor: "#f4f4f4",
-                fontSize: "0.75rem",
-              }}
-            >
-              <MenuItem value={-1}>Select an option</MenuItem>
-              {combinedShapes.map((shape, index) => (
-                <MenuItem key={index} value={index}>
-                  {shape.name}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-        </Box>
-      </Card>
+      {!loading &&
+        !error &&
+        data &&
+        combinedShapes !== null &&
+        combinedShapes.length > 0 && (
+          <Card sx={{ padding: "5px" }}>
+            <Box display="flex" alignItems="center">
+              <Typography
+                variant="h5"
+                sx={{ fontSize: "0.75rem" }}
+                fontWeight={600}
+                paddingRight={"10px"}
+              >
+                See on the map:
+              </Typography>
+
+              <FormControl
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  "& .MuiInputBase-root": {
+                    margin: "0px !important",
+                    height: "30px",
+                  },
+                }}
+              >
+                <Select
+                  value={selectedIndex}
+                  onChange={handleShapeChange}
+                  style={{ marginTop: "10px", marginRight: "10px" }}
+                  sx={{
+                    width: 170,
+                    backgroundColor: "#f4f4f4",
+                    fontSize: "0.75rem",
+                  }}
+                >
+                  <MenuItem value={-1}>Select an option</MenuItem>
+
+                  {combinedShapes.map((shape: any, index: number) => {
+                    console.log(shape); // This line logs to the console
+
+                    return (
+                      <MenuItem key={index} value={index}>
+                        {shape.name}
+                      </MenuItem>
+                    );
+                  })}
+                </Select>
+              </FormControl>
+            </Box>
+          </Card>
+        )}
     </>
   );
 };

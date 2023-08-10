@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import axios from "axios";
 import { convertCoordinates } from "./helperFunctions";
 import { AlertInfoArea } from "./types";
@@ -69,18 +69,44 @@ export const useLevel4Data = () => {
           }
           if (response.data.areas && response.data.areas.length > 0) {
             response.data.areas = response.data.areas.map((area: any) => {
-              if (area.polygons !== "") {
-                area.polygons = area.polygons.map((polygon: any) => {
-                  polygon.value = convertCoordinates(polygon.value);
-                  return polygon;
-                });
+              if (area.polygons.length !== 0) {
+                area.polygons = area.polygons.map(
+                  (polygon: any, index: number) => {
+                    polygon.name = `Polygon ${index + 1}`;
+                    //polygon.coordinates = convertCoordinates(polygon.value);
+                    polygon.coordinates = convertCoordinates(polygon.value).map(
+                      ([x, y]) => [y, x]
+                    );
+
+                    polygon.type = "Polygon";
+                    delete polygon.value;
+                    return polygon;
+                  }
+                );
+              }
+              if (area.circles.length !== 0) {
+                area.circles = area.circles.map(
+                  (circle: any, index: number) => {
+                    circle.name = `Circle ${index + 1}`;
+                    const [coordinatesStr, radius] = circle.value.split(" ");
+                    const coordinates = coordinatesStr
+                      .split(",")
+                      .map(parseFloat);
+                    circle.center = [coordinates[1], coordinates[0]];
+                    circle.type = "Circle";
+                    circle.radius = radius as number;
+                    delete circle.value;
+                    return circle;
+                  }
+                );
               }
               return area;
             });
           } else {
             throw new Error("areas is empty");
           }
-          setData(response.data);
+          console.log(response.data);
+          setData(response.data as any);
           setLoading(false);
         } catch (error: any) {
           console.error("Error fetching data:", error.message);
@@ -97,9 +123,12 @@ export const useLevel4Data = () => {
 };
 
 const Level4: React.FC = () => {
-  const [admin1ID, setAdmin1ID] = useState<number>(1765);
+  const [admin1ID, setAdmin1ID] = useState<number>(78698);
   const { data, loading, error, refetch } = useLevel4Data();
 
+  useEffect(() => {
+    handleFetch();
+  });
   const handleFetch = () => {
     if (admin1ID) {
       refetch(admin1ID);

@@ -109,12 +109,17 @@ type Area = {
 
 type AreaPolygon = {
   id: number;
-  value: string;
+  coordinates: any[];
+  type: string;
+  name: string;
 };
 
 type AreaCircle = {
   id: number;
-  value: string;
+  type: string;
+  name: string;
+  center: any[];
+  radius: number;
 };
 
 type AreaGeocodes = {
