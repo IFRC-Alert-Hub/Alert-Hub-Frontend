@@ -20,10 +20,10 @@ import CountryAutocomplete from "./CountryAutocomplete";
 import { GET_SUBSCRIPTIONS } from "../../../API/ALL_QUERIES";
 import {
   CountryOptionsType,
-  DistrictOptionsType,
+  Admin1OptionsType,
   SubscriptionForm,
 } from "../../../API/TYPES";
-import DistrictAutocomplete from "./DistrictAutocomplete";
+import Admin1Autocomplete from "./Admin1Autocomplete";
 import SentFlagRadio from "./SentFlagRadio";
 
 const style = {
@@ -90,14 +90,14 @@ const ModalForm = ({
   });
 
   const [verifyForm, setVerifyForm] = useState(false);
-  const [districtList, setDistrictList] = useState<
-    DistrictOptionsType[] | null
-  >(null);
+  const [admin1List, setAdmin1List] = useState<Admin1OptionsType[] | null>(
+    null
+  );
 
   const formErrors = {
     subscriptionName: selectedRow.subscriptionName.length < 1,
     countryIds: selectedRow.countryIds.length < 1,
-    districtIds: selectedRow.districtIds.length < 1,
+    admin1Ids: selectedRow.admin1Ids.length < 1,
     urgencyArray: selectedRow.urgencyArray.length < 1,
     severityArray: selectedRow.severityArray.length < 1,
     certaintyArray: selectedRow.certaintyArray.length < 1,
@@ -111,16 +111,17 @@ const ModalForm = ({
     );
     console.log(countryList);
     console.log(filteredCountry);
-    const districtList = filteredCountry.flatMap((country) => {
-      const { id, name, districts } = country;
-      return districts.map((district) => ({
-        districtId: district.id,
-        districtName: district.name,
+    const admin1List = filteredCountry.flatMap((country) => {
+      const { id, name, admin1s } = country;
+      return admin1s.map((admin1) => ({
+        admin1Id: admin1.id,
+        admin1Name: admin1.name,
         countryId: id,
         countryName: name,
       }));
     });
-    setDistrictList(districtList);
+    console.log("admin1List", admin1List);
+    setAdmin1List(admin1List);
   }, [countryList, selectedRow.countryIds]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -156,7 +157,7 @@ const ModalForm = ({
             subscriptionId: parseInt(selectedRow.id),
             subscriptionName: selectedRow.subscriptionName,
             countryIds: selectedRow.countryIds,
-            districtIds: selectedRow.districtIds,
+            admin1Ids: selectedRow.admin1Ids,
             urgencyArray: selectedRow.urgencyArray,
             severityArray: selectedRow.severityArray,
             certaintyArray: selectedRow.certaintyArray,
@@ -169,7 +170,7 @@ const ModalForm = ({
           variables: {
             subscriptionName: selectedRow.subscriptionName,
             countryIds: selectedRow.countryIds,
-            districtIds: selectedRow.districtIds,
+            admin1Ids: selectedRow.admin1Ids,
             urgencyArray: selectedRow.urgencyArray,
             severityArray: selectedRow.severityArray,
             certaintyArray: selectedRow.certaintyArray,
@@ -185,7 +186,7 @@ const ModalForm = ({
 
   return (
     <>
-      {districtList && (
+      {admin1List && (
         <Modal
           open={modalOpen}
           onClose={() => {
@@ -254,10 +255,10 @@ const ModalForm = ({
                 setSelectedRow={setSelectedRow}
               />
 
-              <DistrictAutocomplete
+              <Admin1Autocomplete
                 verifyForm={verifyForm}
                 formErrors={formErrors}
-                districtList={districtList}
+                admin1List={admin1List}
                 selectedRow={selectedRow}
                 setSelectedRow={setSelectedRow}
               />

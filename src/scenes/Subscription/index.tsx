@@ -18,7 +18,7 @@ import { RADIO_OPTIONS } from "./components/SentFlagRadio";
 const INIT_ROW: SubscriptionForm = {
   subscriptionName: "",
   countryIds: [],
-  districtIds: [],
+  admin1Ids: [],
   urgencyArray: [],
   severityArray: [],
   certaintyArray: [],
@@ -66,6 +66,7 @@ const Subscription = () => {
   if (subscriptionLoading) {
     tableContent = <Progress />;
   } else if (subscriptionError) {
+    console.error(subscriptionError);
     tableContent = (
       <Typography variant="h5" textAlign={"center"} color={"gray"} mt={10}>
         Something error! Please contact the application administrator.
@@ -78,20 +79,18 @@ const Subscription = () => {
           const foundCountry = countryData.find((country) => country.id === id);
           return foundCountry?.name;
         });
-        const districtNames = item.districtIds.map((id: number) => {
+        const admin1Names = item.admin1Ids.map((id: number) => {
           const foundCountry = countryData.find(
             (country) => country.id === item.countryIds[0]
           );
-          const districtsList = foundCountry?.districts;
-          const foundDistricts = districtsList?.find(
-            (district) => district.id === id
-          );
-          return foundDistricts?.name;
+          const admin1sList = foundCountry?.admin1s;
+          const foundAdmin1s = admin1sList?.find((admin1) => admin1.id === id);
+          return foundAdmin1s?.name;
         });
         const sentFlagName = RADIO_OPTIONS.find(
           (option) => Number(option.value) === item.sentFlag
         )?.label;
-        return { ...item, countryNames, districtNames, sentFlagName };
+        return { ...item, countryNames, admin1Names, sentFlagName };
       }
     );
     tableContent = (
