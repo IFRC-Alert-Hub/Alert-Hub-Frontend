@@ -130,7 +130,7 @@ export const InfoSetsHorizontalTabs: React.FC<InfoSetsHorizontalTabsProps> = ({
                 </Grid>
                 <Grid item xs={12} sm={12} md={6}>
                   <Card sx={{ padding: "20px" }}>
-                    <AreaInfoHorizontalTab infoSets={infoSets} />
+                    <AreaInfoHorizontalTab infoSets={info} />
                   </Card>
                 </Grid>
               </Grid>

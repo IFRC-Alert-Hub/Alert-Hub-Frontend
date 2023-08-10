@@ -36,7 +36,7 @@ function CustomTabPanel(props: TabPanelProps) {
 }
 
 interface AreaInfoHorizontalTabProps {
-  infoSets: AlertInfo[];
+  infoSets: AlertInfo;
 }
 
 export const AreaInfoHorizontalTab: React.FC<AreaInfoHorizontalTabProps> = ({
@@ -69,36 +69,34 @@ export const AreaInfoHorizontalTab: React.FC<AreaInfoHorizontalTabProps> = ({
             },
           }}
         >
-          {infoSets.map((info: AlertInfo) =>
-            info.area.map((area: Area, index: number) => {
-              return (
-                <Tab
-                  key={index}
-                  label={
-                    <div style={{ display: "flex", alignItems: "center" }}>
-                      {`Area ${index + 1}`}
-                    </div>
-                  }
-                  {...a11yProps(index)}
-                  sx={
-                    value === index
-                      ? {
-                          backgroundColor: "#fcd4dc",
-                        }
-                      : {
-                          backgroundColor: "#DEDEDE",
-                          color: "#9A9797",
-                        }
-                  }
-                />
-              );
-            })
-          )}
+          {infoSets.area.map((area: Area, index: number) => {
+            return (
+              <Tab
+                key={index}
+                label={
+                  <div style={{ display: "flex", alignItems: "center" }}>
+                    {`Area ${index + 1}`}
+                  </div>
+                }
+                {...a11yProps(index)}
+                sx={
+                  value === index
+                    ? {
+                        backgroundColor: "#fcd4dc",
+                      }
+                    : {
+                        backgroundColor: "#DEDEDE",
+                        color: "#9A9797",
+                      }
+                }
+              />
+            );
+          })}
         </Tabs>
       </Box>
-      {infoSets.map((info: AlertInfo, index: any) => (
+      {infoSets.area.map((area: Area, index: number) => (
         <CustomTabPanel key={index} value={value} index={index}>
-          <SingleAreaView areaSets={info.area[index]} />
+          <SingleAreaView areaSets={area} />
         </CustomTabPanel>
       ))}
     </Box>
