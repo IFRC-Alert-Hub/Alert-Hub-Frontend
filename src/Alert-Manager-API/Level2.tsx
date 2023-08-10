@@ -8,6 +8,7 @@ type ResponseAdmin1Type = {
   name: string;
   polygon: string;
   multipolygon: string;
+  filters: any;
 };
 
 interface ResponseType {
@@ -30,13 +31,12 @@ export const useLevel2Data = () => {
   };
 
   useEffect(() => {
-    console.log("LEVEL 2 filters", filters);
+    console.log("FILTERS 2: ", filters);
     setLoading(true);
     setError(null);
     if (countryID !== null) {
       const fetchData = async () => {
         try {
-          console.log("ID: ", countryID);
           if (countryID === null) {
             throw new Error("Country ID is not provided.");
           }
@@ -59,7 +59,7 @@ export const useLevel2Data = () => {
 
           if (modifiedData.admin1s && modifiedData.admin1s.length > 0) {
             modifiedData.admin1s = modifiedData.admin1s.filter(
-              (admin1: any) => {
+              (admin1: ResponseAdmin1Type) => {
                 const adminFilters: any = admin1.filters;
                 if (!adminFilters) {
                   return true;
@@ -82,22 +82,27 @@ export const useLevel2Data = () => {
                 return true;
               }
             );
-            modifiedData.admin1s = modifiedData.admin1s.map((admin1: any) => {
-              if (admin1.polygon === null) {
-                admin1.type = "MultiPolygon";
-                admin1.coordinates = JSON.parse(admin1.multipolygon);
-                delete admin1.polygon;
-                delete admin1.multipolygon;
-              } else {
-                admin1.type = "Polygon";
-                admin1.coordinates = JSON.parse(admin1.polygon);
-                delete admin1.polygon;
-                delete admin1.multipolygon;
-              }
+            if (modifiedData.admin1s.length > 0) {
+              modifiedData.admin1s = modifiedData.admin1s.map((admin1: any) => {
+                if (admin1.polygon === null) {
+                  admin1.type = "MultiPolygon";
+                  admin1.coordinates = JSON.parse(admin1.multipolygon);
+                  delete admin1.polygon;
+                  delete admin1.multipolygon;
+                } else {
+                  admin1.type = "Polygon";
+                  admin1.coordinates = JSON.parse(admin1.polygon);
+                  delete admin1.polygon;
+                  delete admin1.multipolygon;
+                }
 
-              return admin1;
-            });
-            modifiedData.admin1s.reverse();
+                return admin1;
+              });
+              modifiedData.admin1s.reverse();
+            }
+            if (modifiedData.admin1s.length === 0) {
+              console.log("EMPTY", modifiedData);
+            }
           } else {
             throw new Error("admin1 is empty");
           }
@@ -143,6 +148,7 @@ const Level2: React.FC = () => {
       severity: "",
       certainty: "",
     });
+    console.log("UPDATED DATA: ", data);
   };
   return (
     <div>
@@ -196,11 +202,18 @@ const Level2: React.FC = () => {
             }}
           />{" "}
           <ul>
-            <li>
+            <li key={data.country_id}>
               {data.country_name}
               <ul>
-                {data.admin1s?.map((admin1) => (
-                  <li key={admin1.id}>{admin1.name}</li>
+                {data.admin1s?.map((admin1: admin1) => (
+                  <li key={admin1.id}>
+                    {admin1.name}
+                    <ul>
+                      <li>URGENCY: {admin1.filters.urgency}</li>
+                      <li>SEVERITY: {admin1.filters.severity}</li>
+                      <li>CERTAINTY: {admin1.filters.certainty}</li>
+                    </ul>
+                  </li>
                 ))}
               </ul>
             </li>

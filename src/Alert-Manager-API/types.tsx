@@ -18,6 +18,7 @@ export type Country = {
   coordinates: any[];
   type: string;
   centroid: any[];
+  filters: any;
 };
 
 // Level 2
@@ -33,6 +34,7 @@ export type admin1 = {
   iso3: string;
   coordinates: any[];
   type: string;
+  filters: any;
 };
 
 // Level 3

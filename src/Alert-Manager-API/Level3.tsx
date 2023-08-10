@@ -69,7 +69,7 @@ export const useLevel3Data = () => {
   };
 
   useEffect(() => {
-    console.log("LEVEL 3 filters", filters);
+    console.log("FILTERS 3: ", filters);
 
     setLoading(true);
     setError(null);
@@ -95,38 +95,28 @@ export const useLevel3Data = () => {
           if (response.data.alerts && response.data.alerts.length > 0) {
             const filteredAlerts = modifiedData.alerts.filter(
               (alert: ResponseAlertType) => {
-                const filteredInfo = alert.info.filter(
+                const infoMatchesFilters = alert.info.every(
                   (info: ResponseInfoType) => {
-                    const shouldIncludeInfo = Object.keys(filters).every(
-                      (filterKey) => {
-                        console.log("filterKey: ", filterKey.toLowerCase());
-                        const filteredValue = filters[filterKey].toLowerCase();
-                        if (filteredValue === null || filteredValue === "") {
-                          return true;
-                        }
-                        const infoValue = String(
-                          info[filterKey as keyof ResponseInfoType]
-                        ).toLowerCase();
-
-                        return infoValue === filteredValue;
+                    return Object.keys(filters).every((filterKey) => {
+                      const filteredValue = filters[filterKey].toLowerCase();
+                      if (filteredValue === null || filteredValue === "") {
+                        return true; // Skip this filter if it's not set
                       }
-                    );
-                    return shouldIncludeInfo;
+                      const infoValue = String(
+                        info[filterKey as keyof ResponseInfoType]
+                      ).toLowerCase();
+                      return infoValue === filteredValue;
+                    });
                   }
                 );
-                return filteredInfo.length > 0;
-              }
-            );
 
-            const finalFilteredAlerts = filteredAlerts.filter(
-              (alert: ResponseAlertType) => {
-                return alert.info.length > 0;
+                return infoMatchesFilters;
               }
             );
 
             const filteredData = {
               ...modifiedData,
-              alerts: finalFilteredAlerts,
+              alerts: filteredAlerts,
             };
             setData(filteredData as any);
           } else {
@@ -164,19 +154,12 @@ const Level3: React.FC = () => {
     }
   };
 
-  useEffect(() => {
-    if (!loading || !error) {
-      console.log("DATA: ", data);
-    }
-  }, [data, error, loading]);
-
   const [selectedUrgency, setSelectedUrgency] = useState<string>("");
 
   const handleUrgencyChange = (
     event: React.ChangeEvent<{}>,
     value: string | null
   ) => {
-    console.log(value);
     setSelectedUrgency(value || "");
     setFilters({
       urgency: value || "",

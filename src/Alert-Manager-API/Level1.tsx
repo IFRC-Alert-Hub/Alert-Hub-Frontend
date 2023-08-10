@@ -44,6 +44,8 @@ export const useLevel1Data = () => {
   });
 
   useEffect(() => {
+    console.log("FILTERS 1: ", filters);
+
     const fetchData = async () => {
       try {
         const response: ResponseType = await axios.get(
@@ -58,7 +60,7 @@ export const useLevel1Data = () => {
           throw new Error("Data is empty or invalid.");
         }
 
-        const updatedRegions = response.data.regions.map((region: any) => {
+        let updatedRegions = response.data.regions.map((region: any) => {
           try {
             region.centroid = JSON.parse(region?.centroid);
           } catch (error) {
@@ -102,32 +104,42 @@ export const useLevel1Data = () => {
                 return true;
               }
             );
-            region.countries = region.countries.map((country: any) => {
-              try {
-                country.centroid = JSON.parse(country?.centroid);
-                if (country.polygon === null) {
-                  country.type = "MultiPolygon";
-                  country.coordinates = JSON.parse(country.multipolygon);
-                  delete country.polygon;
-                  delete country.multipolygon;
-                } else {
-                  country.type = "Polygon";
-                  country.coordinates = JSON.parse(country.polygon);
-                  delete country.polygon;
-                  delete country.multipolygon;
+
+            if (region.countries.length > 0) {
+              region.countries = region.countries.map((country: any) => {
+                try {
+                  country.centroid = JSON.parse(country?.centroid);
+                  if (country.polygon === null) {
+                    country.type = "MultiPolygon";
+                    country.coordinates = JSON.parse(country.multipolygon);
+                    delete country.polygon;
+                    delete country.multipolygon;
+                  } else {
+                    country.type = "Polygon";
+                    country.coordinates = JSON.parse(country.polygon);
+                    delete country.polygon;
+                    delete country.multipolygon;
+                  }
+                } catch (error) {
+                  throw new Error("Invalid data for a country in a region");
                 }
-              } catch (error) {
-                throw new Error("Invalid data for a country in a region");
-              }
-              return country;
-            });
+                return country;
+              });
+            }
           } else {
             throw new Error("Data is not loaded");
           }
 
           return region;
         });
+
+        updatedRegions = updatedRegions.filter((region) => {
+          console.log(region);
+          return region.countries.length > 0;
+        });
+
         setData(updatedRegions);
+        console.log("UPDATED REGIONS: ", updatedRegions);
         setLoading(false);
       } catch (error: any) {
         setError(error.message);
@@ -211,7 +223,17 @@ const Level1: React.FC = () => {
                 {region.name}
                 <ul>
                   {region.countries?.map((country: Country) => (
-                    <li key={country.id}>{country.name}</li>
+                    <>
+                      {" "}
+                      <div key={country.id}>
+                        <li>{country.name}</li>
+                        <ul>
+                          <li>URGENCY: {country.filters.urgency}</li>
+                          <li>SEVERITY: {country.filters.severity}</li>
+                          <li>CERTAINTY: {country.filters.certainty}</li>
+                        </ul>
+                      </div>
+                    </>
                   ))}
                 </ul>
               </li>

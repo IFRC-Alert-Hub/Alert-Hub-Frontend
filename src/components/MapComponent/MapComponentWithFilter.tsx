@@ -90,7 +90,7 @@ const MapComponentWithFilter: React.FC<MapComponentWithFilterProps> = ({
         selectedFilter={selectedFilter}
         filterKey={filterKey}
       />
-      <Box padding={"20px"}>
+      <Box padding={"20px"} display="flex" alignItems="center">
         <Autocomplete
           disablePortal
           id="combo-box-urgency"

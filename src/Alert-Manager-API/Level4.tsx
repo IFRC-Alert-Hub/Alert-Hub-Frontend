@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import axios from "axios";
 import { convertCoordinates } from "./helperFunctions";
 import { AlertInfoArea } from "./types";
@@ -40,46 +40,58 @@ export const useLevel4Data = () => {
   const [data, setData] = useState<AlertInfoArea>();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const current_Info_ID = useRef<number | null>(null);
 
   const refetch = async (info_ID: number) => {
-    setLoading(true);
-    setError(null);
-    const fetchData = async () => {
-      try {
-        const response: ResponseType = await axios.get(
-          `https://alert-manager.azurewebsites.net/infos/${info_ID}`
-        );
+    console.log(current_Info_ID.current);
+    console.log(info_ID);
 
-        if (!response.data || Object.keys(response.data).length === 0) {
-          throw new Error("Data is empty or invalid.");
-        }
+    if (
+      current_Info_ID.current === null ||
+      current_Info_ID.current !== info_ID
+    ) {
+      setLoading(true);
+      setError(null);
+      console.log("refetch called with infoID:", info_ID);
 
-        if (response.data.info_id && response.data.info_id !== info_ID) {
-          throw new Error("ID does not exist");
-        }
-        if (response.data.areas && response.data.areas.length > 0) {
-          response.data.areas = response.data.areas.map((area: any) => {
-            if (area.polygons !== "") {
-              area.polygons = area.polygons.map((polygon: any) => {
-                polygon.value = convertCoordinates(polygon.value);
-                return polygon;
-              });
-            }
-            return area;
-          });
-        } else {
-          throw new Error("areas is empty");
-        }
-        setData(response.data);
-        setLoading(false);
-      } catch (error: any) {
-        console.error("Error fetching data:", error.message);
-        setError(error.message);
-        setLoading(false);
-      }
-    };
+      const fetchData = async () => {
+        try {
+          const response: ResponseType = await axios.get(
+            `https://alert-manager.azurewebsites.net/infos/${info_ID}`
+          );
 
-    fetchData();
+          if (!response.data || Object.keys(response.data).length === 0) {
+            throw new Error("Data is empty or invalid.");
+          }
+
+          if (response.data.info_id && response.data.info_id !== info_ID) {
+            throw new Error("ID does not exist");
+          }
+          if (response.data.areas && response.data.areas.length > 0) {
+            response.data.areas = response.data.areas.map((area: any) => {
+              if (area.polygons !== "") {
+                area.polygons = area.polygons.map((polygon: any) => {
+                  polygon.value = convertCoordinates(polygon.value);
+                  return polygon;
+                });
+              }
+              return area;
+            });
+          } else {
+            throw new Error("areas is empty");
+          }
+          setData(response.data);
+          setLoading(false);
+        } catch (error: any) {
+          console.error("Error fetching data:", error.message);
+          setError(error.message);
+          setLoading(false);
+        }
+      };
+      current_Info_ID.current = info_ID;
+
+      await fetchData();
+    }
   };
   return { data, loading, error, refetch };
 };

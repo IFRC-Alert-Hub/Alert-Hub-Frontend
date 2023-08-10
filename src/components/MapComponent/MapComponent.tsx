@@ -121,117 +121,120 @@ const MapComponent: React.FC<MapProps> = ({
       const unknownLayerID = `${layerId}-admin1--${Country_ID}`;
       const unknownSourceID = `${sourceId}-admin1--${Country_ID}`;
       if (mapRef.current?.isStyleLoaded()) {
-        admin1Data?.admin1s.forEach((admin1, index) => {
-          if (admin1.id < 0) {
-            admin1.coordinates = currentCountryPolygonData.current.coordinates;
-            admin1.type = currentCountryPolygonData.current.type;
-          }
-          const admin1SourceID = `${sourceId}-admin1-${admin1.id}`;
-          const admin1LayerID = `${layerId}-admin1-${admin1.id}`;
-          if (!mapRef.current?.getSource(admin1SourceID)) {
-            mapRef.current?.addSource(admin1SourceID, {
-              type: "geojson",
-              data: {
-                type: "Feature",
-                geometry: {
-                  type: admin1.type as any,
-                  coordinates: admin1.coordinates as any,
+        if (admin1Data?.admin1s.length! > 0) {
+          admin1Data?.admin1s.forEach((admin1, index) => {
+            if (admin1.id < 0) {
+              admin1.coordinates =
+                currentCountryPolygonData.current.coordinates;
+              admin1.type = currentCountryPolygonData.current.type;
+            }
+            const admin1SourceID = `${sourceId}-admin1-${admin1.id}`;
+            const admin1LayerID = `${layerId}-admin1-${admin1.id}`;
+            if (!mapRef.current?.getSource(admin1SourceID)) {
+              mapRef.current?.addSource(admin1SourceID, {
+                type: "geojson",
+                data: {
+                  type: "Feature",
+                  geometry: {
+                    type: admin1.type as any,
+                    coordinates: admin1.coordinates as any,
+                  },
+                  properties: {},
                 },
-                properties: {},
-              },
-            });
-            mapRef.current?.addLayer({
-              id: `${admin1LayerID}-border`,
-              type: "line",
-              source: admin1SourceID,
-              paint: {
-                "line-color": "black",
-                "line-width": 1.3,
-              },
-            });
-            mapRef.current?.addLayer({
-              id: `${admin1LayerID}`,
-              type: "fill",
-              source: admin1SourceID,
-              paint: {
-                "fill-color": "#000000",
-                "fill-opacity": admin1.id < 0 ? 0.2 : 0.8,
-              },
-            });
+              });
+              mapRef.current?.addLayer({
+                id: `${admin1LayerID}-border`,
+                type: "line",
+                source: admin1SourceID,
+                paint: {
+                  "line-color": "black",
+                  "line-width": 1.3,
+                },
+              });
+              mapRef.current?.addLayer({
+                id: `${admin1LayerID}`,
+                type: "fill",
+                source: admin1SourceID,
+                paint: {
+                  "fill-color": "#000000",
+                  "fill-opacity": admin1.id < 0 ? 0.2 : 0.8,
+                },
+              });
 
-            mapRef.current?.addLayer({
-              id: `${admin1LayerID}-text`,
-              type: "symbol",
-              source: admin1SourceID,
-              layout: {
-                "text-field": `${index}`,
-                "text-font": ["Open Sans Bold"],
-                "text-size": 12,
-                "text-anchor": "center",
-                "text-justify": "center",
-                "text-offset": [0, 0],
-              },
-              paint: {
-                "text-color": "#ffffff",
-              },
-            });
+              mapRef.current?.addLayer({
+                id: `${admin1LayerID}-text`,
+                type: "symbol",
+                source: admin1SourceID,
+                layout: {
+                  "text-field": `${index}`,
+                  "text-font": ["Open Sans Bold"],
+                  "text-size": 12,
+                  "text-anchor": "center",
+                  "text-justify": "center",
+                  "text-offset": [0, 0],
+                },
+                paint: {
+                  "text-color": "#ffffff",
+                },
+              });
 
-            mapRef.current?.on(
-              "click",
-              admin1LayerID,
-              (e: mapboxgl.MapMouseEvent & mapboxgl.EventData) => {
-                const clickedFeatures = mapRef.current?.queryRenderedFeatures(
-                  e.point
-                );
-                let layersClicked = new Set();
+              mapRef.current?.on(
+                "click",
+                admin1LayerID,
+                (e: mapboxgl.MapMouseEvent & mapboxgl.EventData) => {
+                  const clickedFeatures = mapRef.current?.queryRenderedFeatures(
+                    e.point
+                  );
+                  let layersClicked = new Set();
 
-                clickedFeatures?.forEach((feature, index) => {
-                  console.log(feature.layer.id);
+                  clickedFeatures?.forEach((feature, index) => {
+                    console.log(feature.layer.id);
 
-                  if (
-                    feature.layer.id.includes(`${layerId}-admin1-`) &&
-                    !feature.layer.id.includes("-text")
-                  ) {
-                    layersClicked.add(
-                      feature.layer.id.slice(`${layerId}-admin1-`.length)
-                    );
+                    if (
+                      feature.layer.id.includes(`${layerId}-admin1-`) &&
+                      !feature.layer.id.includes("-text")
+                    ) {
+                      layersClicked.add(
+                        feature.layer.id.slice(`${layerId}-admin1-`.length)
+                      );
+                    }
+                  });
+
+                  const layersClickedArray = Array.from(layersClicked);
+                  const indexToRemove = layersClickedArray.indexOf(Country_ID);
+                  if (indexToRemove !== -1) {
+                    layersClickedArray.splice(indexToRemove, 1);
                   }
-                });
+                  const firstValue = Number(layersClickedArray[0]);
+                  console.log(firstValue);
+                  if (latestRefetchAlertData.current !== (firstValue as any)) {
+                    latestRefetchAlertData.current = firstValue as any;
+                    setAlertFilter({
+                      urgency: selectedUrgency,
+                      severity: selectedSeverity,
+                      certainty: selectedCertainty,
+                    });
+                    refetchAlertData(firstValue);
+                  }
 
-                const layersClickedArray = Array.from(layersClicked);
-                const indexToRemove = layersClickedArray.indexOf(Country_ID);
-                if (indexToRemove !== -1) {
-                  layersClickedArray.splice(indexToRemove, 1);
+                  setAdmin1Clicked(true);
+                  mapContainerRef.current!.style.width = "35%";
+                  mapRef.current!.resize();
+                  if (currentCountryBoundingBox.current !== null) {
+                    mapRef.current!.flyTo({
+                      center: currentCountryBoundingBox.current
+                        ?.countryCentroid as unknown as LngLatLike,
+                      zoom:
+                        currentCountryBoundingBox.current!.zoom > 0
+                          ? currentCountryBoundingBox.current!.zoom * 0.75
+                          : mapRef.current!.getZoom(),
+                    });
+                  }
                 }
-                const firstValue = Number(layersClickedArray[0]);
-                console.log(firstValue);
-                if (latestRefetchAlertData.current !== (firstValue as any)) {
-                  latestRefetchAlertData.current = firstValue as any;
-                  setAlertFilter({
-                    urgency: selectedUrgency,
-                    severity: selectedSeverity,
-                    certainty: selectedCertainty,
-                  });
-                  refetchAlertData(firstValue);
-                }
-
-                setAdmin1Clicked(true);
-                mapContainerRef.current!.style.width = "35%";
-                mapRef.current!.resize();
-                if (currentCountryBoundingBox.current !== null) {
-                  mapRef.current!.flyTo({
-                    center: currentCountryBoundingBox.current
-                      ?.countryCentroid as unknown as LngLatLike,
-                    zoom:
-                      currentCountryBoundingBox.current!.zoom > 0
-                        ? currentCountryBoundingBox.current!.zoom * 0.75
-                        : mapRef.current!.getZoom(),
-                  });
-                }
-              }
-            );
-          }
-        });
+              );
+            }
+          });
+        }
       }
     };
     if (countryIDs && admin1Data) {
@@ -275,7 +278,15 @@ const MapComponent: React.FC<MapProps> = ({
         mapRef.current = null;
       }
     };
-  }, [lat, lng, mapContainerRef, mapRef, zoom, CountryRegionData]);
+  }, [
+    lat,
+    lng,
+    mapContainerRef,
+    mapRef,
+    zoom,
+    CountryRegionData,
+    setCountrySelected,
+  ]);
 
   useEffect(() => {
     console.log(CountryRegionData);
@@ -294,36 +305,38 @@ const MapComponent: React.FC<MapProps> = ({
           const sourceId = `country-source-${country.id}`;
 
           const layerId = `country-layer-${country.id}`;
-          mapRef.current?.addSource(sourceId, {
-            type: "geojson",
-            data: {
-              type: "Feature",
-              geometry: {
-                type: country.type as any,
-                coordinates: country.coordinates as any,
+          if (!mapRef.current?.getSource(sourceId)) {
+            mapRef.current?.addSource(sourceId, {
+              type: "geojson",
+              data: {
+                type: "Feature",
+                geometry: {
+                  type: country.type as any,
+                  coordinates: country.coordinates as any,
+                },
+                properties: {},
               },
-              properties: {},
-            },
-          });
+            });
 
-          mapRef.current?.addLayer({
-            id: `${layerId}-border`,
-            type: "line",
-            source: sourceId,
-            paint: {
-              "line-color": "black",
-              "line-width": 2,
-            },
-          });
-          mapRef.current?.addLayer({
-            id: `${layerId}`,
-            type: "fill",
-            source: sourceId,
-            paint: {
-              "fill-color": ExtremeThreatColour,
-              "fill-opacity": 0.8,
-            },
-          });
+            mapRef.current?.addLayer({
+              id: `${layerId}-border`,
+              type: "line",
+              source: sourceId,
+              paint: {
+                "line-color": "black",
+                "line-width": 2,
+              },
+            });
+            mapRef.current?.addLayer({
+              id: `${layerId}`,
+              type: "fill",
+              source: sourceId,
+              paint: {
+                "fill-color": ExtremeThreatColour,
+                "fill-opacity": 0.8,
+              },
+            });
+          }
 
           mapRef.current?.on(
             "click",
@@ -433,6 +446,7 @@ const MapComponent: React.FC<MapProps> = ({
     selectedUrgency,
     selectedSeverity,
     selectedCertainty,
+    setCountrySelected,
   ]);
   const countryControlChange = () => {
     currentCountryBoundingBox.current = null;

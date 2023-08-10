@@ -8,7 +8,7 @@ import {
   Select,
   Typography,
 } from "@mui/material";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { Map as MapboxMap } from "mapbox-gl";
 import CancelPresentationIcon from "@mui/icons-material/CancelPresentation";
 import { AlertInfoArea } from "../../../Alert-Manager-API/types";
@@ -69,11 +69,11 @@ export const PopupArea = ({
   infoDataHandler,
 }: PopupAreaProps) => {
   const { data, loading, error, refetch } = infoDataHandler;
+
   useEffect(() => {
-    //console.log(infoID);
     refetch(infoID);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [infoID]);
+  }, []);
+
   const [selectedIndex, setSelectedIndex] = useState(-1);
   const [selectedShape, setSelectedShape] = useState<any>(null);
 
