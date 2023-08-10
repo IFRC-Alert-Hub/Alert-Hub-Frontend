@@ -27,6 +27,7 @@ import Level2 from "./Alert-Manager-API/Level2";
 import Level3 from "./Alert-Manager-API/Level3";
 import Level4 from "./Alert-Manager-API/Level4";
 import RegionTest from "./Alert-Manager-API/Region";
+import { AlertInfoTest } from "./Alert-Manager-API/AlertInfo";
 
 function App() {
   // useEffect(() => {
@@ -81,6 +82,7 @@ function App() {
                 <Route path="/level-3" element={<Level3 />} />
                 <Route path="/level-4" element={<Level4 />} />
                 <Route path="/level-5" element={<RegionTest />} />
+                <Route path="/alert-info/:id" element={<AlertInfoTest />} />
 
                 <Route path="/404" element={<PageNotFound />} />
 

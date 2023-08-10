@@ -59,7 +59,7 @@ export type Alert = {
   note: string;
   references: string;
   incidents: string;
-  info: AlertInfo[];
+  info?: AlertInfo[];
 };
 
 export type AlertInfo = {
@@ -82,7 +82,8 @@ export type AlertInfo = {
   instruction: string;
   web: string;
   contact: string;
-  parameter: InfoParameter;
+  parameter: InfoParameter[];
+  area: Area[];
 };
 
 type InfoParameter = {

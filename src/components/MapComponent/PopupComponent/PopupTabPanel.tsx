@@ -164,7 +164,7 @@ export const PopupTabPanel: React.FC<PopupTabPanelProps> = ({
         <PopupInfoHorizontalTab
           mapRef={mapRef}
           key={index}
-          alertInfo={alert.info}
+          alertInfo={alert.info as any}
           infoDataHandler={infoDataHandler}
         />
       </TabPanel>
