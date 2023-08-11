@@ -1,27 +1,10 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import axios from "axios";
-import {
-  Alert,
-  AlertInfo,
-  Area,
-  AreaPolygon,
-  Country_Admin1s_Data,
-  admin1,
-} from "./types";
-import { Autocomplete, TextField } from "@mui/material";
+import { Alert, AlertInfo } from "./types";
 
 import React from "react";
 import { useParams } from "react-router-dom";
-import { number } from "yup";
 import { convertCoordinates } from "./helperFunctions";
-
-type ResponseAdmin1Type = {
-  id: number;
-  name: string;
-  polygon: string;
-  multipolygon: string;
-  filters: any;
-};
 
 interface ResponseType {
   data: Alert;

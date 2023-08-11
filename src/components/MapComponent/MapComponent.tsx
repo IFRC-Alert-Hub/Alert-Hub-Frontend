@@ -287,6 +287,7 @@ const MapComponent: React.FC<MapProps> = ({
         mapRef.current = null;
       }
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     lat,
     lng,
@@ -454,6 +455,7 @@ const MapComponent: React.FC<MapProps> = ({
         });
       }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     CountryRegionData,
     error,

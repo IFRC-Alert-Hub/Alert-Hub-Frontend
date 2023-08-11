@@ -6,7 +6,7 @@ import {
   Select,
   Typography,
 } from "@mui/material";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Map as MapboxMap } from "mapbox-gl";
 import { AlertInfoArea } from "../../../Alert-Manager-API/types";
 import turfCircle from "@turf/circle";
@@ -49,8 +49,6 @@ const circles: any = [
     radius: 100,
   },
 ];
-
-const combinedShapes = [...polygons, ...circles];
 
 interface PopupAreaProps {
   mapRef: React.MutableRefObject<MapboxMap | null>;

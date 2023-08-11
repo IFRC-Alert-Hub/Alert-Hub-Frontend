@@ -74,6 +74,11 @@ const MapComponentWithFilter: React.FC<MapComponentWithFilterProps> = ({
   ) => {
     console.log(value);
     setSelectedUrgency(value || "");
+    setFilters({
+      urgency: selectedUrgency,
+      severity: selectedSeverity,
+      certainty: selectedCertainty,
+    });
   };
 
   const handleSeverityChange = (
@@ -81,6 +86,11 @@ const MapComponentWithFilter: React.FC<MapComponentWithFilterProps> = ({
     value: string | null
   ) => {
     setSelectedSeverity(value || "");
+    setFilters({
+      urgency: selectedUrgency,
+      severity: selectedSeverity,
+      certainty: selectedCertainty,
+    });
   };
 
   const handleCertaintyChange = (
@@ -88,6 +98,11 @@ const MapComponentWithFilter: React.FC<MapComponentWithFilterProps> = ({
     value: string | null
   ) => {
     setSelectedCertainty(value || "");
+    setFilters({
+      urgency: selectedUrgency,
+      severity: selectedSeverity,
+      certainty: selectedCertainty,
+    });
   };
 
   return (

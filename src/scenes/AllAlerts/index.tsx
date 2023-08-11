@@ -9,6 +9,8 @@ import { ALL_ALERTS } from "../../API/ALL_QUERIES";
 import TitleHeader from "../../components/Layout/TitleHeader";
 import { useIntl } from "react-intl";
 import Progress from "../../components/Layout/Progress";
+import { GetAllAlerts } from "../../Alert-Manager-API/AllAlerts";
+import { Alert } from "../../Alert-Manager-API/types";
 
 interface AllAlertsProps {
   selectedFilter?: string;
@@ -20,20 +22,19 @@ const AllAlerts: React.FC<AllAlertsProps> = () => {
   const { selectedFilter, filterKey } = location.state || {};
   const { formatMessage } = useIntl();
 
-  const { loading, error, data } = useQuery(ALL_ALERTS, {
-    client: cap_aggregator,
-  });
+  const { data, loading, error } = GetAllAlerts();
   const [numAlerts, setNumAlerts] = useState<number>(0);
 
-  const rowsData: RowsData[] = data?.listAlert?.map((alert: any) => ({
+  const rowsData: RowsData[] = data?.map((alert: Alert) => ({
     identifier: alert.identifier! || "",
-    event: alert.alertinfoSet[0]?.event || "",
-    eventCategory: alert.alertinfoSet[0]?.category || "",
+    event: alert.info![0]?.event || "",
+    eventCategory: alert.info![0]?.category || "",
     sent: alert.sent!,
     sender: alert.sender,
-    region: alert.country?.region?.name,
-    country: alert.country?.name,
-    infoSet: alert.country?.alertinfoSet || [],
+    region: "Africa",
+    country: "France",
+    id: alert.id as unknown as string,
+    //infoSet: alert.country?.alertinfoSet || [],
   }));
 
   return (
@@ -43,7 +44,7 @@ const AllAlerts: React.FC<AllAlertsProps> = () => {
           title={`${formatMessage({ id: "ALL_ALERTS" })} (${numAlerts})`}
         />
         {loading && <Progress />}
-        {error && <p>Error: {error.message}</p>}
+        {error && <p>Error: {error}</p>}
         {!loading && !error && (
           <FilterableTableComponent
             selectedFilter={selectedFilter}
