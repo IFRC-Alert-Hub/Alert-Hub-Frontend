@@ -1,8 +1,9 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import axios from "axios";
 import { Country, CountryRegionData } from "./types";
 import { Autocomplete, TextField } from "@mui/material";
 import { convertCoordinates } from "./helperFunctions";
+import { useParams } from "react-router-dom";
 
 type ResponseFiltersType = {
   urgency?: string[];
@@ -32,7 +33,7 @@ interface ResponseType {
     regions?: ResponseRegionType[];
   };
 }
-export const useLevel1Data = () => {
+export const GetRegionData = () => {
   const [data, setData] = useState<CountryRegionData[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
@@ -42,9 +43,10 @@ export const useLevel1Data = () => {
     certainty: "",
   });
 
-  const [region_ID, setRegion_ID] = useState<number | null>();
+  const [region_ID, setRegion_ID] = useState<number | null>(null);
 
   const refetch = async (region_ID: number) => {
+    console.log(region_ID);
     setRegion_ID(region_ID);
   };
 
@@ -52,116 +54,107 @@ export const useLevel1Data = () => {
     console.log("FILTERS 1: ", filters);
     setLoading(true);
     setError(null);
-    const fetchData = async () => {
-      try {
-        const response: ResponseType = await axios.get(
-          "https://alert-manager.azurewebsites.net/regions/"
-        );
-
-        if (!response.data || Object.keys(response.data).length === 0) {
-          throw new Error("Data is empty or invalid.");
-        }
-
-        if (!response.data.regions || response.data.regions.length === 0) {
-          throw new Error("Data is empty or invalid.");
-        }
-        let updatedRegions: any = response.data.regions;
-        if (region_ID !== -1) {
-          updatedRegions = response.data.regions.find(
-            (region) => region.id === region_ID
+    if (region_ID !== null) {
+      const fetchData = async () => {
+        try {
+          const response: ResponseType = await axios.get(
+            `https://alert-manager.azurewebsites.net/regions/${region_ID}`
           );
-          console.log("REGIONS: ", updatedRegions);
-          if (updatedRegions === undefined) {
-            updatedRegions = [];
-          } else {
-            updatedRegions = [updatedRegions];
+
+          if (!response.data || Object.keys(response.data).length === 0) {
+            throw new Error("Data is empty or invalid.");
           }
-        }
 
-        if (updatedRegions.length > 0) {
-          updatedRegions = updatedRegions.map((region: any) => {
-            try {
-              region.centroid = JSON.parse(region?.centroid);
-            } catch (error) {
-              throw new Error("Invalid centroid data for region");
-            }
+          if (!response.data.regions || response.data.regions.length === 0) {
+            throw new Error("Data is empty or invalid.");
+          }
+          let updatedRegions: any = response.data.regions;
 
-            if (region.polygon) {
+          if (updatedRegions.length > 0) {
+            updatedRegions = updatedRegions.map((region: any) => {
               try {
-                region.bbox = {
-                  type: "Polygon",
-                  coordinates: [convertCoordinates(region.polygon)],
-                };
-                delete region.polygon;
+                region.centroid = JSON.parse(region?.centroid);
               } catch (error) {
-                throw new Error("Invalid polygon data for region");
+                throw new Error("Invalid centroid data for region");
               }
-            }
 
-            if (region.countries && region.countries.length > 0) {
-              region.countries = region.countries.filter(
-                (country: ResponseCountryType) => {
-                  const countryFilters: any = country.filters;
-                  if (!countryFilters) {
-                    return true;
-                  }
+              if (region.polygon) {
+                try {
+                  region.bbox = {
+                    type: "Polygon",
+                    coordinates: [convertCoordinates(region.polygon)],
+                  };
+                  delete region.polygon;
+                } catch (error) {
+                  throw new Error("Invalid polygon data for region");
+                }
+              }
 
-                  for (const filterKey in countryFilters) {
-                    if (countryFilters.hasOwnProperty(filterKey)) {
-                      const filterValues = countryFilters[filterKey];
-                      const selectedFilterValue = filters[filterKey];
+              if (region.countries && region.countries.length > 0) {
+                region.countries = region.countries.filter(
+                  (country: ResponseCountryType) => {
+                    const countryFilters: any = country.filters;
+                    if (!countryFilters) {
+                      return true;
+                    }
 
-                      if (
-                        selectedFilterValue &&
-                        selectedFilterValue !== "" &&
-                        !filterValues.includes(selectedFilterValue)
-                      ) {
-                        return false;
+                    for (const filterKey in countryFilters) {
+                      if (countryFilters.hasOwnProperty(filterKey)) {
+                        const filterValues = countryFilters[filterKey];
+                        const selectedFilterValue = filters[filterKey];
+                        if (
+                          selectedFilterValue &&
+                          selectedFilterValue !== "" &&
+                          !filterValues.includes(selectedFilterValue)
+                        ) {
+                          return false;
+                        }
                       }
                     }
+                    return true;
                   }
-                  return true;
-                }
-              );
+                );
 
-              if (region.countries.length > 0) {
-                region.countries = region.countries.map((country: any) => {
-                  try {
-                    country.centroid = JSON.parse(country?.centroid);
-                    if (country.polygon === null) {
-                      country.type = "MultiPolygon";
-                      country.coordinates = JSON.parse(country.multipolygon);
-                      delete country.polygon;
-                      delete country.multipolygon;
-                    } else {
-                      country.type = "Polygon";
-                      country.coordinates = JSON.parse(country.polygon);
-                      delete country.polygon;
-                      delete country.multipolygon;
+                if (region.countries.length > 0) {
+                  region.countries = region.countries.map((country: any) => {
+                    try {
+                      country.centroid = JSON.parse(country?.centroid);
+                      if (country.polygon === null) {
+                        country.type = "MultiPolygon";
+                        country.coordinates = JSON.parse(country.multipolygon);
+                        delete country.polygon;
+                        delete country.multipolygon;
+                      } else {
+                        country.type = "Polygon";
+                        country.coordinates = JSON.parse(country.polygon);
+                        delete country.polygon;
+                        delete country.multipolygon;
+                      }
+                    } catch (error) {
+                      throw new Error("Invalid data for a country in a region");
                     }
-                  } catch (error) {
-                    throw new Error("Invalid data for a country in a region");
-                  }
-                  return country;
-                });
+                    return country;
+                  });
+                }
               }
-            } else {
-              throw new Error("Data is not loaded");
-            }
 
-            return region;
+              return region;
+            });
+          }
+          updatedRegions = updatedRegions.filter((region: any) => {
+            console.log(region);
+            return region.countries.length > 0;
           });
+          setData(updatedRegions);
+          console.log("UPDATED REGIONS: ", updatedRegions);
+          setLoading(false);
+        } catch (error: any) {
+          setError(error.message);
+          setLoading(false);
         }
-
-        setData(updatedRegions);
-        console.log("UPDATED REGIONS: ", updatedRegions);
-        setLoading(false);
-      } catch (error: any) {
-        setError(error.message);
-        setLoading(false);
-      }
-    };
-    fetchData();
+      };
+      fetchData();
+    }
   }, [filters, region_ID]);
 
   return { data, loading, error, setFilters, refetch };
@@ -176,12 +169,21 @@ const urgencyOptions: string[] = [
 ];
 
 const RegionTest: React.FC = () => {
-  const { data, loading, error, setFilters, refetch } = useLevel1Data();
+  const { data, loading, error, setFilters, refetch } = GetRegionData();
   const [selectedUrgency, setSelectedUrgency] = useState<string>("");
+  const { id } = useParams<{ id: string }>();
+
+  useMemo(() => {
+    refetch(Number(id));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [id]);
 
   useEffect(() => {
-    refetch(-1);
-  });
+    if (!loading && !error) {
+      console.log("afafafa:", data);
+    }
+  }, [data, loading, error]);
+
   const handleUrgencyChange = (
     event: React.ChangeEvent<{}>,
     value: string | null

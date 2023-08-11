@@ -51,6 +51,7 @@ type MapProps = {
   selectedCertainty: any;
   setCountrySelected: React.Dispatch<React.SetStateAction<boolean>>;
   countrySelected: boolean;
+  isRegion: boolean;
 };
 
 const MapComponent: React.FC<MapProps> = ({
@@ -69,6 +70,7 @@ const MapComponent: React.FC<MapProps> = ({
   selectedCertainty,
   setCountrySelected,
   countrySelected,
+  isRegion,
 }) => {
   const [countryPolygonNameClicked, setCountryPolygonNameClicked] = useState<
     [string, string] | null
@@ -293,11 +295,13 @@ const MapComponent: React.FC<MapProps> = ({
     zoom,
     CountryRegionData,
     setCountrySelected,
+    isRegion,
   ]);
 
   useEffect(() => {
     console.log(CountryRegionData);
   }, [CountryRegionData]);
+
   useEffect(() => {
     if (
       !mapRef.current ||
@@ -307,6 +311,18 @@ const MapComponent: React.FC<MapProps> = ({
     )
       return;
     const loadCountryRegionData = () => {
+      if (isRegion) {
+        const boundingRegionCoordinates = CountryRegionData[0].bbox;
+        const mapBoundingBox = turfBbox(boundingRegionCoordinates);
+        const [minX, minY, maxX, maxY] = mapBoundingBox;
+
+        mapRef.current!.fitBounds(
+          [minX, minY, maxX, maxY] as LngLatBoundsLike,
+          {
+            padding: { top: 10, bottom: 25, left: 15, right: 5 },
+          }
+        );
+      }
       CountryRegionData.forEach((region: CountryRegionData, index: number) => {
         region.countries?.forEach((country: Country, index: number) => {
           const sourceId = `country-source-${country.id}`;

@@ -3,9 +3,11 @@ import { useIntl } from "react-intl";
 
 import MapComponentWithFilter from "../../components/MapComponent/MapComponentWithFilter";
 import HomeCards from "../../components/Card/HomeCards";
+import { useLevel1Data } from "../../Alert-Manager-API/Level1";
 
 const Home = () => {
   const { formatMessage } = useIntl();
+  const { data, loading, error, setFilters } = useLevel1Data();
 
   return (
     <Container maxWidth="lg">
@@ -35,7 +37,12 @@ const Home = () => {
       </Box>
       <HomeCards />
 
-      <MapComponentWithFilter></MapComponentWithFilter>
+      <MapComponentWithFilter
+        data={data}
+        loading={loading}
+        error={error}
+        setFilters={setFilters}
+      ></MapComponentWithFilter>
     </Container>
   );
 };

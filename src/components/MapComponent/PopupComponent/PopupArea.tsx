@@ -170,7 +170,7 @@ export const PopupArea = ({
 
       setCombinedShapes(combinedShapesIn);
     }
-  }, [data?.areas, loading, error, data?.info_id, mapRef]); // Add data.areas, loading, and error as dependencies
+  }, [data?.areas, loading, error, data?.info_id, mapRef]);
 
   return (
     <>
@@ -213,7 +213,7 @@ export const PopupArea = ({
                   <MenuItem value={-1}>Select an option</MenuItem>
 
                   {combinedShapes.map((shape: any, index: number) => {
-                    console.log(shape); // This line logs to the console
+                    console.log(shape);
 
                     return (
                       <MenuItem key={index} value={index}>

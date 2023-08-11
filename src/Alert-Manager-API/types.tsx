@@ -1,7 +1,7 @@
 // Level 1
 export type Bbox = {
   type: string;
-  coordinates: number[][][];
+  coordinates: any[];
 };
 export type CountryRegionData = {
   id: number;
@@ -60,6 +60,7 @@ export type Alert = {
   references: string;
   incidents: string;
   info?: AlertInfo[];
+  admin1_known: boolean;
 };
 
 export type AlertInfo = {

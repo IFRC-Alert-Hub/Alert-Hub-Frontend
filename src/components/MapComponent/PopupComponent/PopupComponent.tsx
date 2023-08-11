@@ -246,7 +246,7 @@ export const PopupComponent: React.FC<PopupComponentProps> = ({
                         <span style={{ justifyItems: "center" }}>
                           {alert.info!.length > 0 ? (
                             <>
-                              {data?.admin1_name === "Unknown" && (
+                              {!alert?.admin1_known && (
                                 <Box
                                   sx={{
                                     display: "flex",

@@ -63,7 +63,7 @@ function App() {
                 <Route path="/login" element={<Login />} />
                 <Route path="/register" element={<Register />} />
                 <Route path="/forget-password" element={<ForgotPassword />} />
-                {/* <Route path="/regions/:id" element={<Region />} /> */}
+                <Route path="/regions/:id" element={<Region />} />
                 <Route path="/alerts/all" element={<AllAlerts />} />
                 <Route path="/alerts/:id" element={<AlertInfo />} />
                 <Route path="/account/" element={<PrivateRoutes />}>
@@ -81,7 +81,7 @@ function App() {
                 <Route path="/level-2" element={<Level2 />} />
                 <Route path="/level-3" element={<Level3 />} />
                 <Route path="/level-4" element={<Level4 />} />
-                <Route path="/level-5" element={<RegionTest />} />
+                <Route path="/level-5/:id" element={<RegionTest />} />
                 <Route path="/alert-info/:id" element={<AlertInfoTest />} />
 
                 <Route path="/404" element={<PageNotFound />} />

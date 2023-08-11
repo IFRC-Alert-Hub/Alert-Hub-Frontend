@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import mapboxgl from "mapbox-gl";
 
 import TitleHeader from "../Layout/TitleHeader";
@@ -6,12 +6,18 @@ import { useIntl } from "react-intl";
 import { Bbox, CountryRegionData } from "../../Alert-Manager-API/types";
 import MapComponent from "./MapComponent";
 import { Autocomplete, Box, Button, TextField } from "@mui/material";
-import { useLevel1Data } from "../../Alert-Manager-API/Level1";
 
 interface MapComponentWithFilterProps {
+  loading: boolean;
+  error: string | null;
+  data: CountryRegionData[];
+  setFilters: any;
+
   boundingRegionCoordinates?: Bbox;
   filterKey?: string;
   selectedFilter?: string;
+
+  isRegion?: boolean;
 }
 const urgencyOptions: string[] = [
   "Immediate",
@@ -37,12 +43,15 @@ const certaintyOptions: string[] = [
 ];
 
 const MapComponentWithFilter: React.FC<MapComponentWithFilterProps> = ({
-  boundingRegionCoordinates,
+  loading,
+  error,
+  data,
+  boundingRegionCoordinates = undefined,
   filterKey,
   selectedFilter,
+  setFilters,
+  isRegion = false,
 }) => {
-  const { data, loading, error, setFilters } = useLevel1Data();
-
   const mapContainerRef = useRef<HTMLDivElement | null>(null);
   const mapRef = useRef<mapboxgl.Map | null>(null);
 
@@ -215,6 +224,8 @@ const MapComponentWithFilter: React.FC<MapComponentWithFilterProps> = ({
         selectedCertainty={selectedCertainty}
         countrySelected={countrySelected}
         setCountrySelected={setCountrySelected}
+        boundingRegionCoordinates={boundingRegionCoordinates}
+        isRegion={isRegion}
       />
     </>
   );
