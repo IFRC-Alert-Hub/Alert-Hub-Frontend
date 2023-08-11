@@ -36,7 +36,7 @@ const CollapsibleRow = ({
 
   const handleViewAlerts = () => {
     navigate(
-      `/account/subscription/${row.subscriptionName}?country=${row.countryNames[0]}`
+      `/account/subscription/${row.subscriptionName}/${row.countryNames[0]}`
     );
   };
 
