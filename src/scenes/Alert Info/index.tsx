@@ -6,6 +6,7 @@ import AlertInfoTitleHeader from "./AlertInfoTitleHeader";
 import { InfoSetsHorizontalTabs } from "./InfoSetsHorizontalTabs";
 import { useParams } from "react-router-dom";
 import { GetAlertInfoByAlertID } from "../../Alert-Manager-API/AlertInfo";
+import { Alert } from "../../Alert-Manager-API/types";
 
 const AlertInfo = () => {
   const { id } = useParams<{ id: string }>();
@@ -21,6 +22,25 @@ const AlertInfo = () => {
     }
   }, [data, loading, error]);
 
+  // interface KeyTitleMap {
+  //   [key: string]: string;
+  // }
+
+  // const keyTitleMap: KeyTitleMap = {
+  //   url: "URL",
+  //   identifier: "Identifier",
+  //   msg_type: "Message Type",
+  //   source: "Source",
+  //   // Add more key-title pairs as needed
+  // };
+
+  // const keyOrder: (keyof Alert)[] = [
+  //   "url",
+  //   "identifier",
+  //   "msg_type",
+  //   "source",
+  //   // Add more keys in the desired order
+  // ];
   return (
     <>
       {error && <h1>Error</h1>}
@@ -42,6 +62,28 @@ const AlertInfo = () => {
           </Box>
           <Container maxWidth="lg">
             <AlertInfoTitleHeader title="Alert" />
+            {/* {keyOrder.map((key) => {
+              const title = keyTitleMap[key] || key;
+              const value = data[key];
+
+              if (key === "id") {
+                return null;
+              }
+
+              return value !== "" ? (
+                <AlertInfoText
+                  key={key}
+                  title={title}
+                  content={value as unknown as any}
+                />
+              ) : (
+                <AlertInfoText
+                  key={key}
+                  title={title}
+                  content={"Not Available"}
+                />
+              );
+            })} */}
             {Object.entries(data).map(
               ([key, value]) =>
                 !Array.isArray(value) &&
@@ -55,6 +97,7 @@ const AlertInfo = () => {
                   />
                 ))
             )}
+
             <Box sx={{ padding: "20px" }}>
               {" "}
               <InfoSetsHorizontalTabs infoSets={data.info!} />

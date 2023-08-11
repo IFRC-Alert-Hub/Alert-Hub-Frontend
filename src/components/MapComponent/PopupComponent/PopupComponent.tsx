@@ -237,13 +237,19 @@ export const PopupComponent: React.FC<PopupComponentProps> = ({
                           index + (page - 1) * itemsPerPage === value
                             ? "#fcd4dc"
                             : "#DEDEDE",
-                        borderLeft:
-                          index + (page - 1) * itemsPerPage === value
-                            ? "10px solid #F5333F"
-                            : "",
                       }}
                       label={
                         <span style={{ justifyItems: "center" }}>
+                          <Box
+                            sx={{
+                              position: "absolute",
+                              left: 0,
+                              top: 0,
+                              height: "100%",
+                              width: index === value ? "10px" : "0", // Add a colored box on the left when clicked
+                              backgroundColor: "#F5333F",
+                            }}
+                          />
                           {alert.info!.length > 0 ? (
                             <>
                               {!alert?.admin1_known && (
