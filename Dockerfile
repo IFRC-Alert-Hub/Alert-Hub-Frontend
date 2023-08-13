@@ -10,8 +10,8 @@ WORKDIR /app
 # Copy package.json and package-lock.json (if present) to the working directory
 COPY package*.json ./
 
-# Install dependencies defined in package.json (only production dependencies)
-RUN npm install --only=production && npm cache clean --force
+# Install dependencies defined in package.json
+RUN npm install && npm cache clean --force
 
 # Copy the remaining application files to the working directory
 COPY . .
