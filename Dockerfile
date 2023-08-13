@@ -1,8 +1,8 @@
-# Base image
-FROM node:18
+# Use a specific version of Node.js as the base image
+FROM node:14
 
-# Set the environment variable for Node.js to development
-ENV NODE_ENV development
+# Set the environment variable for Node.js to production
+ENV NODE_ENV production
 
 # Set the working directory inside the container
 WORKDIR /app
@@ -11,13 +11,13 @@ WORKDIR /app
 COPY package*.json ./
 
 # Install dependencies defined in package.json
-RUN npm i && npm cache clean --force
+RUN npm install && npm cache clean --force
 
-# Copy the remaining application files to the working directory
+# Copy the rest of the application files to the working directory
 COPY . .
 
 # Specify the command to run when the container starts
 CMD ["npm", "start"]
 
-# Expose port 3000 to the outside world (if needed)
+# Expose the necessary port (if your application uses a different port, change it)
 EXPOSE 3000
