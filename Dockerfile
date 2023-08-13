@@ -1,8 +1,8 @@
-# Use a lighter base image suitable for production
-FROM node:18-alpine
+# Base image
+FROM node:18
 
-# Set the environment variable for Node.js to production
-ENV NODE_ENV production
+# Set the environment variable for Node.js to development
+ENV NODE_ENV development
 
 # Set the working directory inside the container
 WORKDIR /app
@@ -11,7 +11,7 @@ WORKDIR /app
 COPY package*.json ./
 
 # Install dependencies defined in package.json
-RUN npm install && npm cache clean --force
+RUN npm i && npm cache clean --force
 
 # Copy the remaining application files to the working directory
 COPY . .
