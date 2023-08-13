@@ -95,6 +95,15 @@ export const theme: Theme = createTheme({
         },
       },
     },
+    MuiRadio: {
+      styleOverrides: {
+        root: {
+          "&.MuiRadio-root.Mui-checked": {
+            color: "#f5333f",
+          },
+        },
+      },
+    },
     MuiLink: {
       styleOverrides: {
         root: {

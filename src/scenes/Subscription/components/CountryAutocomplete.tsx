@@ -29,14 +29,14 @@ const CountryAutocomplete = ({
   setSelectedRow,
 }: PropsType) => {
   const initOption = countryList.filter(
-    (country) => Number(country.countryId) === selectedRow.countryIds[0]
+    (country) => Number(country.id) === selectedRow.countryIds[0]
   );
   const [seleciton, setSelection] = useState<CountryOptionsType | null>(
     initOption.length > 0 ? initOption[0] : null
   );
 
   const handleChange = (event: any, newValue: CountryOptionsType | null) => {
-    const countryIds = newValue ? [Number(newValue?.countryId)] : [];
+    const countryIds = newValue ? [Number(newValue?.id)] : [];
     setSelectedRow((prevState) => ({
       ...prevState,
       countryIds: countryIds,
@@ -60,7 +60,7 @@ const CountryAutocomplete = ({
         id="tags-outlined"
         size="small"
         options={countryList}
-        getOptionLabel={(option) => option.countryName}
+        getOptionLabel={(option) => option.name}
         value={seleciton}
         onChange={handleChange}
         renderInput={(params) => (

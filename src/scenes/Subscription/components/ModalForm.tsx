@@ -24,6 +24,7 @@ import {
   SubscriptionForm,
 } from "../../../API/TYPES";
 import DistrictAutocomplete from "./DistrictAutocomplete";
+import SentFlagRadio from "./SentFlagRadio";
 
 const style = {
   position: "absolute" as "absolute",
@@ -101,19 +102,22 @@ const ModalForm = ({
     severityArray: selectedRow.severityArray.length < 1,
     certaintyArray: selectedRow.certaintyArray.length < 1,
     subscribeBy: selectedRow.subscribeBy.length < 1,
+    sentFlag: selectedRow.sentFlag < 0,
   };
 
   useEffect(() => {
     const filteredCountry = countryList.filter(
-      (country) => country.countryId === String(selectedRow.countryIds[0])
+      (country) => country.id === selectedRow.countryIds[0]
     );
+    console.log(countryList);
+    console.log(filteredCountry);
     const districtList = filteredCountry.flatMap((country) => {
-      const { countryId, countryName, districts } = country;
+      const { id, name, districts } = country;
       return districts.map((district) => ({
-        districtId: district.districtId,
-        districtName: district.districtName,
-        countryId,
-        countryName,
+        districtId: district.id,
+        districtName: district.name,
+        countryId: id,
+        countryName: name,
       }));
     });
     setDistrictList(districtList);
@@ -157,6 +161,7 @@ const ModalForm = ({
             severityArray: selectedRow.severityArray,
             certaintyArray: selectedRow.certaintyArray,
             subscribeBy: selectedRow.subscribeBy,
+            sentFlag: selectedRow.sentFlag,
           },
         });
       } else {
@@ -169,6 +174,7 @@ const ModalForm = ({
             severityArray: selectedRow.severityArray,
             certaintyArray: selectedRow.certaintyArray,
             subscribeBy: selectedRow.subscribeBy,
+            sentFlag: selectedRow.sentFlag,
           },
         });
       }
@@ -267,6 +273,12 @@ const ModalForm = ({
                   handleChange={handleChange}
                 />
               ))}
+              <SentFlagRadio
+                verifyForm={verifyForm}
+                formErrors={formErrors}
+                selectedRow={selectedRow}
+                setSelectedRow={setSelectedRow}
+              />
               <Box display="flex" justifyContent="flex-end">
                 <Button
                   variant="outlined"
