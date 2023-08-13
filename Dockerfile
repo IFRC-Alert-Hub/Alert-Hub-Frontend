@@ -16,9 +16,6 @@ RUN npm install && npm cache clean --force
 # Copy the rest of the application files to the working directory
 COPY . .
 
-# Build the application (assuming the "build" script is defined in package.json)
-RUN npm run build
-
 # Specify the command to run when the container starts
 CMD ["npm", "start"]
 
