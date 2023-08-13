@@ -2,7 +2,7 @@
 FROM node:18
 
 # Set the environment variable for Node.js to development
-ENV NODE_ENV development
+ENV NODE_ENV production
 
 # Set the working directory inside the container
 WORKDIR /app
