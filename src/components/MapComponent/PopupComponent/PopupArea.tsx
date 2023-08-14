@@ -1,54 +1,57 @@
 import {
   Box,
+  Button,
   Card,
   FormControl,
+  IconButton,
   MenuItem,
   Select,
   Typography,
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
-import { Map as MapboxMap } from "mapbox-gl";
+import { Map as MapboxMap, LngLatBoundsLike } from "mapbox-gl";
 import { AlertInfoArea } from "../../../Alert-Manager-API/types";
 import turfCircle from "@turf/circle";
+import turfBbox from "@turf/bbox";
+import CloseIcon from "@mui/icons-material/Close";
+// const coordinatesArray = [
+//   [
+//     [46.402337365920744, -17.803245312080932],
+//     [47.908167523744794, -15.723010653316308],
+//     [46.33780178772807, -16.116059589294224],
+//     [44.97179871598672, -16.76597213323565],
+//     [44.84272755960282, -18.85488195045251],
+//     [46.402337365920744, -17.803245312080932],
+//   ],
+// ];
 
-const coordinatesArray = [
-  [
-    [46.402337365920744, -17.803245312080932],
-    [47.908167523744794, -15.723010653316308],
-    [46.33780178772807, -16.116059589294224],
-    [44.97179871598672, -16.76597213323565],
-    [44.84272755960282, -18.85488195045251],
-    [46.402337365920744, -17.803245312080932],
-  ],
-];
+// const polygons: any = [
+//   {
+//     type: "Polygon",
+//     name: "Polygon 1",
+//     coordinates: coordinatesArray,
+//   },
+//   {
+//     type: "Polygon",
+//     name: "Polygon 2",
+//     coordinates: coordinatesArray,
+//   },
+// ];
 
-const polygons: any = [
-  {
-    type: "Polygon",
-    name: "Polygon 1",
-    coordinates: coordinatesArray,
-  },
-  {
-    type: "Polygon",
-    name: "Polygon 2",
-    coordinates: coordinatesArray,
-  },
-];
-
-const circles: any = [
-  {
-    type: "Circle",
-    name: "Circle 1",
-    center: [-5.917401, 38.90551541],
-    radius: 100,
-  },
-  {
-    type: "Circle",
-    name: "Circle 2",
-    center: [-5.380571851623813, 38.61525108318435],
-    radius: 100,
-  },
-];
+// const circles: any = [
+//   {
+//     type: "Circle",
+//     name: "Circle 1",
+//     center: [-5.917401, 38.90551541],
+//     radius: 100,
+//   },
+//   {
+//     type: "Circle",
+//     name: "Circle 2",
+//     center: [-5.380571851623813, 38.61525108318435],
+//     radius: 100,
+//   },
+// ];
 
 interface PopupAreaProps {
   mapRef: React.MutableRefObject<MapboxMap | null>;
@@ -69,18 +72,19 @@ export const PopupArea = ({
 
   useEffect(() => {
     refetch(infoID);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const [selectedIndex, setSelectedIndex] = useState(-1);
-  const [selectedShape, setSelectedShape] = useState<any>(null);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [combinedShapes, setCombinedShapes] = useState<any>(null);
+
   const sourceID = "infoArea-source";
   const layerID = "infoArea-layer";
   const handleShapeChange = (event: any) => {
     const newSelectedIndex = event.target.value;
     if (newSelectedIndex !== -1) {
       setSelectedIndex(newSelectedIndex);
-      setSelectedShape(combinedShapes[newSelectedIndex]);
 
       if (mapRef.current?.getSource(sourceID)) {
         mapRef.current?.removeLayer(layerID);
@@ -118,7 +122,6 @@ export const PopupArea = ({
           combinedShapes[newSelectedIndex]?.radius as any,
           {
             units: "kilometers",
-            // properties: { foo: "bar" },
           }
         );
 
@@ -141,7 +144,6 @@ export const PopupArea = ({
       }
     } else {
       setSelectedIndex(newSelectedIndex);
-      setSelectedShape(null);
 
       if (mapRef.current?.getSource(sourceID)) {
         mapRef.current?.removeLayer(layerID);
@@ -203,16 +205,15 @@ export const PopupArea = ({
                   onChange={handleShapeChange}
                   style={{ marginTop: "10px", marginRight: "10px" }}
                   sx={{
-                    width: 170,
+                    width: 210, // Increased width to accommodate the close button
                     backgroundColor: "#f4f4f4",
                     fontSize: "0.75rem",
+                    position: "relative", // Required for positioning the close button
                   }}
                 >
-                  <MenuItem value={-1}>Select an option</MenuItem>
+                  <MenuItem value={-1}>Choose an option</MenuItem>
 
                   {combinedShapes.map((shape: any, index: number) => {
-                    console.log(shape);
-
                     return (
                       <MenuItem key={index} value={index}>
                         {shape.name}
@@ -220,7 +221,75 @@ export const PopupArea = ({
                     );
                   })}
                 </Select>
+                <IconButton
+                  aria-label="close"
+                  size="small"
+                  onClick={() => {
+                    if (mapRef.current?.getSource(sourceID)) {
+                      mapRef.current?.removeLayer(layerID);
+                      mapRef.current?.removeSource(sourceID);
+                    }
+                    handleShapeChange({
+                      target: {
+                        value: -1,
+                      },
+                    });
+                  }}
+                  sx={{
+                    position: "absolute",
+                    right: "4px", // Adjust this value to position the close button
+                    top: "50%", // Vertically aligns the button
+                    transform: "translateY(-50%)", // Centers the button vertically
+                    backgroundColor: "#f4f4f4",
+                  }}
+                >
+                  <CloseIcon />
+                </IconButton>
               </FormControl>
+              <Button
+                variant="contained"
+                color="success"
+                disableTouchRipple
+                disableRipple
+                disableElevation
+                disableFocusRipple
+                sx={{
+                  color: "#fff",
+                  outline: "red",
+                  marginLeft: "8px",
+                  textTransform: "capitalize",
+                  padding: "4px ",
+                  backgroundColor: "#f5333f",
+                  "&:hover": {
+                    backgroundColor: "#f5333f",
+                  },
+                  display: selectedIndex !== -1 ? "block" : "none",
+                }}
+                onClick={() => {
+                  const mapBoundingBox = turfBbox({
+                    type: "Feature",
+                    geometry: {
+                      type: "Polygon" as any,
+                      coordinates: [
+                        combinedShapes[selectedIndex]?.coordinates,
+                      ] as any,
+                    },
+                  });
+
+                  console.log(mapBoundingBox);
+                  const [minX, minY, maxX, maxY] = mapBoundingBox;
+
+                  mapRef.current!.fitBounds(
+                    [minX, minY, maxX, maxY] as LngLatBoundsLike,
+                    {
+                      padding: { top: 20, bottom: 35, left: 20, right: 10 }, // Increased padding
+                      maxZoom: 10, // Adjust this value to control the maximum zoom level
+                    }
+                  );
+                }}
+              >
+                Fly to Polygon
+              </Button>
             </Box>
           </Card>
         )}

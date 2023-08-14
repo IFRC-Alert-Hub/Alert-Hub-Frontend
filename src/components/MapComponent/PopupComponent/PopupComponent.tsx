@@ -45,7 +45,7 @@ export const PopupComponent: React.FC<PopupComponentProps> = ({
   const [value, setValue] = React.useState(0);
   const [pageCount, setPageCount] = React.useState(0);
   const tabPanelRef = React.useRef<HTMLDivElement | null>(null);
-  const itemsPerPage = 6;
+  const itemsPerPage = 8;
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     if (tabPanelRef.current) {
       tabPanelRef.current.scrollTop = 0;
@@ -213,7 +213,6 @@ export const PopupComponent: React.FC<PopupComponentProps> = ({
             >
               <Tabs
                 orientation="vertical"
-                variant="scrollable"
                 value={value - (page - 1) * itemsPerPage}
                 onChange={handleChange}
                 aria-label="Vertical tabs example"
@@ -232,11 +231,13 @@ export const PopupComponent: React.FC<PopupComponentProps> = ({
                     <Tab
                       key={index + (page - 1) * itemsPerPage}
                       sx={{
-                        minHeight: "100px",
+                        height: "75px",
                         backgroundColor:
                           index + (page - 1) * itemsPerPage === value
                             ? "#fcd4dc"
                             : "#DEDEDE",
+
+                        border: "0.01em grey solid",
                       }}
                       label={
                         <span style={{ justifyItems: "center" }}>
@@ -246,7 +247,10 @@ export const PopupComponent: React.FC<PopupComponentProps> = ({
                               left: 0,
                               top: 0,
                               height: "100%",
-                              width: index === value ? "10px" : "0", // Add a colored box on the left when clicked
+                              width:
+                                index + (page - 1) * itemsPerPage === value
+                                  ? "10px"
+                                  : "0", // Add a colored box on the left when clicked
                               backgroundColor: "#F5333F",
                             }}
                           />
@@ -277,16 +281,24 @@ export const PopupComponent: React.FC<PopupComponentProps> = ({
                                   </Box>
                                 </Box>
                               )}
+
                               <Typography
                                 variant="h5"
-                                fontSize={"13px"}
-                                fontWeight={"600"}
-                                textTransform={"uppercase"}
+                                fontSize="13px"
+                                fontWeight="600"
+                                textTransform="uppercase"
                                 color={
                                   index + (page - 1) * itemsPerPage !== value
                                     ? "#9A9797 !important"
                                     : ""
                                 }
+                                style={{
+                                  whiteSpace: "nowrap",
+                                  overflow: "hidden",
+                                  textOverflow: "ellipsis",
+                                  maxWidth: "100%",
+                                  display: "block",
+                                }}
                               >
                                 {alert.info![0].event}
                               </Typography>
