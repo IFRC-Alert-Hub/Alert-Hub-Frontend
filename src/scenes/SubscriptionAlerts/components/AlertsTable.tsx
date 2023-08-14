@@ -5,9 +5,10 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
-import { Button, TablePagination } from "@mui/material";
+import { Button, Menu, MenuItem, TablePagination } from "@mui/material";
 import { useState } from "react";
 import { SubscriptionAlertsType } from "../../../API/TYPES";
+import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 
 type PropsType = {
   alertsData: SubscriptionAlertsType[];
@@ -16,11 +17,42 @@ type PropsType = {
 const AlertsTable = ({ alertsData }: PropsType) => {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [location, setLocation] = useState("All Locations");
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const open = Boolean(anchorEl);
 
+  // get the location options
+  const uniqueLocations = alertsData.reduce((locations: string[], item) => {
+    item.admin1s.forEach((admin1) => {
+      if (!locations.includes(admin1)) {
+        console.log(admin1);
+        locations.push(admin1);
+      }
+    });
+    return locations;
+  }, []);
+
+  const locationOptions = ["All Locations", ...uniqueLocations];
+
+  const filteredAlerts = alertsData.filter((item) =>
+    item.admin1s.includes(location)
+  );
+
+  const shownData = location === "All Locations" ? alertsData : filteredAlerts;
+
+  const handleClick = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+  const handleChooseLocation = (event: any) => {
+    setLocation(event.target.textContent);
+    handleClose();
+  };
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
   };
-
   const handleChangeRowsPerPage = (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
@@ -41,7 +73,43 @@ const AlertsTable = ({ alertsData }: PropsType) => {
                 align="left"
                 sx={{ fontSize: "0.875rem", fontWeight: 600 }}
               >
-                Location
+                <div>
+                  <Button
+                    id="basic-button"
+                    aria-controls={open ? "basic-menu" : undefined}
+                    aria-haspopup="true"
+                    aria-expanded={open ? "true" : undefined}
+                    sx={{
+                      m: 0,
+                      p: 0,
+                      minWidth: 0,
+                      fontSize: "0.875rem",
+                      fontWeight: 600,
+                      color: "black",
+                      textTransform: "capitalize",
+                    }}
+                    disableRipple
+                    onClick={handleClick}
+                    endIcon={<KeyboardArrowDownIcon />}
+                  >
+                    {location}
+                  </Button>
+                  <Menu
+                    id="basic-menu"
+                    anchorEl={anchorEl}
+                    open={open}
+                    onClose={handleClose}
+                    MenuListProps={{
+                      "aria-labelledby": "basic-button",
+                    }}
+                  >
+                    {locationOptions.map((option) => (
+                      <MenuItem key={option} onClick={handleChooseLocation}>
+                        {option}
+                      </MenuItem>
+                    ))}
+                  </Menu>
+                </div>
               </TableCell>
               <TableCell
                 align="left"
@@ -64,7 +132,7 @@ const AlertsTable = ({ alertsData }: PropsType) => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {alertsData
+            {shownData
               .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
               .map((row) => (
                 <TableRow key={row.id} hover>
@@ -76,10 +144,10 @@ const AlertsTable = ({ alertsData }: PropsType) => {
                     {row.event}
                   </TableCell>
                   <TableCell align="left" sx={{ fontSize: "0.875rem" }}>
-                    {row.admin1s}
+                    {row.admin1s.join(", ")}
                   </TableCell>
                   <TableCell align="left" sx={{ fontSize: "0.875rem" }}>
-                    {row.event}
+                    {row.category}
                   </TableCell>
                   <TableCell align="left" sx={{ fontSize: "0.875rem" }}>
                     {row.sent}
@@ -110,7 +178,7 @@ const AlertsTable = ({ alertsData }: PropsType) => {
       <TablePagination
         rowsPerPageOptions={[5, 10, 25]}
         component="div"
-        count={alertsData.length}
+        count={shownData.length}
         rowsPerPage={rowsPerPage}
         page={page}
         onPageChange={handleChangePage}
