@@ -5,21 +5,36 @@ import mapboxgl, {
   LngLatLike,
   Map as MapboxMap,
 } from "mapbox-gl";
-
-import { Box, Skeleton, Tab, Tabs, Typography } from "@mui/material";
+import {
+  Box,
+  Chip,
+  CircularProgress,
+  Container,
+  IconButton,
+  Skeleton,
+  Tab,
+  Tabs,
+  Typography,
+} from "@mui/material";
 import SourcesTableComponent from "../SourceTableComponent/SourceTableComponent";
-import { PopupComponent } from "./PopupComponent/PopupComponent_new";
+import { PopupComponent } from "./PopupComponent/PopupComponent";
 import Progress from "../Layout/Progress";
 import turfBbox from "@turf/bbox";
+import {
+  Bbox,
+  Country,
+  CountryRegionData,
+  Country_Admin1s_Data,
+} from "../../Alert-Manager-API/types";
+import { useLevel2Data } from "../../Alert-Manager-API/Level2";
+import { useLevel3Data } from "../../Alert-Manager-API/Level3";
+import { useLevel4Data } from "../../Alert-Manager-API/Level4";
+import { feature } from "@turf/turf";
 
 export const ExtremeThreatColour: string = "#f5333f";
 export const ModerateThreatColour: string = "#ff9e00";
 export const OtherAlertsColour: string = "#95BF6E";
 
-export type Bbox = {
-  type: string;
-  coordinates: number[][][];
-};
 type MapProps = {
   lng?: number;
   lat?: number;
@@ -27,78 +42,16 @@ type MapProps = {
   mapContainerRef: React.RefObject<HTMLDivElement>;
   mapRef: React.MutableRefObject<MapboxMap | null>;
   boundingRegionCoordinates?: Bbox;
-  alerts?: AlertData[];
-  countries?: CountryType[];
-  alertsLoading: boolean;
-  setAlertsLoading: React.Dispatch<React.SetStateAction<boolean>>;
-  sources?: SourceFeed[];
-  loading?: any;
-  error?: any;
-};
-
-type Region = {
-  centroid: string;
-  id: string;
-  name: string;
-  polygon: string;
-};
-
-export type SourceFeed = {
-  url?: string;
-  id?: string;
-};
-type CountryType = {
-  centroid?: string;
-  id?: string;
-  iso3?: string;
-  name?: string;
-  polygon?: string;
-  multipolygon?: string;
-  region?: Region[];
-  type?: string;
-  countryPolygon?: number[][];
-};
-
-export type AlertInfoSet = {
-  web?: string;
-  urgency?: string;
-  audience?: string;
-  category?: string;
-  certainty?: string;
-  contact?: string;
-  effective?: string;
-  event?: string;
-  eventCode?: string;
-  headline?: string;
-  expires?: string;
-  instruction?: string;
-  language?: string;
-  onset?: string;
-  responseType?: string;
-  senderName?: string;
-  severity?: string;
-  id?: string;
-  description?: string;
-};
-export type AlertData = {
-  status?: string;
-  source?: string;
-  sent?: string;
-  sender?: string;
-  references?: string;
-  scope?: string;
-  restriction?: string;
-  note?: string;
-  msgType?: string;
-  incidents?: string;
-  identifier?: string;
-  code?: string;
-  addresses?: string;
-  id?: string;
-  url?: string;
-  country?: CountryType;
-  alertinfoSet?: AlertInfoSet[];
-  feed?: SourceFeed;
+  CountryRegionData: CountryRegionData[];
+  loading?: boolean;
+  error?: string | null;
+  handleSearch?: any;
+  selectedUrgency: any;
+  selectedSeverity: any;
+  selectedCertainty: any;
+  setCountrySelected: React.Dispatch<React.SetStateAction<boolean>>;
+  countrySelected: boolean;
+  isRegion: boolean;
 };
 
 const MapComponent: React.FC<MapProps> = ({
@@ -107,88 +60,222 @@ const MapComponent: React.FC<MapProps> = ({
   zoom = 1,
   mapContainerRef,
   mapRef,
-  alerts = [],
-  countries = [],
-  alertsLoading,
-  setAlertsLoading,
-  sources = [],
+  CountryRegionData,
   loading,
   error,
   boundingRegionCoordinates = undefined,
+  handleSearch,
+  selectedUrgency,
+  selectedSeverity,
+  selectedCertainty,
+  setCountrySelected,
+  countrySelected,
+  isRegion,
 }) => {
-  const [tableID, setTableID] = useState<string>("");
-  const [isPolygonClicked, setPolygonClicked] = useState(false);
+  const [countryPolygonNameClicked, setCountryPolygonNameClicked] = useState<
+    [string, string] | null
+  >(null);
 
-  const countryTables = useRef<{
-    [key: string]: { table: ReactElement; alerts: AlertData[] };
-  }>({});
+  const [countryIDs, setCountryIDs] = useState<[string, string] | null>(null);
 
-  const [value, setValue] = React.useState("map-tab");
+  const [admin1Clicked, setAdmin1Clicked] = useState<boolean>(false);
+  const [countryRegionDataLoading, setCountryRegionDataLoading] =
+    useState<boolean>(true);
 
-  const handleChange = (event: React.SyntheticEvent, newValue: string) => {
-    setValue(newValue);
-  };
+  const currentCountryBoundingBox = useRef<{
+    countryCentroid: LngLatLike;
+    zoom: number;
+  } | null>(null);
+
+  const {
+    data: admin1Data,
+    loading: admin1Loading,
+    error: admin1Error,
+    refetch: refetchAdmin1,
+    setFilters: setAdmin1Filter,
+  } = useLevel2Data();
+
+  const {
+    data: alertData,
+    loading: alertLoading,
+    error: alertError,
+    refetch: refetchAlertData,
+    setFilters: setAlertFilter,
+  } = useLevel3Data();
+
+  const {
+    data: infoData,
+    loading: infoLoading,
+    error: infoError,
+    refetch: refectInfoData,
+  } = useLevel4Data();
+
+  const latestRefetchAlertData = useRef<number | null>(null);
+  const currentCountryPolygonData = useRef<any | null>(null);
 
   useEffect(() => {
-    setPolygonClicked(false);
-  }, [value]);
-  const handleClose = () => {
-    setPolygonClicked(false);
-    mapContainerRef.current!.style.width = "100%";
+    if (!mapRef.current || admin1Error || admin1Loading) return;
 
-    mapContainerRef.current!.classList.add("map-container-transition");
+    const loadAdmin1Data = () => {
+      const sourceId = countryIDs![0];
+      const layerId = countryIDs![1];
+      const Country_ID = sourceId.match(/\d+/g)?.map(Number);
+      const unknownLayerID = `${layerId}-admin1--${Country_ID}`;
+      const unknownSourceID = `${sourceId}-admin1--${Country_ID}`;
+      if (mapRef.current?.isStyleLoaded()) {
+        if (admin1Data?.admin1s.length! > 0) {
+          admin1Data?.admin1s.forEach((admin1, index) => {
+            if (admin1.id < 0) {
+              admin1.coordinates =
+                currentCountryPolygonData.current.coordinates;
+              admin1.type = currentCountryPolygonData.current.type;
+            }
+            const admin1SourceID = `${sourceId}-admin1-${admin1.id}`;
+            const admin1LayerID = `${layerId}-admin1-${admin1.id}`;
+            if (!mapRef.current?.getSource(admin1SourceID)) {
+              mapRef.current?.addSource(admin1SourceID, {
+                type: "geojson",
+                data: {
+                  type: "Feature",
+                  geometry: {
+                    type: admin1.type as any,
+                    coordinates: admin1.coordinates as any,
+                  },
+                  properties: {},
+                },
+              });
+              mapRef.current?.addLayer({
+                id: `${admin1LayerID}-border`,
+                type: "line",
+                source: admin1SourceID,
+                paint: {
+                  "line-color": "black",
+                  "line-width": 1.3,
+                },
+              });
+              mapRef.current?.addLayer({
+                id: `${admin1LayerID}`,
+                type: "fill",
+                source: admin1SourceID,
+                paint: {
+                  "fill-color": "#000000",
+                  "fill-opacity": admin1.id < 0 ? 0.2 : 0.8,
+                },
+              });
 
-    setTimeout(() => {
-      mapRef.current!.resize();
-      mapRef.current?.setCenter([0, 0]);
-      mapRef.current?.setZoom(1);
+              mapRef.current?.addLayer({
+                id: `${admin1LayerID}-text`,
+                type: "symbol",
+                source: admin1SourceID,
+                layout: {
+                  "text-field": `${index}`,
+                  "text-font": ["Open Sans Bold"],
+                  "text-size": 12,
+                  "text-anchor": "center",
+                  "text-justify": "center",
+                  "text-offset": [0, 0],
+                },
+                paint: {
+                  "text-color": "#ffffff",
+                },
+              });
 
-      mapContainerRef.current!.classList.remove("map-container-transition");
-    }, 300);
-  };
+              mapRef.current?.on(
+                "click",
+                admin1LayerID,
+                (e: mapboxgl.MapMouseEvent & mapboxgl.EventData) => {
+                  const clickedFeatures = mapRef.current?.queryRenderedFeatures(
+                    e.point
+                  );
+                  let layersClicked = new Set();
 
-  useEffect(() => {
-    if (mapRef.current) {
-      if (mapContainerRef.current) {
-        mapRef.current!.resize();
+                  clickedFeatures?.forEach((feature, index) => {
+                    console.log(feature.layer.id);
+
+                    if (
+                      feature.layer.id.includes(`${layerId}-admin1-`) &&
+                      !feature.layer.id.includes("-text")
+                    ) {
+                      layersClicked.add(
+                        feature.layer.id.slice(`${layerId}-admin1-`.length)
+                      );
+                    }
+                  });
+
+                  const layersClickedArray = Array.from(layersClicked);
+                  const indexToRemove = layersClickedArray.indexOf(Country_ID);
+                  if (indexToRemove !== -1) {
+                    layersClickedArray.splice(indexToRemove, 1);
+                  }
+                  const firstValue = Number(layersClickedArray[0]);
+                  console.log(firstValue);
+                  if (latestRefetchAlertData.current !== (firstValue as any)) {
+                    latestRefetchAlertData.current = firstValue as any;
+                    setAlertFilter({
+                      urgency: selectedUrgency,
+                      severity: selectedSeverity,
+                      certainty: selectedCertainty,
+                    });
+                    refetchAlertData(firstValue);
+                  }
+
+                  setAdmin1Clicked(true);
+                  mapContainerRef.current!.style.width = "35%";
+                  mapRef.current!.resize();
+                  if (currentCountryBoundingBox.current !== null) {
+                    mapRef.current!.flyTo({
+                      center: currentCountryBoundingBox.current
+                        ?.countryCentroid as unknown as LngLatLike,
+                      zoom:
+                        currentCountryBoundingBox.current!.zoom > 0
+                          ? currentCountryBoundingBox.current!.zoom * 0.75
+                          : mapRef.current!.getZoom(),
+                    });
+                  }
+                }
+              );
+            }
+          });
+        }
       }
+    };
+    if (countryIDs && admin1Data) {
+      loadAdmin1Data();
     }
-  }, [isPolygonClicked, mapContainerRef, mapRef]);
+  }, [
+    admin1Data,
+    admin1Error,
+    admin1Loading,
+    countryIDs,
+    currentCountryBoundingBox,
+    mapContainerRef,
+    mapRef,
+    refetchAdmin1,
+    refetchAlertData,
+    selectedCertainty,
+    selectedSeverity,
+    selectedUrgency,
+    setAlertFilter,
+  ]);
 
   useEffect(() => {
-    setAlertsLoading(true);
-
-    if (mapRef.current) {
-      mapRef.current.remove();
-      mapRef.current = null;
+    setCountryRegionDataLoading(true);
+    if (countrySelected) {
+      countryControlChange();
+      setCountrySelected(false);
+    }
+    if (admin1Clicked) {
+      handleClose();
+      setAdmin1Clicked(false);
     }
 
-    if (value === "map-tab") {
-      console.log("SOURCES: ", sources);
+    if (!mapRef.current) {
       mapRef.current = new mapboxgl.Map({
         container: mapContainerRef.current!,
         style: "mapbox://styles/go-ifrc/cki7aznup3hqz19rxliv3naf4",
         center: [lng, lat],
         zoom: zoom,
-        scrollZoom: false,
-        dragPan: true,
       });
-      mapRef.current!.resize();
-      console.log("boundingRegion Coord: ", boundingRegionCoordinates);
-      if (
-        boundingRegionCoordinates !== undefined &&
-        boundingRegionCoordinates !== null
-      ) {
-        const mapBoundingBox = turfBbox(boundingRegionCoordinates);
-        const [minX, minY, maxX, maxY] = mapBoundingBox;
-
-        mapRef.current!.fitBounds(
-          [minX, minY, maxX, maxY] as LngLatBoundsLike,
-          {
-            padding: { top: 10, bottom: 25, left: 15, right: 5 },
-          }
-        );
-      }
 
       mapRef.current.addControl(new mapboxgl.FullscreenControl(), "top-left");
       mapRef.current.addControl(new mapboxgl.NavigationControl(), "top-left");
@@ -200,121 +287,68 @@ const MapComponent: React.FC<MapProps> = ({
         mapRef.current = null;
       }
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     lat,
-    value,
     lng,
-    mapRef,
     mapContainerRef,
+    mapRef,
     zoom,
-    alerts,
-    setAlertsLoading,
-    boundingRegionCoordinates,
-    sources,
+    CountryRegionData,
+    setCountrySelected,
+    isRegion,
   ]);
 
-  function calculateZoomLevelForBounds(
-    mapBound: any,
-    polygonBound: any,
-    mapContainerRef: React.RefObject<HTMLDivElement>
-  ) {
-    const mapContainerWidthInPixels = mapContainerRef.current!.style.width; // Replace this with the actual width of your map container in pixels
-
-    const mapBounds = new mapboxgl.LngLatBounds(
-      new mapboxgl.LngLat(mapBound._sw.lng, mapBound._sw.lat),
-      new mapboxgl.LngLat(mapBound._ne.lng, mapBound._ne.lat)
-    );
-
-    const polygonBounds = new mapboxgl.LngLatBounds(
-      new mapboxgl.LngLat(polygonBound[0], polygonBound[1]),
-      new mapboxgl.LngLat(polygonBound[2], polygonBound[3])
-    );
-
-    const combinedBounds = mapBounds.extend(polygonBounds);
-
-    const bboxWidth = combinedBounds.getEast() - combinedBounds.getWest();
-
-    const bboxHeight = combinedBounds.getNorth() - combinedBounds.getSouth();
-
-    const maxBboxSize = Math.max(bboxWidth, bboxHeight);
-
-    const bboxSizeInPixelsAtZoom0 = (maxBboxSize / 360) * 2 ** 0 * 256;
-
-    const zoom = Math.log2(
-      ((mapContainerWidthInPixels as any) * 2 ** 0) / bboxSizeInPixelsAtZoom0
-    );
-
-    return zoom;
-  }
+  useEffect(() => {
+    console.log(CountryRegionData);
+  }, [CountryRegionData]);
 
   useEffect(() => {
-    console.log(tableID);
-  }, [tableID]);
-
-  useEffect(() => {
-    if (!mapRef.current || !alertsLoading || alerts.length === 0) {
+    if (
+      !mapRef.current ||
+      !countryRegionDataLoading ||
+      CountryRegionData.length === 0
+      //|| !mapRef.current.loaded()
+    )
       return;
-    }
-    if (value === "map-tab") {
-      setAlertsLoading(true);
+    const loadCountryRegionData = () => {
+      if (isRegion) {
+        const boundingRegionCoordinates = CountryRegionData[0].bbox;
+        const mapBoundingBox = turfBbox(boundingRegionCoordinates);
+        const [minX, minY, maxX, maxY] = mapBoundingBox;
 
-      mapRef.current?.on("load", () => {
-        countryTables.current = {};
-
-        alerts.forEach((alert: AlertData) => {
-          const tableId = `alertTable-${alert?.country?.iso3}`;
-          const tableData = countryTables.current[tableId];
-
-          if (!tableData) {
-            const table = <PopupComponent alerts={[alert]} />;
-            countryTables.current[tableId] = { table, alerts: [alert] };
-          } else {
-            const updatedAlerts = [...tableData.alerts, alert];
-            const updatedTable = React.cloneElement(tableData.table, {
-              alerts: updatedAlerts,
-            });
-            countryTables.current[tableId] = {
-              table: updatedTable,
-              alerts: updatedAlerts,
-            };
+        mapRef.current!.fitBounds(
+          [minX, minY, maxX, maxY] as LngLatBoundsLike,
+          {
+            padding: { top: 10, bottom: 25, left: 15, right: 5 },
           }
-          if (
-            mapRef.current?.getSource(
-              `polygon-source-${alert?.country?.iso3}`
-            ) !== undefined
-          ) {
-            mapRef.current?.setPaintProperty(
-              `polygon-layer-${alert?.country?.iso3}`,
-              "fill-color",
-              ExtremeThreatColour
-            );
-          } else {
-            const sourceId = `polygon-source-${alert?.country?.iso3}`;
-            const layerId = `polygon-layer-${alert?.country?.iso3}`;
+        );
+      }
+      CountryRegionData.forEach((region: CountryRegionData, index: number) => {
+        region.countries?.forEach((country: Country, index: number) => {
+          const sourceId = `country-source-${country.id}`;
 
+          const layerId = `country-layer-${country.id}`;
+          if (!mapRef.current?.getSource(sourceId)) {
             mapRef.current?.addSource(sourceId, {
               type: "geojson",
-
               data: {
                 type: "Feature",
                 geometry: {
-                  type: alert?.country?.type! as any,
-                  coordinates: alert?.country?.countryPolygon! as any,
+                  type: country.type as any,
+                  coordinates: country.coordinates as any,
                 },
                 properties: {},
               },
             });
 
-            // const colour = determineColour(ModerateThreatColour, alert);
-
-            // Add the border layer
             mapRef.current?.addLayer({
               id: `${layerId}-border`,
               type: "line",
               source: sourceId,
               paint: {
                 "line-color": "black",
-                "line-width": 1.3,
+                "line-width": 2,
               },
             });
             mapRef.current?.addLayer({
@@ -326,189 +360,330 @@ const MapComponent: React.FC<MapProps> = ({
                 "fill-opacity": 0.8,
               },
             });
-
-            mapRef.current?.on(
-              "click",
-              layerId,
-              (e: mapboxgl.MapMouseEvent & mapboxgl.EventData) => {
-                setPolygonClicked(true);
-                setTableID(tableId);
-                mapContainerRef.current!.style.width = "35%";
-                mapRef.current!.resize();
-
-                const polygonBoundingBox = turfBbox({
-                  type: "Feature",
-                  geometry: {
-                    type: alert?.country?.type! as any,
-                    coordinates: alert?.country?.countryPolygon! as any,
-                  },
-                });
-
-                const [minX, minY, maxX, maxY] = polygonBoundingBox;
-                const mapBoundingBox = mapRef.current!.getBounds();
-
-                console.log("MapBound", mapBoundingBox);
-                console.log("Country POlygon Bound: ", polygonBoundingBox);
-
-                console.log("Country Zoom: ", mapRef.current!.getZoom());
-
-                console.log("centroid: ", alert?.country?.centroid!);
-
-                console.log([minX, minY, maxX, maxY]);
-
-                const polygonWidth = maxX - minX;
-                const polygonHeight = maxY - minY;
-                const mapWidth =
-                  mapBoundingBox.getEast() - mapBoundingBox.getWest();
-                const mapHeight =
-                  mapBoundingBox.getNorth() - mapBoundingBox.getSouth();
-                const zoomLevelWidth = Math.log2(mapWidth / polygonWidth);
-                const zoomLevelHeight = Math.log2(mapHeight / polygonHeight);
-                const zoomLevel = Math.max(zoomLevelWidth, zoomLevelHeight);
-
-                mapRef.current!.flyTo({
-                  center: JSON.parse(
-                    alert?.country?.centroid!
-                  ) as unknown as LngLatLike,
-                  zoom: zoomLevel > 0 ? zoomLevel : mapRef.current!.getZoom(),
-                });
-
-                // mapRef.current!.fitBounds([
-                //   minX,
-                //   minY,
-                //   maxX,
-                //   maxY,
-                // ] as LngLatBoundsLike);
-              }
-            );
           }
-        });
 
-        setAlertsLoading(false);
+          mapRef.current?.on(
+            "click",
+            layerId,
+            (e: mapboxgl.MapMouseEvent & mapboxgl.EventData) => {
+              setCountryPolygonNameClicked([country.name, country.iso3]);
+              setCountrySelected(true);
+              setCountryIDs([sourceId, layerId]);
+              currentCountryPolygonData.current = {
+                coordinates: country.coordinates,
+                type: country.type,
+              };
+              mapRef.current?.resize();
+
+              const polygonBoundingBox = turfBbox({
+                type: "Feature",
+                geometry: {
+                  type: country.type as any,
+                  coordinates: country?.coordinates as any,
+                },
+              });
+
+              //console.log(mapRef.current?.getStyle().layers);
+
+              const [minX, minY, maxX, maxY] = polygonBoundingBox;
+              const mapBoundingBox = mapRef.current!.getBounds();
+              mapRef.current?.setCenter([0, 0]);
+              mapRef.current?.setZoom(1);
+
+              const polygonWidth = maxX - minX;
+              const polygonHeight = maxY - minY;
+              const mapWidth =
+                mapBoundingBox.getEast() - mapBoundingBox.getWest();
+              const mapHeight =
+                mapBoundingBox.getNorth() - mapBoundingBox.getSouth();
+              const zoomLevelWidth = Math.log2(mapWidth / polygonWidth);
+              const zoomLevelHeight = Math.log2(mapHeight / polygonHeight);
+              const zoomLevel = Math.max(zoomLevelWidth, zoomLevelHeight);
+              currentCountryBoundingBox.current = {
+                countryCentroid: country.centroid as unknown as LngLatLike,
+                zoom: zoomLevel,
+              };
+
+              mapRef.current!.flyTo({
+                center: country.centroid as unknown as LngLatLike,
+                zoom:
+                  zoomLevel > 0 ? zoomLevel * 0.75 : mapRef.current!.getZoom(),
+              });
+
+              mapRef.current?.setLayoutProperty(layerId, "visibility", "none");
+
+              CountryRegionData.forEach(
+                (region: CountryRegionData, index: number) => {
+                  region.countries?.forEach(
+                    (otherCountry: Country, index: number) => {
+                      if (otherCountry.id !== country.id) {
+                        mapRef.current?.setLayoutProperty(
+                          `country-layer-${otherCountry.id}`,
+                          "visibility",
+                          "none"
+                        );
+
+                        mapRef.current?.setLayoutProperty(
+                          `country-layer-${otherCountry.id}-border`,
+                          "visibility",
+                          "none"
+                        );
+                      }
+                    }
+                  );
+                }
+              );
+              //console.log("COUNTRY ID: ", country.id);
+              setAdmin1Filter({
+                urgency: selectedUrgency,
+                severity: selectedSeverity,
+                certainty: selectedCertainty,
+              });
+              refetchAdmin1(country.id);
+            }
+          );
+        });
       });
+      setCountryRegionDataLoading(false);
+    };
+    if (!loading && !error) {
+      if (mapRef.current.loaded()) {
+        loadCountryRegionData();
+      } else {
+        mapRef.current.on("load", () => {
+          loadCountryRegionData();
+        });
+      }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
-    alertsLoading,
-    setAlertsLoading,
-    alerts,
+    CountryRegionData,
+    error,
+    loading,
     mapRef,
-    countryTables,
-    countries,
-    value,
-    mapContainerRef,
+    countryRegionDataLoading,
+    refetchAdmin1,
+    admin1Data,
+    admin1Loading,
+    admin1Error,
+    countryIDs,
+    setAdmin1Filter,
+    selectedUrgency,
+    selectedSeverity,
+    selectedCertainty,
+    setCountrySelected,
   ]);
+  const countryControlChange = () => {
+    currentCountryBoundingBox.current = null;
+    const sourceID = "infoArea-source";
+    const layerID = "infoArea-layer";
+    if (mapRef.current?.getSource(sourceID)) {
+      mapRef.current?.removeLayer(layerID);
+      mapRef.current?.removeSource(sourceID);
+    }
+    handleClose();
+
+    setCountrySelected(false);
+    CountryRegionData.forEach((region: CountryRegionData, index: number) => {
+      region.countries?.forEach((country: Country, index: number) => {
+        const layerId = `country-layer-${country.id}`;
+        const sourceId = `country-source-${country.id}`;
+        const borderLayerId = `${layerId}-border`;
+        mapRef.current?.setLayoutProperty(layerId, "visibility", "visible");
+        mapRef.current?.setLayoutProperty(
+          borderLayerId,
+          "visibility",
+          "visible"
+        );
+      });
+    });
+
+    const sourceId = countryIDs![0];
+    const layerId = countryIDs![1];
+    console.log(mapRef.current?.getStyle().layers);
+    admin1Data?.admin1s.forEach((admin1, index) => {
+      const admin1LayerId = `${layerId}-admin1-${admin1.id}`;
+      const admin1SourceId = `${sourceId}-admin1-${admin1.id}`;
+      const admin1BorderLayerId = `${admin1LayerId}-border`;
+      const admin1TextLayerId = `${admin1LayerId}-text`;
+      mapRef.current?.getLayer(admin1BorderLayerId) &&
+        mapRef.current?.removeLayer(admin1BorderLayerId);
+      mapRef.current?.getLayer(admin1TextLayerId) &&
+        mapRef.current?.removeLayer(admin1TextLayerId);
+      mapRef.current?.getLayer(admin1LayerId) &&
+        mapRef.current?.removeLayer(admin1LayerId);
+      mapRef.current?.getSource(admin1SourceId) &&
+        mapRef.current?.removeSource(admin1SourceId);
+    });
+
+    console.log(mapRef.current?.getStyle().layers);
+
+    mapRef.current?.setCenter([0, 0]);
+    mapRef.current?.setZoom(1);
+    console.log(mapRef.current?.getStyle().layers);
+    setCountryIDs(null);
+  };
+
+  const handleClose = () => {
+    const sourceID = "infoArea-source";
+    const layerID = "infoArea-layer";
+    if (mapRef.current?.getSource(sourceID)) {
+      mapRef.current?.removeLayer(layerID);
+      mapRef.current?.removeSource(sourceID);
+    }
+    setAdmin1Clicked(false);
+    mapContainerRef.current!.style.width = "100%";
+    const mapContainer = document.getElementById("mapContainer");
+
+    mapContainer?.classList.add("map-container-transition");
+    mapContainerRef.current!.classList.add("map-container-transition");
+
+    setTimeout(() => {
+      mapRef.current!.resize();
+      mapContainer?.classList.remove("map-container-transition");
+      mapContainerRef.current!.classList.remove("map-container-transition");
+      if (currentCountryBoundingBox.current !== null) {
+        mapRef.current!.flyTo({
+          center: currentCountryBoundingBox?.current!
+            .countryCentroid as unknown as LngLatLike,
+          zoom:
+            currentCountryBoundingBox!.current!.zoom > 0
+              ? currentCountryBoundingBox!.current!.zoom * 0.75
+              : mapRef.current!.getZoom(),
+        });
+      }
+    }, 300);
+  };
 
   return (
     <>
-      <Box>
-        <Tabs
-          value={value}
-          onChange={handleChange}
-          textColor="secondary"
-          indicatorColor="secondary"
-          aria-label="secondary tabs example"
-        >
-          <Tab value="map-tab" label="Map" />
-          <Tab value="source-tab" label="Sources" disabled={sources === null} />
-        </Tabs>
-
-        {value === "map-tab" && (
-          <Box p={3} style={{ position: "relative" }}>
-            {loading && alertsLoading && (
-              <div
-                style={{
-                  position: "absolute",
-                  left: 0,
-                  width: "100%",
-                  height: "600px",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  backgroundColor: "#e0dcdc",
-                  zIndex: 999,
-                }}
-              >
-                <div>
-                  <Box
-                    sx={{
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      padding: "30px",
-                      height: "60px",
-                      borderRadius: "30px",
-                      bgColor: "black",
-                    }}
-                  >
-                    <Skeleton
-                      animation="wave"
+      <>
+        {error || admin1Error || alertError || infoError ? (
+          <h1>Error</h1>
+        ) : (
+          <>
+            <Box sx={{ height: "40px" }}>
+              {countrySelected &&
+                countryPolygonNameClicked &&
+                countryPolygonNameClicked.length === 2 && (
+                  <>
+                    <Chip
+                      label={
+                        <>
+                          {countryPolygonNameClicked[0]} (
+                          {countryPolygonNameClicked[1]})
+                          {admin1Loading && (
+                            <IconButton aria-label="loading" disabled>
+                              <CircularProgress size={20} color="secondary" />
+                            </IconButton>
+                          )}
+                        </>
+                      }
+                      variant="outlined"
+                      onDelete={countryControlChange}
+                      disabled={admin1Loading ? true : false}
+                    />
+                  </>
+                )}
+            </Box>
+            <Box style={{ position: "relative" }}>
+              {loading && countryRegionDataLoading && (
+                <div
+                  style={{
+                    position: "absolute",
+                    left: 0,
+                    width: "100%",
+                    height: "700px",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    backgroundColor: "#e0dcdc",
+                    zIndex: 999,
+                  }}
+                >
+                  <div>
+                    <Box
                       sx={{
-                        position: "absolute",
-                        top: "50%",
-                        left: "50%",
-                        width: "100%",
-                        height: "100%",
-                        transform: "translate(-50%, -50%)",
-                        backgroundColor: "#e0dcdc",
                         display: "flex",
                         alignItems: "center",
                         justifyContent: "center",
-                        padding: "none",
+                        padding: "30px",
+                        height: "60px",
+                        borderRadius: "30px",
+                        bgColor: "black",
                       }}
-                    ></Skeleton>
-                    <Progress />
-                    <Typography
-                      sx={{ paddingLeft: "5px", zIndex: 1000 }}
-                      variant="h4"
-                      fontWeight={800}
-                      color="f5333f"
                     >
-                      Loading Alerts
-                    </Typography>
-                  </Box>
+                      <Skeleton
+                        animation="wave"
+                        sx={{
+                          position: "absolute",
+                          top: "50%",
+                          left: "50%",
+                          width: "100%",
+                          height: "100%",
+                          transform: "translate(-50%, -50%)",
+                          backgroundColor: "#e0dcdc",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          padding: "none",
+                        }}
+                      ></Skeleton>
+                      <Progress />
+                      <Typography
+                        sx={{ paddingLeft: "5px", zIndex: 1000 }}
+                        variant="h4"
+                        fontWeight={800}
+                        color="f5333f"
+                      >
+                        Loading Alerts
+                      </Typography>
+                    </Box>
+                  </div>
                 </div>
-              </div>
-            )}
-
-            <Box sx={{ display: "flex", flexDirection: "row" }}>
-              <div
-                ref={mapContainerRef}
-                className="map-container"
-                style={{
-                  width: isPolygonClicked ? "35%" : "100%",
-                  zIndex: 1, // Make sure the map container is behind the loading element
-                }}
-              ></div>
-              {isPolygonClicked && (
-                <Box
-                  sx={{
-                    width: "65%",
-                    height: "600px",
-                    backgroundColor: "lightgray",
-                    position: "relative",
-                    transform: `translateX(${
-                      isPolygonClicked ? "0%" : "100%"
-                    })`,
-                    transition: "transform 0.3s ease-in-out",
-                    zIndex: 2, // Make sure the popup component is above the map container
-                  }}
-                >
-                  <PopupComponent
-                    handleClose={handleClose}
-                    alerts={countryTables.current[tableID].alerts}
-                  />
-                </Box>
               )}
-            </Box>
-          </Box>
-        )}
 
-        {value === "source-tab" && (
-          <Box p={3}>
-            <SourcesTableComponent sources={sources}></SourcesTableComponent>
-          </Box>
+              <Box sx={{ display: "flex", flexDirection: "row" }}>
+                <div
+                  ref={mapContainerRef}
+                  className="map-container"
+                  id="mapContainer"
+                  style={{
+                    width: admin1Clicked ? "35%" : "100%",
+                    zIndex: 1,
+                  }}
+                ></div>
+                {admin1Clicked && (
+                  <Box
+                    sx={{
+                      width: "65%",
+                      position: "relative",
+                      transform: `translateX(${admin1Clicked ? "0%" : "100%"})`,
+                      transition: "transform 0.3s ease-in-out",
+                      zIndex: 2,
+                    }}
+                  >
+                    <PopupComponent
+                      handleClose={handleClose}
+                      loading={alertLoading}
+                      error={alertError}
+                      data={alertData}
+                      countryPolygonNameClicked={countryPolygonNameClicked}
+                      mapRef={mapRef}
+                      infoDataHandler={{
+                        data: infoData,
+                        loading: infoLoading,
+                        error: infoError,
+                        refetch: refectInfoData,
+                      }}
+                    />
+                  </Box>
+                )}
+              </Box>
+            </Box>
+          </>
         )}
-      </Box>
+      </>
     </>
   );
 };

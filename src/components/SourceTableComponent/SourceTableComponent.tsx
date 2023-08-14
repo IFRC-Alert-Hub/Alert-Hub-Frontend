@@ -1,8 +1,10 @@
 import * as React from "react";
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import { Box, Typography } from "@mui/material";
-import { SourceFeed } from "../MapComponent/MapComponent";
-
+export type SourceFeed = {
+  url?: string;
+  id?: string;
+};
 const columns = [
   { field: "id", headerName: "Source Name", width: 400 },
   { field: "url", headerName: "URL", width: 500 },

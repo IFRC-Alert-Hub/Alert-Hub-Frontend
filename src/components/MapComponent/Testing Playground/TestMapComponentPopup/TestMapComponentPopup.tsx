@@ -2,7 +2,6 @@ import React, { useEffect, useRef, useState } from "react";
 import mapboxgl, { LngLatBoundsLike } from "mapbox-gl";
 import { Container, Box, Button } from "@mui/material";
 import turfBbox from "@turf/bbox";
-import { PopupComponent } from "../PopupComponent/PopupComponent_new";
 import { IndiaPolygonCoordinates } from "./India";
 import { UttarPradesh } from "./UttarPradesh";
 
@@ -136,39 +135,39 @@ const TestMapComponentPopup = () => {
     });
   }, []);
 
-  const removeDistrictSourcesAndLayers = (map: any) => {
-    const layerIds = map.getStyle().layers;
-    if (layerIds) {
-      layerIds.forEach((layer: any) => {
-        if (layer.id.startsWith("district")) {
-          map.removeLayer(layer.id); // Fix: Use layer.id instead of layer object
-        }
-      });
-    }
-    const sourceIds = Object.keys(map.getStyle().sources);
-    if (sourceIds) {
-      sourceIds.forEach((sourceId: any) => {
-        if (sourceId.startsWith("district")) {
-          map.removeSource(sourceId);
-        }
-      });
-    }
-  };
+  // const removeDistrictSourcesAndLayers = (map: any) => {
+  //   const layerIds = map.getStyle().layers;
+  //   if (layerIds) {
+  //     layerIds.forEach((layer: any) => {
+  //       if (layer.id.startsWith("district")) {
+  //         map.removeLayer(layer.id); // Fix: Use layer.id instead of layer object
+  //       }
+  //     });
+  //   }
+  //   const sourceIds = Object.keys(map.getStyle().sources);
+  //   if (sourceIds) {
+  //     sourceIds.forEach((sourceId: any) => {
+  //       if (sourceId.startsWith("district")) {
+  //         map.removeSource(sourceId);
+  //       }
+  //     });
+  //   }
+  // };
 
-  const handleClose = () => {
-    setPolygonClicked(false);
-    mapContainerRef.current!.style.width = "100%";
+  // const handleClose = () => {
+  //   setPolygonClicked(false);
+  //   mapContainerRef.current!.style.width = "100%";
 
-    mapContainerRef.current!.classList.add("map-container-transition");
-    removeDistrictSourcesAndLayers(mapRef.current!);
-    setTimeout(() => {
-      mapRef.current!.resize();
-      mapRef.current?.setCenter([0, 0]);
-      mapRef.current?.setZoom(1);
+  //   mapContainerRef.current!.classList.add("map-container-transition");
+  //   removeDistrictSourcesAndLayers(mapRef.current!);
+  //   setTimeout(() => {
+  //     mapRef.current!.resize();
+  //     mapRef.current?.setCenter([0, 0]);
+  //     mapRef.current?.setZoom(1);
 
-      mapContainerRef.current!.classList.remove("map-container-transition");
-    }, 300);
-  };
+  //     mapContainerRef.current!.classList.remove("map-container-transition");
+  //   }, 300);
+  // };
 
   return (
     <>
@@ -203,7 +202,7 @@ const TestMapComponentPopup = () => {
                 transition: "transform 0.3s ease-in-out",
               }}
             >
-              <PopupComponent
+              {/* <PopupComponent
                 handleClose={handleClose}
                 alerts={[
                   {
@@ -399,7 +398,7 @@ const TestMapComponentPopup = () => {
                     },
                   },
                 ]}
-              />
+              /> */}
             </Box>
           )}
         </Box>

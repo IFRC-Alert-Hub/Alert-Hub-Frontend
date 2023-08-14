@@ -4,6 +4,7 @@ import Tab from "@mui/material/Tab";
 import Box from "@mui/material/Box";
 
 import SingleAreaView from "./SingleAreaView";
+import { AlertInfo, Area } from "../../Alert-Manager-API/types";
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -33,7 +34,14 @@ function CustomTabPanel(props: TabPanelProps) {
     </div>
   );
 }
-export default function AreaInfoHorizontalTab({ areaData }: any) {
+
+interface AreaInfoHorizontalTabProps {
+  infoSets: AlertInfo;
+}
+
+export const AreaInfoHorizontalTab: React.FC<AreaInfoHorizontalTabProps> = ({
+  infoSets,
+}) => {
   const [value, setValue] = React.useState(0);
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
@@ -42,7 +50,7 @@ export default function AreaInfoHorizontalTab({ areaData }: any) {
 
   return (
     <Box>
-      <Box display="flex" width="100%" justifyContent={"center"}>
+      <Box display="flex" width="100%">
         <Tabs
           value={value}
           onChange={handleChange}
@@ -61,34 +69,36 @@ export default function AreaInfoHorizontalTab({ areaData }: any) {
             },
           }}
         >
-          {areaData.map((info: any, index: any) => (
-            <Tab
-              key={index}
-              label={
-                <div style={{ display: "flex", alignItems: "center" }}>
-                  {`Area ${index + 1}`}
-                </div>
-              }
-              {...a11yProps(index)}
-              sx={
-                value === index
-                  ? {
-                      backgroundColor: "#fcd4dc",
-                    }
-                  : {
-                      backgroundColor: "#DEDEDE",
-                      color: "#9A9797",
-                    }
-              }
-            />
-          ))}
+          {infoSets.area.map((area: Area, index: number) => {
+            return (
+              <Tab
+                key={index}
+                label={
+                  <div style={{ display: "flex", alignItems: "center" }}>
+                    {`Area ${index + 1}`}
+                  </div>
+                }
+                {...a11yProps(index)}
+                sx={
+                  value === index
+                    ? {
+                        backgroundColor: "#fcd4dc",
+                      }
+                    : {
+                        backgroundColor: "#DEDEDE",
+                        color: "#9A9797",
+                      }
+                }
+              />
+            );
+          })}
         </Tabs>
       </Box>
-      {areaData.map((info: any, index: any) => (
+      {infoSets.area.map((area: Area, index: number) => (
         <CustomTabPanel key={index} value={value} index={index}>
-          <SingleAreaView />
+          <SingleAreaView areaSets={area} />
         </CustomTabPanel>
       ))}
     </Box>
   );
-}
+};

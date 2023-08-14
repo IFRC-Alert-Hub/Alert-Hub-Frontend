@@ -4,7 +4,7 @@ import TitleHeader from "../../components/Layout/TitleHeader";
 import AlertsTable from "./components/AlertsTable";
 
 const SubscriptionAlerts = () => {
-  const { title, country } = useParams();
+  const { id, title, country } = useParams();
   const numAlerts = 10;
 
   return (

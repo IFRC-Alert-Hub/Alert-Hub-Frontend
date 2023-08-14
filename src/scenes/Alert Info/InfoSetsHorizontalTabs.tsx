@@ -6,7 +6,8 @@ import { Grid } from "@mui/material";
 import { AlertInfoText } from "./AlertInfoText";
 import { Card } from "@mui/material";
 
-import AreaInfoHorizontalTab from "./AreaInfoHorizontalTab";
+import { AlertInfo } from "../../Alert-Manager-API/types";
+import { AreaInfoHorizontalTab } from "./AreaInfoHorizontalTab";
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -36,7 +37,14 @@ function CustomTabPanel(props: TabPanelProps) {
     </div>
   );
 }
-export default function DynamicTabs({ infoSets }: any) {
+
+interface InfoSetsHorizontalTabsProps {
+  infoSets: AlertInfo[];
+}
+
+export const InfoSetsHorizontalTabs: React.FC<InfoSetsHorizontalTabsProps> = ({
+  infoSets,
+}) => {
   const [value, setValue] = React.useState(0);
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
@@ -102,25 +110,27 @@ export default function DynamicTabs({ infoSets }: any) {
                 alignItems="center"
               >
                 <Grid item xs={12} sm={12} md={6}>
-                  {Object.entries(info).map(([key, value]) =>
-                    value !== "" ? (
-                      <AlertInfoText
-                        key={key}
-                        title={key}
-                        content={value as string}
-                      />
-                    ) : (
-                      <AlertInfoText
-                        key={key}
-                        title={key}
-                        content={"Not available"}
-                      />
-                    )
+                  {Object.entries(info).map(
+                    ([key, value]) =>
+                      !Array.isArray(value) &&
+                      (value !== "" ? (
+                        <AlertInfoText
+                          key={key}
+                          title={key}
+                          content={value as any}
+                        />
+                      ) : (
+                        <AlertInfoText
+                          key={key}
+                          title={key}
+                          content="Not available"
+                        />
+                      ))
                   )}
                 </Grid>
                 <Grid item xs={12} sm={12} md={6}>
-                  <Card>
-                    <AreaInfoHorizontalTab areaData={[{ id: 1 }, { id: 2 }]} />
+                  <Card sx={{ padding: "20px" }}>
+                    <AreaInfoHorizontalTab infoSets={info} />
                   </Card>
                 </Grid>
               </Grid>
@@ -130,4 +140,4 @@ export default function DynamicTabs({ infoSets }: any) {
       ))}
     </Box>
   );
-}
+};

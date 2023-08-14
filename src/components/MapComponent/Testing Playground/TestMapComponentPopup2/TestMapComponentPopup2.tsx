@@ -218,7 +218,7 @@ const TestMapComponentPopup2 = () => {
           {" "}
           {countrySelected && (
             <Chip
-              label="Country"
+              label={countryPolygonClicked}
               variant="outlined"
               onDelete={countryControlChange}
             />
