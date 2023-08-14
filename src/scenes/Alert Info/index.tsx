@@ -6,7 +6,6 @@ import AlertInfoTitleHeader from "./AlertInfoTitleHeader";
 import { InfoSetsHorizontalTabs } from "./InfoSetsHorizontalTabs";
 import { useParams } from "react-router-dom";
 import { GetAlertInfoByAlertID } from "../../Alert-Manager-API/AlertInfo";
-import { Alert } from "../../Alert-Manager-API/types";
 
 const AlertInfo = () => {
   const { id } = useParams<{ id: string }>();

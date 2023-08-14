@@ -1,5 +1,5 @@
-import { Box, CircularProgress, Container, Typography } from "@mui/material";
-import { Navigate, Outlet, useParams } from "react-router-dom";
+import { Box, Container, Typography } from "@mui/material";
+import { Navigate, useParams } from "react-router-dom";
 import { useMemo } from "react";
 import { GetRegionData } from "../../Alert-Manager-API/Region";
 import MapComponentWithFilter from "../../components/MapComponent/MapComponentWithFilter";

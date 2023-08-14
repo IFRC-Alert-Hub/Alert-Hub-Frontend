@@ -1,11 +1,8 @@
 import React, { useState } from "react";
-import { useQuery } from "@apollo/client";
 import { Container } from "@mui/material";
 import { useLocation } from "react-router-dom";
 import { RowsData } from "./Table/Data";
 import FilterableTableComponent from "./Table/TableComponent";
-import { cap_aggregator } from "../../API/API_Links";
-import { ALL_ALERTS } from "../../API/ALL_QUERIES";
 import TitleHeader from "../../components/Layout/TitleHeader";
 import { useIntl } from "react-intl";
 import Progress from "../../components/Layout/Progress";

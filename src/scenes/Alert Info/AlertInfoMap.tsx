@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef } from "react";
 import mapboxgl, { LngLatBoundsLike } from "mapbox-gl";
 import MapIcon from "@mui/icons-material/Map";
 import turfBbox from "@turf/bbox";
