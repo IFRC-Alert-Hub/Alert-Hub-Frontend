@@ -7,25 +7,13 @@ import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import { Button, TablePagination } from "@mui/material";
 import { useState } from "react";
+import { SubscriptionAlertsType } from "../../../API/TYPES";
 
-function createData(
-  event: string,
-  location: string,
-  eventCategory: string,
-  sentTime: string
-) {
-  return { event, location, eventCategory, sentTime };
-}
+type PropsType = {
+  alertsData: SubscriptionAlertsType[];
+};
 
-const rows = [
-  createData("Strong Winds", "District1", "MET", "01/08/2023, 7:09:09 PM"),
-  createData("Hurricane Warning", "District1", "MET", "01/08/2023, 4:09:09 PM"),
-  createData("Earthquake Alert", "District1", "MET", "01/08/2023, 12:09:09 PM"),
-  createData("Tsunami Advisory", "District2", "MET", "31/07/2023, 7:09:09 AM"),
-  createData("Flash Flood", "District3", "MET", "31/07/2023, 5:09:09 AM"),
-];
-
-const AlertsTable = () => {
+const AlertsTable = ({ alertsData }: PropsType) => {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
 
@@ -76,10 +64,10 @@ const AlertsTable = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {rows
+            {alertsData
               .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
               .map((row) => (
-                <TableRow key={row.event} hover>
+                <TableRow key={row.id} hover>
                   <TableCell
                     component="th"
                     scope="row"
@@ -88,13 +76,13 @@ const AlertsTable = () => {
                     {row.event}
                   </TableCell>
                   <TableCell align="left" sx={{ fontSize: "0.875rem" }}>
-                    {row.location}
+                    {row.admin1s}
                   </TableCell>
                   <TableCell align="left" sx={{ fontSize: "0.875rem" }}>
-                    {row.eventCategory}
+                    {row.event}
                   </TableCell>
                   <TableCell align="left" sx={{ fontSize: "0.875rem" }}>
-                    {row.sentTime}
+                    {row.sent}
                   </TableCell>
                   <TableCell align="left" sx={{ fontSize: "0.875rem" }}>
                     <Button
@@ -122,7 +110,7 @@ const AlertsTable = () => {
       <TablePagination
         rowsPerPageOptions={[5, 10, 25]}
         component="div"
-        count={rows.length}
+        count={alertsData.length}
         rowsPerPage={rowsPerPage}
         page={page}
         onPageChange={handleChangePage}
