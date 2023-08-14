@@ -1,13 +1,10 @@
 import { Box, Container, Typography } from "@mui/material";
-import { useLocation, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import TitleHeader from "../../components/Layout/TitleHeader";
 import AlertsTable from "./components/AlertsTable";
 
 const SubscriptionAlerts = () => {
-  const location = useLocation();
-  const params = new URLSearchParams(location.search);
-  const country = params.get("country");
-  const { title } = useParams();
+  const { title, country } = useParams();
   const numAlerts = 10;
 
   return (

@@ -36,7 +36,7 @@ const CollapsibleRow = ({
 
   const handleViewAlerts = () => {
     navigate(
-      `/account/subscription/${row.subscriptionName}?country=${row.countryNames[0]}`
+      `/account/subscription/${row.subscriptionName}/${row.countryNames[0]}`
     );
   };
 
@@ -86,7 +86,7 @@ const CollapsibleRow = ({
               textOverflow: "ellipsis",
             }}
           >
-            {row.districtNames.join(", ")}
+            {row.admin1Names.join(", ")}
           </Box>
         </TableCell>
         <TableCell align="left" sx={{ fontSize: "0.875rem" }}>
@@ -154,7 +154,7 @@ const CollapsibleRow = ({
                 id: row.id,
                 subscriptionName: row.subscriptionName,
                 countryIds: row.countryIds,
-                districtIds: row.districtIds,
+                admin1Ids: row.admin1Ids,
                 urgencyArray: row.urgencyArray,
                 severityArray: row.severityArray,
                 certaintyArray: row.certaintyArray,
@@ -235,7 +235,7 @@ const CollapsibleRow = ({
                 sx={{ fontWeight: 400 }}
               >
                 <span style={{ color: "gray" }}>Subscribed Admin1s:</span>{" "}
-                {row.districtNames.join(", ")}
+                {row.admin1Names.join(", ")}
               </Typography>
               <Typography
                 variant="h6"

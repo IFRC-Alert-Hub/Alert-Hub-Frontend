@@ -221,7 +221,6 @@ const Register = () => {
               sx={{ fontSize: "12px" }}
               value={formik.values.verifyCode}
               onChange={formik.handleChange}
-              disabled={!isSendClicked}
               onBlur={formik.handleBlur}
               error={
                 formik.touched.verifyCode && Boolean(formik.errors.verifyCode)

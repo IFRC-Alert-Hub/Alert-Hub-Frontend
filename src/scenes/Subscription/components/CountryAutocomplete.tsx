@@ -4,8 +4,11 @@ import {
   FormControl,
   FormHelperText,
   FormLabel,
+  IconButton,
   TextField,
+  Tooltip,
 } from "@mui/material";
+import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
 import { CountryOptionsType, SubscriptionForm } from "../../../API/TYPES";
 import { useState } from "react";
 
@@ -40,7 +43,7 @@ const CountryAutocomplete = ({
     setSelectedRow((prevState) => ({
       ...prevState,
       countryIds: countryIds,
-      districtIds: [],
+      admin1Ids: [],
     }));
     setSelection(newValue);
   };
@@ -54,6 +57,14 @@ const CountryAutocomplete = ({
     >
       <Box display="flex" sx={{ alignItems: "center" }}>
         <FormLabel className="subs-form-legend">Country</FormLabel>
+        <Tooltip
+          title="Subscriptions are currently only supported for countries that have alert feeds on the Alert Hub"
+          placement="bottom-start"
+        >
+          <IconButton disableRipple sx={{ p: "0 0 0 10px" }}>
+            <ErrorOutlineIcon />
+          </IconButton>
+        </Tooltip>
       </Box>
       <Autocomplete
         disablePortal
