@@ -1,23 +1,23 @@
-# Use a specific version of Node.js as the base image
-FROM node:14
+# Use a Node 16 base image
+FROM node:16-alpine 
 
-# Set the environment variable for Node.js to production
-ENV NODE_ENV production
-
-# Set the working directory inside the container
+# Set the working directory to /app inside the container
 WORKDIR /app
 
-# Copy package.json and package-lock.json (if present) to the working directory
-COPY package*.json ./
-
-# Install dependencies defined in package.json
-RUN npm install && npm cache clean --force
-
-# Copy the rest of the application files to the working directory
+# Copy application files into the container
 COPY . .
 
-# Specify the command to run when the container starts
-CMD ["npm", "start"]
+# Install dependencies (npm ci ensures exact versions from lockfile are installed)
+RUN npm ci 
 
-# Expose the necessary port (if your application uses a different port, change it)
+# Build the application
+RUN npm run build
+
+# Set the environment to "production"
+ENV NODE_ENV=production
+
+# Expose the port on which the application will run (3000 is the default that `serve` uses)
 EXPOSE 3000
+
+# Start the application using the `serve` command
+CMD [ "npx", "serve", "build" ]
