@@ -5,6 +5,7 @@ import mapboxgl, {
   LngLatLike,
   Map as MapboxMap,
 } from "mapbox-gl";
+
 import { Box, Skeleton, Tab, Tabs, Typography } from "@mui/material";
 import SourcesTableComponent from "../SourceTableComponent/SourceTableComponent";
 import { PopupComponent } from "./PopupComponent/PopupComponent_new";
@@ -129,8 +130,8 @@ const MapComponent: React.FC<MapProps> = ({
   };
 
   useEffect(() => {
-    setPolygonClicked(false)
-  }, [value])
+    setPolygonClicked(false);
+  }, [value]);
   const handleClose = () => {
     setPolygonClicked(false);
     mapContainerRef.current!.style.width = "100%";
