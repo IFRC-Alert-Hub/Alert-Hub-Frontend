@@ -9,7 +9,7 @@ import {
   FormLabel,
   TextField,
 } from "@mui/material";
-import { DistrictOptionsType, SubscriptionForm } from "../../../API/TYPES";
+import { Admin1OptionsType, SubscriptionForm } from "../../../API/TYPES";
 import React, { useEffect, useState } from "react";
 
 interface FormErrors {
@@ -19,49 +19,49 @@ interface FormErrors {
 type PropsType = {
   verifyForm: boolean;
   formErrors: FormErrors;
-  districtList: DistrictOptionsType[];
+  admin1List: Admin1OptionsType[];
   selectedRow: SubscriptionForm;
   setSelectedRow: React.Dispatch<React.SetStateAction<SubscriptionForm>>;
 };
 
-const CountryAutocomplete = ({
+const Admin1Autocomplete = ({
   verifyForm,
   formErrors,
-  districtList,
+  admin1List,
   selectedRow,
   setSelectedRow,
 }: PropsType) => {
-  const [value, setValue] = useState<DistrictOptionsType[]>([]);
+  const [value, setValue] = useState<Admin1OptionsType[]>([]);
 
   useEffect(() => {
-    const initValue = districtList.filter((item) =>
-      selectedRow.districtIds.includes(Number(item.districtId))
+    const initValue = admin1List.filter((item) =>
+      selectedRow.admin1Ids.includes(Number(item.admin1Id))
     );
     setValue(initValue);
-  }, [districtList, selectedRow.countryIds, selectedRow.districtIds]);
+  }, [admin1List, selectedRow.countryIds, selectedRow.admin1Ids]);
 
-  const handleChange = (event: any, newValue: DistrictOptionsType[]) => {
-    const districtIds = newValue.map((item) => Number(item.districtId));
+  const handleChange = (event: any, newValue: Admin1OptionsType[]) => {
+    const admin1Ids = newValue.map((item) => Number(item.admin1Id));
     setSelectedRow((prevState) => ({
       ...prevState,
-      districtIds: districtIds,
+      admin1Ids: admin1Ids,
     }));
     setValue(newValue);
   };
 
   const handleSelectAll = () => {
-    const districtIds = districtList.map((item) => Number(item.districtId));
+    const admin1Ids = admin1List.map((item) => Number(item.admin1Id));
     setSelectedRow((prevState) => ({
       ...prevState,
-      districtIds: districtIds,
+      admin1Ids: admin1Ids,
     }));
-    setValue(districtList);
+    setValue(admin1List);
   };
 
   return (
     <FormControl
       required
-      error={verifyForm && formErrors["districtIds"]}
+      error={verifyForm && formErrors["admin1Ids"]}
       component="fieldset"
       sx={{ width: "100%" }}
     >
@@ -90,17 +90,17 @@ const CountryAutocomplete = ({
         multiple
         value={value}
         disabled={selectedRow.countryIds.length === 0}
-        id="checkboxes-districts"
+        id="checkboxes-admin1s"
         size="small"
-        options={districtList}
+        options={admin1List}
         groupBy={(option) => option.countryName}
         disableCloseOnSelect
-        getOptionLabel={(option) => option.districtName}
+        getOptionLabel={(option) => option.admin1Name}
         onChange={handleChange}
         renderOption={(props, option, { selected }) => (
           <li {...props}>
             <FormControlLabel
-              label={option.districtName}
+              label={option.admin1Name}
               control={<Checkbox checked={selected} />}
             />
           </li>
@@ -110,11 +110,11 @@ const CountryAutocomplete = ({
       />
       <FormHelperText>
         {verifyForm &&
-          formErrors["districtIds"] &&
+          formErrors["admin1Ids"] &&
           "You need to select at least one"}
       </FormHelperText>
     </FormControl>
   );
 };
 
-export default CountryAutocomplete;
+export default Admin1Autocomplete;

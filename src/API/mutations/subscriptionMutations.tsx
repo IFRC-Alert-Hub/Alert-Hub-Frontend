@@ -4,7 +4,7 @@ export const ADD_SUBSCRIPTION = gql`
   mutation AddSubscription(
     $certaintyArray: [String] = ""
     $countryIds: [Int]!
-    $districtIds: [Int]!
+    $admin1Ids: [Int]!
     $sentFlag: Int!
     $severityArray: [String] = ""
     $subscribeBy: [String] = ""
@@ -19,12 +19,12 @@ export const ADD_SUBSCRIPTION = gql`
       severityArray: $severityArray
       countryIds: $countryIds
       certaintyArray: $certaintyArray
-      districtIds: $districtIds
+      admin1Ids: $admin1Ids
     ) {
       subscription {
         certaintyArray
         countryIds
-        districtIds
+        admin1Ids
         id
         sentFlag
         severityArray
@@ -52,7 +52,7 @@ export const UPDATE_SUBSCRIPTION = gql`
     $subscriptionName: String = ""
     $certaintyArray: [String] = ""
     $countryIds: [Int]!
-    $districtIds: [Int]!
+    $admin1Ids: [Int]!
     $sentFlag: Int!
     $severityArray: [String] = ""
     $subscribeBy: [String] = ""
@@ -63,7 +63,7 @@ export const UPDATE_SUBSCRIPTION = gql`
       subscriptionId: $subscriptionId
       subscriptionName: $subscriptionName
       countryIds: $countryIds
-      districtIds: $districtIds
+      admin1Ids: $admin1Ids
       urgencyArray: $urgencyArray
       severityArray: $severityArray
       certaintyArray: $certaintyArray
