@@ -65,7 +65,7 @@ const Subscription = () => {
   let tableContent;
   if (subscriptionLoading) {
     tableContent = <Progress />;
-  } else if (subscriptionError) {
+  } else if (subscriptionError || (countryData && countryData.length < 1)) {
     console.error(subscriptionError);
     tableContent = (
       <Typography variant="h5" textAlign={"center"} color={"gray"} mt={10}>
