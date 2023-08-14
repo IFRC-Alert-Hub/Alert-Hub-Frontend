@@ -1,8 +1,8 @@
-import { Box, Card, CardContent, Typography } from "@mui/material";
+import { Box, Card, Typography } from "@mui/material";
 import React, { ReactNode } from "react";
-import { AlertData } from "../MapComponent";
+import { Alert } from "../../../Alert-Manager-API/types";
 type PopupCardProps = {
-  alerts?: AlertData[];
+  alerts?: Alert[];
   iconComponent?: ReactNode;
   iconText?: string;
   rightText?: String;
@@ -26,6 +26,7 @@ export const PopupCard: React.FC<PopupCardProps> = (props) => {
           alignItems: "center",
           justifyContent: "center",
           paddingLeft: "15px",
+          paddingRight: "2px",
         }}
       >
         {iconComponent}
@@ -39,17 +40,23 @@ export const PopupCard: React.FC<PopupCardProps> = (props) => {
         </Typography>
       </Box>
 
-      <Box sx={{ display: "flex", flexDirection: "column" }}>
-        <CardContent sx={{ flex: "1 0 auto" }}>
-          <Typography
-            component="h5"
-            fontSize="13px"
-            fontWeight="500"
-            variant="body1"
-          >
-            {rightText}
-          </Typography>
-        </CardContent>
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
+          flex: "1 0 auto",
+          paddingLeft: "10px",
+        }}
+      >
+        <Typography
+          component="h5"
+          fontSize="13px"
+          fontWeight="500"
+          variant="body1"
+        >
+          {rightText}
+        </Typography>
       </Box>
     </Card>
   );

@@ -1,163 +1,109 @@
-// import { Container } from "@mui/material";
-// import { useNavigate, useParams } from "react-router-dom";
-// import * as React from "react";
-// import axios from "axios";
-
-// const AlertInfo = () => {
-//   const { id } = useParams();
-//   const [alertData, setAlertData] = React.useState(null);
-//   const [isLoading, setIsLoading] = React.useState(true);
-//   const navigate = useNavigate();
-
-//   const fetchAlertData = async () => {
-//     try {
-//       const response = await axios.get(
-//         `https://alert-manager.azurewebsites.net/alert/get/${id}`
-//       );
-//       if (response.status === 200) {
-//         const data = response.data;
-//         console.log(data);
-//         setAlertData(data);
-//       } else {
-//         redirectTo404();
-//       }
-//     } catch (error) {
-//       redirectTo404();
-//     } finally {
-//       setIsLoading(false);
-//     }
-//   };
-
-//   const redirectTo404 = () => {
-//     navigate("/404");
-//   };
-
-//   React.useEffect(() => {
-//     fetchAlertData();
-//     // eslint-disable-next-line react-hooks/exhaustive-deps
-//   }, []);
-//   if (isLoading) {
-//     return <p>Loading...</p>;
-//   } else if (alertData) {
-//     return (
-//       <Container maxWidth="lg">
-//         <h1>Alert Info</h1>
-//       </Container>
-//     );
-//   } else {
-//     return <p>Error: Unable to fetch alert data.</p>;
-//   }
-// };
-
-// export default AlertInfo;
-
 import { Box, Container, Typography } from "@mui/material";
-import React from "react";
+import React, { useEffect, useMemo } from "react";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import { AlertInfoText } from "./AlertInfoText";
 import AlertInfoTitleHeader from "./AlertInfoTitleHeader";
-import DynamicTabs from "./InfoSetsHorizontalTabs";
-
-const data = {
-  code: "",
-  id: "15383",
-  identifier: "2.49.0.0.250.0.FR.20230803060040.725023",
-  incidents: "",
-  msgType: "ALERT",
-  note: "",
-  references: "",
-  restriction: "",
-  scope: "PUBLIC",
-  sender: "vigilance@meteo.fr",
-  sent: "2023-08-03T04:00:40+00:00",
-  source: "",
-  status: "ACTUAL",
-  url: "https://feeds.meteoalarm.org/api/v1/warnings/feeds-france/5db24ddb-eb6e-4a23-8617-11a8c8968ead?index_info=1&index_area=10&index_geocode=0",
-  addresses: "",
-};
-
-const info = [
-  {
-    category: "MET",
-    audience: "",
-    contact: "METEO-FRANCE",
-    certainty: "LIKELY",
-    description:
-      "Des phénomènes habituels dans la région mais occasionnellement et localement dangereux sont prévus (exemple : mistral, orage d'été, montée des eaux, fortes vagues submergeant le littoral).",
-    effective: "2023-08-03T04:00:00+00:00",
-    event: "Vigilance jaune orages",
-    urgency: "FUTURE",
-    severity: "MODERATE",
-    senderName: "METEO-FRANCE",
-    responseType: "MONITOR",
-    parameter: "",
-    onset: "2023-08-03T04:00:26+00:00",
-    language: "fr-FR",
-    id: "13874",
-    instruction:
-      "Soyez attentifs si vous pratiquez des activités sensibles au risque météorologique ou à proximité d'un rivage ou d'un cours d'eau. Tenez-vous au courant de l'évolution de la situation.",
-    headline: "Vigilance jaune orages",
-    expires: "2023-08-03T22:00:00+00:00",
-    eventCode: "",
-    web: "http://vigilance.meteofrance.com/",
-  },
-  {
-    category: "MET",
-    audience: "",
-    contact: "METEO-FRANCE",
-    certainty: "LIKELY",
-    description:
-      "Moderate damages may occur, especially in vulnerable or in exposed areas and to people who carry out weather-related activities.",
-    effective: "2023-08-03T04:00:00+00:00",
-    event: "Moderate thunderstorm warning",
-    urgency: "FUTURE",
-    severity: "MODERATE",
-    senderName: "METEO-FRANCE",
-    responseType: "MONITOR",
-    parameter: "",
-    onset: "2023-08-03T04:00:26+00:00",
-    language: "en-GB",
-    id: "13877",
-    instruction: "Be careful, keep informed of the latest weather forecast.",
-    headline: "Moderate thunderstorm warning",
-    expires: "2023-08-03T22:00:00+00:00",
-    eventCode: "",
-    web: "http://vigilance.meteofrance.com/",
-  },
-];
+import { InfoSetsHorizontalTabs } from "./InfoSetsHorizontalTabs";
+import { useParams } from "react-router-dom";
+import { GetAlertInfoByAlertID } from "../../Alert-Manager-API/AlertInfo";
 
 const AlertInfo = () => {
-  //const { id } = useParams();
+  const { id } = useParams<{ id: string }>();
+  const { data, loading, error, refetch } = GetAlertInfoByAlertID();
+  useMemo(() => {
+    refetch(Number(id));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [id]);
 
+  useEffect(() => {
+    if (!loading && !error) {
+      console.log(data);
+    }
+  }, [data, loading, error]);
+
+  // interface KeyTitleMap {
+  //   [key: string]: string;
+  // }
+
+  // const keyTitleMap: KeyTitleMap = {
+  //   url: "URL",
+  //   identifier: "Identifier",
+  //   msg_type: "Message Type",
+  //   source: "Source",
+  //   // Add more key-title pairs as needed
+  // };
+
+  // const keyOrder: (keyof Alert)[] = [
+  //   "url",
+  //   "identifier",
+  //   "msg_type",
+  //   "source",
+  //   // Add more keys in the desired order
+  // ];
   return (
     <>
-      <Box padding={"40px"} sx={{ textAlign: "center" }}>
-        <Typography
-          variant={"h1"}
-          fontWeight={"600"}
-          sx={{ paddingBottom: "5px" }}
-        >
-          Excessive Heat warning
-        </Typography>
-        <Typography variant={"h4"}>
-          <LocationOnIcon />
-          UNITED STATES OF AMERICA (USA)
-        </Typography>
-      </Box>
-      <Container maxWidth="lg">
-        <AlertInfoTitleHeader title="Alert" />
-        {Object.entries(data).map(([key, value]) =>
-          value !== "" ? (
-            <AlertInfoText key={key} title={key} content={value} />
-          ) : (
-            <AlertInfoText key={key} title={key} content={"Not available"} />
-          )
-        )}
-        <Box sx={{ padding: "20px" }}>
+      {error && <h1>Error</h1>}
+      {data && !loading && !error && (
+        <>
           {" "}
-          <DynamicTabs infoSets={info} />
-        </Box>
-      </Container>
+          <Box padding={"40px"} sx={{ textAlign: "center" }}>
+            <Typography
+              variant={"h1"}
+              fontWeight={"600"}
+              sx={{ paddingBottom: "5px" }}
+            >
+              Excessive Heat warning
+            </Typography>
+            <Typography variant={"h4"}>
+              <LocationOnIcon />
+              UNITED STATES OF AMERICA (USA)
+            </Typography>
+          </Box>
+          <Container maxWidth="lg">
+            <AlertInfoTitleHeader title="Alert" />
+            {/* {keyOrder.map((key) => {
+              const title = keyTitleMap[key] || key;
+              const value = data[key];
+
+              if (key === "id") {
+                return null;
+              }
+
+              return value !== "" ? (
+                <AlertInfoText
+                  key={key}
+                  title={title}
+                  content={value as unknown as any}
+                />
+              ) : (
+                <AlertInfoText
+                  key={key}
+                  title={title}
+                  content={"Not Available"}
+                />
+              );
+            })} */}
+            {Object.entries(data).map(
+              ([key, value]) =>
+                !Array.isArray(value) &&
+                (value !== "" ? (
+                  <AlertInfoText key={key} title={key} content={value as any} />
+                ) : (
+                  <AlertInfoText
+                    key={key}
+                    title={key}
+                    content={"Not available"}
+                  />
+                ))
+            )}
+
+            <Box sx={{ padding: "20px" }}>
+              {" "}
+              <InfoSetsHorizontalTabs infoSets={data.info!} />
+            </Box>
+          </Container>
+        </>
+      )}
     </>
   );
 };

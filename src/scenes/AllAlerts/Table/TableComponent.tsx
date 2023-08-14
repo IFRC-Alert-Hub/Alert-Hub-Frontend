@@ -238,7 +238,13 @@ const EnhancedTable = (props: EnhancedTableProps) => {
                     <TableCell align="center">{row.region}</TableCell>
                     <TableCell align="center">{row.country}</TableCell>
                     <TableCell align="center">
-                      <Link to="https://www.google.com">View Alert Info</Link>{" "}
+                      <Link
+                        to={`/alerts/${row.id}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        View Alert Info
+                      </Link>{" "}
                     </TableCell>
                   </TableRow>
                 );
