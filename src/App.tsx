@@ -71,7 +71,7 @@ function App() {
                   <Route path="profile" element={<Profile />} />
                   <Route path="subscription" element={<Subscription />} />
                   <Route
-                    path="subscription/:title"
+                    path="subscription/:title/:country"
                     element={<SubscriptionAlerts />}
                   />
                 </Route>

@@ -2,33 +2,36 @@ import { gql } from "@apollo/client";
 
 export const ADD_SUBSCRIPTION = gql`
   mutation AddSubscription(
-    $certaintyArray: [String] = []
-    $countryIds: [Int] = []
-    $districtIds: [Int] = []
-    $severityArray: [String] = []
-    $subscribeBy: [String] = []
+    $certaintyArray: [String] = ""
+    $countryIds: [Int]!
+    $admin1Ids: [Int]!
+    $sentFlag: Int!
+    $severityArray: [String] = ""
+    $subscribeBy: [String] = ""
     $subscriptionName: String = ""
-    $urgencyArray: [String] = []
+    $urgencyArray: [String] = ""
   ) {
     createSubscription(
+      sentFlag: $sentFlag
       subscriptionName: $subscriptionName
-      countryIds: $countryIds
-      districtIds: $districtIds
       urgencyArray: $urgencyArray
-      severityArray: $severityArray
-      certaintyArray: $certaintyArray
       subscribeBy: $subscribeBy
+      severityArray: $severityArray
+      countryIds: $countryIds
+      certaintyArray: $certaintyArray
+      admin1Ids: $admin1Ids
     ) {
       subscription {
-        id
-        userId
-        subscriptionName
-        countryIds
-        districtIds
-        urgencyArray
-        severityArray
         certaintyArray
+        countryIds
+        admin1Ids
+        id
+        sentFlag
+        severityArray
         subscribeBy
+        subscriptionName
+        urgencyArray
+        userId
       }
     }
   }
@@ -49,16 +52,18 @@ export const UPDATE_SUBSCRIPTION = gql`
     $subscriptionName: String = ""
     $certaintyArray: [String] = ""
     $countryIds: [Int]!
-    $districtIds: [Int]!
+    $admin1Ids: [Int]!
+    $sentFlag: Int!
     $severityArray: [String] = ""
     $subscribeBy: [String] = ""
     $urgencyArray: [String] = ""
   ) {
     updateSubscription(
+      sentFlag: $sentFlag
       subscriptionId: $subscriptionId
       subscriptionName: $subscriptionName
       countryIds: $countryIds
-      districtIds: $districtIds
+      admin1Ids: $admin1Ids
       urgencyArray: $urgencyArray
       severityArray: $severityArray
       certaintyArray: $certaintyArray

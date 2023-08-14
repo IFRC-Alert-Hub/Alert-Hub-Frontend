@@ -1,71 +1,39 @@
 import { Button, Container, Grid, Typography } from "@mui/material";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useQuery } from "@apollo/client";
-import { cap_aggregator, subscription_module } from "../../API/API_Links";
+import axios from "axios";
+import { subscription_module } from "../../API/API_Links";
 import {
   CountryOptionsType,
   SubscriptionForm,
   SubscriptionItem,
   SubscriptionQueryResult,
 } from "../../API/TYPES";
-import { GET_ALL_COUNTRIES, GET_SUBSCRIPTIONS } from "../../API/ALL_QUERIES";
+import { GET_SUBSCRIPTIONS } from "../../API/ALL_QUERIES";
 import SubscriptionTable from "./components/SubscriptionTable";
 import ModalForm from "./components/ModalForm";
 import Progress from "../../components/Layout/Progress";
+import { RADIO_OPTIONS } from "./components/SentFlagRadio";
 
 const INIT_ROW: SubscriptionForm = {
   subscriptionName: "",
   countryIds: [],
-  districtIds: [],
+  admin1Ids: [],
   urgencyArray: [],
   severityArray: [],
   certaintyArray: [],
   subscribeBy: [],
+  sentFlag: -1,
 };
 
-const testCountryData: CountryOptionsType[] = [
-  {
-    countryId: "1",
-    countryName: "country1",
-    districts: [
-      {
-        districtId: "1",
-        districtName: "district1",
-      },
-      {
-        districtId: "2",
-        districtName: "district2",
-      },
-      {
-        districtId: "3",
-        districtName: "district3",
-      },
-    ],
-  },
-  {
-    countryId: "2",
-    countryName: "country2",
-    districts: [
-      {
-        districtId: "4",
-        districtName: "district4",
-      },
-      {
-        districtId: "5",
-        districtName: "district5",
-      },
-    ],
-  },
-];
-
 const Subscription = () => {
-  // fetch the data from backend
-  const { loading: countryLoading, data: countryData } = useQuery(
-    GET_ALL_COUNTRIES,
-    {
-      client: cap_aggregator,
-    }
+  const [formType, setFormType] = useState("");
+  const [modalOpen, setModalOpen] = useState(false);
+  const [selectedRow, setSelectedRow] = useState<SubscriptionForm>(INIT_ROW);
+  const [countryData, setCountryData] = useState<CountryOptionsType[] | null>(
+    null
   );
+
   const {
     loading: subscriptionLoading,
     error: subscriptionError,
@@ -74,9 +42,16 @@ const Subscription = () => {
     client: subscription_module,
   });
 
-  const [formType, setFormType] = useState("");
-  const [modalOpen, setModalOpen] = useState(false);
-  const [selectedRow, setSelectedRow] = useState<SubscriptionForm>(INIT_ROW);
+  useEffect(() => {
+    axios
+      .get("https://alert-manager.azurewebsites.net/admin1s/")
+      .then((res) => {
+        setCountryData(res.data.countries);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, []);
 
   const handleModalOpen = () => {
     setModalOpen(true);
@@ -88,9 +63,10 @@ const Subscription = () => {
   };
 
   let tableContent;
-  if (subscriptionLoading || countryLoading) {
+  if (subscriptionLoading) {
     tableContent = <Progress />;
   } else if (subscriptionError) {
+    console.error(subscriptionError);
     tableContent = (
       <Typography variant="h5" textAlign={"center"} color={"gray"} mt={10}>
         Something error! Please contact the application administrator.
@@ -100,22 +76,21 @@ const Subscription = () => {
     const tableDetail = subscriptionData.listAllSubscription.map(
       (item: SubscriptionItem) => {
         const countryNames = item.countryIds.map((id: number) => {
-          const foundCountry = testCountryData.find(
-            (country) => country.countryId === id.toString()
-          );
-          return foundCountry?.countryName;
+          const foundCountry = countryData.find((country) => country.id === id);
+          return foundCountry?.name;
         });
-        const districtNames = item.districtIds.map((id: number) => {
-          const foundCountry = testCountryData.find(
-            (country) => country.countryId === item.countryIds[0].toString()
+        const admin1Names = item.admin1Ids.map((id: number) => {
+          const foundCountry = countryData.find(
+            (country) => country.id === item.countryIds[0]
           );
-          const districtsList = foundCountry?.districts;
-          const foundDistricts = districtsList?.find(
-            (district) => district.districtId === id.toString()
-          );
-          return foundDistricts?.districtName;
+          const admin1sList = foundCountry?.admin1s;
+          const foundAdmin1s = admin1sList?.find((admin1) => admin1.id === id);
+          return foundAdmin1s?.name;
         });
-        return { ...item, countryNames, districtNames };
+        const sentFlagName = RADIO_OPTIONS.find(
+          (option) => Number(option.value) === item.sentFlag
+        )?.label;
+        return { ...item, countryNames, admin1Names, sentFlagName };
       }
     );
     tableContent = (
@@ -167,8 +142,7 @@ const Subscription = () => {
           modalOpen={modalOpen}
           handleModalClose={handleModalClose}
           formType={formType}
-          // countryList={countryData.listCountry}
-          countryList={testCountryData}
+          countryList={countryData}
           selectedRow={selectedRow}
           setSelectedRow={setSelectedRow}
         />

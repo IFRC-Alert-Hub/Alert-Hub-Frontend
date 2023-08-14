@@ -8,7 +8,6 @@ import mapboxgl from "mapbox-gl";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { ApolloProvider } from "@apollo/client";
-
 import { IntlProvider } from "react-intl";
 import { getLanguage } from "./multiLanguage/helpers/useLanguage";
 import en from "./multiLanguage/locales/en.json";
@@ -20,6 +19,7 @@ import {
 } from "./API/API_Links";
 const messages = { en: en, fr: fr };
 const language = getLanguage();
+// eslint-disable-next-line import/no-webpack-loader-syntax
 
 mapboxgl.accessToken =
   "pk.eyJ1IjoiZ28taWZyYyIsImEiOiJja3E2bGdvb3QwaXM5MnZtbXN2eGtmaWgwIn0.llipq3Spc_PPA2bLjPwIPQ";

@@ -16,6 +16,8 @@ import {
   Tabs,
   Typography,
 } from "@mui/material";
+
+import { Box, Skeleton, Tab, Tabs, Typography } from "@mui/material";
 import SourcesTableComponent from "../SourceTableComponent/SourceTableComponent";
 import { PopupComponent } from "./PopupComponent/PopupComponent";
 import Progress from "../Layout/Progress";
@@ -237,6 +239,28 @@ const MapComponent: React.FC<MapProps> = ({
             }
           });
         }
+=======
+    setPolygonClicked(false);
+  }, [value]);
+  const handleClose = () => {
+    setPolygonClicked(false);
+    mapContainerRef.current!.style.width = "100%";
+
+    mapContainerRef.current!.classList.add("map-container-transition");
+
+    setTimeout(() => {
+      mapRef.current!.resize();
+      mapRef.current?.setCenter([0, 0]);
+      mapRef.current?.setZoom(1);
+
+      mapContainerRef.current!.classList.remove("map-container-transition");
+    }, 300);
+  };
+
+  useEffect(() => {
+    if (mapRef.current) {
+      if (mapContainerRef.current) {
+        mapRef.current!.resize();
       }
     };
     if (countryIDs && admin1Data) {

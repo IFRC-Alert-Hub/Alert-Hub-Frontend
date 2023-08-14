@@ -3,11 +3,12 @@ export interface SubscriptionItem {
   userId: number;
   subscriptionName: string;
   countryIds: number[];
-  districtIds: number[];
+  admin1Ids: number[];
   urgencyArray: string[];
   severityArray: string[];
   certaintyArray: string[];
   subscribeBy: string[];
+  sentFlag: number;
 }
 
 export interface UpdatedSubscriptionItem {
@@ -15,13 +16,15 @@ export interface UpdatedSubscriptionItem {
   userId: number;
   subscriptionName: string;
   countryIds: number[];
-  districtIds: number[];
+  admin1Ids: number[];
   urgencyArray: string[];
   severityArray: string[];
   certaintyArray: string[];
   subscribeBy: string[];
+  sentFlag: number;
   countryNames: string[];
-  districtNames: string[];
+  admin1Names: string[];
+  sentFlagName: string;
 }
 
 export interface SubscriptionQueryResult {
@@ -30,15 +33,16 @@ export interface SubscriptionQueryResult {
 }
 
 export interface SubscriptionForm {
-  [key: string]: string | string[] | number[] | undefined;
+  [key: string]: string | string[] | number | number[] | undefined;
   id?: string;
   subscriptionName: string;
   countryIds: number[];
-  districtIds: number[];
+  admin1Ids: number[];
   urgencyArray: string[];
   severityArray: string[];
   certaintyArray: string[];
   subscribeBy: string[];
+  sentFlag: number;
 }
 
 export interface CountryType {
@@ -54,17 +58,17 @@ export interface ContinentType {
 }
 
 export type CountryOptionsType = {
-  countryId: string;
-  countryName: string;
-  districts: {
-    districtId: string;
-    districtName: string;
+  id: number;
+  name: string;
+  admin1s: {
+    id: number;
+    name: string;
   }[];
 };
 
-export type DistrictOptionsType = {
-  districtId: string;
-  districtName: string;
-  countryId: string;
+export type Admin1OptionsType = {
+  admin1Id: number;
+  admin1Name: string;
+  countryId: number;
   countryName: string;
 };
