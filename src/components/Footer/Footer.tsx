@@ -1,7 +1,10 @@
 import { Box, Button, Container, Grid, Link, Typography } from "@mui/material";
 import "../../index.css";
+import { useIntl } from "react-intl";
 
 const Footer = () => {
+  const { formatMessage } = useIntl();
+
   return (
     <footer className="footer">
       <Container maxWidth="lg">
@@ -16,7 +19,7 @@ const Footer = () => {
               margin={"0 0 24px"}
               textTransform={"uppercase"}
             >
-              About Alert Hub
+              {formatMessage({ id: "footer.title" })}
             </Typography>
             <Typography
               variant="h6"
@@ -24,12 +27,10 @@ const Footer = () => {
               color="white"
               fontWeight={500}
             >
-              The aim of IFRC Alert Hub is to provide timely and effective
-              emergency alerts to communities worldwide, empowering them to
-              protect their lives and livelihoods.
+              {formatMessage({ id: "footer.aims" })}
             </Typography>
             <Typography variant="subtitle1" color={"rgb(145, 145, 145)"}>
-              © IFRC Alert Hub 2023 v1
+              {formatMessage({ id: "footer.copyright" })}
             </Typography>
           </Grid>
 
@@ -43,7 +44,7 @@ const Footer = () => {
               margin={"0 0 24px"}
               textTransform={"uppercase"}
             >
-              Find Out More
+              {formatMessage({ id: "footer.findOutMore" })}
             </Typography>
             <Link
               href="https://ifrc.org"
@@ -58,23 +59,7 @@ const Footer = () => {
                 margin={"0 0 12px"}
                 fontWeight={300}
               >
-                ifrc.org
-              </Typography>
-            </Link>
-            <Link
-              href="https://ifrc.org"
-              className="footer-section-link"
-              target="_blank"
-              underline="hover"
-            >
-              <Typography
-                variant="h6"
-                color="white"
-                sx={{ textDecoration: "underline" }}
-                margin={"0 0 12px"}
-                fontWeight={300}
-              >
-                rcrcsims.org
+                {formatMessage({ id: "footer.IFRC" })}
               </Typography>
             </Link>
             <Link
@@ -90,7 +75,23 @@ const Footer = () => {
                 margin={"0 0 12px"}
                 fontWeight={300}
               >
-                data.ifrc.org
+                {formatMessage({ id: "footer.rcrcsims" })}
+              </Typography>
+            </Link>
+            <Link
+              href="https://ifrc.org"
+              className="footer-section-link"
+              target="_blank"
+              underline="hover"
+            >
+              <Typography
+                variant="h6"
+                color="white"
+                sx={{ textDecoration: "underline" }}
+                margin={"0 0 12px"}
+                fontWeight={300}
+              >
+                {formatMessage({ id: "footer.data.ifrc" })}
               </Typography>
             </Link>
           </Grid>
@@ -105,11 +106,11 @@ const Footer = () => {
               margin={"0 0 24px"}
               textTransform={"uppercase"}
             >
-              Helpful Links
+              {formatMessage({ id: "footer.helpfulLinks" })}
             </Typography>
 
             <Link
-              href="https://github.com/ifrcgo/go-frontend"
+              href="https://github.com/IFRC-Alert-Hub/"
               target="_blank"
               underline="hover"
             >
@@ -120,7 +121,7 @@ const Footer = () => {
                 margin={"0 0 12px"}
                 fontWeight={300}
               >
-                Open Source Code
+                {formatMessage({ id: "footer.sourceCode" })}
               </Typography>
             </Link>
             <Link
@@ -135,11 +136,11 @@ const Footer = () => {
                 margin={"0 0 12px"}
                 fontWeight={300}
               >
-                API Documentation
+                {formatMessage({ id: "footer.API" })}
               </Typography>
             </Link>
             <Link
-              href="/about"
+              href="/resources"
               className="footer-section-link"
               underline="hover"
             >
@@ -150,7 +151,7 @@ const Footer = () => {
                 margin={"0 0 12px"}
                 fontWeight={300}
               >
-                Other Resources
+                {formatMessage({ id: "footer.otherResources" })}
               </Typography>
             </Link>
           </Grid>
@@ -165,7 +166,7 @@ const Footer = () => {
               margin={"0 0 24px"}
               textTransform={"uppercase"}
             >
-              CONTACT US
+              {formatMessage({ id: "footer.contactUs" })}
             </Typography>
             <Link
               href="mailto:im@ifrc.org"
