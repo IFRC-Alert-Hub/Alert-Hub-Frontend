@@ -36,7 +36,6 @@ const Login = () => {
     } catch (error: any) {
       formik.setFieldError("email", "Invalid email or password.");
       formik.setFieldError("password", "Invalid email or password.");
-      //setServerError(true);
     }
   };
   const formik = useFormik({
@@ -50,7 +49,6 @@ const Login = () => {
     }),
     onSubmit: (values) => {
       getTokenData(values).then((authData) => {
-        console.log("afsafsafa: ", authData);
         if (authData) {
           userContext.setUser(authData.data.login.user);
           navigate("/account/subscription");
@@ -88,6 +86,7 @@ const Login = () => {
                 label={formatMessage({ id: "login.formLabel.emailaddress" })}
                 name="email"
                 autoComplete="email"
+                inputProps={{ "data-testid": "login-email" }}
                 autoFocus
                 sx={{ fontSize: "12px" }}
                 value={formik.values.email}
@@ -109,6 +108,7 @@ const Login = () => {
                 error={
                   formik.touched.password && Boolean(formik.errors.password)
                 }
+                inputProps={{ "data-testid": "login-password" }}
                 InputProps={{
                   endAdornment: (
                     <InputAdornment position="end">
