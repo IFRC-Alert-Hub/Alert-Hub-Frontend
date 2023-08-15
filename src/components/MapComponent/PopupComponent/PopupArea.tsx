@@ -1,4 +1,5 @@
 import {
+  Alert,
   Box,
   Button,
   Card,
@@ -174,6 +175,15 @@ export const PopupArea = ({
 
   return (
     <>
+      {error && (
+        <h1>
+          {" "}
+          <Alert severity="error">
+            We are currently unable to retrieve the alert information
+          </Alert>
+        </h1>
+      )}
+
       {!loading &&
         !error &&
         data &&

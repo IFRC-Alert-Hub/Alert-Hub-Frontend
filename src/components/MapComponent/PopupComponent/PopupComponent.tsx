@@ -9,7 +9,13 @@ import {
 } from "../../../Alert-Manager-API/types";
 import DisabledByDefaultIcon from "@mui/icons-material/DisabledByDefault";
 import PopupTabPanel from "./PopupTabPanel";
-import { Divider, Pagination, PaginationItem, Skeleton } from "@mui/material";
+import {
+  Alert,
+  Divider,
+  Pagination,
+  PaginationItem,
+  Skeleton,
+} from "@mui/material";
 import { a11yProps } from "./helper";
 import { Map as MapboxMap } from "mapbox-gl";
 interface PopupComponentProps {
@@ -150,7 +156,51 @@ export const PopupComponent: React.FC<PopupComponentProps> = ({
           </Box>
         </Box>
       )}
-      {error && <h1>{error}</h1>}
+      {error && (
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            height: "100%",
+            border: "1px black solid",
+          }}
+        >
+          <Box
+            sx={{
+              backgroundColor: "white",
+              color: "black",
+              textAlign: "center",
+              borderBottom: "1px solid black",
+              padding: "10px",
+              position: "relative",
+            }}
+          >
+            <DisabledByDefaultIcon
+              sx={{
+                position: "absolute",
+                top: "5px",
+                right: "5px",
+                cursor: "pointer",
+              }}
+              onClick={handleClose}
+            />
+            <Typography
+              variant="h4"
+              fontWeight={"bold"}
+              textTransform={"uppercase"}
+            >
+              (No Alerts)
+            </Typography>
+            <Typography variant="h5" textTransform={"uppercase"}>
+              Country Name (Country ISO3)
+            </Typography>
+          </Box>
+          <Alert severity="error">
+            We are currently unable to retrieve the alert data, please refresh
+            or try again
+          </Alert>
+        </Box>
+      )}
       {!loading && !error && (
         <Box
           sx={{
