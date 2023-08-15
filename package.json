@@ -10,6 +10,7 @@
     "@mui/material": "^5.13.3",
     "@mui/x-data-grid": "^6.6.0",
     "@mui/x-date-pickers": "^6.9.1",
+    "@turf/circle": "^6.5.0",
     "@turf/turf": "^6.5.0",
     "@types/jest": "^27.5.2",
     "@types/mapbox-gl": "^2.7.11",
@@ -54,7 +55,11 @@
     "production": [
       ">0.2%",
       "not dead",
-      "not op_mini all"
+      "not op_mini all",
+      "not safari < 10",
+      "not chrome < 51",
+      "not android < 5",
+      "not ie < 12"
     ],
     "development": [
       "last 1 chrome version",
@@ -69,5 +74,6 @@
     "@testing-library/user-event": "^13.5.0",
     "react-scripts": "5.0.1",
     "react-test-renderer": "^18.2.0"
-  }
+  },
+  "devtool": "eval"
 }

@@ -1,13 +1,18 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef } from "react";
 import mapboxgl, { LngLatBoundsLike } from "mapbox-gl";
 import MapIcon from "@mui/icons-material/Map";
 import turfBbox from "@turf/bbox";
-
+import turfCircle from "@turf/circle";
 type MapProps = {
   lng?: number;
   lat?: number;
   zoom?: number;
   areaPolygon?: Polygon;
+  areaCircle?: Circle;
+};
+type Circle = {
+  radius?: number;
+  coordinates: number[];
 };
 
 type Polygon = {
@@ -20,12 +25,21 @@ const AlertInfoMap: React.FC<MapProps> = ({
   lat = 0,
   zoom = 1,
   areaPolygon = undefined,
+  areaCircle = undefined,
 }) => {
   const mapContainerRef = useRef<HTMLDivElement | null>(null);
   const mapRef = useRef<mapboxgl.Map | null>(null);
-  const [polygonDataLoaded, setPolygonDataLoaded] = useState(false);
 
   useEffect(() => {
+    if (mapRef.current?.getSource("infoset-polygon-source")) {
+      mapRef.current?.removeLayer("infoset-polygon-layer");
+      mapRef.current?.removeSource("infoset-polygon-source");
+    }
+
+    if (mapRef.current?.getSource("circle-source")) {
+      mapRef.current?.removeLayer("circle-layer");
+      mapRef.current?.removeSource("circle-source");
+    }
     if (!mapRef.current) {
       mapRef.current = new mapboxgl.Map({
         container: mapContainerRef.current!,
@@ -33,9 +47,6 @@ const AlertInfoMap: React.FC<MapProps> = ({
         center: [lng, lat],
         zoom: zoom,
       });
-
-      // mapRef.current.addControl(new mapboxgl.FullscreenControl(), "top-left");
-      // mapRef.current.addControl(new mapboxgl.NavigationControl(), "top-left");
     }
     mapRef.current!.resize();
     return () => {
@@ -44,68 +55,102 @@ const AlertInfoMap: React.FC<MapProps> = ({
         mapRef.current = null;
       }
     };
-  }, [lat, lng, mapRef, mapContainerRef, zoom]);
+  }, [lat, lng, zoom, areaCircle, areaPolygon]);
 
   useEffect(() => {
-    if (!mapRef.current || polygonDataLoaded || areaPolygon === undefined) {
+    if (!mapRef.current) {
       return;
     }
-    console.log(areaPolygon);
 
     mapRef.current.on("load", () => {
-      const sourceId = `infoset-polygon-source`;
-      const layerId = `infoset-polygon-layer`;
-      mapRef.current?.addSource(sourceId, {
-        type: "geojson",
-        data: {
+      if (areaPolygon !== undefined) {
+        const sourceId = "infoset-polygon-source";
+        const layerId = "infoset-polygon-layer";
+
+        mapRef.current?.addSource(sourceId, {
+          type: "geojson",
+          data: {
+            type: "Feature",
+            geometry: {
+              type: areaPolygon.geometryType as any,
+              coordinates: [areaPolygon.coordinates] as any,
+            },
+            properties: {},
+          },
+        });
+
+        mapRef.current?.addLayer({
+          id: layerId,
+          type: "fill",
+          source: sourceId,
+          paint: {
+            "fill-color": "red",
+            "fill-opacity": 0.5,
+          },
+        });
+
+        const mapBoundingBox = turfBbox({
           type: "Feature",
           geometry: {
             type: areaPolygon.geometryType as any,
             coordinates: [areaPolygon.coordinates] as any,
           },
-          properties: {},
-        },
-      });
+        });
 
-      mapRef.current?.addLayer({
-        id: layerId,
-        type: "fill",
-        source: sourceId,
-        paint: {
-          "fill-color": "red",
-          "fill-opacity": 0.5,
-        },
-      });
+        const [minX, minY, maxX, maxY] = mapBoundingBox;
+        mapRef.current!.fitBounds(
+          [minX, minY, maxX, maxY] as LngLatBoundsLike,
+          {
+            padding: { top: 10, bottom: 25, left: 15, right: 5 },
+          }
+        );
+      }
 
-      setPolygonDataLoaded(true);
+      if (areaCircle !== undefined) {
+        var circle = turfCircle(
+          areaCircle?.coordinates as any,
+          areaCircle?.radius as any,
+          {
+            units: "kilometers",
+            // properties: { foo: "bar" },
+          }
+        );
 
-      const mapBoundingBox = turfBbox({
-        type: "Feature",
-        geometry: {
-          type: areaPolygon.geometryType as any,
-          coordinates: [areaPolygon.coordinates] as any,
-        },
-      });
+        mapRef.current?.addSource("circle-source", {
+          type: "geojson",
+          data: circle,
+        });
 
-      const [minX, minY, maxX, maxY] = mapBoundingBox;
-      console.log([minX, minY, maxX, maxY]);
-      mapRef.current!.fitBounds([minX, minY, maxX, maxY] as LngLatBoundsLike, {
-        padding: { top: 10, bottom: 25, left: 15, right: 5 },
-      });
+        mapRef.current?.addLayer({
+          id: "circle-layer",
+          type: "fill",
+          source: "circle-source",
+          paint: {
+            "fill-color": "#0000FF",
+            "fill-opacity": 0.8,
+          },
+        });
+
+        const mapBoundingBox = turfBbox(circle);
+        const [minX, minY, maxX, maxY] = mapBoundingBox;
+        mapRef.current!.fitBounds(
+          [minX, minY, maxX, maxY] as LngLatBoundsLike,
+          {
+            padding: { top: 20, bottom: 20, left: 20, right: 20 },
+          }
+        );
+      }
     });
-  }, [polygonDataLoaded, areaPolygon, mapRef]);
+  }, [areaPolygon, areaCircle, mapRef]);
 
   return (
     <>
-      {areaPolygon === undefined ? (
+      {areaPolygon === undefined && areaCircle === undefined && (
         <h1>
           <MapIcon />
-          No Polygon Data
+          No Data
         </h1>
-      ) : (
-        ""
       )}
-
       <div ref={mapContainerRef} style={{ height: "300px", width: "100%" }} />
     </>
   );

@@ -3,7 +3,6 @@ import { Breadcrumbs, Link, Stack, Typography } from "@mui/material";
 const BreadcrumbsComponent = () => {
   function handleClick(event: React.MouseEvent<HTMLAnchorElement, MouseEvent>) {
     event.preventDefault();
-    console.info("You clicked a breadcrumb.");
   }
 
   const breadcrumbs = [
