@@ -65,7 +65,8 @@ const Subscription = () => {
   let tableContent;
   if (subscriptionLoading) {
     tableContent = <Progress />;
-  } else if (subscriptionError || (countryData && countryData.length < 1)) {
+  } else if (subscriptionError) {
+    console.log(countryData);
     console.error(subscriptionError);
     tableContent = (
       <Typography variant="h5" textAlign={"center"} color={"gray"} mt={10}>
@@ -101,6 +102,12 @@ const Subscription = () => {
         setFormType={setFormType}
         setSelectedRow={setSelectedRow}
       />
+    );
+  } else {
+    tableContent = (
+      <Typography variant="h5" textAlign={"center"} color={"gray"} mt={10}>
+        Something error! Please contact the application administrator.
+      </Typography>
     );
   }
 
