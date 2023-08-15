@@ -17,11 +17,11 @@ import ForgotPassword from "./scenes/ForgotPassword";
 import PrivateRoutes from "./utils/PrivateRoute";
 import { UserContextProvider } from "./context/UserContext";
 import PageNotFound from "./scenes/404_Page";
-import TestPerformance from "./API/test-performance";
-import TestMapComponentPopup from "./components/MapComponent/Testing Playground/TestMapComponentPopup/TestMapComponentPopup";
+// import TestPerformance from "./API/test-performance";
+// import TestMapComponentPopup from "./components/MapComponent/Testing Playground/TestMapComponentPopup/TestMapComponentPopup";
 import AlertInfo from "./scenes/Alert Info";
 import SubscriptionAlerts from "./scenes/SubscriptionAlerts";
-import TestMapComponentPopup2 from "./components/MapComponent/Testing Playground/TestMapComponentPopup2/TestMapComponentPopup2";
+// import TestMapComponentPopup2 from "./components/MapComponent/Testing Playground/TestMapComponentPopup2/TestMapComponentPopup2";
 import Level1 from "./Alert-Manager-API/Level1";
 import Level2 from "./Alert-Manager-API/Level2";
 import Level3 from "./Alert-Manager-API/Level3";
@@ -75,9 +75,9 @@ function App() {
                     element={<SubscriptionAlerts />}
                   />
                 </Route>
-                <Route path="/test-performance" element={<TestPerformance />} />
+                {/* <Route path="/test-performance" element={<TestPerformance />} />
                 <Route path="/map-test" element={<TestMapComponentPopup />} />
-                <Route path="/map-test2" element={<TestMapComponentPopup2 />} />
+                <Route path="/map-test2" element={<TestMapComponentPopup2 />} /> */}
                 <Route path="/level-1" element={<Level1 />} />
                 <Route path="/level-2" element={<Level2 />} />
                 <Route path="/level-3" element={<Level3 />} />
