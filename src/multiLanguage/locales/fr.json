@@ -74,5 +74,23 @@
   "passwordComponent.rule1": "Au moins une lettre majuscule",
   "passwordComponent.rule2": "Au moins un numéro",
   "passwordComponent.rule3": "Au moins un caractère spécial [?!@#$%^&*()]",
-  "passwordComponent.rule4": "Au moins 8 caractères"
+  "passwordComponent.rule4": "Au moins 8 caractères",
+
+  "footer.title": "À propos d'Alert Hub",
+  "footer.aims": "L'objectif d'IFRC Alert Hub est de fournir des alertes d'urgence rapides et efficaces aux communautés du monde entier, leur permettant de protéger leurs vies et leurs moyens de subsistance.",
+  "footer.copyright": "© IFRC Alert Hub 2023 v1",
+  "footer.findOutMore": "En savoir plus",
+  "footer.IFRC": "ifrc.org",
+  "footer.rcrcsims": "rcrcsims.org",
+  "footer.data.ifrc": "data.ifrc.org",
+  "footer.sourceCode": "Code source ouvert",
+  "footer.helpfulLinks": "Liens utiles",
+  "footer.API": "Documentation API",
+  "footer.otherResources": "Autres ressources",
+  "footer.contactUs": "Contactez-nous",
+
+  "mapfilters.urgencyLabel": "Urgence",
+  "mapfilters.severityLabel": "Gravité",
+  "mapfilters.certaintyLabel": "Certitude",
+  "mapfilters.search": "recherche"
 }

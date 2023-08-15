@@ -74,11 +74,11 @@ const MapComponentWithFilter: React.FC<MapComponentWithFilterProps> = ({
   ) => {
     console.log(value);
     setSelectedUrgency(value || "");
-    setFilters({
-      urgency: selectedUrgency,
-      severity: selectedSeverity,
-      certainty: selectedCertainty,
-    });
+    // setFilters({
+    //   urgency: selectedUrgency,
+    //   severity: selectedSeverity,
+    //   certainty: selectedCertainty,
+    // });
   };
 
   const handleSeverityChange = (
@@ -86,11 +86,11 @@ const MapComponentWithFilter: React.FC<MapComponentWithFilterProps> = ({
     value: string | null
   ) => {
     setSelectedSeverity(value || "");
-    setFilters({
-      urgency: selectedUrgency,
-      severity: selectedSeverity,
-      certainty: selectedCertainty,
-    });
+    // setFilters({
+    //   urgency: selectedUrgency,
+    //   severity: selectedSeverity,
+    //   certainty: selectedCertainty,
+    // });
   };
 
   const handleCertaintyChange = (
@@ -98,11 +98,11 @@ const MapComponentWithFilter: React.FC<MapComponentWithFilterProps> = ({
     value: string | null
   ) => {
     setSelectedCertainty(value || "");
-    setFilters({
-      urgency: selectedUrgency,
-      severity: selectedSeverity,
-      certainty: selectedCertainty,
-    });
+    // setFilters({
+    //   urgency: selectedUrgency,
+    //   severity: selectedSeverity,
+    //   certainty: selectedCertainty,
+    // });
   };
 
   return (
@@ -131,7 +131,7 @@ const MapComponentWithFilter: React.FC<MapComponentWithFilterProps> = ({
           renderInput={(params) => (
             <TextField
               {...params}
-              label="Urgency"
+              label={formatMessage({ id: "mapfilters.urgencyLabel" })}
               size="small"
               sx={{
                 "& .MuiInputLabel-root": {
@@ -168,7 +168,7 @@ const MapComponentWithFilter: React.FC<MapComponentWithFilterProps> = ({
           renderInput={(params) => (
             <TextField
               {...params}
-              label="Severity"
+              label={formatMessage({ id: "mapfilters.severityLabel" })}
               size="small"
               sx={{
                 "& .MuiInputLabel-root": {
@@ -203,7 +203,7 @@ const MapComponentWithFilter: React.FC<MapComponentWithFilterProps> = ({
           renderInput={(params) => (
             <TextField
               {...params}
-              label="Certainty"
+              label={formatMessage({ id: "mapfilters.certaintyLabel" })}
               size="small"
               sx={{
                 "& .MuiInputLabel-root": {
@@ -224,7 +224,7 @@ const MapComponentWithFilter: React.FC<MapComponentWithFilterProps> = ({
         />
 
         <Button color="secondary" onClick={handleSearch}>
-          Search
+          {formatMessage({ id: "mapfilters.search" })}
         </Button>
       </Box>
       <MapComponent

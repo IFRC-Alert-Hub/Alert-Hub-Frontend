@@ -4,7 +4,6 @@ const HtmlWebpackPlugin = require("html-webpack-plugin");
 const webpack = require("webpack");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
 const InterpolateHtmlPlugin = require("interpolate-html-plugin");
-const CopyPlugin = require("copy-webpack-plugin");
 
 module.exports = {
   mode: "development",

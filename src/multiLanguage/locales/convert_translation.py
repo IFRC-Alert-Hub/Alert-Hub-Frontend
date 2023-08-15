@@ -8,7 +8,7 @@ def translate_values(values, target_language):
     return translations
 
 
-target_language_code = 'es'
+target_language_code = 'fr'
 output_filename = f"{target_language_code}.json"
 
 try:
