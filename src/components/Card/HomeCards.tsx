@@ -14,7 +14,12 @@ const HomeSubscriptionCard = () => {
   const { formatMessage } = useIntl();
 
   return (
-    <Grid container spacing={2} sx={{ alignItems: "stretch" }}>
+    <Grid
+      container
+      spacing={2}
+      sx={{ alignItems: "stretch" }}
+      data-testid="mocked-home-cards"
+    >
       <Grid
         item
         sm={12}
