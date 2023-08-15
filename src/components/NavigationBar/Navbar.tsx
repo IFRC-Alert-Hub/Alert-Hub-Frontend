@@ -155,7 +155,7 @@ const NavbarComponent = (props: any) => {
               >
                 <Avatar
                   alt="logo"
-                  src={process.env.PUBLIC_URL + "/assets/go-logo-2020.svg"}
+                  src={"/assets/go-logo-2020.svg"}
                   sx={{
                     verticalAlign: "middle",
                     height: "2.2rem",

@@ -68,11 +68,7 @@ const About = () => {
               </Typography>
             </Grid>
             <Grid item xs={12} sm={6} md={5} alignItems={"left"}>
-              <img
-                alt="AboutLogo"
-                src={process.env.PUBLIC_URL + "/assets/laptop.png"}
-                width={"100%"}
-              />
+              <img alt="AboutLogo" src={"/assets/laptop.png"} width={"100%"} />
             </Grid>
           </Grid>
         </Container>

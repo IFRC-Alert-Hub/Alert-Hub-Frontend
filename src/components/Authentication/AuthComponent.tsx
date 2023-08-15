@@ -77,7 +77,7 @@ const AuthComponent: React.FC<AuthComponentProps> = ({
           }}
         >
           <img
-            src={process.env.PUBLIC_URL + "/assets/login_ifrc.png"}
+            src={"/assets/login_ifrc.png"}
             alt="ifrc_image"
             style={{
               width: "80%",
