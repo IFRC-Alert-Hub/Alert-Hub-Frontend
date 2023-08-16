@@ -1,4 +1,4 @@
-import { Box, Card, Container, Typography } from "@mui/material";
+import { Box, Container, Typography } from "@mui/material";
 import React, { useEffect, useMemo } from "react";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import { AlertInfoText } from "./AlertInfoText";

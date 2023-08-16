@@ -1,11 +1,4 @@
-import {
-  Box,
-  Chip,
-  FormControl,
-  MenuItem,
-  Select,
-  Typography,
-} from "@mui/material";
+import { Box, FormControl, MenuItem, Select, Typography } from "@mui/material";
 import React, { useState } from "react";
 import AlertInfoMap from "./AlertInfoMap";
 

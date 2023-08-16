@@ -1,7 +1,7 @@
 import { Fragment } from "react";
 // import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
-import { Card, Divider, Typography } from "@mui/material";
+import { Card, Typography } from "@mui/material";
 import { AlertInfoText } from "./AlertInfoText";
 // import AlertInfoMap from "./AlertInfoMap";
 import { AreaPolygonCircle } from "./AreaPolygonCircle";
