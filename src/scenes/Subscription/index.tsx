@@ -1,7 +1,6 @@
 import { Button, Container, Grid, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useQuery } from "@apollo/client";
-import axios from "axios";
 import { subscription_module } from "../../API/API_Links";
 import {
   CountryOptionsType,
@@ -14,6 +13,7 @@ import SubscriptionTable from "./components/SubscriptionTable";
 import ModalForm from "./components/ModalForm";
 import Progress from "../../components/Layout/Progress";
 import { RADIO_OPTIONS } from "./components/SentFlagRadio";
+import axios from "axios";
 
 const INIT_ROW: SubscriptionForm = {
   subscriptionName: "",
@@ -66,14 +66,12 @@ const Subscription = () => {
   if (subscriptionLoading) {
     tableContent = <Progress />;
   } else if (subscriptionError) {
-    console.log(countryData);
-    console.error(subscriptionError);
     tableContent = (
       <Typography variant="h5" textAlign={"center"} color={"gray"} mt={10}>
         Something error! Please contact the application administrator.
       </Typography>
     );
-  } else if (subscriptionData && countryData) {
+  } else if (subscriptionData && countryData && countryData.length > 0) {
     const tableDetail = subscriptionData.listAllSubscription.map(
       (item: SubscriptionItem) => {
         const countryNames = item.countryIds.map((id: number) => {
@@ -85,7 +83,9 @@ const Subscription = () => {
             (country) => country.id === item.countryIds[0]
           );
           const admin1sList = foundCountry?.admin1s;
-          const foundAdmin1s = admin1sList?.find((admin1) => admin1.id === id);
+          const foundAdmin1s = admin1sList?.find(
+            (admin1: any) => admin1.id === id
+          );
           return foundAdmin1s?.name;
         });
         const sentFlagName = RADIO_OPTIONS.find(
@@ -144,7 +144,7 @@ const Subscription = () => {
         </Grid>
       </Grid>
       {tableContent}
-      {countryData && (
+      {countryData && countryData.length > 0 && (
         <ModalForm
           modalOpen={modalOpen}
           handleModalClose={handleModalClose}

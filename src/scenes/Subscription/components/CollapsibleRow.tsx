@@ -270,7 +270,7 @@ const CollapsibleRow = ({
                 component="div"
                 sx={{ fontWeight: 400 }}
               >
-                <span style={{ color: "gray" }}>Notification Methods:</span>{" "}
+                <span style={{ color: "gray" }}>Notification Type:</span>{" "}
                 {row.subscribeBy.join(", ")}
               </Typography>
               <Typography
