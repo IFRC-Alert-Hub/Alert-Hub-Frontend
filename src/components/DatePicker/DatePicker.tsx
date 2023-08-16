@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Button, Typography } from "@mui/material";
+import { Box, Button, Typography } from "@mui/material";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import { EffectivePopup } from "./DatePickerPopup";
 
@@ -18,22 +18,22 @@ const DatePickerComponent: React.FC<DatePickerComponentProps> = ({
 }) => {
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
 
-  // const getSelectedDates = (
-  //   selectedDate: [number | null, number | null] | undefined
-  // ) => {
-  //   const startDate = new Date((selectedDate?.[0] as number) * 1000);
-  //   const endDate = new Date((selectedDate?.[1] as number) * 1000);
-  //   const dateRange = `${String(startDate.getDate()).padStart(2, "0")}/${String(
-  //     startDate.getMonth() + 1
-  //   ).padStart(2, "0")}/${startDate.getFullYear()} - ${String(
-  //     endDate.getDate()
-  //   ).padStart(2, "0")}/${String(endDate.getMonth() + 1).padStart(
-  //     2,
-  //     "0"
-  //   )}/${endDate.getFullYear()}`;
+  const getSelectedDates = (
+    selectedDate: [number | null, number | null] | undefined
+  ) => {
+    const startDate = new Date((selectedDate?.[0] as number) * 1000);
+    const endDate = new Date((selectedDate?.[1] as number) * 1000);
+    const dateRange = `${String(startDate.getDate()).padStart(2, "0")}/${String(
+      startDate.getMonth() + 1
+    ).padStart(2, "0")}/${startDate.getFullYear()} - ${String(
+      endDate.getDate()
+    ).padStart(2, "0")}/${String(endDate.getMonth() + 1).padStart(
+      2,
+      "0"
+    )}/${endDate.getFullYear()}`;
 
-  //   return dateRange;
-  // };
+    return dateRange;
+  };
   const handleMenuOpen = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
   };
@@ -57,8 +57,8 @@ const DatePickerComponent: React.FC<DatePickerComponentProps> = ({
           display: "flex",
           justifyContent: "space-between", // Places the Typography and icon on opposite ends
           alignItems: "center", // Centers the content vertically within the Button
-          height: "36.71px",
-          width: "170px",
+          height: "28px",
+          width: "150px",
           backgroundColor: "#f4f4f4",
           borderColor: "#E0E3E7",
           "&:hover": {
@@ -77,7 +77,7 @@ const DatePickerComponent: React.FC<DatePickerComponentProps> = ({
               selectedDate[1] !== null
                 ? "#f5333f"
                 : "#8D8D8D",
-            fontSize: "12px",
+            fontSize: "0.875rem",
             fontWeight:
               selectedDate !== undefined &&
               selectedDate[0] !== null &&
@@ -86,7 +86,26 @@ const DatePickerComponent: React.FC<DatePickerComponentProps> = ({
                 : "",
           }}
         >
-          {datePickerTitle}
+          <Box
+            sx={{
+              maxWidth: "100px",
+              whiteSpace: "nowrap",
+              overflow: "hidden",
+              textOverflow: "ellipsis",
+              textTransform: "capitalize",
+            }}
+          >
+            <Typography
+              textTransform={"capitalize"}
+              sx={{
+                fontWeight: "600",
+              }}
+            >
+              {selectedDate![0] !== null && selectedDate![1] !== null
+                ? getSelectedDates(selectedDate)
+                : datePickerTitle}
+            </Typography>
+          </Box>
         </Typography>
       </Button>
       <EffectivePopup
