@@ -72,7 +72,9 @@ const DropdownFilter = (props: DropdownFilterProps) => {
                 .map((filter) => filter.selectedFilter)[0] !== "All"
                 ? "red"
                 : "black",
-            minWidth: minWidth,
+            minWidth: "150px",
+            fontSize: "0.875rem",
+            fontWeight: "600",
           }}
         >
           {filters

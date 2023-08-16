@@ -19,18 +19,13 @@ import { Data, Order, RowsData, headCells } from "./Data";
 import { EnhancedTableToolbar } from "./EnhancedTableToolbar";
 import { EnhancedTableHead } from "./EnhancedTableHead";
 import { Link } from "react-router-dom";
+import SingleRow from "./SingleRow";
 
 interface EnhancedTableProps {
   selectedFilter?: string;
   filterKey?: string;
   rowsData: RowsData[];
   setNumAlerts: (numAlerts: number) => void;
-}
-function modifyDateTime(timestamp: string) {
-  const date = new Date(timestamp);
-
-  const formattedDateTime = date.toLocaleString("en-US");
-  return formattedDateTime;
 }
 
 const EnhancedTable = (props: EnhancedTableProps) => {
@@ -204,49 +199,13 @@ const EnhancedTable = (props: EnhancedTableProps) => {
                 const labelId = `enhanced-table-checkbox-${index}`;
 
                 return (
-                  <TableRow
-                    hover
-                    onClick={(event) => handleClick(event, row)}
-                    role="checkbox"
-                    aria-checked={isItemSelected}
-                    tabIndex={-1}
-                    selected={isItemSelected}
-                    sx={{
-                      cursor: "pointer",
-                      textAlign: "center",
-                      "& .MuiTableCell-root": { textAlign: "center" },
-                    }}
-                  >
-                    <TableCell padding="checkbox">
-                      <Checkbox
-                        color="primary"
-                        checked={isItemSelected}
-                        inputProps={{
-                          "aria-labelledby": labelId,
-                        }}
-                      />
-                    </TableCell>
-                    <TableCell align="center">{row.identifier}</TableCell>
-                    <TableCell align="center">{row.event}</TableCell>
-                    <TableCell align="center">{row.eventCategory}</TableCell>
-                    <TableCell align="center">
-                      {modifyDateTime(row.sent)}
-                    </TableCell>
-                    <TableCell align="center">
-                      <Link to={row.sender}>{row.sender}</Link>
-                    </TableCell>
-                    <TableCell align="center">{row.region}</TableCell>
-                    <TableCell align="center">{row.country}</TableCell>
-                    <TableCell align="center">
-                      <Link
-                        to={`/alerts/${row.id}`}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
-                        View Alert Info
-                      </Link>{" "}
-                    </TableCell>
-                  </TableRow>
+                  <SingleRow
+                    isItemSelected={isItemSelected}
+                    labelId={labelId}
+                    handleClick={handleClick}
+                    key={index}
+                    row={row}
+                  />
                 );
               })}
 
