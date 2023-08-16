@@ -43,19 +43,6 @@ const SingleRow = (props: SingleRowProps) => {
           "& .MuiTableCell-root": { textAlign: "center" },
         }}
       >
-        <TableCell padding="checkbox">
-          <Checkbox
-            color="primary"
-            checked={isItemSelected}
-            inputProps={{
-              "aria-labelledby": labelId,
-            }}
-            onChange={(event) => {
-              event.stopPropagation(); // Prevent the click event from reaching the parent elements
-              handleClick(event, row); // Call your handleClick function with the specific row
-            }}
-          />
-        </TableCell>
         <TableCell>
           <IconButton
             aria-label="expand row"
@@ -65,19 +52,7 @@ const SingleRow = (props: SingleRowProps) => {
             {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
           </IconButton>
         </TableCell>
-        <TableCell align="center">
-          <Box
-            sx={{
-              maxWidth: "150px",
-              whiteSpace: "nowrap",
-              overflow: "hidden",
-              textOverflow: "ellipsis",
-              textTransform: "capitalize",
-            }}
-          >
-            {row.identifier}
-          </Box>
-        </TableCell>
+
         <TableCell align="center">
           <Box
             sx={{
@@ -104,32 +79,7 @@ const SingleRow = (props: SingleRowProps) => {
             {row.eventCategory}
           </Box>
         </TableCell>
-        <TableCell align="center">
-          <Box
-            sx={{
-              maxWidth: "150px",
-              whiteSpace: "nowrap",
-              overflow: "hidden",
-              textOverflow: "ellipsis",
-              textTransform: "capitalize",
-            }}
-          >
-            {modifyDateTime(row.sent)}
-          </Box>
-        </TableCell>
-        <TableCell align="center">
-          <Box
-            sx={{
-              maxWidth: "150px",
-              whiteSpace: "nowrap",
-              overflow: "hidden",
-              textOverflow: "ellipsis",
-              textTransform: "capitalize",
-            }}
-          >
-            <Link to={row.sender}>{row.sender}</Link>
-          </Box>
-        </TableCell>
+
         <TableCell align="center">
           <Box
             sx={{
@@ -154,17 +104,61 @@ const SingleRow = (props: SingleRowProps) => {
               textTransform: "capitalize",
             }}
           >
+            Unknown, Île-de-France, Centre-Val de Loire, Normandie,
+            Bourgogne-Franche-Comté
+          </Box>
+        </TableCell>
+
+        <TableCell align="center">
+          <Box
+            sx={{
+              maxWidth: "150px",
+              whiteSpace: "nowrap",
+              overflow: "hidden",
+              textOverflow: "ellipsis",
+              textTransform: "capitalize",
+            }}
+          >
+            {modifyDateTime(row.sent)}
+          </Box>
+        </TableCell>
+
+        <TableCell align="center">
+          <Box
+            sx={{
+              maxWidth: "150px",
+              whiteSpace: "nowrap",
+              overflow: "hidden",
+              textOverflow: "ellipsis",
+              textTransform: "capitalize",
+            }}
+          >
             {" "}
             <Link
               to={`/alerts/${row.id}`}
               target="_blank"
               rel="noopener noreferrer"
             >
-              View Alert
+              View Details
             </Link>{" "}
           </Box>
         </TableCell>
+
+        <TableCell padding="checkbox">
+          <Checkbox
+            color="primary"
+            checked={isItemSelected}
+            inputProps={{
+              "aria-labelledby": labelId,
+            }}
+            onChange={(event) => {
+              event.stopPropagation(); // Prevent the click event from reaching the parent elements
+              handleClick(event, row); // Call your handleClick function with the specific row
+            }}
+          />
+        </TableCell>
       </TableRow>
+
       <TableRow>
         <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={10}>
           <Collapse in={open} timeout="auto" unmountOnExit>

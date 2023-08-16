@@ -59,13 +59,6 @@ const EnhancedTableHead = (props: EnhancedTableProps) => {
   return (
     <TableHead>
       <TableRow>
-        <TableCell padding="checkbox">
-          <Checkbox
-            color="primary"
-            checked={rowCount > 0 && numSelected === rowCount}
-            onChange={onSelectAllClick}
-          />
-        </TableCell>
         <TableCell padding="checkbox"></TableCell>
 
         {headCells.map((headCell) =>
@@ -200,6 +193,13 @@ const EnhancedTableHead = (props: EnhancedTableProps) => {
           padding={"normal"}
         >
           View Details
+        </TableCell>
+        <TableCell padding="checkbox">
+          <Checkbox
+            color="primary"
+            checked={rowCount > 0 && numSelected === rowCount}
+            onChange={onSelectAllClick}
+          />
         </TableCell>
       </TableRow>
     </TableHead>

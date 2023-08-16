@@ -1,5 +1,5 @@
 import FileDownloadIcon from "@mui/icons-material/FileDownload";
-import { Toolbar, Typography, IconButton, Tooltip } from "@mui/material";
+import { Toolbar, Typography, IconButton, Tooltip, Chip } from "@mui/material";
 import { alpha } from "@mui/material/styles";
 import { RowsData } from "./Data";
 
@@ -44,27 +44,22 @@ const EnhancedTableToolbar = (props: EnhancedTableToolbarProps) => {
         }),
       }}
     >
-      {numSelected > 0 ? (
-        <Typography
-          sx={{ flex: "1 1 100%" }}
-          color="inherit"
-          variant="subtitle1"
-          component="div"
-        >
-          {numSelected} selected
-        </Typography>
-      ) : (
-        <></>
-      )}
-      {numSelected > 0 ? (
-        <Tooltip title="Download" onClick={downloadCSV}>
-          <IconButton>
-            <FileDownloadIcon />
-          </IconButton>
-        </Tooltip>
-      ) : (
-        <></>
-      )}
+      <Typography
+        sx={{ flex: "1 1 100%" }}
+        color="inherit"
+        variant="subtitle1"
+        component="div"
+      >
+        {numSelected} selected
+      </Typography>
+      <Typography>
+        <Chip label="Select multiple alerts to download as a csv" />
+      </Typography>
+      <Tooltip title="Download" onClick={downloadCSV}>
+        <IconButton disabled={numSelected === 0}>
+          <FileDownloadIcon />
+        </IconButton>
+      </Tooltip>
     </Toolbar>
   );
 };

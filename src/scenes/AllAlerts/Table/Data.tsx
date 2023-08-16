@@ -1,13 +1,13 @@
 type Order = "asc" | "desc" | "";
 
 interface Data {
-  identifier: string;
   event: string;
   eventCategory: string;
   sent: string;
   sender: string;
   region: string;
   country: string;
+  admin1s: string;
 }
 
 // const rows: RowsData[] = [
@@ -71,16 +71,6 @@ interface HeadCell {
 
 const headCells: HeadCell[] = [
   {
-    id: "identifier",
-    numeric: true,
-    disablePadding: false,
-    label: "Identfier",
-    isDropdownFilter: false,
-    minWidth: "150px",
-    hasFilter: true,
-  },
-
-  {
     id: "event",
     numeric: true,
     disablePadding: false,
@@ -112,27 +102,6 @@ const headCells: HeadCell[] = [
     minWidth: "150px",
     allMenuItemTitle: "All Event Categories",
   },
-
-  {
-    id: "sent",
-    numeric: true,
-    disablePadding: false,
-    label: "Sent",
-    isDropdownFilter: false,
-    minWidth: "100px",
-    hasFilter: false,
-    isDatePicker: true,
-  },
-  {
-    id: "sender",
-    numeric: true,
-    disablePadding: false,
-    label: "Sender",
-    isDropdownFilter: false,
-    minWidth: "150px",
-    hasFilter: false,
-  },
-
   {
     selectedFilter: "All",
     title: "Region",
@@ -157,6 +126,27 @@ const headCells: HeadCell[] = [
     minWidth: "150px",
     hasFilter: true,
     isSearchable: true,
+  },
+
+  {
+    id: "country",
+    numeric: false,
+    disablePadding: true,
+    label: "Admin1s",
+    isDropdownFilter: false,
+    minWidth: "150px",
+    hasFilter: false,
+    isSearchable: true,
+  },
+  {
+    id: "sent",
+    numeric: true,
+    disablePadding: false,
+    label: "Sent",
+    isDropdownFilter: false,
+    minWidth: "100px",
+    hasFilter: false,
+    isDatePicker: true,
   },
 ];
 
