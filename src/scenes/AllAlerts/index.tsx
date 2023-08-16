@@ -14,9 +14,8 @@ interface AllAlertsProps {
   filterKey?: string;
 }
 
-const AllAlerts: React.FC<AllAlertsProps> = () => {
+const AllAlerts: React.FC<AllAlertsProps> = ({ selectedFilter, filterKey }) => {
   const location = useLocation();
-  const { selectedFilter, filterKey } = location.state || {};
   const { formatMessage } = useIntl();
 
   const { data, loading, error } = GetAllAlerts();

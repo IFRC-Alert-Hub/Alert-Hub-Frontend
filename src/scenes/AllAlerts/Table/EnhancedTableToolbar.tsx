@@ -12,6 +12,7 @@ import { alpha } from "@mui/material/styles";
 import { RowsData } from "./Data";
 import { useState } from "react";
 import { utils, write } from "xlsx";
+import SwipeRightIcon from "@mui/icons-material/SwipeRight";
 
 interface EnhancedTableToolbarProps {
   numSelected: number;
@@ -101,9 +102,10 @@ const EnhancedTableToolbar = (props: EnhancedTableToolbarProps) => {
       >
         {numSelected} selected
       </Typography>
-      <Typography>
-        <Chip label="Select multiple alerts to download as a csv" />
-      </Typography>
+      <Chip
+        label="Select multiple alerts to download"
+        icon={<SwipeRightIcon />}
+      />
       <div>
         <Tooltip title="Download">
           <IconButton disabled={numSelected === 0} onClick={handleMenuOpen}>
