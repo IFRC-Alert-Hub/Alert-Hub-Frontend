@@ -4,6 +4,7 @@ import TitleHeader from "../../components/Layout/TitleHeader";
 import AlertsTable from "./components/AlertsTable";
 
 const SubscriptionAlerts = () => {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { id, title, country } = useParams();
   const numAlerts = 10;
 

@@ -1,6 +1,5 @@
 import {
   Box,
-  Card,
   Checkbox,
   Collapse,
   IconButton,
@@ -29,7 +28,7 @@ interface SingleRowProps {
 }
 const SingleRow = (props: SingleRowProps) => {
   const [open, setOpen] = useState(false);
-  const [copied, setCopied] = useState(false);
+  const [, setCopied] = useState(false);
   const baseUrl = window.location.origin;
   const handleCopy = () => {
     const linkText = `${baseUrl}/alerts/${row.id}`;
