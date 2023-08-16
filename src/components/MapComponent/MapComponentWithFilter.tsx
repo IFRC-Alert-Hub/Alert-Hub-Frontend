@@ -1,7 +1,6 @@
 import React, { useRef, useState } from "react";
 import mapboxgl from "mapbox-gl";
 
-import TitleHeader from "../Layout/TitleHeader";
 import { useIntl } from "react-intl";
 import { Bbox, CountryRegionData } from "../../Alert-Manager-API/types";
 import MapComponent from "./MapComponent";
