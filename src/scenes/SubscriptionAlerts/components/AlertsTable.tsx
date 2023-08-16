@@ -9,6 +9,7 @@ import { Button, Menu, MenuItem, TablePagination } from "@mui/material";
 import { useState } from "react";
 import { SubscriptionAlertsType } from "../../../API/TYPES";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
+import { Link } from "react-router-dom";
 
 type PropsType = {
   alertsData: SubscriptionAlertsType[];
@@ -153,22 +154,28 @@ const AlertsTable = ({ alertsData }: PropsType) => {
                     {row.sent}
                   </TableCell>
                   <TableCell align="left" sx={{ fontSize: "0.875rem" }}>
-                    <Button
-                      variant="text"
-                      size="small"
-                      sx={{
-                        color: "red",
-                        minWidth: 0,
-                        p: 0,
-                        fontSize: "0.875rem",
-                        textTransform: "capitalize",
-                        "&:hover": {
-                          opacity: "0.7",
-                        },
-                      }}
+                    <Link
+                      to={`/alerts/${row.id}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
                     >
-                      View Detail
-                    </Button>
+                      <Button
+                        variant="text"
+                        size="small"
+                        sx={{
+                          color: "red",
+                          minWidth: 0,
+                          p: 0,
+                          fontSize: "0.875rem",
+                          textTransform: "capitalize",
+                          "&:hover": {
+                            opacity: "0.7",
+                          },
+                        }}
+                      >
+                        View Alert Info
+                      </Button>
+                    </Link>{" "}
                   </TableCell>
                 </TableRow>
               ))}
