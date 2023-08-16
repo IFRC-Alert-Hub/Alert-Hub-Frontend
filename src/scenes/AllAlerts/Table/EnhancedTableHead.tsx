@@ -62,23 +62,15 @@ const EnhancedTableHead = (props: EnhancedTableProps) => {
         <TableCell padding="checkbox">
           <Checkbox
             color="primary"
-            indeterminate={numSelected > 0 && numSelected < rowCount}
             checked={rowCount > 0 && numSelected === rowCount}
             onChange={onSelectAllClick}
-            inputProps={{
-              "aria-label": "select all desserts",
-            }}
           />
         </TableCell>
+        <TableCell padding="checkbox"></TableCell>
 
         {headCells.map((headCell) =>
           headCell.isDatePicker ? (
-            <TableCell
-              key={headCell.id}
-              align={"center"}
-              padding={"normal"}
-              sx={{ minWidth: headCell.minWidth }}
-            >
+            <TableCell key={headCell.id} align={"center"} padding={"normal"}>
               <DatePickerComponent
                 datePickerTitle={headCell.label as string}
                 selectedDate={selectedSent}
@@ -90,17 +82,11 @@ const EnhancedTableHead = (props: EnhancedTableProps) => {
               key={headCell.id}
               align={"center"}
               padding={"normal"}
-              sx={{ minWidth: headCell.minWidth }}
+              sx={{
+                fontSize: "0.875rem",
+                fontWeight: "600",
+              }}
             >
-              {headCell.isSearchable ? (
-                <TextField
-                  id="outlined-basic"
-                  label="Outlined"
-                  variant="outlined"
-                />
-              ) : (
-                <></>
-              )}
               {headCell.hasFilter ? (
                 <TableSortLabel
                   active={orderBy === headCell.id}
@@ -120,6 +106,15 @@ const EnhancedTableHead = (props: EnhancedTableProps) => {
                     },
                   }}
                 >
+                  <Box
+                    sx={{
+                      maxWidth: "150px",
+                      whiteSpace: "nowrap",
+                      overflow: "hidden",
+                      textOverflow: "ellipsis",
+                      textTransform: "capitalize",
+                    }}
+                  ></Box>
                   <span
                     style={{
                       color:
@@ -197,11 +192,14 @@ const EnhancedTableHead = (props: EnhancedTableProps) => {
           )
         )}
         <TableCell
+          sx={{
+            fontSize: "0.875rem",
+            fontWeight: "600",
+          }}
           align={"center"}
           padding={"normal"}
-          sx={{ minWidth: "150px" }}
         >
-          Info
+          View Details
         </TableCell>
       </TableRow>
     </TableHead>
