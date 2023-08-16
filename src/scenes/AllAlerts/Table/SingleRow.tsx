@@ -13,6 +13,8 @@ import { Link } from "react-router-dom";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import { AlertInfoText } from "../../Alert Info/AlertInfoText";
+import FileCopyIcon from "@mui/icons-material/FileCopy";
+
 function modifyDateTime(timestamp: string) {
   const date = new Date(timestamp);
 
@@ -27,7 +29,15 @@ interface SingleRowProps {
 }
 const SingleRow = (props: SingleRowProps) => {
   const [open, setOpen] = useState(false);
-
+  const [copied, setCopied] = useState(false);
+  const baseUrl = window.location.origin;
+  const handleCopy = () => {
+    const linkText = `${baseUrl}/alerts/${row.id}`;
+    navigator.clipboard.writeText(linkText).then(() => {
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    });
+  };
   const { handleClick, row, isItemSelected, labelId } = props;
   return (
     <>
@@ -141,6 +151,9 @@ const SingleRow = (props: SingleRowProps) => {
             >
               View Details
             </Link>{" "}
+            <IconButton onClick={handleCopy} size="small">
+              <FileCopyIcon />
+            </IconButton>
           </Box>
         </TableCell>
 
@@ -152,8 +165,8 @@ const SingleRow = (props: SingleRowProps) => {
               "aria-labelledby": labelId,
             }}
             onChange={(event) => {
-              event.stopPropagation(); // Prevent the click event from reaching the parent elements
-              handleClick(event, row); // Call your handleClick function with the specific row
+              event.stopPropagation();
+              handleClick(event, row);
             }}
           />
         </TableCell>
