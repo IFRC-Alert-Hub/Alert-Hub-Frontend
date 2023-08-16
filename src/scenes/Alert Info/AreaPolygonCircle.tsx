@@ -1,4 +1,4 @@
-import { FormControl, MenuItem, Select } from "@mui/material";
+import { Box, FormControl, MenuItem, Select, Typography } from "@mui/material";
 import React, { useState } from "react";
 import AlertInfoMap from "./AlertInfoMap";
 
@@ -67,46 +67,71 @@ export const AreaPolygonCircle: React.FC<AreaPolygonCircleProps> = ({
 
   return (
     <>
-      <FormControl>
-        <Select
-          value={selectedIndex}
-          onChange={handleShapeChange}
-          style={{ marginTop: "10px" }}
+      <Box
+        sx={{
+          border: "0.001em solid grey",
+          padding: "10px",
+          overflowY: "auto",
+          marginBottom: "10px",
+          borderRadius: "5px",
+        }}
+      >
+        <Typography
+          variant="h5"
+          textAlign={"center"}
+          sx={{ textDecoration: "underline", fontWeight: 600 }}
         >
-          <MenuItem value={-1}>Select an option</MenuItem>
-          {combinedShapes.map((shape: any, index: number) => (
-            <MenuItem key={index} value={index}>
-              {shape.name}
-            </MenuItem>
-          ))}
-        </Select>
-      </FormControl>
+          Area Polygon & Circle{" "}
+        </Typography>
+        {combinedShapes.length > 0 ? (
+          <>
+            <FormControl>
+              <Select
+                value={selectedIndex}
+                onChange={handleShapeChange}
+                style={{ marginTop: "10px" }}
+                sx={{ fontSize: "13px", height: "30px" }}
+              >
+                <MenuItem sx={{ fontSize: "13px" }} value={-1}>
+                  Select an option
+                </MenuItem>
+                {combinedShapes.map((shape: any, index: number) => (
+                  <MenuItem sx={{ fontSize: "13px" }} key={index} value={index}>
+                    {shape.name}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+            <Typography sx={{ margin: "5px", fontSize: "10px" }}>
+              * Please select an option above to see the available area
+              polygon(s) and circle(s)
+            </Typography>
+          </>
+        ) : (
+          "No Polygon Data"
+        )}
 
-      {selectedShape ? (
-        <AlertInfoMap
-          areaPolygon={
-            selectedShape && selectedShape.type === "Polygon"
-              ? {
-                  geometryType: "Polygon",
-                  coordinates: selectedShape.coordinates,
-                }
-              : undefined
-          }
-          areaCircle={
-            selectedShape && selectedShape.type === "Circle"
-              ? {
-                  radius: selectedShape.radius,
-                  coordinates: selectedShape.center,
-                }
-              : undefined
-          }
-        />
-      ) : (
-        <div>
-          Please select an option above to see the available area polygon(s) and
-          circle(s)
-        </div>
-      )}
+        {selectedShape && (
+          <AlertInfoMap
+            areaPolygon={
+              selectedShape && selectedShape.type === "Polygon"
+                ? {
+                    geometryType: "Polygon",
+                    coordinates: selectedShape.coordinates,
+                  }
+                : undefined
+            }
+            areaCircle={
+              selectedShape && selectedShape.type === "Circle"
+                ? {
+                    radius: selectedShape.radius,
+                    coordinates: selectedShape.center,
+                  }
+                : undefined
+            }
+          />
+        )}
+      </Box>
     </>
   );
 };

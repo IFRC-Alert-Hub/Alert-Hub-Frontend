@@ -1,7 +1,7 @@
 import { Fragment } from "react";
 // import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
-import { Card, Divider, Typography } from "@mui/material";
+import { Card, Typography } from "@mui/material";
 import { AlertInfoText } from "./AlertInfoText";
 // import AlertInfoMap from "./AlertInfoMap";
 import { AreaPolygonCircle } from "./AreaPolygonCircle";
@@ -66,41 +66,78 @@ export const SingleAreaView: React.FC<SingleAreaViewProps> = ({ areaSets }) => {
   //   setSelectedButton(title);
   // };
 
+  interface KeyTitleMap {
+    [key: string]: string;
+  }
+  const keyTitleMap: KeyTitleMap = {
+    area_desc: "Area Description",
+    altitude: "Altitude",
+    ceiling: "Ceiling",
+  };
+
+  const keyOrder: (keyof Area)[] = ["area_desc", "altitude", "ceiling"];
+
   return (
     <Box sx={{ minHeight: "420px" }}>
-      <Box>
-        {Object.entries(areaSets).map(
-          ([key, value]) =>
-            !Array.isArray(value) &&
-            ((value as unknown) !== "" ? (
-              <AlertInfoText key={key} title={key} content={value as any} />
-            ) : (
-              <AlertInfoText key={key} title={key} content={"Not available"} />
-            ))
-        )}
+      <Box paddingBottom={"10px"}>
+        {" "}
+        {keyOrder.map((key) => {
+          const title = keyTitleMap[key] || key;
+          const value = areaSets[key];
+
+          if (key === "id") {
+            return null;
+          }
+
+          return value !== "" && value !== null ? (
+            <AlertInfoText
+              key={key}
+              title={title}
+              content={value as unknown as any}
+            />
+          ) : (
+            <AlertInfoText key={key} title={title} content={"Not Available"} />
+          );
+        })}{" "}
       </Box>
 
-      <Box>
-        <Typography variant="h4">Area Polygon & Circle</Typography>
+      <AreaPolygonCircle areaSets={areaSets} />
+      {areaSets.geocode.length > 0 && (
+        <Box
+          sx={{
+            border: "0.001em solid grey",
+            padding: "10px",
+            borderRadius: "5px",
+          }}
+        >
+          <Typography
+            variant="h5"
+            textAlign={"center"}
+            sx={{ textDecoration: "underline", fontWeight: 600 }}
+          >
+            Geocodes
+          </Typography>
 
-        <AreaPolygonCircle areaSets={areaSets} />
-        <Divider />
-        <Typography variant="h4">Gecode</Typography>
-
-        <Box sx={{ height: "150px", overflowY: "auto" }}>
-          {areaSets.geocode.map((geocode: AreaGeocodes, index: number) => (
-            <Card key={index} sx={{ padding: "20px" }}>
-              <Fragment>
-                <AlertInfoText
-                  title={"Value Name"}
-                  content={geocode.value_name}
-                />
-                <AlertInfoText title={"Value"} content={geocode.value} />
-              </Fragment>
-            </Card>
-          ))}
+          <Box sx={{ maxHeight: "250px", overflowY: "auto", padding: "20px" }}>
+            <ul style={{ listStyle: "none", padding: 0 }}>
+              {areaSets.geocode.map((geocode: AreaGeocodes, index: number) => (
+                <li key={index} style={{ marginBottom: "20px" }}>
+                  <Card sx={{ padding: "20px" }}>
+                    <Typography variant="h5">Geocode {index + 1}</Typography>
+                    <Fragment>
+                      <AlertInfoText
+                        title={"Value Name"}
+                        content={geocode.value_name}
+                      />
+                      <AlertInfoText title={"Value"} content={geocode.value} />
+                    </Fragment>
+                  </Card>
+                </li>
+              ))}
+            </ul>
+          </Box>
         </Box>
-      </Box>
+      )}
     </Box>
   );
 };

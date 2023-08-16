@@ -19,7 +19,6 @@ const DropdownFilter = (props: DropdownFilterProps) => {
     menuItems,
     filters,
     setFilters,
-    minWidth,
     allMenuItemTitle,
   } = props;
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);

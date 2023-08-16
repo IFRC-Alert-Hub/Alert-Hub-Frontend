@@ -72,3 +72,12 @@ export type Admin1OptionsType = {
   countryId: number;
   countryName: string;
 };
+
+export type SubscriptionAlertsType = {
+  id: number;
+  event: string;
+  category: string;
+  countryName: string;
+  admin1s: string[];
+  sent: string;
+};

@@ -12,6 +12,8 @@ import { Link } from "react-router-dom";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import { AlertInfoText } from "../../Alert Info/AlertInfoText";
+import FileCopyIcon from "@mui/icons-material/FileCopy";
+
 function modifyDateTime(timestamp: string) {
   const date = new Date(timestamp);
 
@@ -26,7 +28,15 @@ interface SingleRowProps {
 }
 const SingleRow = (props: SingleRowProps) => {
   const [open, setOpen] = useState(false);
-
+  const [, setCopied] = useState(false);
+  const baseUrl = window.location.origin;
+  const handleCopy = () => {
+    const linkText = `${baseUrl}/alerts/${row.id}`;
+    navigator.clipboard.writeText(linkText).then(() => {
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    });
+  };
   const { handleClick, row, isItemSelected, labelId } = props;
   return (
     <>
@@ -43,19 +53,6 @@ const SingleRow = (props: SingleRowProps) => {
           "& .MuiTableCell-root": { textAlign: "center" },
         }}
       >
-        <TableCell padding="checkbox">
-          <Checkbox
-            color="primary"
-            checked={isItemSelected}
-            inputProps={{
-              "aria-labelledby": labelId,
-            }}
-            onChange={(event) => {
-              event.stopPropagation(); // Prevent the click event from reaching the parent elements
-              handleClick(event, row); // Call your handleClick function with the specific row
-            }}
-          />
-        </TableCell>
         <TableCell>
           <IconButton
             aria-label="expand row"
@@ -65,19 +62,7 @@ const SingleRow = (props: SingleRowProps) => {
             {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
           </IconButton>
         </TableCell>
-        <TableCell align="center">
-          <Box
-            sx={{
-              maxWidth: "150px",
-              whiteSpace: "nowrap",
-              overflow: "hidden",
-              textOverflow: "ellipsis",
-              textTransform: "capitalize",
-            }}
-          >
-            {row.identifier}
-          </Box>
-        </TableCell>
+
         <TableCell align="center">
           <Box
             sx={{
@@ -104,32 +89,7 @@ const SingleRow = (props: SingleRowProps) => {
             {row.eventCategory}
           </Box>
         </TableCell>
-        <TableCell align="center">
-          <Box
-            sx={{
-              maxWidth: "150px",
-              whiteSpace: "nowrap",
-              overflow: "hidden",
-              textOverflow: "ellipsis",
-              textTransform: "capitalize",
-            }}
-          >
-            {modifyDateTime(row.sent)}
-          </Box>
-        </TableCell>
-        <TableCell align="center">
-          <Box
-            sx={{
-              maxWidth: "150px",
-              whiteSpace: "nowrap",
-              overflow: "hidden",
-              textOverflow: "ellipsis",
-              textTransform: "capitalize",
-            }}
-          >
-            <Link to={row.sender}>{row.sender}</Link>
-          </Box>
-        </TableCell>
+
         <TableCell align="center">
           <Box
             sx={{
@@ -154,17 +114,63 @@ const SingleRow = (props: SingleRowProps) => {
               textTransform: "capitalize",
             }}
           >
+            {row.admin1s}
+          </Box>
+        </TableCell>
+
+        <TableCell align="center">
+          <Box
+            sx={{
+              maxWidth: "150px",
+              whiteSpace: "nowrap",
+              overflow: "hidden",
+              textOverflow: "ellipsis",
+              textTransform: "capitalize",
+            }}
+          >
+            {modifyDateTime(row.sent)}
+          </Box>
+        </TableCell>
+
+        <TableCell align="center">
+          <Box
+            sx={{
+              maxWidth: "150px",
+              whiteSpace: "nowrap",
+              overflow: "hidden",
+              textOverflow: "ellipsis",
+              textTransform: "capitalize",
+            }}
+          >
             {" "}
             <Link
               to={`/alerts/${row.id}`}
               target="_blank"
               rel="noopener noreferrer"
             >
-              View Alert
+              View Details
             </Link>{" "}
+            <IconButton onClick={handleCopy} size="small">
+              <FileCopyIcon />
+            </IconButton>
           </Box>
         </TableCell>
+
+        <TableCell padding="checkbox">
+          <Checkbox
+            color="primary"
+            checked={isItemSelected}
+            inputProps={{
+              "aria-labelledby": labelId,
+            }}
+            onChange={(event) => {
+              event.stopPropagation();
+              handleClick(event, row);
+            }}
+          />
+        </TableCell>
       </TableRow>
+
       <TableRow>
         <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={10}>
           <Collapse in={open} timeout="auto" unmountOnExit>
@@ -181,11 +187,27 @@ const SingleRow = (props: SingleRowProps) => {
                 title="Identifier"
                 content={row.identifier}
               ></AlertInfoText>
-
               <AlertInfoText title="Event" content={row.event}></AlertInfoText>
               <AlertInfoText
                 title="Event Category"
                 content={row.eventCategory}
+              ></AlertInfoText>
+              <AlertInfoText
+                title="Region"
+                content={row.region}
+              ></AlertInfoText>
+              <AlertInfoText
+                title="Country"
+                content={row.country}
+              ></AlertInfoText>
+              <AlertInfoText
+                title="Admin1s"
+                content={row.admin1s}
+              ></AlertInfoText>
+              <AlertInfoText title="Sent" content={row.sent}></AlertInfoText>
+              <AlertInfoText
+                title="Sender"
+                content={row.sender}
               ></AlertInfoText>
             </Box>
           </Collapse>

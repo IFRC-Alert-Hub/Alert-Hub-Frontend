@@ -169,12 +169,9 @@ const MapComponent: React.FC<MapProps> = ({
                 type: "symbol",
                 source: admin1SourceID,
                 layout: {
-                  "text-field": `${index}`,
+                  "text-field": `${admin1.name}`,
                   "text-font": ["Open Sans Bold"],
-                  "text-size": 12,
-                  "text-anchor": "center",
-                  "text-justify": "center",
-                  "text-offset": [0, 0],
+                  "text-size": 8,
                 },
                 paint: {
                   "text-color": "#ffffff",
@@ -561,17 +558,16 @@ const MapComponent: React.FC<MapProps> = ({
       <>
         {error && (
           <Alert severity="error">
-            We are currently unable to retrieve the country data for each region
+            We are currently unable to retrieve the region data, please refresh
+            or try again
           </Alert>
         )}
         {admin1Error && (
           <Alert severity="error">
-            We are currently unable to retrieve the admin1 data for each
-            individual country
+            We are currently unable to retrieve the admin1 data for this
+            particular country, please refresh or try again
           </Alert>
         )}
-
-        {(error || admin1Error || alertError) && <h1>Error</h1>}
         <>
           <Box sx={{ height: "40px" }}>
             {countrySelected &&

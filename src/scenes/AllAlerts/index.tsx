@@ -28,9 +28,13 @@ const AllAlerts: React.FC<AllAlertsProps> = () => {
     eventCategory: alert.info![0]?.category || "",
     sent: alert.sent!,
     sender: alert.sender,
-    region: "Africa",
-    country: "France",
+    region: alert.region as any,
+    country: alert.country as any,
     id: alert.id as unknown as string,
+    admin1s:
+      (alert.admin1 as [string]).length > 0
+        ? ((alert.admin1 as [string]).join(", ") as any)
+        : "",
     //infoSet: alert.country?.alertinfoSet || [],
   }));
 
