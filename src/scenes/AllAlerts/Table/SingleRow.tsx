@@ -1,5 +1,6 @@
 import {
   Box,
+  Card,
   Checkbox,
   Collapse,
   IconButton,
@@ -175,11 +176,29 @@ const SingleRow = (props: SingleRowProps) => {
                 title="Identifier"
                 content={row.identifier}
               ></AlertInfoText>
-
               <AlertInfoText title="Event" content={row.event}></AlertInfoText>
               <AlertInfoText
                 title="Event Category"
                 content={row.eventCategory}
+              ></AlertInfoText>
+              <AlertInfoText
+                title="Region"
+                content={row.region}
+              ></AlertInfoText>
+              <AlertInfoText
+                title="Country"
+                content={row.country}
+              ></AlertInfoText>
+              <AlertInfoText
+                title="Admin1"
+                content={
+                  "Unknown, Île-de-France, Centre-Val de Loire, Normandie, Bourgogne-Franche-Comté"
+                }
+              ></AlertInfoText>
+              <AlertInfoText title="Sent" content={row.sent}></AlertInfoText>
+              <AlertInfoText
+                title="Sender"
+                content={row.sender}
               ></AlertInfoText>
             </Box>
           </Collapse>
