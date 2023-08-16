@@ -105,8 +105,7 @@ const SingleRow = (props: SingleRowProps) => {
               textTransform: "capitalize",
             }}
           >
-            Unknown, Île-de-France, Centre-Val de Loire, Normandie,
-            Bourgogne-Franche-Comté
+            {row.admin1s}
           </Box>
         </TableCell>
 
@@ -190,10 +189,8 @@ const SingleRow = (props: SingleRowProps) => {
                 content={row.country}
               ></AlertInfoText>
               <AlertInfoText
-                title="Admin1"
-                content={
-                  "Unknown, Île-de-France, Centre-Val de Loire, Normandie, Bourgogne-Franche-Comté"
-                }
+                title="Admin1s"
+                content={row.admin1s}
               ></AlertInfoText>
               <AlertInfoText title="Sent" content={row.sent}></AlertInfoText>
               <AlertInfoText

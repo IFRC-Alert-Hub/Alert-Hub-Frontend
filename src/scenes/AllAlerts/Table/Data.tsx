@@ -50,6 +50,7 @@ type RowsData = {
   country: string;
   [key: string]: string;
   id: string;
+  admin1s: string;
 };
 
 interface HeadCell {
@@ -129,7 +130,7 @@ const headCells: HeadCell[] = [
   },
 
   {
-    id: "country",
+    id: "admin1s",
     numeric: false,
     disablePadding: true,
     label: "Admin1s",

@@ -61,6 +61,9 @@ export type Alert = {
   incidents: string;
   info?: AlertInfo[];
   admin1_known: boolean;
+  region?: string;
+  country?: string;
+  admin1?: [string];
 };
 
 export type AlertInfo = {
