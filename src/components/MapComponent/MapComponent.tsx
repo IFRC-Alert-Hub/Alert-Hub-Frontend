@@ -6,6 +6,7 @@ import mapboxgl, {
   Map as MapboxMap,
 } from "mapbox-gl";
 import {
+  Alert,
   Box,
   Chip,
   CircularProgress,
@@ -171,9 +172,6 @@ const MapComponent: React.FC<MapProps> = ({
                   "text-field": `${admin1.name}`,
                   "text-font": ["Open Sans Bold"],
                   "text-size": 8,
-                  "text-anchor": "center",
-                  "text-justify": "center",
-                  "text-offset": [0, 0],
                 },
                 paint: {
                   "text-color": "#ffffff",
@@ -558,131 +556,139 @@ const MapComponent: React.FC<MapProps> = ({
   return (
     <>
       <>
-        {error || admin1Error || alertError || infoError ? (
-          <h1>Error</h1>
-        ) : (
-          <>
-            <Box sx={{ height: "40px" }}>
-              {countrySelected &&
-                countryPolygonNameClicked &&
-                countryPolygonNameClicked.length === 2 && (
-                  <>
-                    <Chip
-                      label={
-                        <>
-                          {countryPolygonNameClicked[0]} (
-                          {countryPolygonNameClicked[1]})
-                          {admin1Loading && (
-                            <IconButton aria-label="loading" disabled>
-                              <CircularProgress size={20} color="secondary" />
-                            </IconButton>
-                          )}
-                        </>
-                      }
-                      variant="outlined"
-                      onDelete={countryControlChange}
-                      disabled={admin1Loading ? true : false}
-                    />
-                  </>
-                )}
-            </Box>
-            <Box style={{ position: "relative" }}>
-              {loading && countryRegionDataLoading && (
-                <div
-                  style={{
-                    position: "absolute",
-                    left: 0,
-                    width: "100%",
-                    height: "700px",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    backgroundColor: "#e0dcdc",
-                    zIndex: 999,
-                  }}
-                >
-                  <div>
-                    <Box
+        {error && (
+          <Alert severity="error">
+            We are currently unable to retrieve the region data, please refresh
+            or try again
+          </Alert>
+        )}
+        {admin1Error && (
+          <Alert severity="error">
+            We are currently unable to retrieve the admin1 data for this
+            particular country, please refresh or try again
+          </Alert>
+        )}
+        <>
+          <Box sx={{ height: "40px" }}>
+            {countrySelected &&
+              countryPolygonNameClicked &&
+              countryPolygonNameClicked.length === 2 && (
+                <>
+                  <Chip
+                    label={
+                      <>
+                        {countryPolygonNameClicked[0]} (
+                        {countryPolygonNameClicked[1]})
+                        {admin1Loading && (
+                          <IconButton aria-label="loading" disabled>
+                            <CircularProgress size={20} color="secondary" />
+                          </IconButton>
+                        )}
+                      </>
+                    }
+                    variant="outlined"
+                    onDelete={countryControlChange}
+                    disabled={admin1Loading ? true : false}
+                  />
+                </>
+              )}
+          </Box>
+          <Box style={{ position: "relative" }}>
+            {loading && countryRegionDataLoading && (
+              <div
+                style={{
+                  position: "absolute",
+                  left: 0,
+                  width: "100%",
+                  height: "700px",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  backgroundColor: "#e0dcdc",
+                  zIndex: 999,
+                }}
+              >
+                <div>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      padding: "30px",
+                      height: "60px",
+                      borderRadius: "30px",
+                      bgColor: "black",
+                    }}
+                  >
+                    <Skeleton
+                      animation="wave"
                       sx={{
+                        position: "absolute",
+                        top: "50%",
+                        left: "50%",
+                        width: "100%",
+                        height: "100%",
+                        transform: "translate(-50%, -50%)",
+                        backgroundColor: "#e0dcdc",
                         display: "flex",
                         alignItems: "center",
                         justifyContent: "center",
-                        padding: "30px",
-                        height: "60px",
-                        borderRadius: "30px",
-                        bgColor: "black",
+                        padding: "none",
                       }}
+                    ></Skeleton>
+                    <Progress />
+                    <Typography
+                      sx={{ paddingLeft: "5px", zIndex: 1000 }}
+                      variant="h4"
+                      fontWeight={800}
+                      color="f5333f"
                     >
-                      <Skeleton
-                        animation="wave"
-                        sx={{
-                          position: "absolute",
-                          top: "50%",
-                          left: "50%",
-                          width: "100%",
-                          height: "100%",
-                          transform: "translate(-50%, -50%)",
-                          backgroundColor: "#e0dcdc",
-                          display: "flex",
-                          alignItems: "center",
-                          justifyContent: "center",
-                          padding: "none",
-                        }}
-                      ></Skeleton>
-                      <Progress />
-                      <Typography
-                        sx={{ paddingLeft: "5px", zIndex: 1000 }}
-                        variant="h4"
-                        fontWeight={800}
-                        color="f5333f"
-                      >
-                        Loading Alerts
-                      </Typography>
-                    </Box>
-                  </div>
-                </div>
-              )}
-
-              <Box sx={{ display: "flex", flexDirection: "row" }}>
-                <div
-                  ref={mapContainerRef}
-                  className="map-container"
-                  id="mapContainer"
-                  style={{
-                    width: admin1Clicked ? "35%" : "100%",
-                    zIndex: 1,
-                  }}
-                ></div>
-                {admin1Clicked && (
-                  <Box
-                    sx={{
-                      width: "65%",
-                      position: "relative",
-                      transform: `translateX(${admin1Clicked ? "0%" : "100%"})`,
-                      transition: "transform 0.3s ease-in-out",
-                      zIndex: 2,
-                    }}
-                  >
-                    <PopupComponent
-                      handleClose={handleClose}
-                      loading={alertLoading}
-                      error={alertError}
-                      data={alertData}
-                      countryPolygonNameClicked={countryPolygonNameClicked}
-                      mapRef={mapRef}
-                      infoDataHandler={{
-                        data: infoData,
-                        loading: infoLoading,
-                        error: infoError,
-                        refetch: refectInfoData,
-                      }}
-                    />
+                      Loading Alerts
+                    </Typography>
                   </Box>
-                )}
-              </Box>
+                </div>
+              </div>
+            )}
+
+            <Box sx={{ display: "flex", flexDirection: "row" }}>
+              <div
+                ref={mapContainerRef}
+                className="map-container"
+                id="mapContainer"
+                style={{
+                  width: admin1Clicked ? "35%" : "100%",
+                  zIndex: 1,
+                }}
+              ></div>
+              {admin1Clicked && (
+                <Box
+                  sx={{
+                    width: "65%",
+                    position: "relative",
+                    transform: `translateX(${admin1Clicked ? "0%" : "100%"})`,
+                    transition: "transform 0.3s ease-in-out",
+                    zIndex: 2,
+                  }}
+                >
+                  <PopupComponent
+                    handleClose={handleClose}
+                    loading={alertLoading}
+                    error={alertError}
+                    data={alertData}
+                    countryPolygonNameClicked={countryPolygonNameClicked}
+                    mapRef={mapRef}
+                    infoDataHandler={{
+                      data: infoData,
+                      loading: infoLoading,
+                      error: infoError,
+                      refetch: refectInfoData,
+                    }}
+                  />
+                </Box>
+              )}
             </Box>
-          </>
-        )}
+          </Box>
+        </>
       </>
     </>
   );
