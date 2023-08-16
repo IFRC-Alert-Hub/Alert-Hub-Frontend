@@ -89,7 +89,7 @@ export const SingleAreaView: React.FC<SingleAreaViewProps> = ({ areaSets }) => {
             return null;
           }
 
-          return value !== "" ? (
+          return value !== "" && value !== null ? (
             <AlertInfoText
               key={key}
               title={title}
@@ -102,40 +102,42 @@ export const SingleAreaView: React.FC<SingleAreaViewProps> = ({ areaSets }) => {
       </Box>
 
       <AreaPolygonCircle areaSets={areaSets} />
-
-      <Box
-        sx={{
-          border: "0.001em solid grey",
-          padding: "10px",
-        }}
-      >
-        <Typography
-          variant="h5"
-          textAlign={"center"}
-          sx={{ textDecoration: "underline", fontWeight: 600 }}
+      {areaSets.geocode.length > 0 && (
+        <Box
+          sx={{
+            border: "0.001em solid grey",
+            padding: "10px",
+            borderRadius: "5px",
+          }}
         >
-          Geocodes
-        </Typography>
+          <Typography
+            variant="h5"
+            textAlign={"center"}
+            sx={{ textDecoration: "underline", fontWeight: 600 }}
+          >
+            Geocodes
+          </Typography>
 
-        <Box sx={{ height: "250px", overflowY: "auto", padding: "20px" }}>
-          <ul style={{ listStyle: "none", padding: 0 }}>
-            {areaSets.geocode.map((geocode: AreaGeocodes, index: number) => (
-              <li key={index} style={{ marginBottom: "20px" }}>
-                <Card sx={{ padding: "20px" }}>
-                  <Typography variant="h5">Geocode {index + 1}</Typography>
-                  <Fragment>
-                    <AlertInfoText
-                      title={"Value Name"}
-                      content={geocode.value_name}
-                    />
-                    <AlertInfoText title={"Value"} content={geocode.value} />
-                  </Fragment>
-                </Card>
-              </li>
-            ))}
-          </ul>
+          <Box sx={{ maxHeight: "250px", overflowY: "auto", padding: "20px" }}>
+            <ul style={{ listStyle: "none", padding: 0 }}>
+              {areaSets.geocode.map((geocode: AreaGeocodes, index: number) => (
+                <li key={index} style={{ marginBottom: "20px" }}>
+                  <Card sx={{ padding: "20px" }}>
+                    <Typography variant="h5">Geocode {index + 1}</Typography>
+                    <Fragment>
+                      <AlertInfoText
+                        title={"Value Name"}
+                        content={geocode.value_name}
+                      />
+                      <AlertInfoText title={"Value"} content={geocode.value} />
+                    </Fragment>
+                  </Card>
+                </li>
+              ))}
+            </ul>
+          </Box>
         </Box>
-      </Box>
+      )}
     </Box>
   );
 };

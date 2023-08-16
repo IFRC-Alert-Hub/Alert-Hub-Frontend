@@ -78,7 +78,12 @@ const AlertInfo = () => {
               Country: {data.country}
             </Typography>
             <Typography variant={"h4"}>Region: {data.region}</Typography>
-            <Typography variant={"h4"}>Admin1s: {data.admin1}</Typography>
+            <Typography variant={"h4"}>
+              Admin1s:{" "}
+              {(data.admin1 as [string]).length > 0
+                ? ((data.admin1 as [string]).join(", ") as any)
+                : ""}
+            </Typography>
           </Box>
           <Container maxWidth="lg">
             <AlertInfoTitleHeader title="Alert" />
@@ -90,7 +95,7 @@ const AlertInfo = () => {
                 return null;
               }
 
-              return value !== "" ? (
+              return value !== "" && value !== null ? (
                 <AlertInfoText
                   key={key}
                   title={title}
@@ -105,7 +110,7 @@ const AlertInfo = () => {
               );
             })}
 
-            <Box sx={{ padding: "20px" }}>
+            <Box sx={{ paddingTop: "20px" }}>
               {" "}
               <InfoSetsHorizontalTabs infoSets={data.info!} />
             </Box>

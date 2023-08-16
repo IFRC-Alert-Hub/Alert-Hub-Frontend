@@ -1,4 +1,11 @@
-import { Box, FormControl, MenuItem, Select, Typography } from "@mui/material";
+import {
+  Box,
+  Chip,
+  FormControl,
+  MenuItem,
+  Select,
+  Typography,
+} from "@mui/material";
 import React, { useState } from "react";
 import AlertInfoMap from "./AlertInfoMap";
 
@@ -73,6 +80,7 @@ export const AreaPolygonCircle: React.FC<AreaPolygonCircleProps> = ({
           padding: "10px",
           overflowY: "auto",
           marginBottom: "10px",
+          borderRadius: "5px",
         }}
       >
         <Typography
@@ -89,19 +97,22 @@ export const AreaPolygonCircle: React.FC<AreaPolygonCircleProps> = ({
                 value={selectedIndex}
                 onChange={handleShapeChange}
                 style={{ marginTop: "10px" }}
+                sx={{ fontSize: "13px", height: "30px" }}
               >
-                <MenuItem value={-1}>Select an option</MenuItem>
+                <MenuItem sx={{ fontSize: "13px" }} value={-1}>
+                  Select an option
+                </MenuItem>
                 {combinedShapes.map((shape: any, index: number) => (
-                  <MenuItem key={index} value={index}>
+                  <MenuItem sx={{ fontSize: "13px" }} key={index} value={index}>
                     {shape.name}
                   </MenuItem>
                 ))}
               </Select>
             </FormControl>
-            <div>
-              Please select an option above to see the available area polygon(s)
-              and circle(s)
-            </div>
+            <Typography sx={{ margin: "5px", fontSize: "10px" }}>
+              * Please select an option above to see the available area
+              polygon(s) and circle(s)
+            </Typography>
           </>
         ) : (
           "No Polygon Data"

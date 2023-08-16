@@ -148,7 +148,7 @@ export const InfoSetsHorizontalTabs: React.FC<InfoSetsHorizontalTabsProps> = ({
                         return null;
                       }
 
-                      return value !== "" ? (
+                      return value !== "" && value !== null ? (
                         <AlertInfoText
                           key={key}
                           title={title}
@@ -164,51 +164,53 @@ export const InfoSetsHorizontalTabs: React.FC<InfoSetsHorizontalTabsProps> = ({
                     })}{" "}
                   </Box>
 
-                  <Box
-                    sx={{
-                      border: "0.001em solid grey",
-                      padding: "10px",
-                    }}
-                  >
-                    <Typography
-                      variant="h5"
-                      textAlign={"center"}
-                      sx={{ textDecoration: "underline", fontWeight: 600 }}
-                    >
-                      Parameters
-                    </Typography>
+                  {info.parameter.length > 0 && (
                     <Box
                       sx={{
-                        height: "250px",
-                        overflowY: "auto",
-                        padding: "20px",
+                        border: "0.001em solid grey",
+                        padding: "10px",
                       }}
                     >
-                      <ul style={{ listStyle: "none", padding: 0 }}>
-                        {info.parameter.map(
-                          (parameter: InfoParameter, index: number) => (
-                            <li key={index} style={{ marginBottom: "20px" }}>
-                              <Card sx={{ padding: "20px" }}>
-                                <Typography variant="h5">
-                                  Parameter {index + 1}
-                                </Typography>
-                                <React.Fragment>
-                                  <AlertInfoText
-                                    title={"Value Name"}
-                                    content={String(parameter.id)}
-                                  />
-                                  <AlertInfoText
-                                    title={"Value"}
-                                    content={parameter.value_name}
-                                  />
-                                </React.Fragment>
-                              </Card>
-                            </li>
-                          )
-                        )}
-                      </ul>
+                      <Typography
+                        variant="h5"
+                        textAlign={"center"}
+                        sx={{ textDecoration: "underline", fontWeight: 600 }}
+                      >
+                        Parameters
+                      </Typography>
+                      <Box
+                        sx={{
+                          maxHeight: "250px",
+                          overflowY: "auto",
+                          padding: "20px",
+                        }}
+                      >
+                        <ul style={{ listStyle: "none", padding: 0 }}>
+                          {info.parameter.map(
+                            (parameter: InfoParameter, index: number) => (
+                              <li key={index} style={{ marginBottom: "20px" }}>
+                                <Card sx={{ padding: "20px" }}>
+                                  <Typography variant="h5">
+                                    Parameter {index + 1}
+                                  </Typography>
+                                  <React.Fragment>
+                                    <AlertInfoText
+                                      title={"Value Name"}
+                                      content={String(parameter.id)}
+                                    />
+                                    <AlertInfoText
+                                      title={"Value"}
+                                      content={parameter.value_name}
+                                    />
+                                  </React.Fragment>
+                                </Card>
+                              </li>
+                            )
+                          )}
+                        </ul>
+                      </Box>
                     </Box>
-                  </Box>
+                  )}
                 </Grid>
                 <Grid item xs={12} sm={12} md={6}>
                   <Card sx={{ padding: "20px" }}>
