@@ -17,7 +17,6 @@ import {
   Tabs,
   Typography,
 } from "@mui/material";
-import SourcesTableComponent from "../SourceTableComponent/SourceTableComponent";
 import { PopupComponent } from "./PopupComponent/PopupComponent";
 import Progress from "../Layout/Progress";
 import turfBbox from "@turf/bbox";

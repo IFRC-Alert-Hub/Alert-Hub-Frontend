@@ -23,7 +23,7 @@
   "about.disclaimer": "L'IFRC Alert Hub publie uniquement les alertes officielles émises par des agences d'alerte gouvernementales reconnues. Les alertes ne sont pas émises ou publiées par la FICR ou ses Sociétés nationales membres de la Croix-Rouge et du Croissant-Rouge. La FICR n'assume aucune responsabilité pour les informations contenues dans les alertes, qui relèvent de la seule responsabilité de l'organisme émetteur. La FICR s'efforce d'identifier les flux d'alertes gouvernementaux défectueux et de mettre ces informations en évidence pour les utilisateurs de l'Alert Hub. Cependant, la FICR ne surveille pas 24 heures sur 24 et 7 jours sur 7 l'état des flux gouvernementaux et il incombe aux utilisateurs d'Alert Hub d'identifier les sources redondantes d'informations sur les alertes de danger.",
 
   "ALL_ONGOING_ALERTS": "Toutes les alertes EN COURS",
-  "VIEW_ALL_ALERTS": "Afficher toutes les alertes",
+  "VIEW_ALL_SOURCES": "Afficher toutes les alertes",
   "ALL_ALERTS": "Toutes les alertes",
 
   "login.pageTitle": "Connexion",
