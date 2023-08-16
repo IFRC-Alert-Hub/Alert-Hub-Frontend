@@ -17,7 +17,8 @@
     "jsx": "react-jsx",
     "types": ["node", "mapbox-gl", "@mui/x-date-pickers"]
   },
-  "include": ["src"]
+  "include": ["src", "jest.config.js"]
+
   // "exclude": [
   //   "/src/components/MapComponent/TestMapComponentPopup",
   //   "/src/components/MapComponent/TestMapComponentPopup2"
