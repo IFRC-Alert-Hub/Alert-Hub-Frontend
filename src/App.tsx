@@ -29,6 +29,7 @@ import Level4 from "./Alert-Manager-API/Level4";
 import RegionTest from "./Alert-Manager-API/Region";
 import { AlertInfoTest } from "./Alert-Manager-API/AlertInfo";
 import AllAlertsComponent from "./Alert-Manager-API/AllAlerts";
+import { SourceFeeds } from "./components/SourceFeedsTableComponent/SourceFeedsTableComponent";
 
 function App() {
   // useEffect(() => {
@@ -66,6 +67,8 @@ function App() {
                 <Route path="/forget-password" element={<ForgotPassword />} />
                 <Route path="/regions/:id" element={<Region />} />
                 <Route path="/alerts/all" element={<AllAlerts />} />
+                <Route path="/feeds" element={<SourceFeeds />} />
+
                 <Route path="/alerts/:id" element={<AlertInfo />} />
                 <Route path="/account/" element={<PrivateRoutes />}>
                   <Route path="profile" element={<Profile />} />

@@ -1,14 +1,21 @@
-import { Box, Container, Grid, Typography } from "@mui/material";
+import { Box, Container, Grid, Tab, Tabs, Typography } from "@mui/material";
 import { useIntl } from "react-intl";
 
 import MapComponentWithFilter from "../../components/MapComponent/MapComponentWithFilter";
 import HomeCards from "../../components/Card/HomeCards";
 import { useLevel1Data } from "../../Alert-Manager-API/Level1";
+import { useState } from "react";
+import TitleHeader from "../../components/Layout/TitleHeader";
+import AllAlerts from "../AllAlerts";
 
 const Home = () => {
   const { formatMessage } = useIntl();
   const { data, loading, error, setFilters } = useLevel1Data();
+  const [value, setValue] = useState("map-tab");
 
+  const handleChange = (event: React.SyntheticEvent, newValue: string) => {
+    setValue(newValue);
+  };
   return (
     <Container maxWidth="lg">
       <Box sx={{ padding: "50px 0 50px 0" }}>
@@ -37,12 +44,33 @@ const Home = () => {
       </Box>
       <HomeCards />
 
-      <MapComponentWithFilter
-        data={data}
-        loading={loading}
-        error={error}
-        setFilters={setFilters}
-      ></MapComponentWithFilter>
+      <TitleHeader
+        title={`${formatMessage({ id: "ALL_ONGOING_ALERTS" })}`}
+        rightTitle={`${formatMessage({ id: "VIEW_ALL_SOURCES" })}`}
+        rightLinkURL={"/feeds"}
+      />
+      <Tabs
+        value={value}
+        onChange={handleChange}
+        textColor="secondary"
+        indicatorColor="secondary"
+        aria-label="secondary tabs example"
+      >
+        <Tab value="map-tab" label="Map" />
+        <Tab value="table-tab" label="Table" />
+      </Tabs>
+
+      <Box sx={{ display: value === "map-tab" ? "block" : "none" }}>
+        <MapComponentWithFilter
+          data={data}
+          loading={loading}
+          error={error}
+          setFilters={setFilters}
+        />
+      </Box>
+      <Box sx={{ display: value === "table-tab" ? "block" : "none" }}>
+        <AllAlerts />
+      </Box>
     </Container>
   );
 };

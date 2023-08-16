@@ -107,13 +107,6 @@ const MapComponentWithFilter: React.FC<MapComponentWithFilterProps> = ({
 
   return (
     <>
-      <TitleHeader
-        title={`${formatMessage({ id: "ALL_ONGOING_ALERTS" })}`}
-        rightTitle={`${formatMessage({ id: "VIEW_ALL_ALERTS" })}`}
-        rightLinkURL={"/alerts/all"}
-        selectedFilter={selectedFilter}
-        filterKey={filterKey}
-      />
       <Box padding={"20px"} display="flex" alignItems="center">
         <Autocomplete
           disablePortal
