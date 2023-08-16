@@ -14,6 +14,7 @@ export const AlertInfoText: React.FC<AlertInfoTextProps> = (props) => {
         style={{
           textDecoration: "underline",
           fontWeight: "bold",
+          textTransform: "capitalize",
         }}
       >
         {title}:
@@ -23,7 +24,6 @@ export const AlertInfoText: React.FC<AlertInfoTextProps> = (props) => {
           whiteSpace: "normal",
           wordWrap: "break-word",
           hyphens: "auto",
-          wordBreak: "break-all",
         }}
       >
         &nbsp;{content}

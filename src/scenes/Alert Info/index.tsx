@@ -1,4 +1,4 @@
-import { Box, Container, Typography } from "@mui/material";
+import { Box, Card, Container, Typography } from "@mui/material";
 import React, { useEffect, useMemo } from "react";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import { AlertInfoText } from "./AlertInfoText";
@@ -6,6 +6,7 @@ import AlertInfoTitleHeader from "./AlertInfoTitleHeader";
 import { InfoSetsHorizontalTabs } from "./InfoSetsHorizontalTabs";
 import { useParams } from "react-router-dom";
 import { GetAlertInfoByAlertID } from "../../Alert-Manager-API/AlertInfo";
+import { Alert } from "../../Alert-Manager-API/types";
 
 const AlertInfo = () => {
   const { id } = useParams<{ id: string }>();
@@ -21,25 +22,43 @@ const AlertInfo = () => {
     }
   }, [data, loading, error]);
 
-  // interface KeyTitleMap {
-  //   [key: string]: string;
-  // }
+  interface KeyTitleMap {
+    [key: string]: string;
+  }
 
-  // const keyTitleMap: KeyTitleMap = {
-  //   url: "URL",
-  //   identifier: "Identifier",
-  //   msg_type: "Message Type",
-  //   source: "Source",
-  //   // Add more key-title pairs as needed
-  // };
+  const keyTitleMap: KeyTitleMap = {
+    url: "URL",
+    identifier: "Identifier",
+    sender: "Sender",
+    sent: "Sent",
+    status: "Status",
+    msg_type: "Message Type",
+    source: "Source",
+    scope: "Scope",
+    restriction: "Restriction",
+    addresses: "Addresses",
+    code: "Code",
+    note: "Note",
+    references: "References",
+    incidents: "Incidents",
+  };
 
-  // const keyOrder: (keyof Alert)[] = [
-  //   "url",
-  //   "identifier",
-  //   "msg_type",
-  //   "source",
-  //   // Add more keys in the desired order
-  // ];
+  const keyOrder: (keyof Alert)[] = [
+    "url",
+    "identifier",
+    "msg_type",
+    "source",
+    "sender",
+    "sent",
+    "status",
+    "scope",
+    "restriction",
+    "addresses",
+    "code",
+    "note",
+    "references",
+    "incidents",
+  ];
   return (
     <>
       {error && <h1>Error</h1>}
@@ -52,16 +71,18 @@ const AlertInfo = () => {
               fontWeight={"600"}
               sx={{ paddingBottom: "5px" }}
             >
-              Excessive Heat warning
+              {data.info!.length > 0 && data.info![0].event}
             </Typography>
             <Typography variant={"h4"}>
               <LocationOnIcon />
-              UNITED STATES OF AMERICA (USA)
+              Country: {data.country}
             </Typography>
+            <Typography variant={"h4"}>Region: {data.region}</Typography>
+            <Typography variant={"h4"}>Admin1s: {data.admin1}</Typography>
           </Box>
           <Container maxWidth="lg">
             <AlertInfoTitleHeader title="Alert" />
-            {/* {keyOrder.map((key) => {
+            {keyOrder.map((key) => {
               const title = keyTitleMap[key] || key;
               const value = data[key];
 
@@ -82,20 +103,7 @@ const AlertInfo = () => {
                   content={"Not Available"}
                 />
               );
-            })} */}
-            {Object.entries(data).map(
-              ([key, value]) =>
-                !Array.isArray(value) &&
-                (value !== "" ? (
-                  <AlertInfoText key={key} title={key} content={value as any} />
-                ) : (
-                  <AlertInfoText
-                    key={key}
-                    title={key}
-                    content={"Not available"}
-                  />
-                ))
-            )}
+            })}
 
             <Box sx={{ padding: "20px" }}>
               {" "}

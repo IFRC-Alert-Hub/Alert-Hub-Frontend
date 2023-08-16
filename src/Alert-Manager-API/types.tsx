@@ -64,6 +64,7 @@ export type Alert = {
   region?: string;
   country?: string;
   admin1?: [string];
+  status: string;
 };
 
 export type AlertInfo = {
@@ -90,7 +91,7 @@ export type AlertInfo = {
   area: Area[];
 };
 
-type InfoParameter = {
+export type InfoParameter = {
   id: number;
   value_name: string;
   value: string;
