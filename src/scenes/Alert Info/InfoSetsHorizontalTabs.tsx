@@ -2,11 +2,11 @@ import * as React from "react";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import Box from "@mui/material/Box";
-import { Grid } from "@mui/material";
+import { Grid, Typography } from "@mui/material";
 import { AlertInfoText } from "./AlertInfoText";
 import { Card } from "@mui/material";
 
-import { AlertInfo } from "../../Alert-Manager-API/types";
+import { AlertInfo, InfoParameter } from "../../Alert-Manager-API/types";
 import { AreaInfoHorizontalTab } from "./AreaInfoHorizontalTab";
 
 interface TabPanelProps {
@@ -46,7 +46,36 @@ export const InfoSetsHorizontalTabs: React.FC<InfoSetsHorizontalTabsProps> = ({
   infoSets,
 }) => {
   const [value, setValue] = React.useState(0);
+  interface KeyTitleMap {
+    [key: string]: string;
+  }
+  const keyTitleMap: KeyTitleMap = {
+    language: "Language",
+    category: "Category",
+    sender_name: "Sender Name",
+    event_code: "Event Code",
+  };
 
+  const keyOrder: (keyof AlertInfo)[] = [
+    "language",
+    "category",
+    "event",
+    "response_type",
+    "urgency",
+    "severity",
+    "certainty",
+    "audience",
+    "event_code",
+    "effective",
+    "onset",
+    "expires",
+    "sender_name",
+    "headline",
+    "description",
+    "instruction",
+    "web",
+    "contact",
+  ];
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
   };
@@ -107,26 +136,79 @@ export const InfoSetsHorizontalTabs: React.FC<InfoSetsHorizontalTabsProps> = ({
                 container
                 rowSpacing={1}
                 columnSpacing={{ xs: 1, sm: 2, md: 3 }}
-                alignItems="center"
               >
                 <Grid item xs={12} sm={12} md={6}>
-                  {Object.entries(info).map(
-                    ([key, value]) =>
-                      !Array.isArray(value) &&
-                      (value !== "" ? (
+                  <Box paddingBottom={"10px"}>
+                    {" "}
+                    {keyOrder.map((key) => {
+                      const title = keyTitleMap[key] || key;
+                      const value = info[key];
+
+                      if (key === "id") {
+                        return null;
+                      }
+
+                      return value !== "" ? (
                         <AlertInfoText
                           key={key}
-                          title={key}
-                          content={value as any}
+                          title={title}
+                          content={value as unknown as any}
                         />
                       ) : (
                         <AlertInfoText
                           key={key}
-                          title={key}
-                          content="Not available"
+                          title={title}
+                          content={"Not Available"}
                         />
-                      ))
-                  )}
+                      );
+                    })}{" "}
+                  </Box>
+
+                  <Box
+                    sx={{
+                      border: "0.001em solid grey",
+                      padding: "10px",
+                    }}
+                  >
+                    <Typography
+                      variant="h5"
+                      textAlign={"center"}
+                      sx={{ textDecoration: "underline", fontWeight: 600 }}
+                    >
+                      Parameters
+                    </Typography>
+                    <Box
+                      sx={{
+                        height: "250px",
+                        overflowY: "auto",
+                        padding: "20px",
+                      }}
+                    >
+                      <ul style={{ listStyle: "none", padding: 0 }}>
+                        {info.parameter.map(
+                          (parameter: InfoParameter, index: number) => (
+                            <li key={index} style={{ marginBottom: "20px" }}>
+                              <Card sx={{ padding: "20px" }}>
+                                <Typography variant="h5">
+                                  Parameter {index + 1}
+                                </Typography>
+                                <React.Fragment>
+                                  <AlertInfoText
+                                    title={"Value Name"}
+                                    content={String(parameter.id)}
+                                  />
+                                  <AlertInfoText
+                                    title={"Value"}
+                                    content={parameter.value_name}
+                                  />
+                                </React.Fragment>
+                              </Card>
+                            </li>
+                          )
+                        )}
+                      </ul>
+                    </Box>
+                  </Box>
                 </Grid>
                 <Grid item xs={12} sm={12} md={6}>
                   <Card sx={{ padding: "20px" }}>

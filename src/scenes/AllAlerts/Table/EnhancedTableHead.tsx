@@ -8,7 +8,7 @@ import {
   TableRow,
   TableSortLabel,
   Checkbox,
-  TextField,
+  Tooltip,
 } from "@mui/material";
 import React from "react";
 import DropdownFilter from "./DropdownFilter";
@@ -59,13 +59,6 @@ const EnhancedTableHead = (props: EnhancedTableProps) => {
   return (
     <TableHead>
       <TableRow>
-        <TableCell padding="checkbox">
-          <Checkbox
-            color="primary"
-            checked={rowCount > 0 && numSelected === rowCount}
-            onChange={onSelectAllClick}
-          />
-        </TableCell>
         <TableCell padding="checkbox"></TableCell>
 
         {headCells.map((headCell) =>
@@ -200,6 +193,15 @@ const EnhancedTableHead = (props: EnhancedTableProps) => {
           padding={"normal"}
         >
           View Details
+        </TableCell>
+        <TableCell padding="checkbox">
+          <Tooltip title="Select All">
+            <Checkbox
+              color="primary"
+              checked={rowCount > 0 && numSelected === rowCount}
+              onChange={onSelectAllClick}
+            />
+          </Tooltip>
         </TableCell>
       </TableRow>
     </TableHead>

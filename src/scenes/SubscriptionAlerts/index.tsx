@@ -7,6 +7,7 @@ import { SubscriptionAlertsType } from "../../API/TYPES";
 import axios from "axios";
 
 const SubscriptionAlerts = () => {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { id, title, country } = useParams();
 
   const [alertsData, setAlertsData] = useState<SubscriptionAlertsType[] | null>(

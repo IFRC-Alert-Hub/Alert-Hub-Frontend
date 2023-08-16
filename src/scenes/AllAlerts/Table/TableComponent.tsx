@@ -8,7 +8,6 @@ import {
   TablePagination,
   TableRow,
   Paper,
-  Checkbox,
   Typography,
 } from "@mui/material";
 
@@ -18,7 +17,6 @@ import { Data, Order, RowsData, headCells } from "./Data";
 
 import { EnhancedTableToolbar } from "./EnhancedTableToolbar";
 import { EnhancedTableHead } from "./EnhancedTableHead";
-import { Link } from "react-router-dom";
 import SingleRow from "./SingleRow";
 
 interface EnhancedTableProps {
