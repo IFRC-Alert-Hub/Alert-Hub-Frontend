@@ -58,7 +58,7 @@ const checkBoxList = [
   },
   {
     name: "subscribeBy",
-    legend: "Methods",
+    legend: "Notification Type",
     checkboxItems: ["Email"],
   },
 ];

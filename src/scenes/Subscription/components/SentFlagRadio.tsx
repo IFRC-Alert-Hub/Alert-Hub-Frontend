@@ -25,7 +25,7 @@ export const RADIO_OPTIONS = [
   },
   {
     value: "3",
-    label: "1 Week",
+    label: "Never",
   },
 ];
 

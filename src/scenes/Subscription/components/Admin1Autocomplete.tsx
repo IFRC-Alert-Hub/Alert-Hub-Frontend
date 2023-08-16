@@ -7,8 +7,11 @@ import {
   FormControlLabel,
   FormHelperText,
   FormLabel,
+  IconButton,
   TextField,
+  Tooltip,
 } from "@mui/material";
+import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
 import { Admin1OptionsType, SubscriptionForm } from "../../../API/TYPES";
 import React, { useEffect, useState } from "react";
 
@@ -67,6 +70,14 @@ const Admin1Autocomplete = ({
     >
       <Box display="flex" sx={{ alignItems: "center" }}>
         <FormLabel className="subs-form-legend">Admin1s</FormLabel>
+        <Tooltip
+          title="Unknown contains all alerts without a specific admin1"
+          placement="bottom-start"
+        >
+          <IconButton disableRipple sx={{ p: "0 0 0 10px" }}>
+            <ErrorOutlineIcon />
+          </IconButton>
+        </Tooltip>
         {selectedRow.countryIds.length === 0 ? (
           <></>
         ) : (
