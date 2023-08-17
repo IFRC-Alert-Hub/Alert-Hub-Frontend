@@ -31,7 +31,7 @@ export const useLevel2Data = () => {
   };
 
   useEffect(() => {
-    console.log("FILTERS 2: ", filters);
+    // console.log("FILTERS 2: ", filters);
     setLoading(true);
     setError(null);
     if (countryID !== null) {
@@ -98,10 +98,6 @@ export const useLevel2Data = () => {
 
                 return admin1;
               });
-              //modifiedData.admin1s.reverse();
-            }
-            if (modifiedData.admin1s.length === 0) {
-              console.log("EMPTY", modifiedData);
             }
           } else {
             throw new Error("admin1 is empty");
@@ -109,7 +105,6 @@ export const useLevel2Data = () => {
           setData(modifiedData as any);
           setLoading(false);
         } catch (error: any) {
-          console.log(error.message);
           setError(error.message);
           setLoading(false);
         }
@@ -141,14 +136,12 @@ const Level2: React.FC = () => {
     event: React.ChangeEvent<{}>,
     value: string | null
   ) => {
-    console.log(value);
     setSelectedUrgency(value || "");
     setFilters({
       urgency: value || "",
       severity: "",
       certainty: "",
     });
-    console.log("UPDATED DATA: ", data);
   };
   return (
     <div>

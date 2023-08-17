@@ -212,7 +212,7 @@ const MapComponent: React.FC<MapProps> = ({
                   let layersClicked = new Set();
 
                   clickedFeatures?.forEach((feature, index) => {
-                    console.log(feature.layer.id);
+                    // console.log(feature.layer.id);
 
                     if (
                       feature.layer.id.includes(`${layerId}-admin1-`) &&
@@ -230,7 +230,7 @@ const MapComponent: React.FC<MapProps> = ({
                     layersClickedArray.splice(indexToRemove, 1);
                   }
                   const firstValue = Number(layersClickedArray[0]);
-                  console.log(firstValue);
+                  // console.log(firstValue);
                   if (latestRefetchAlertData.current !== (firstValue as any)) {
                     latestRefetchAlertData.current = firstValue as any;
                     setAlertFilter({
@@ -320,10 +320,6 @@ const MapComponent: React.FC<MapProps> = ({
     setCountrySelected,
     isRegion,
   ]);
-
-  useEffect(() => {
-    console.log(CountryRegionData);
-  }, [CountryRegionData]);
 
   useEffect(() => {
     if (
@@ -521,7 +517,7 @@ const MapComponent: React.FC<MapProps> = ({
 
     const sourceId = countryIDs![0];
     const layerId = countryIDs![1];
-    console.log(mapRef.current?.getStyle().layers);
+    // console.log(mapRef.current?.getStyle().layers);
     admin1Data?.admin1s.forEach((admin1, index) => {
       const admin1LayerId = `${layerId}-admin1-${admin1.id}`;
       const admin1SourceId = `${sourceId}-admin1-${admin1.id}`;
@@ -542,11 +538,11 @@ const MapComponent: React.FC<MapProps> = ({
         mapRef.current?.removeSource(admin1CenterSourceID);
     });
 
-    console.log(mapRef.current?.getStyle().layers);
+    // console.log(mapRef.current?.getStyle().layers);
 
     mapRef.current?.setCenter([0, 0]);
     mapRef.current?.setZoom(1);
-    console.log(mapRef.current?.getStyle().layers);
+    // console.log(mapRef.current?.getStyle().layers);
     setCountryIDs(null);
   };
 

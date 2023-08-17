@@ -43,16 +43,12 @@ export const useLevel4Data = () => {
   const current_Info_ID = useRef<number | null>(null);
 
   const refetch = async (info_ID: number) => {
-    console.log(current_Info_ID.current);
-    console.log(info_ID);
-
     if (
       current_Info_ID.current === null ||
       current_Info_ID.current !== info_ID
     ) {
       setLoading(true);
       setError(null);
-      console.log("refetch called with infoID:", info_ID);
 
       const fetchData = async () => {
         try {
@@ -105,7 +101,6 @@ export const useLevel4Data = () => {
           } else {
             throw new Error("areas is empty");
           }
-          console.log(response.data);
           setData(response.data as any);
           setLoading(false);
         } catch (error: any) {
