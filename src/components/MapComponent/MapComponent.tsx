@@ -151,7 +151,7 @@ const MapComponent: React.FC<MapProps> = ({
                 type: "line",
                 source: admin1SourceID,
                 paint: {
-                  "line-color": "black",
+                  "line-color": "#404040",
                   "line-width": 1.3,
                 },
               });
