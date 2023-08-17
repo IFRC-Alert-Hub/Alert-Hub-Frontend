@@ -170,19 +170,16 @@ const EnhancedTableHead = (props: EnhancedTableProps) => {
               )}
             </TableCell>
           ) : (
-            <>
-              {" "}
-              <DropdownFilter
-                key={headCell.id}
-                TableCellTitle={headCell.title || ""}
-                setSelected={setSelected}
-                menuItems={headCell.menuItems || []}
-                filters={filters}
-                setFilters={setFilters}
-                minWidth={headCell.minWidth}
-                allMenuItemTitle={headCell.allMenuItemTitle || ""}
-              ></DropdownFilter>
-            </>
+            <DropdownFilter
+              key={headCell.id}
+              TableCellTitle={headCell.title || ""}
+              setSelected={setSelected}
+              menuItems={headCell.menuItems || []}
+              filters={filters}
+              setFilters={setFilters}
+              minWidth={headCell.minWidth}
+              allMenuItemTitle={headCell.allMenuItemTitle || ""}
+            />
           )
         )}
         <TableCell

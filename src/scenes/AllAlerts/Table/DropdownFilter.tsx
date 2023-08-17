@@ -102,8 +102,10 @@ const DropdownFilter = (props: DropdownFilterProps) => {
           <MenuItem onClick={() => handleFilterClick("All")}>
             {allMenuItemTitle}
           </MenuItem>
-          {menuItems.map((item) => (
-            <MenuItem onClick={() => handleFilterClick(item)}>{item}</MenuItem>
+          {menuItems.map((item, index) => (
+            <MenuItem key={index} onClick={() => handleFilterClick(item)}>
+              {item}
+            </MenuItem>
           ))}
         </Menu>
       </TableCell>

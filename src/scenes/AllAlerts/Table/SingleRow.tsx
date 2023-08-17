@@ -163,6 +163,34 @@ const SingleRow = (props: SingleRowProps) => {
             <IconButton onClick={handleCopy} size="small">
               <FileCopyIcon />
             </IconButton>
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              {" "}
+              <Snackbar
+                onClose={handleCloseAlert}
+                open={copyAlertOpen}
+                autoHideDuration={3000}
+              >
+                <Alert
+                  onClose={handleCloseAlert}
+                  severity="success"
+                  sx={{
+                    backgroundColor: "#6B8E23",
+                    color: "white",
+                    "& .MuiAlert-icon": {
+                      color: "white",
+                    },
+                  }}
+                >
+                  Copied link!
+                </Alert>
+              </Snackbar>
+            </Box>
           </Box>
         </TableCell>
 
@@ -223,34 +251,6 @@ const SingleRow = (props: SingleRowProps) => {
           </Collapse>
         </TableCell>
       </TableRow>
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-        }}
-      >
-        {" "}
-        <Snackbar
-          onClose={handleCloseAlert}
-          open={copyAlertOpen}
-          autoHideDuration={3000}
-        >
-          <Alert
-            onClose={handleCloseAlert}
-            severity="success"
-            sx={{
-              backgroundColor: "#6B8E23",
-              color: "white",
-              "& .MuiAlert-icon": {
-                color: "white",
-              },
-            }}
-          >
-            Copied link!
-          </Alert>
-        </Snackbar>
-      </Box>
     </>
   );
 };
