@@ -4,4 +4,5 @@ module.exports = {
     "/__tests__/",
     "/src/Alert-Manager-API/",
   ],
+  transformIgnorePatterns: ["/node_modules/(?!(axios)/)"],
 };
