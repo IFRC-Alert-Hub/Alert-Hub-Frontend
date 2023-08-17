@@ -14,56 +14,8 @@ import FirstPageIcon from "@mui/icons-material/FirstPage";
 import KeyboardArrowLeft from "@mui/icons-material/KeyboardArrowLeft";
 import KeyboardArrowRight from "@mui/icons-material/KeyboardArrowRight";
 import LastPageIcon from "@mui/icons-material/LastPage";
-import { Container, Typography } from "@mui/material";
-import TitleHeader from "../Layout/TitleHeader";
+import { Typography } from "@mui/material";
 import { Link } from "react-router-dom";
-import axios from "axios";
-interface ResponseType {
-  data: {
-    sources?: any[];
-  };
-}
-
-export type SourceData = {
-  authorEmail?: string;
-  authorName: string;
-  authorityCountry: string;
-  capAlertFeed: string;
-  capAlertFeedStatus?: string;
-  sourceId: number;
-  sourceIsOfficial: boolean;
-  byLanguage: { code: string; logo: string; name: StringConstructor }[];
-};
-
-const GetAllSources = () => {
-  const [data, setData] = React.useState<SourceData[]>([]);
-  const [loading, setLoading] = React.useState<boolean>(true);
-  const [error, setError] = React.useState<string | null>(null);
-
-  React.useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response: ResponseType = await axios.get(
-          "https://cap-aggregator.azurewebsites.net/feeds/"
-        );
-
-        if (!response.data || Object.keys(response.data).length === 0) {
-          throw new Error("Data is empty or invalid.");
-        }
-
-        setData(response.data.sources as any);
-        console.log("Alerts: ", response.data.sources);
-        setLoading(false);
-      } catch (error: any) {
-        setError(error.message);
-        setLoading(false);
-      }
-    };
-    fetchData();
-  }, []);
-
-  return { data, loading, error };
-};
 
 interface TablePaginationActionsProps {
   count: number;
@@ -145,37 +97,44 @@ const TablePaginationActions = (props: TablePaginationActionsProps) => {
   );
 };
 
-const rows: any = [
-  {
-    sourceId: "af-andma-en",
-    name: "Afghanistan: National Disaster Management Authority",
-    language: "English",
-    picUrl: "https://alert-hub.s3.amazonaws.com/images/af-andma-en.png",
-    capAlertFeed: "https://cap-sources.s3.amazonaws.com/af-andma-en/rss.xml",
-  },
-  {
-    sourceId: "al-igewe-en",
-    name: "Albania: Institute of GeoSciences, Energy, Water and Environment",
-    language: "English",
-    picUrl: "https://alert-hub.s3.amazonaws.com/images/al-igewe-en.png",
-    capAlertFeed: "https://cap-sources.s3.amazonaws.com/al-igewe-en/rss.xml",
-  },
-  {
-    sourceId: "dz-meteo-en",
-    name: "Algeria: National Meteorological Office",
-    language: "English",
-    picUrl: "https://alert-hub.s3.amazonaws.com/images/dz-meteo-en.png",
-    capAlertFeed: "https://ametvigilance.meteo.dz/rss/rss_meteo_dz.xml",
-  },
-];
-export const SourceFeeds = () => {
-  const { data, loading, error } = GetAllSources();
+// const rows: any = [
+//   {
+//     sourceId: "af-andma-en",
+//     name: "Afghanistan: National Disaster Management Authority",
+//     language: "English",
+//     picUrl: "https://alert-hub.s3.amazonaws.com/images/af-andma-en.png",
+//     capAlertFeed: "https://cap-sources.s3.amazonaws.com/af-andma-en/rss.xml",
+//   },
+//   {
+//     sourceId: "al-igewe-en",
+//     name: "Albania: Institute of GeoSciences, Energy, Water and Environment",
+//     language: "English",
+//     picUrl: "https://alert-hub.s3.amazonaws.com/images/al-igewe-en.png",
+//     capAlertFeed: "https://cap-sources.s3.amazonaws.com/al-igewe-en/rss.xml",
+//   },
+//   {
+//     sourceId: "dz-meteo-en",
+//     name: "Algeria: National Meteorological Office",
+//     language: "English",
+//     picUrl: "https://alert-hub.s3.amazonaws.com/images/dz-meteo-en.png",
+//     capAlertFeed: "https://ametvigilance.meteo.dz/rss/rss_meteo_dz.xml",
+//   },
+// ];
 
-  React.useEffect(() => {
-    if (!loading || !error) {
-      console.log(data);
-    }
-  });
+type SourceFeedsComponentProps = {
+  rows: ModifiedSourceData[] | [];
+};
+
+export type ModifiedSourceData = {
+  sourceName: string;
+  logo: string;
+  language: string;
+  capAlertFeed: string;
+  sourceId: string;
+};
+export const SourceFeedsComponent: React.FC<SourceFeedsComponentProps> = ({
+  rows,
+}) => {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
 
@@ -197,123 +156,127 @@ export const SourceFeeds = () => {
   };
 
   return (
-    <Container maxWidth="lg" sx={{ paddingTop: "20px" }}>
-      <TitleHeader title={`Source Feeds`} />
-      <TableContainer component={Paper}>
-        <Table>
-          <TableBody>
-            <TableRow>
-              <TableCell
-                sx={{
-                  fontSize: "0.875rem",
-                  fontWeight: "600",
-                }}
-                align="center"
-              >
-                Logo
-              </TableCell>
-              <TableCell
-                sx={{
-                  fontSize: "0.875rem",
-                  fontWeight: "600",
-                }}
-                align="center"
-              >
-                Source Name
-              </TableCell>
-              <TableCell
-                sx={{
-                  fontSize: "0.875rem",
-                  fontWeight: "600",
-                }}
-                align="center"
-              >
-                Language
-              </TableCell>
+    <TableContainer component={Paper}>
+      <Table>
+        <TableBody>
+          <TableRow>
+            <TableCell
+              sx={{
+                fontSize: "0.875rem",
+                fontWeight: "600",
+              }}
+              align="center"
+            >
+              Logo
+            </TableCell>
+            <TableCell
+              sx={{
+                fontSize: "0.875rem",
+                fontWeight: "600",
+              }}
+              align="center"
+            >
+              Source Name
+            </TableCell>
+            <TableCell
+              sx={{
+                fontSize: "0.875rem",
+                fontWeight: "600",
+              }}
+              align="center"
+            >
+              Language
+            </TableCell>
 
-              <TableCell
-                sx={{
-                  fontSize: "0.875rem",
-                  fontWeight: "600",
-                }}
-                align="center"
-              >
-                CAP Alert Feed
+            <TableCell
+              sx={{
+                fontSize: "0.875rem",
+                fontWeight: "600",
+              }}
+              align="center"
+            >
+              CAP Alert Feed
+            </TableCell>
+          </TableRow>
+          {rows.length === 0 ? (
+            <TableRow sx={{ textAlign: "center" }}>
+              <TableCell colSpan={6}>
+                <Typography variant="h6" textAlign={"center"} padding={"10px"}>
+                  {" "}
+                  🔍 No Sources are available
+                </Typography>
               </TableCell>
             </TableRow>
-            {rows.length === 0 ? (
-              <TableRow sx={{ textAlign: "center" }}>
-                <TableCell colSpan={6}>
-                  <Typography
-                    variant="h6"
-                    textAlign={"center"}
-                    padding={"10px"}
-                  >
-                    {" "}
-                    🔍 No Sources are available
-                  </Typography>
-                </TableCell>
-              </TableRow>
-            ) : (
-              <>
-                {(rowsPerPage > 0
-                  ? rows.slice(
-                      page * rowsPerPage,
-                      page * rowsPerPage + rowsPerPage
-                    )
-                  : rows
-                ).map((row: any, index: number) => (
-                  <TableRow key={index}>
-                    <TableCell align="center">
+          ) : (
+            <>
+              {(rowsPerPage > 0
+                ? rows.slice(
+                    page * rowsPerPage,
+                    page * rowsPerPage + rowsPerPage
+                  )
+                : rows
+              ).map((row: ModifiedSourceData, index: number) => (
+                <TableRow key={row.sourceId}>
+                  <TableCell align="center">
+                    {row.logo !== null ? (
                       <img
-                        src={row.picUrl}
+                        src={row.logo}
                         alt="Source"
                         style={{ width: "200px", height: "auto" }}
                       />
-                    </TableCell>
-                    <TableCell align="center">{row.name}</TableCell>
-                    <TableCell align="center">{row.language}</TableCell>
-                    <TableCell align="center">
-                      <Link
-                        to={row.capAlertFeed}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
-                        {row.capAlertFeed}
-                      </Link>{" "}
-                    </TableCell>
-                  </TableRow>
-                ))}
-                {emptyRows > 0 && (
-                  <TableRow style={{ height: 53 * emptyRows }}>
-                    <TableCell colSpan={6} />
-                  </TableRow>
-                )}
-              </>
-            )}
-          </TableBody>
-          <TableFooter>
-            <TableRow>
-              <TablePagination
-                rowsPerPageOptions={[5, 10, 25, { label: "All", value: -1 }]}
-                colSpan={3}
-                count={rows.length}
-                rowsPerPage={rowsPerPage}
-                page={page}
-                SelectProps={{
-                  inputProps: {
-                    "aria-label": "rows per page",
-                  },
-                  native: true,
-                }}
-                onPageChange={handleChangePage}
-                onRowsPerPageChange={handleChangeRowsPerPage}
-                ActionsComponent={TablePaginationActions}
-              />
-            </TableRow>
-          </TableFooter>
-        </Table>
-      </TableContainer>
-    </Container>
+                    ) : (
+                      `No Logo Available`
+                    )}
+                  </TableCell>
+                  <TableCell
+                    align="center"
+                    sx={{ textTransform: "capitalize" }}
+                  >
+                    {row.sourceName}
+                  </TableCell>
+                  <TableCell align="center" sx={{ textTransform: "uppercase" }}>
+                    {row.language}
+                  </TableCell>
+                  <TableCell align="center">
+                    <Link
+                      to={row.capAlertFeed}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      {row.capAlertFeed}
+                    </Link>{" "}
+                  </TableCell>
+                </TableRow>
+              ))}
+              {emptyRows > 0 && (
+                <TableRow style={{ height: 53 * emptyRows }}>
+                  <TableCell colSpan={6} />
+                </TableRow>
+              )}
+            </>
+          )}
+        </TableBody>
+        <TableFooter>
+          <TableRow>
+            <TablePagination
+              rowsPerPageOptions={[5, 10, 25, { label: "All", value: -1 }]}
+              colSpan={3}
+              count={rows.length}
+              rowsPerPage={rowsPerPage}
+              page={page}
+              SelectProps={{
+                inputProps: {
+                  "aria-label": "rows per page",
+                },
+                native: true,
+              }}
+              onPageChange={handleChangePage}
+              onRowsPerPageChange={handleChangeRowsPerPage}
+              ActionsComponent={TablePaginationActions}
+            />
+          </TableRow>
+        </TableFooter>
+      </Table>
+    </TableContainer>
   );
 };
