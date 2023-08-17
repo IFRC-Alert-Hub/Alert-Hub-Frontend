@@ -136,7 +136,8 @@ npm run build
 ### Building and running the docker images
 
 ![Docker Nginx Deployment Diagram](https://github.com/IFRC-Alert-Hub/Alert-Hub-Frontend/assets/57798047/57f50040-af4f-41dd-a8b9-021b4ca84d64)
-The deployment of the application is facilitated by Docker and Nginx. This setup combines these technologies to create a smooth and effective deployment process.
+
+The deployment of the application is facilitated by Docker and Nginx as seen in the image above. This setup combines these technologies to create a smooth and effective deployment process.
 
 It's important to note that the practical deployment strategy makes use of Docker. Both a Dockerfile and a docker-compose.yml are included for both the client application, and the standard development process involves leveraging Azure to construct and distribute the application.
 
@@ -189,8 +190,6 @@ This project is designed to be deployed to an Azure Web App using a Docker conta
 
 Make sure to update the `env.AZURE_WEBAPP_NAME` value in your GitHub Actions workflow file (`.github/workflows/main.yml`) with the name you chose for your Web App.
 ```
-
-/
 
 ## Contributing
 
