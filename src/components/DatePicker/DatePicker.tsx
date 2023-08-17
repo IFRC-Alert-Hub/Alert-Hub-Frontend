@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Box, Button, Typography } from "@mui/material";
+import { Button, Typography } from "@mui/material";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import { EffectivePopup } from "./DatePickerPopup";
 
@@ -86,26 +86,21 @@ const DatePickerComponent: React.FC<DatePickerComponentProps> = ({
                 : "",
           }}
         >
-          <Box
+          <Typography
+            textTransform={"capitalize"}
             sx={{
               maxWidth: "100px",
               whiteSpace: "nowrap",
               overflow: "hidden",
               textOverflow: "ellipsis",
               textTransform: "capitalize",
+              fontWeight: "600",
             }}
           >
-            <Typography
-              textTransform={"capitalize"}
-              sx={{
-                fontWeight: "600",
-              }}
-            >
-              {selectedDate![0] !== null && selectedDate![1] !== null
-                ? getSelectedDates(selectedDate)
-                : datePickerTitle}
-            </Typography>
-          </Box>
+            {selectedDate![0] !== null && selectedDate![1] !== null
+              ? getSelectedDates(selectedDate)
+              : datePickerTitle}
+          </Typography>
         </Typography>
       </Button>
       <EffectivePopup

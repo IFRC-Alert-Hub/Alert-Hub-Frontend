@@ -30,6 +30,7 @@ import { useLevel2Data } from "../../Alert-Manager-API/Level2";
 import { useLevel3Data } from "../../Alert-Manager-API/Level3";
 import { useLevel4Data } from "../../Alert-Manager-API/Level4";
 import { feature } from "@turf/turf";
+import * as turf from "@turf/turf";
 
 export const ExtremeThreatColour: string = "#f5333f";
 export const ModerateThreatColour: string = "#ff9e00";
@@ -132,6 +133,7 @@ const MapComponent: React.FC<MapProps> = ({
             }
             const admin1SourceID = `${sourceId}-admin1-${admin1.id}`;
             const admin1LayerID = `${layerId}-admin1-${admin1.id}`;
+
             if (!mapRef.current?.getSource(admin1SourceID)) {
               mapRef.current?.addSource(admin1SourceID, {
                 type: "geojson",
@@ -162,11 +164,34 @@ const MapComponent: React.FC<MapProps> = ({
                   "fill-opacity": admin1.id < 0 ? 0.2 : 0.8,
                 },
               });
+              const multipolygonFeature = {
+                type: "Feature",
+                geometry: {
+                  type: admin1.type as any,
+                  coordinates: admin1.coordinates as any,
+                },
+              };
+
+              const centerPoint = turf.centerOfMass(multipolygonFeature);
+
+              const centerCoordinates = centerPoint.geometry.coordinates;
+
+              mapRef.current?.addSource(`${admin1SourceID}-center-source`, {
+                type: "geojson",
+                data: {
+                  type: "Feature",
+                  geometry: {
+                    type: "Point" as any,
+                    coordinates: centerCoordinates as any,
+                  },
+                  properties: {},
+                },
+              });
 
               mapRef.current?.addLayer({
                 id: `${admin1LayerID}-text`,
                 type: "symbol",
-                source: admin1SourceID,
+                source: `${admin1SourceID}-center-source`,
                 layout: {
                   "text-field": `${admin1.name}`,
                   "text-font": ["Open Sans Bold"],
@@ -430,7 +455,6 @@ const MapComponent: React.FC<MapProps> = ({
                   );
                 }
               );
-              //console.log("COUNTRY ID: ", country.id);
               setAdmin1Filter({
                 urgency: selectedUrgency,
                 severity: selectedSeverity,
@@ -501,6 +525,8 @@ const MapComponent: React.FC<MapProps> = ({
     admin1Data?.admin1s.forEach((admin1, index) => {
       const admin1LayerId = `${layerId}-admin1-${admin1.id}`;
       const admin1SourceId = `${sourceId}-admin1-${admin1.id}`;
+      const admin1CenterSourceID = `${sourceId}-admin1-${admin1.id}-center-source`;
+
       const admin1BorderLayerId = `${admin1LayerId}-border`;
       const admin1TextLayerId = `${admin1LayerId}-text`;
       mapRef.current?.getLayer(admin1BorderLayerId) &&
@@ -511,6 +537,9 @@ const MapComponent: React.FC<MapProps> = ({
         mapRef.current?.removeLayer(admin1LayerId);
       mapRef.current?.getSource(admin1SourceId) &&
         mapRef.current?.removeSource(admin1SourceId);
+
+      mapRef.current?.getSource(admin1CenterSourceID) &&
+        mapRef.current?.removeSource(admin1CenterSourceID);
     });
 
     console.log(mapRef.current?.getStyle().layers);

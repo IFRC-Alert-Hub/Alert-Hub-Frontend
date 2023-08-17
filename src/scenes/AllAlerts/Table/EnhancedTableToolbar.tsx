@@ -100,17 +100,20 @@ const EnhancedTableToolbar = (props: EnhancedTableToolbarProps) => {
         variant="subtitle1"
         component="div"
       >
-        {numSelected} selected
+        {numSelected > 0 && `${numSelected} selected`}
       </Typography>
+
       <Chip
         label="Select multiple alerts to download"
         icon={<SwipeRightIcon />}
       />
       <div>
         <Tooltip title="Download">
-          <IconButton disabled={numSelected === 0} onClick={handleMenuOpen}>
-            <FileDownloadIcon />
-          </IconButton>
+          <span>
+            <IconButton disabled={numSelected === 0} onClick={handleMenuOpen}>
+              <FileDownloadIcon />
+            </IconButton>
+          </span>
         </Tooltip>
         <Menu
           anchorEl={anchorEl}

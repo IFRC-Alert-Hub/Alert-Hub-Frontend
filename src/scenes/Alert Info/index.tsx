@@ -7,20 +7,24 @@ import { InfoSetsHorizontalTabs } from "./InfoSetsHorizontalTabs";
 import { useParams } from "react-router-dom";
 import { GetAlertInfoByAlertID } from "../../Alert-Manager-API/AlertInfo";
 import { Alert } from "../../Alert-Manager-API/types";
+import Progress from "../../components/Layout/Progress";
+import { useNavigate } from "react-router-dom"; // Import useHistory
 
 const AlertInfo = () => {
   const { id } = useParams<{ id: string }>();
   const { data, loading, error, refetch } = GetAlertInfoByAlertID();
+  const navigate = useNavigate();
+
   useMemo(() => {
     refetch(Number(id));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
 
   useEffect(() => {
-    if (!loading && !error) {
-      console.log(data);
+    if (!loading && error) {
+      navigate("/404");
     }
-  }, [data, loading, error]);
+  }, [data, loading, error, navigate]);
 
   interface KeyTitleMap {
     [key: string]: string;
@@ -61,31 +65,32 @@ const AlertInfo = () => {
   ];
   return (
     <>
-      {error && <h1>Error</h1>}
-      {data && !loading && !error && (
-        <>
-          {" "}
-          <Box padding={"40px"} sx={{ textAlign: "center" }}>
-            <Typography
-              variant={"h1"}
-              fontWeight={"600"}
-              sx={{ paddingBottom: "5px" }}
-            >
-              {data.info!.length > 0 && data.info![0].event}
-            </Typography>
-            <Typography variant={"h4"}>
-              <LocationOnIcon />
-              Country: {data.country}
-            </Typography>
-            <Typography variant={"h4"}>Region: {data.region}</Typography>
-            <Typography variant={"h4"}>
-              Admin1s:{" "}
-              {(data.admin1 as [string]).length > 0
-                ? ((data.admin1 as [string]).join(", ") as any)
-                : ""}
-            </Typography>
-          </Box>
-          <Container maxWidth="lg">
+      <Container maxWidth="lg">
+        {error && <h1>Error</h1>}
+        {loading && <Progress></Progress>}
+        {data && !loading && !error && (
+          <>
+            {" "}
+            <Box padding={"40px"} sx={{ textAlign: "center" }}>
+              <Typography
+                variant={"h1"}
+                fontWeight={"600"}
+                sx={{ paddingBottom: "5px" }}
+              >
+                {data.info!.length > 0 && data.info![0].event}
+              </Typography>
+              <Typography variant={"h4"}>
+                <LocationOnIcon />
+                Country: {data.country}
+              </Typography>
+              <Typography variant={"h4"}>Region: {data.region}</Typography>
+              <Typography variant={"h4"}>
+                Admin1s:{" "}
+                {(data.admin1 as [string]).length > 0
+                  ? ((data.admin1 as [string]).join(", ") as any)
+                  : ""}
+              </Typography>
+            </Box>
             <AlertInfoTitleHeader title="Alert" />
             {keyOrder.map((key) => {
               const title = keyTitleMap[key] || key;
@@ -109,14 +114,13 @@ const AlertInfo = () => {
                 />
               );
             })}
-
             <Box sx={{ paddingTop: "20px" }}>
               {" "}
               <InfoSetsHorizontalTabs infoSets={data.info!} />
             </Box>
-          </Container>
-        </>
-      )}
+          </>
+        )}
+      </Container>
     </>
   );
 };

@@ -173,6 +173,7 @@ const EnhancedTableHead = (props: EnhancedTableProps) => {
             <>
               {" "}
               <DropdownFilter
+                key={headCell.id}
                 TableCellTitle={headCell.title || ""}
                 setSelected={setSelected}
                 menuItems={headCell.menuItems || []}

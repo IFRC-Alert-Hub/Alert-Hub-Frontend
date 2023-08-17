@@ -1,8 +1,10 @@
 import {
+  Alert,
   Box,
   Checkbox,
   Collapse,
   IconButton,
+  Snackbar,
   TableCell,
   TableRow,
   Typography,
@@ -30,13 +32,21 @@ const SingleRow = (props: SingleRowProps) => {
   const [open, setOpen] = useState(false);
   const [, setCopied] = useState(false);
   const baseUrl = window.location.origin;
+  const [copyAlertOpen, setCopyAlertOpen] = useState(false); // State for controlling alert visibility
+
   const handleCopy = () => {
     const linkText = `${baseUrl}/alerts/${row.id}`;
     navigator.clipboard.writeText(linkText).then(() => {
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
     });
+    setCopyAlertOpen(true);
   };
+
+  const handleCloseAlert = () => {
+    setCopyAlertOpen(false);
+  };
+
   const { handleClick, row, isItemSelected, labelId } = props;
   return (
     <>
@@ -213,6 +223,34 @@ const SingleRow = (props: SingleRowProps) => {
           </Collapse>
         </TableCell>
       </TableRow>
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        {" "}
+        <Snackbar
+          onClose={handleCloseAlert}
+          open={copyAlertOpen}
+          autoHideDuration={3000}
+        >
+          <Alert
+            onClose={handleCloseAlert}
+            severity="success"
+            sx={{
+              backgroundColor: "#6B8E23",
+              color: "white",
+              "& .MuiAlert-icon": {
+                color: "white",
+              },
+            }}
+          >
+            Copied link!
+          </Alert>
+        </Snackbar>
+      </Box>
     </>
   );
 };

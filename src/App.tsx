@@ -29,7 +29,7 @@ import Level4 from "./Alert-Manager-API/Level4";
 import RegionTest from "./Alert-Manager-API/Region";
 import { AlertInfoTest } from "./Alert-Manager-API/AlertInfo";
 import AllAlertsComponent from "./Alert-Manager-API/AllAlerts";
-import { SourceFeeds } from "./components/SourceFeedsTableComponent/SourceFeedsTableComponent";
+import SourceFeeds from "./scenes/SourceFeeds";
 
 function App() {
   // useEffect(() => {

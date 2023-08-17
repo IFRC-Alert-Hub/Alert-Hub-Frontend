@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Container } from "@mui/material";
-import { useLocation } from "react-router-dom";
+// import { useLocation } from "react-router-dom";
 import { RowsData } from "./Table/Data";
 import FilterableTableComponent from "./Table/TableComponent";
 import TitleHeader from "../../components/Layout/TitleHeader";
@@ -15,7 +15,7 @@ interface AllAlertsProps {
 }
 
 const AllAlerts: React.FC<AllAlertsProps> = ({ selectedFilter, filterKey }) => {
-  const location = useLocation();
+  // const location = useLocation();
   const { formatMessage } = useIntl();
 
   const { data, loading, error } = GetAllAlerts();
