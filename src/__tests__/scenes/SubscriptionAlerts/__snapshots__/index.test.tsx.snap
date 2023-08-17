@@ -1,0 +1,30 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`SubscirptionAlerts Snapshot should match DOM snapshot 1`] = `
+<div
+  className="MuiContainer-root MuiContainer-maxWidthLg css-1oqqzyl-MuiContainer-root"
+>
+  <div
+    className="MuiBox-root css-13nh7ky"
+  >
+    <h1
+      className="MuiTypography-root MuiTypography-h1 css-1coon7i-MuiTypography-root"
+    />
+  </div>
+  <div
+    className="MuiBox-root css-k132eu"
+  >
+    <h3
+      className="MuiTypography-root MuiTypography-h3 css-15t17q5-MuiTypography-root"
+    >
+      undefined (undefined)
+    </h3>
+  </div>
+  <h6
+    className="MuiTypography-root MuiTypography-h6 css-1x39w2t-MuiTypography-root"
+  >
+     
+    No alerts happen in subscription admin1s now.
+  </h6>
+</div>
+`;
