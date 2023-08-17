@@ -247,7 +247,6 @@ const Register = () => {
                     setIsCaptchaVerified(true);
                   } else {
                     setIsCaptchaVerified(false);
-                    turnstile.reset();
                   }
                 });
               }}
