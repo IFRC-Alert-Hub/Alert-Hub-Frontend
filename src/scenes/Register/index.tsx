@@ -14,8 +14,12 @@ import AuthComponent from "../../components/Authentication/AuthComponent";
 import PasswordComponent from "../../components/Authentication/PasswordComponent";
 import { useState, useEffect } from "react";
 import { useIntl } from "react-intl";
+import Turnstile, { useTurnstile } from "react-turnstile";
 
 const Register = () => {
+  const turnstile = useTurnstile();
+  const [isCaptchaVerified, setIsCaptchaVerified] = useState(false);
+
   const [isSendClicked, setIsSendClicked] = useState(false);
   const [isSendEnabled, setIsSendEnabled] = useState<boolean>(false);
   const [isEmailSent, setIsEmailSent] = useState(false);
@@ -230,6 +234,25 @@ const Register = () => {
 
             <PasswordComponent formik={formik} />
 
+            <Turnstile
+              sitekey="0x4AAAAAAAI5NJD8YwM05CDJ"
+              style={{ fontFamily: "Poppins !important" }}
+              theme="light"
+              onVerify={(token) => {
+                fetch("/login", {
+                  method: "POST",
+                  body: JSON.stringify({ token }),
+                }).then((response) => {
+                  if (response.ok) {
+                    setIsCaptchaVerified(true);
+                  } else {
+                    setIsCaptchaVerified(false);
+                    turnstile.reset();
+                  }
+                });
+              }}
+            />
+
             <Button
               type="submit"
               fullWidth
@@ -245,7 +268,7 @@ const Register = () => {
                 },
                 fontSize: "14px",
               }}
-              disabled={!formik.isValid || !formik.dirty}
+              disabled={!formik.isValid || !formik.dirty || !isCaptchaVerified}
             >
               Register
             </Button>
