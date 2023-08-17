@@ -71,7 +71,7 @@ const MapComponentWithFilter: React.FC<MapComponentWithFilterProps> = ({
     event: React.ChangeEvent<{}>,
     value: string | null
   ) => {
-    console.log(value);
+    // console.log(value);
     setSelectedUrgency(value || "");
     // setFilters({
     //   urgency: selectedUrgency,

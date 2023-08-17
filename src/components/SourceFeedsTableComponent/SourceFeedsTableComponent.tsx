@@ -231,9 +231,7 @@ export const SourceFeedsComponent: React.FC<SourceFeedsComponentProps> = ({
                   <TableCell align="left" sx={{ textTransform: "capitalize" }}>
                     {row.sourceName}
                   </TableCell>
-                  <TableCell align="left" sx={{ textTransform: "uppercase" }}>
-                    {row.language}
-                  </TableCell>
+                  <TableCell align="left">{row.language}</TableCell>
                   <TableCell align="left">
                     <Link
                       to={row.capAlertFeed}

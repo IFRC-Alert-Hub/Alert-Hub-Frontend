@@ -44,8 +44,6 @@ export const useLevel1Data = () => {
   });
 
   useEffect(() => {
-    console.log("FILTERS 1: ", filters);
-
     const fetchData = async () => {
       try {
         const response: ResponseType = await axios.get(
@@ -134,12 +132,10 @@ export const useLevel1Data = () => {
         });
 
         updatedRegions = updatedRegions.filter((region) => {
-          console.log(region);
           return region.countries.length > 0;
         });
 
         setData(updatedRegions);
-        console.log("UPDATED REGIONS: ", updatedRegions);
         setLoading(false);
       } catch (error: any) {
         setError(error.message);
