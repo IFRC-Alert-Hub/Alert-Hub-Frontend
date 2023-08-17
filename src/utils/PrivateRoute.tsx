@@ -32,7 +32,6 @@ const PrivateRoutes = () => {
   useEffect(() => {
     verify()
       .then((verifyData) => {
-        console.log(verifyData.data.verifyToken);
         if (verifyData.data.verifyToken) {
           setIsAuthenticated(true);
           setIsLoading(false);
