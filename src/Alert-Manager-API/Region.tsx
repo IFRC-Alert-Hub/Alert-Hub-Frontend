@@ -46,12 +46,10 @@ export const GetRegionData = () => {
   const [region_ID, setRegion_ID] = useState<number | null>(null);
 
   const refetch = async (region_ID: number) => {
-    console.log(region_ID);
     setRegion_ID(region_ID);
   };
 
   useEffect(() => {
-    console.log("FILTERS 1: ", filters);
     setLoading(true);
     setError(null);
     if (region_ID !== null) {
@@ -142,11 +140,9 @@ export const GetRegionData = () => {
             });
           }
           updatedRegions = updatedRegions.filter((region: any) => {
-            console.log(region);
             return region.countries.length > 0;
           });
           setData(updatedRegions);
-          console.log("UPDATED REGIONS: ", updatedRegions);
           setLoading(false);
         } catch (error: any) {
           setError(error.message);
@@ -177,12 +173,6 @@ const RegionTest: React.FC = () => {
     refetch(Number(id));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
-
-  useEffect(() => {
-    if (!loading && !error) {
-      console.log("afafafa:", data);
-    }
-  }, [data, loading, error]);
 
   const handleUrgencyChange = (
     event: React.ChangeEvent<{}>,

@@ -25,7 +25,6 @@ export const GetAllAlerts = () => {
         }
 
         setData(response.data.alerts as any);
-        console.log("Alerts: ", response.data.alerts);
         setLoading(false);
       } catch (error: any) {
         setError(error.message);

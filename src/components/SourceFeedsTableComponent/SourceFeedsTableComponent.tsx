@@ -136,7 +136,7 @@ export const SourceFeedsComponent: React.FC<SourceFeedsComponentProps> = ({
   rows,
 }) => {
   const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(5);
+  const [rowsPerPage, setRowsPerPage] = React.useState(10);
 
   const emptyRows =
     page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
@@ -165,7 +165,7 @@ export const SourceFeedsComponent: React.FC<SourceFeedsComponentProps> = ({
                 fontSize: "0.875rem",
                 fontWeight: "600",
               }}
-              align="center"
+              align="left"
             >
               Logo
             </TableCell>
@@ -174,7 +174,7 @@ export const SourceFeedsComponent: React.FC<SourceFeedsComponentProps> = ({
                 fontSize: "0.875rem",
                 fontWeight: "600",
               }}
-              align="center"
+              align="left"
             >
               Source Name
             </TableCell>
@@ -183,7 +183,7 @@ export const SourceFeedsComponent: React.FC<SourceFeedsComponentProps> = ({
                 fontSize: "0.875rem",
                 fontWeight: "600",
               }}
-              align="center"
+              align="left"
             >
               Language
             </TableCell>
@@ -193,7 +193,7 @@ export const SourceFeedsComponent: React.FC<SourceFeedsComponentProps> = ({
                 fontSize: "0.875rem",
                 fontWeight: "600",
               }}
-              align="center"
+              align="left"
             >
               CAP Alert Feed
             </TableCell>
@@ -216,28 +216,25 @@ export const SourceFeedsComponent: React.FC<SourceFeedsComponentProps> = ({
                   )
                 : rows
               ).map((row: ModifiedSourceData, index: number) => (
-                <TableRow key={row.sourceId}>
-                  <TableCell align="center">
+                <TableRow key={row.sourceId} sx={{ height: "100px" }}>
+                  <TableCell>
                     {row.logo !== null ? (
                       <img
                         src={row.logo}
                         alt="Source"
-                        style={{ width: "200px", height: "auto" }}
+                        style={{ width: "120px", height: "auto" }}
                       />
                     ) : (
                       `No Logo Available`
                     )}
                   </TableCell>
-                  <TableCell
-                    align="center"
-                    sx={{ textTransform: "capitalize" }}
-                  >
+                  <TableCell align="left" sx={{ textTransform: "capitalize" }}>
                     {row.sourceName}
                   </TableCell>
-                  <TableCell align="center" sx={{ textTransform: "uppercase" }}>
+                  <TableCell align="left" sx={{ textTransform: "uppercase" }}>
                     {row.language}
                   </TableCell>
-                  <TableCell align="center">
+                  <TableCell align="left">
                     <Link
                       to={row.capAlertFeed}
                       target="_blank"
@@ -249,7 +246,7 @@ export const SourceFeedsComponent: React.FC<SourceFeedsComponentProps> = ({
                 </TableRow>
               ))}
               {emptyRows > 0 && (
-                <TableRow style={{ height: 53 * emptyRows }}>
+                <TableRow style={{ height: 100 * emptyRows }}>
                   <TableCell colSpan={6} />
                 </TableRow>
               )}
@@ -260,7 +257,6 @@ export const SourceFeedsComponent: React.FC<SourceFeedsComponentProps> = ({
           <TableRow>
             <TablePagination
               rowsPerPageOptions={[5, 10, 25, { label: "All", value: -1 }]}
-              colSpan={3}
               count={rows.length}
               rowsPerPage={rowsPerPage}
               page={page}
