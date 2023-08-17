@@ -151,7 +151,7 @@ const MapComponent: React.FC<MapProps> = ({
                 type: "line",
                 source: admin1SourceID,
                 paint: {
-                  "line-color": "black",
+                  "line-color": "#404040",
                   "line-width": 1.3,
                 },
               });
@@ -160,7 +160,7 @@ const MapComponent: React.FC<MapProps> = ({
                 type: "fill",
                 source: admin1SourceID,
                 paint: {
-                  "fill-color": "#000000",
+                  "fill-color": ExtremeThreatColour,
                   "fill-opacity": admin1.id < 0 ? 0.2 : 0.8,
                 },
               });
@@ -198,7 +198,7 @@ const MapComponent: React.FC<MapProps> = ({
                   "text-size": 8,
                 },
                 paint: {
-                  "text-color": "#ffffff",
+                  "text-color": "#000000",
                 },
               });
 

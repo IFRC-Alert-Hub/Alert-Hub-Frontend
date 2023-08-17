@@ -7,12 +7,17 @@ import { useLevel1Data } from "../../Alert-Manager-API/Level1";
 import { useState } from "react";
 import TitleHeader from "../../components/Layout/TitleHeader";
 import AllAlerts from "../AllAlerts";
+import { GetAllAlerts } from "../../Alert-Manager-API/AllAlerts";
 
 const Home = () => {
   const { formatMessage } = useIntl();
   const { data, loading, error, setFilters } = useLevel1Data();
   const [value, setValue] = useState("map-tab");
-
+  const {
+    data: alertsData,
+    loading: loadingAlerts,
+    error: ErrorAlerts,
+  } = GetAllAlerts();
   const handleChange = (event: React.SyntheticEvent, newValue: string) => {
     setValue(newValue);
   };
@@ -45,7 +50,11 @@ const Home = () => {
       <HomeCards />
 
       <TitleHeader
-        title={`${formatMessage({ id: "ALL_ONGOING_ALERTS" })}`}
+        title={`${formatMessage({ id: "ALL_ONGOING_ALERTS" })} (${
+          !loadingAlerts && !ErrorAlerts && alertsData.length > 0
+            ? `${alertsData.length}`
+            : "0"
+        })`}
         rightTitle={`${formatMessage({ id: "VIEW_ALL_SOURCES" })}`}
         rightLinkURL={"/feeds"}
       />

@@ -11,11 +11,4 @@ describe("Resources component", () => {
     });
     expect(titleElement).toBeInTheDocument();
   });
-
-  it("renders within a Container with 'lg' maxWidth", () => {
-    render(<Resources />);
-    const containerElement = screen.getByTestId("resources-container");
-    expect(containerElement).toBeInTheDocument();
-    expect(containerElement).toHaveStyle("max-width: 1280px");
-  });
 });

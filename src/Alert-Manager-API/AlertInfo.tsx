@@ -17,9 +17,6 @@ export const GetAlertInfoByAlertID = () => {
   const currentAlertID = useRef<number | null>(null);
 
   const refetch = async (alertID: number | null) => {
-    console.log("currentAlertID : ", currentAlertID.current);
-    console.log("ALERT ID : ", alertID);
-
     if (currentAlertID.current === null || currentAlertID.current !== alertID) {
       setLoading(true);
       setError(null);
@@ -68,7 +65,6 @@ export const GetAlertInfoByAlertID = () => {
         setLoading(false);
         currentAlertID.current = alertID;
       } catch (error: any) {
-        console.log(error.message);
         setError(error.message);
         setLoading(false);
       }
@@ -86,12 +82,6 @@ export const AlertInfoTest = () => {
     refetch(Number(id));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
-
-  useEffect(() => {
-    if (!loading && !error) {
-      console.log(data);
-    }
-  }, [data, loading, error]);
 
   return (
     <>
