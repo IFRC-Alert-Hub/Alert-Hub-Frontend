@@ -19,46 +19,64 @@ Before you begin, ensure you have met the following requirements:
 - Node.js [v19.6.0] or higher is installed.
 - Yarn [1.22.19] or npm [9.4.0] is installed (depending on your preferred package manager).
 
+## Technologies
+
+Technology Stack The client application is developed using React 16.8 and TypeScript, utilising the create-react-app framework as its foundation.
+
+- Routing: [react-router](https://github.com/remix-run/react-router)
+- HTTP client: [axios](https://github.com/axios/axios)
+- GraphQL client: [apollo-client](https://github.com/apollographql/apollo-client)
+- Form validation: [yup](https://github.com/jquense/yup)
+- Form Builder: [formik](https://github.com/jaredpalmer/formik)
+- Linting and formatting: [ESLint](https://github.com/eslint/eslint) and [Prettier](https://github.com/prettier/prettier)
+- Styling: [material-ui](https://github.com/mui/material-ui)
+- Testing: [Jest](https://github.com/facebook/jest), [React Testing Library](https://github.com/testing-library/react-testing-library) and [axios-mock-adapter](https://github.com/ctimmerm/axios-mock-adapter)
+
+The usage of TypeScript enhances development by providing type safety, static analysis, and comprehensive code completion.
+Both the client and backend components share the same type definitions to ensure consistency across the entire system.
+
 ## Dependencies
 
-|           Package           | Version |
+|           Package           | Version  |
 | :-------------------------: | :------: |
-|       @apollo/client       |  3.7.17  |
-|       @emotion/react       | 11.11.0 |
-|       @emotion/styled       | 11.11.0 |
-|     @mui/icons-material     | 5.11.16 |
+|       @apollo/client        |  3.7.17  |
+|       @emotion/react        | 11.11.0  |
+|       @emotion/styled       | 11.11.0  |
+|     @mui/icons-material     | 5.11.16  |
 |        @mui/material        |  5.13.3  |
-|      @mui/x-data-grid      |  6.6.0  |
-|     @mui/x-date-pickers     |  6.9.1  |
+|      @mui/x-data-grid       |  6.6.0   |
+|     @mui/x-date-pickers     |  6.9.1   |
 |  @testing-library/jest-dom  |  5.16.5  |
-|   @testing-library/react   |  13.4.0  |
+|   @testing-library/react    |  13.4.0  |
 | @testing-library/user-event |  13.5.0  |
-|         @turf/turf         |  6.5.0  |
+|         @turf/turf          |  6.5.0   |
 |         @types/jest         |  27.5.2  |
-|      @types/mapbox-gl      |  2.7.11  |
+|      @types/mapbox-gl       |  2.7.11  |
 |         @types/node         | 16.18.34 |
-|        @types/react        |  18.2.9  |
-|      @types/react-dom      |  18.2.4  |
-|     @types/react-slick     | 0.23.10 |
-|     @types/react-table     |  7.7.14  |
-|      apollo-link-http      |  1.5.17  |
+|        @types/react         |  18.2.9  |
+|      @types/react-dom       |  18.2.4  |
+|     @types/react-slick      | 0.23.10  |
+|     @types/react-table      |  7.7.14  |
+|      apollo-link-http       |  1.5.17  |
 |            dayjs            |  1.11.9  |
-|           formik           |  2.4.2  |
-|    http-proxy-middleware    |  2.0.6  |
+|           formik            |  2.4.2   |
+|    http-proxy-middleware    |  2.0.6   |
 |          mapbox-gl          |  2.15.0  |
 |            react            |  18.2.0  |
 |          react-dom          |  18.2.0  |
-|         react-intl         |  6.4.4  |
-|      react-router-dom      |  6.12.1  |
-|        react-scripts        |  5.0.1  |
+|         react-intl          |  6.4.4   |
+|      react-router-dom       |  6.12.1  |
+|        react-scripts        |  5.0.1   |
 |         react-slick         |  0.29.0  |
-|       slick-carousel       |  1.8.1  |
-|         typescript         |  4.9.5  |
-|      universal-cookie      |  4.0.4  |
-|         web-vitals         |  2.1.4  |
-|             yup             |  1.2.0  |
+|       slick-carousel        |  1.8.1   |
+|         typescript          |  4.9.5   |
+|      universal-cookie       |  4.0.4   |
+|         web-vitals          |  2.1.4   |
+|             yup             |  1.2.0   |
 
 ## Contact
+
+This component is owned by [piraveenankirupakaran](https://github.com/piraveenankirupakaran). Please get in touch if you have any questions. For change requests and bug reports, please open a new issue.
 
 If you have any questions or concerns, please reach out to:
 
@@ -92,6 +110,38 @@ npm start
 ```
 
 Your application should now be running on http://localhost:3000.
+
+## Testing
+
+Both client and server are tested using Jest.
+
+```shell
+npm run test
+```
+
+Jest provides a couple of advanced features, for instance you can generate a coverage report with `npm run test -- --coverage` or run tests in an interactive loop via `npm run test -- --watch`.
+
+## Build and deployment
+
+### Local builds
+
+To build the software locally, run
+
+```shell
+# build client
+cd client
+npm run build
+```
+
+### Building and running the docker images
+
+Note that the actual deployment leverages Docker. A `Dockerfile` and a `docker-compose.yml`is provided for the client and the typical development workflow uses Azure to build and release the app.
+
+```shell
+# building the application locally
+docker-compose up
+
+```
 
 # Azure setup
 
