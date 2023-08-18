@@ -65,7 +65,7 @@ export const useLevel4Data = () => {
           }
           if (response.data.areas && response.data.areas.length > 0) {
             let polygonIndex = 0;
-            console.log("AREA POLYGONS: ", response.data.areas);
+            // console.log("AREA POLYGONS: ", response.data.areas);
             response.data.areas = response.data.areas.map((area: any) => {
               if (area.polygons.length !== 0) {
                 area.polygons = area.polygons.map(

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Alert, Container, InputAdornment } from "@mui/material";
 import * as React from "react";
 import { useFormik } from "formik";
@@ -14,7 +15,7 @@ import AuthComponent from "../../components/Authentication/AuthComponent";
 import PasswordComponent from "../../components/Authentication/PasswordComponent";
 import { useState, useEffect } from "react";
 import { useIntl } from "react-intl";
-import Turnstile from "react-turnstile";
+import { Turnstile } from "@marsidev/react-turnstile";
 
 const Register = () => {
   const [isCaptchaVerified, setIsCaptchaVerified] = useState(false);
@@ -233,24 +234,26 @@ const Register = () => {
 
             <PasswordComponent formik={formik} />
 
-            <Turnstile
-              sitekey="0x4AAAAAAAI5NJD8YwM05CDJ"
-              style={{ fontFamily: "Poppins !important" }}
-              theme="light"
-              onVerify={(token) => {
-                fetch("/login", {
-                  method: "POST",
-                  body: JSON.stringify({ token }),
-                }).then((response) => {
-                  if (response.ok) {
-                    setIsCaptchaVerified(true);
-                  } else {
-                    setIsCaptchaVerified(false);
-                  }
-                });
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "center",
+                paddingBottom: "20px",
               }}
-            />
-
+            >
+              <Turnstile
+                siteKey="0x4AAAAAAAI8p2QdAzbuIEGw"
+                style={{ fontFamily: "Poppins !important" }}
+                onSuccess={() => setIsCaptchaVerified(true)}
+                onError={() => {
+                  alert("Not Available");
+                }}
+                options={{
+                  action: "submit-form",
+                  theme: "light",
+                }}
+              />
+            </Box>
             <Button
               type="submit"
               fullWidth
