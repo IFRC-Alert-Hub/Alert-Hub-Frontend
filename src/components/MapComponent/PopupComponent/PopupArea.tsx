@@ -2,20 +2,16 @@ import {
   Alert,
   Box,
   Button,
-  Card,
-  Divider,
   FormControl,
-  IconButton,
   MenuItem,
   Select,
   Typography,
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
-import { Map as MapboxMap, LngLatBoundsLike } from "mapbox-gl";
+import { Map as MapboxMap, LngLatBoundsLike, LngLatLike } from "mapbox-gl";
 import { AlertInfoArea } from "../../../Alert-Manager-API/types";
 import turfCircle from "@turf/circle";
 import turfBbox from "@turf/bbox";
-import CloseIcon from "@mui/icons-material/Close";
 // const coordinatesArray = [
 //   [
 //     [46.402337365920744, -17.803245312080932],
@@ -64,11 +60,16 @@ interface PopupAreaProps {
     error: string | null;
     refetch: any;
   };
+  currentCountryBoundingBox: React.MutableRefObject<{
+    countryCentroid: LngLatLike;
+    zoom: number;
+  } | null>;
 }
 export const PopupArea = ({
   mapRef,
   infoID,
   infoDataHandler,
+  currentCountryBoundingBox,
 }: PopupAreaProps) => {
   const { data, loading, error, refetch } = infoDataHandler;
 
@@ -281,6 +282,16 @@ export const PopupArea = ({
                       value: -1,
                     },
                   });
+                  if (currentCountryBoundingBox.current !== null) {
+                    mapRef.current!.flyTo({
+                      center: currentCountryBoundingBox.current
+                        ?.countryCentroid as unknown as LngLatLike,
+                      zoom:
+                        currentCountryBoundingBox.current!.zoom > 0
+                          ? currentCountryBoundingBox.current!.zoom * 0.85
+                          : mapRef.current!.getZoom(),
+                    });
+                  }
                 }}
               >
                 Remove Polygon

@@ -17,7 +17,7 @@ import {
   Skeleton,
 } from "@mui/material";
 import { a11yProps } from "./helper";
-import { Map as MapboxMap } from "mapbox-gl";
+import { LngLatLike, Map as MapboxMap } from "mapbox-gl";
 interface PopupComponentProps {
   handleClose?: () => void;
   loading?: boolean;
@@ -31,6 +31,10 @@ interface PopupComponentProps {
     error: string | null;
     refetch: any;
   };
+  currentCountryBoundingBox: React.MutableRefObject<{
+    countryCentroid: LngLatLike;
+    zoom: number;
+  } | null>;
 }
 
 export const PopupComponent: React.FC<PopupComponentProps> = ({
@@ -41,6 +45,7 @@ export const PopupComponent: React.FC<PopupComponentProps> = ({
   countryPolygonNameClicked,
   mapRef,
   infoDataHandler,
+  currentCountryBoundingBox,
 }) => {
   React.useEffect(() => {
     setPage(1);
@@ -449,6 +454,7 @@ export const PopupComponent: React.FC<PopupComponentProps> = ({
                     itemsPerPage={itemsPerPage}
                     mapRef={mapRef}
                     infoDataHandler={infoDataHandler}
+                    currentCountryBoundingBox={currentCountryBoundingBox}
                   />
                 ))}
             </Box>

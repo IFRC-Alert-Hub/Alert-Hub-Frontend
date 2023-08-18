@@ -80,6 +80,7 @@ const MapComponent: React.FC<MapProps> = ({
   const [countryIDs, setCountryIDs] = useState<[string, string] | null>(null);
 
   const [admin1Clicked, setAdmin1Clicked] = useState<boolean>(false);
+  const admin1LayerIDClicked = useRef<string | null>(null);
   const [countryRegionDataLoading, setCountryRegionDataLoading] =
     useState<boolean>(true);
 
@@ -195,7 +196,7 @@ const MapComponent: React.FC<MapProps> = ({
                 layout: {
                   "text-field": `${admin1.name}`,
                   "text-font": ["Open Sans Bold"],
-                  "text-size": 8,
+                  "text-size": 10,
                 },
                 paint: {
                   "text-color": "#000000",
@@ -206,9 +207,17 @@ const MapComponent: React.FC<MapProps> = ({
                 "click",
                 admin1LayerID,
                 (e: mapboxgl.MapMouseEvent & mapboxgl.EventData) => {
+                  if (admin1LayerIDClicked.current !== null) {
+                    mapRef.current!.setPaintProperty(
+                      admin1LayerIDClicked.current,
+                      "fill-color",
+                      ExtremeThreatColour
+                    );
+                  }
                   const clickedFeatures = mapRef.current?.queryRenderedFeatures(
                     e.point
                   );
+                  let layersIDsClicked = new Set();
                   let layersClicked = new Set();
 
                   clickedFeatures?.forEach((feature, index) => {
@@ -218,18 +227,24 @@ const MapComponent: React.FC<MapProps> = ({
                       feature.layer.id.includes(`${layerId}-admin1-`) &&
                       !feature.layer.id.includes("-text")
                     ) {
-                      layersClicked.add(
+                      layersIDsClicked.add(
                         feature.layer.id.slice(`${layerId}-admin1-`.length)
                       );
+                      layersClicked.add(feature.layer.id);
                     }
                   });
 
+                  const layerIDsClickedArray = Array.from(layersIDsClicked);
                   const layersClickedArray = Array.from(layersClicked);
-                  const indexToRemove = layersClickedArray.indexOf(Country_ID);
+                  const indexToRemove =
+                    layerIDsClickedArray.indexOf(Country_ID);
+
                   if (indexToRemove !== -1) {
+                    layerIDsClickedArray.splice(indexToRemove, 1);
                     layersClickedArray.splice(indexToRemove, 1);
                   }
-                  const firstValue = Number(layersClickedArray[0]);
+                  const firstValue = Number(layerIDsClickedArray[0]);
+
                   // console.log(firstValue);
                   if (latestRefetchAlertData.current !== (firstValue as any)) {
                     latestRefetchAlertData.current = firstValue as any;
@@ -240,8 +255,15 @@ const MapComponent: React.FC<MapProps> = ({
                     });
                     refetchAlertData(firstValue);
                   }
-
                   setAdmin1Clicked(true);
+
+                  mapRef.current!.setPaintProperty(
+                    layersClickedArray[0] as unknown as string,
+                    "fill-color",
+                    "orange"
+                  );
+                  admin1LayerIDClicked.current =
+                    layersClickedArray[0] as unknown as string;
                   mapContainerRef.current!.style.width = "35%";
                   mapRef.current!.resize();
                   if (currentCountryBoundingBox.current !== null) {
@@ -250,7 +272,7 @@ const MapComponent: React.FC<MapProps> = ({
                         ?.countryCentroid as unknown as LngLatLike,
                       zoom:
                         currentCountryBoundingBox.current!.zoom > 0
-                          ? currentCountryBoundingBox.current!.zoom * 0.75
+                          ? currentCountryBoundingBox.current!.zoom * 0.85
                           : mapRef.current!.getZoom(),
                     });
                   }
@@ -289,6 +311,13 @@ const MapComponent: React.FC<MapProps> = ({
     if (admin1Clicked) {
       handleClose();
       setAdmin1Clicked(false);
+      if (admin1LayerIDClicked.current !== null) {
+        mapRef.current!.setPaintProperty(
+          admin1LayerIDClicked.current,
+          "fill-color",
+          ExtremeThreatColour
+        );
+      }
     }
 
     if (!mapRef.current) {
@@ -401,8 +430,6 @@ const MapComponent: React.FC<MapProps> = ({
                 },
               });
 
-              //console.log(mapRef.current?.getStyle().layers);
-
               const [minX, minY, maxX, maxY] = polygonBoundingBox;
               const mapBoundingBox = mapRef.current!.getBounds();
               mapRef.current?.setCenter([0, 0]);
@@ -425,7 +452,7 @@ const MapComponent: React.FC<MapProps> = ({
               mapRef.current!.flyTo({
                 center: country.centroid as unknown as LngLatLike,
                 zoom:
-                  zoomLevel > 0 ? zoomLevel * 0.75 : mapRef.current!.getZoom(),
+                  zoomLevel > 0 ? zoomLevel * 0.85 : mapRef.current!.getZoom(),
               });
 
               mapRef.current?.setLayoutProperty(layerId, "visibility", "none");
@@ -553,6 +580,15 @@ const MapComponent: React.FC<MapProps> = ({
       mapRef.current?.removeLayer(layerID);
       mapRef.current?.removeSource(sourceID);
     }
+
+    if (admin1LayerIDClicked.current !== null) {
+      mapRef.current!.setPaintProperty(
+        admin1LayerIDClicked.current,
+        "fill-color",
+        ExtremeThreatColour
+      );
+    }
+    admin1LayerIDClicked.current = null;
     setAdmin1Clicked(false);
     mapContainerRef.current!.style.width = "100%";
     const mapContainer = document.getElementById("mapContainer");
@@ -570,7 +606,7 @@ const MapComponent: React.FC<MapProps> = ({
             .countryCentroid as unknown as LngLatLike,
           zoom:
             currentCountryBoundingBox!.current!.zoom > 0
-              ? currentCountryBoundingBox!.current!.zoom * 0.75
+              ? currentCountryBoundingBox!.current!.zoom * 0.85
               : mapRef.current!.getZoom(),
         });
       }
@@ -707,6 +743,7 @@ const MapComponent: React.FC<MapProps> = ({
                       error: infoError,
                       refetch: refectInfoData,
                     }}
+                    currentCountryBoundingBox={currentCountryBoundingBox}
                   />
                 </Box>
               )}
