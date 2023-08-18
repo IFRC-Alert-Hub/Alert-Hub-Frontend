@@ -7,13 +7,15 @@ import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import { Button, Menu, MenuItem, TablePagination } from "@mui/material";
 import { useState } from "react";
-import { SubscriptionAlertsType } from "../../../API/TYPES";
+import { SubscriptionAlertsType } from "../../API/TYPES";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import { Link } from "react-router-dom";
 
 type PropsType = {
   alertsData: SubscriptionAlertsType[];
 };
+
+const ITEM_HEIGHT = 48;
 
 const AlertsTable = ({ alertsData }: PropsType) => {
   const [page, setPage] = useState(0);
@@ -26,7 +28,6 @@ const AlertsTable = ({ alertsData }: PropsType) => {
   const uniqueLocations = alertsData.reduce((locations: string[], item) => {
     item.admin1s.forEach((admin1) => {
       if (!locations.includes(admin1)) {
-        console.log(admin1);
         locations.push(admin1);
       }
     });
@@ -102,6 +103,11 @@ const AlertsTable = ({ alertsData }: PropsType) => {
                     onClose={handleClose}
                     MenuListProps={{
                       "aria-labelledby": "basic-button",
+                    }}
+                    PaperProps={{
+                      style: {
+                        maxHeight: ITEM_HEIGHT * 4.5,
+                      },
                     }}
                   >
                     {locationOptions.map((option) => (

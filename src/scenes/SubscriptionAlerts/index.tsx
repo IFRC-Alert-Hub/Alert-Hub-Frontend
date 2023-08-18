@@ -1,7 +1,7 @@
 import { Box, Container, Typography } from "@mui/material";
 import { useParams } from "react-router-dom";
 import TitleHeader from "../../components/Layout/TitleHeader";
-import AlertsTable from "./components/AlertsTable";
+import AlertsTable from "./AlertsTable";
 import { useEffect, useState } from "react";
 import { SubscriptionAlertsType } from "../../API/TYPES";
 import axios from "axios";
