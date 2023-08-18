@@ -6,7 +6,7 @@ import { ExtremeThreatColour, ModerateThreatColour } from "../MapComponent";
 import { PopupContentText } from "./PopupContentText";
 import { CustomTabPanel, a11yProps, modifyDateTime } from "./helper";
 import { AlertInfo, AlertInfoArea } from "../../../Alert-Manager-API/types";
-import { Map as MapboxMap } from "mapbox-gl";
+import { LngLatLike, Map as MapboxMap } from "mapbox-gl";
 import { PopupArea } from "./PopupArea";
 
 interface TabProps {
@@ -18,6 +18,10 @@ interface TabProps {
     error: string | null;
     refetch: any;
   };
+  currentCountryBoundingBox: React.MutableRefObject<{
+    countryCentroid: LngLatLike;
+    zoom: number;
+  } | null>;
 }
 
 const determineColour = (info: AlertInfo) => {
@@ -39,6 +43,7 @@ export const PopupInfoHorizontalTab = ({
   alertInfo,
   mapRef,
   infoDataHandler,
+  currentCountryBoundingBox,
 }: TabProps) => {
   const [value, setValue] = React.useState(0);
 
@@ -104,6 +109,7 @@ export const PopupInfoHorizontalTab = ({
                 mapRef={mapRef}
                 infoID={info.id}
                 infoDataHandler={infoDataHandler}
+                currentCountryBoundingBox={currentCountryBoundingBox}
               />
 
               <PopupContentText

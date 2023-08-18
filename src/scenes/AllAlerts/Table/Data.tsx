@@ -82,6 +82,7 @@ const headCells: HeadCell[] = [
   },
 
   {
+    id: "eventCategory",
     selectedFilter: "All",
     title: "Event Category",
     filterKey: "eventCategory",
@@ -104,6 +105,7 @@ const headCells: HeadCell[] = [
     allMenuItemTitle: "All Event Categories",
   },
   {
+    id: "region",
     selectedFilter: "All",
     title: "Region",
     filterKey: "region",

@@ -1,6 +1,7 @@
 /* eslint-disable testing-library/no-unnecessary-act */
 import { act, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import renderer from "react-test-renderer";
 
 import Profile from "../../../scenes/Profile";
 
@@ -60,5 +61,12 @@ describe("Proifle", () => {
     });
     const errorContent = await screen.findByText("Please enter the code");
     expect(errorContent).toBeInTheDocument();
+  });
+});
+
+describe("SubscirptionAlerts Snapshot", () => {
+  it("should match DOM snapshot", () => {
+    const tree = renderer.create(<Profile />).toJSON();
+    expect(tree).toMatchSnapshot();
   });
 });

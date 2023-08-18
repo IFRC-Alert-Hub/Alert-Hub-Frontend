@@ -109,8 +109,6 @@ const ModalForm = ({
     const filteredCountry = countryList.filter(
       (country) => country.id === selectedRow.countryIds[0]
     );
-    console.log(countryList);
-    console.log(filteredCountry);
     const admin1List = filteredCountry.flatMap((country) => {
       const { id, name, admin1s } = country;
       return admin1s.map((admin1) => ({
@@ -120,7 +118,6 @@ const ModalForm = ({
         countryName: name,
       }));
     });
-    console.log("admin1List", admin1List);
     setAdmin1List(admin1List);
   }, [countryList, selectedRow.countryIds]);
 

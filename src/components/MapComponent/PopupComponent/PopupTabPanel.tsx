@@ -8,7 +8,7 @@ import { PopupContentText } from "./PopupContentText";
 import { Alert, AlertInfoArea } from "../../../Alert-Manager-API/types";
 import { TabPanelProps, modifyDateTime } from "./helper";
 import { PopupInfoHorizontalTab } from "./PopupInfoHorizontalTab";
-import { Map as MapboxMap } from "mapbox-gl";
+import { LngLatLike, Map as MapboxMap } from "mapbox-gl";
 const TabPanel = (props: TabPanelProps) => {
   const { children, value, index, ...other } = props;
 
@@ -41,6 +41,10 @@ interface PopupTabPanelProps {
     error: string | null;
     refetch: any;
   };
+  currentCountryBoundingBox: React.MutableRefObject<{
+    countryCentroid: LngLatLike;
+    zoom: number;
+  } | null>;
 }
 
 export const PopupTabPanel: React.FC<PopupTabPanelProps> = ({
@@ -51,6 +55,7 @@ export const PopupTabPanel: React.FC<PopupTabPanelProps> = ({
   page,
   mapRef,
   infoDataHandler,
+  currentCountryBoundingBox,
 }) => {
   return (
     <div>
@@ -166,6 +171,7 @@ export const PopupTabPanel: React.FC<PopupTabPanelProps> = ({
           key={index}
           alertInfo={alert.info as any}
           infoDataHandler={infoDataHandler}
+          currentCountryBoundingBox={currentCountryBoundingBox}
         />
       </TabPanel>
     </div>

@@ -147,6 +147,7 @@ export const useLevel1Data = () => {
 
   return { data, loading, error, setFilters };
 };
+
 const urgencyOptions: string[] = [
   "Immediate",
   "Expected",

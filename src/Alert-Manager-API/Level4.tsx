@@ -64,11 +64,14 @@ export const useLevel4Data = () => {
             throw new Error("ID does not exist");
           }
           if (response.data.areas && response.data.areas.length > 0) {
+            let polygonIndex = 0;
+            console.log("AREA POLYGONS: ", response.data.areas);
             response.data.areas = response.data.areas.map((area: any) => {
               if (area.polygons.length !== 0) {
                 area.polygons = area.polygons.map(
                   (polygon: any, index: number) => {
-                    polygon.name = `Polygon ${index + 1}`;
+                    polygonIndex = polygonIndex + 1;
+                    polygon.name = `Polygon ${polygonIndex}`;
                     //polygon.coordinates = convertCoordinates(polygon.value);
                     polygon.coordinates = convertCoordinates(polygon.value).map(
                       ([x, y]) => [y, x]
@@ -80,10 +83,12 @@ export const useLevel4Data = () => {
                   }
                 );
               }
+              let circleIndex = 0;
               if (area.circles.length !== 0) {
                 area.circles = area.circles.map(
                   (circle: any, index: number) => {
-                    circle.name = `Circle ${index + 1}`;
+                    circleIndex = circleIndex + 1;
+                    circle.name = `Circle ${circleIndex}`;
                     const [coordinatesStr, radius] = circle.value.split(" ");
                     const coordinates = coordinatesStr
                       .split(",")

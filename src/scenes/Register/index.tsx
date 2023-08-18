@@ -14,10 +14,9 @@ import AuthComponent from "../../components/Authentication/AuthComponent";
 import PasswordComponent from "../../components/Authentication/PasswordComponent";
 import { useState, useEffect } from "react";
 import { useIntl } from "react-intl";
-import Turnstile, { useTurnstile } from "react-turnstile";
+import Turnstile from "react-turnstile";
 
 const Register = () => {
-  const turnstile = useTurnstile();
   const [isCaptchaVerified, setIsCaptchaVerified] = useState(false);
 
   const [isSendClicked, setIsSendClicked] = useState(false);

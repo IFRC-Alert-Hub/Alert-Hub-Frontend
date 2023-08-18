@@ -78,29 +78,17 @@ const DatePickerComponent: React.FC<DatePickerComponentProps> = ({
                 ? "#f5333f"
                 : "#8D8D8D",
             fontSize: "0.875rem",
-            fontWeight:
-              selectedDate !== undefined &&
-              selectedDate[0] !== null &&
-              selectedDate[1] !== null
-                ? "600"
-                : "",
+            maxWidth: "100px",
+            whiteSpace: "nowrap",
+            overflow: "hidden",
+            textOverflow: "ellipsis",
+            textTransform: "capitalize",
+            fontWeight: "600",
           }}
         >
-          <Typography
-            textTransform={"capitalize"}
-            sx={{
-              maxWidth: "100px",
-              whiteSpace: "nowrap",
-              overflow: "hidden",
-              textOverflow: "ellipsis",
-              textTransform: "capitalize",
-              fontWeight: "600",
-            }}
-          >
-            {selectedDate![0] !== null && selectedDate![1] !== null
-              ? getSelectedDates(selectedDate)
-              : datePickerTitle}
-          </Typography>
+          {selectedDate![0] !== null && selectedDate![1] !== null
+            ? getSelectedDates(selectedDate)
+            : datePickerTitle}
         </Typography>
       </Button>
       <EffectivePopup
