@@ -311,13 +311,6 @@ const MapComponent: React.FC<MapProps> = ({
     if (admin1Clicked) {
       handleClose();
       setAdmin1Clicked(false);
-      if (admin1LayerIDClicked.current !== null) {
-        mapRef.current!.setPaintProperty(
-          admin1LayerIDClicked.current,
-          "fill-color",
-          ExtremeThreatColour
-        );
-      }
     }
 
     if (!mapRef.current) {
@@ -582,11 +575,13 @@ const MapComponent: React.FC<MapProps> = ({
     }
 
     if (admin1LayerIDClicked.current !== null) {
-      mapRef.current!.setPaintProperty(
-        admin1LayerIDClicked.current,
-        "fill-color",
-        ExtremeThreatColour
-      );
+      if (mapRef.current?.getLayer(admin1LayerIDClicked.current)) {
+        mapRef.current!.setPaintProperty(
+          admin1LayerIDClicked.current,
+          "fill-color",
+          ExtremeThreatColour
+        );
+      }
     }
     admin1LayerIDClicked.current = null;
     setAdmin1Clicked(false);

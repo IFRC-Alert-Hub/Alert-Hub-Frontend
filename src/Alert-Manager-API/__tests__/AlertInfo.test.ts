@@ -31,7 +31,7 @@ test("GetAlertInfoByAlertID fetches successfully data from an API", async () => 
 
   mockedAxios.get.mockResolvedValue({ mockData });
 
-  const { data } = await GetAlertInfoByAlertID();
+  const { data } = GetAlertInfoByAlertID();
 
   expect(data).toEqual(mockData);
 });
