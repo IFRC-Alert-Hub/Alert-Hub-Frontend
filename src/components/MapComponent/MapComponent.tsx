@@ -126,6 +126,7 @@ const MapComponent: React.FC<MapProps> = ({
       const unknownSourceID = `${sourceId}-admin1--${Country_ID}`;
       if (mapRef.current?.isStyleLoaded()) {
         if (admin1Data?.admin1s.length! > 0) {
+          // console.log(admin1Data?.admin1s);
           admin1Data?.admin1s.forEach((admin1, index) => {
             if (admin1.id < 0) {
               admin1.coordinates =
@@ -245,7 +246,7 @@ const MapComponent: React.FC<MapProps> = ({
                   }
                   const firstValue = Number(layerIDsClickedArray[0]);
 
-                  // console.log(firstValue);
+                  // console.log("FIRST VALUE: ", firstValue);
                   if (latestRefetchAlertData.current !== (firstValue as any)) {
                     latestRefetchAlertData.current = firstValue as any;
                     setAlertFilter({
@@ -253,7 +254,9 @@ const MapComponent: React.FC<MapProps> = ({
                       severity: selectedSeverity,
                       certainty: selectedCertainty,
                     });
-                    refetchAlertData(firstValue);
+                    if (typeof firstValue === "number") {
+                      refetchAlertData(firstValue);
+                    }
                   }
                   setAdmin1Clicked(true);
 
@@ -264,6 +267,7 @@ const MapComponent: React.FC<MapProps> = ({
                   );
                   admin1LayerIDClicked.current =
                     layersClickedArray[0] as unknown as string;
+
                   mapContainerRef.current!.style.width = "35%";
                   mapRef.current!.resize();
                   if (currentCountryBoundingBox.current !== null) {
@@ -272,9 +276,41 @@ const MapComponent: React.FC<MapProps> = ({
                         ?.countryCentroid as unknown as LngLatLike,
                       zoom:
                         currentCountryBoundingBox.current!.zoom > 0
-                          ? currentCountryBoundingBox.current!.zoom * 0.85
+                          ? currentCountryBoundingBox.current!.zoom * 0.7
                           : mapRef.current!.getZoom(),
                     });
+                  }
+
+                  const clickedFeature = mapRef.current?.queryRenderedFeatures(
+                    e.point,
+                    {
+                      layers: [layersClickedArray[0]] as unknown as any,
+                    }
+                  )[0];
+
+                  if (clickedFeature) {
+                    const featureGeometry = clickedFeature.geometry;
+
+                    const polygonBoundingBox = turfBbox(featureGeometry);
+
+                    const [minX, minY, maxX, maxY] = polygonBoundingBox;
+
+                    mapRef.current?.fitBounds([minX, minY, maxX, maxY]);
+                  } else {
+                    const clickedFeature =
+                      mapRef.current?.queryRenderedFeatures(e.point, {
+                        layers: [admin1LayerID] as unknown as any,
+                      })[0];
+                    console.log(clickedFeature);
+                    if (clickedFeature) {
+                      const featureGeometry = clickedFeature.geometry;
+
+                      const polygonBoundingBox = turfBbox(featureGeometry);
+
+                      const [minX, minY, maxX, maxY] = polygonBoundingBox;
+
+                      mapRef.current?.fitBounds([minX, minY, maxX, maxY]);
+                    }
                   }
                 }
               );

@@ -93,7 +93,7 @@ export const PopupArea = ({
         mapRef.current?.removeLayer(layerID);
         mapRef.current?.removeSource(sourceID);
       }
-      console.log(combinedShapes[newSelectedIndex].coordinates);
+      // console.log(combinedShapes[newSelectedIndex].coordinates);
 
       if (combinedShapes[newSelectedIndex].type === "Polygon") {
         mapRef.current?.addSource(sourceID, {
@@ -127,7 +127,7 @@ export const PopupArea = ({
           }
         );
 
-        console.log("CIRCLE: ", circle);
+        // console.log("CIRCLE: ", circle);
 
         mapRef.current?.addSource(sourceID, {
           type: "geojson",
@@ -160,12 +160,12 @@ export const PopupArea = ({
   // };
   useEffect(() => {
     if (!loading && !error) {
-      console.log("info_id: ", data?.info_id);
+      // console.log("info_id: ", data?.info_id);
       let combinedShapesIn: any = [];
       if (!mapRef.current) {
         return;
       }
-      console.log("DATA AREAS: ", data?.areas);
+      // console.log("DATA AREAS: ", data?.areas);
       data?.areas?.forEach((area: any) => {
         combinedShapesIn.push(...area.polygons, ...area.circles);
       });
