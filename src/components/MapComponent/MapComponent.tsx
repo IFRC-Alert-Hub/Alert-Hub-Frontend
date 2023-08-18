@@ -290,27 +290,17 @@ const MapComponent: React.FC<MapProps> = ({
 
                   if (clickedFeature) {
                     const featureGeometry = clickedFeature.geometry;
-
+                    //
                     const polygonBoundingBox = turfBbox(featureGeometry);
 
                     const [minX, minY, maxX, maxY] = polygonBoundingBox;
 
                     mapRef.current?.fitBounds([minX, minY, maxX, maxY]);
                   } else {
-                    const clickedFeature =
-                      mapRef.current?.queryRenderedFeatures(e.point, {
-                        layers: [admin1LayerID] as unknown as any,
-                      })[0];
-                    console.log(clickedFeature);
-                    if (clickedFeature) {
-                      const featureGeometry = clickedFeature.geometry;
-
-                      const polygonBoundingBox = turfBbox(featureGeometry);
-
-                      const [minX, minY, maxX, maxY] = polygonBoundingBox;
-
-                      mapRef.current?.fitBounds([minX, minY, maxX, maxY]);
-                    }
+                    console.log(e.point);
+                    mapRef.current!.flyTo({
+                      center: [e.lngLat.lng, e.lngLat.lat] as unknown as any,
+                    });
                   }
                 }
               );
