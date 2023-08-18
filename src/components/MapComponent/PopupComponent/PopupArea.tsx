@@ -118,7 +118,6 @@ export const PopupArea = ({
             "fill-opacity": 0.6,
           },
         });
-        console.log(mapRef.current?.getStyle().layers);
       } else {
         var circle = turfCircle(
           combinedShapes[newSelectedIndex]?.center as any,

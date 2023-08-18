@@ -11,11 +11,14 @@ import DisabledByDefaultIcon from "@mui/icons-material/DisabledByDefault";
 import PopupTabPanel from "./PopupTabPanel";
 import {
   Alert,
+  Button,
   Divider,
   Pagination,
   PaginationItem,
   Skeleton,
+  Tooltip,
 } from "@mui/material";
+import RestartAltIcon from "@mui/icons-material/RestartAlt";
 import { a11yProps } from "./helper";
 import { LngLatLike, Map as MapboxMap } from "mapbox-gl";
 interface PopupComponentProps {
@@ -60,6 +63,12 @@ export const PopupComponent: React.FC<PopupComponentProps> = ({
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     if (tabPanelRef.current) {
       tabPanelRef.current.scrollTop = 0;
+    }
+    const sourceID = "infoArea-source";
+    const layerID = "infoArea-layer";
+    if (mapRef.current?.getSource(sourceID)) {
+      mapRef.current?.removeLayer(layerID);
+      mapRef.current?.removeSource(sourceID);
     }
     setValue(newValue + (page - 1) * itemsPerPage);
   };
@@ -225,6 +234,60 @@ export const PopupComponent: React.FC<PopupComponentProps> = ({
               position: "relative",
             }}
           >
+            <Tooltip
+              title="If you want to reset the map zoom level, please click here"
+              placement="bottom"
+            >
+              <span
+                onClick={(event) => {
+                  if (currentCountryBoundingBox.current !== null) {
+                    mapRef.current!.flyTo({
+                      center: currentCountryBoundingBox.current
+                        ?.countryCentroid as unknown as LngLatLike,
+                      zoom:
+                        currentCountryBoundingBox.current!.zoom > 0
+                          ? currentCountryBoundingBox.current!.zoom * 0.85
+                          : mapRef.current!.getZoom(),
+                    });
+                  }
+                }}
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  position: "absolute",
+                  top: "5px",
+                  left: "5px",
+                  cursor: "pointer",
+                  fontSize: "24px",
+                }}
+              >
+                <Button
+                  variant="contained"
+                  color="success"
+                  disableTouchRipple
+                  disableRipple
+                  disableElevation
+                  disableFocusRipple
+                  sx={{
+                    color: "#fff",
+                    outline: "red",
+                    marginLeft: "8px",
+                    marginRight: "8px",
+
+                    textTransform: "capitalize",
+                    padding: "4px ",
+                    backgroundColor: "#f5333f",
+                    "&:hover": {
+                      backgroundColor: "#f5333f",
+                    },
+                    fontSize: "10px",
+                  }}
+                >
+                  <RestartAltIcon fontSize="small" />
+                  <Typography fontSize={"11px"}>Reset Map</Typography>
+                </Button>
+              </span>
+            </Tooltip>
             <DisabledByDefaultIcon
               sx={{
                 position: "absolute",
