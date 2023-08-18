@@ -311,7 +311,7 @@ export const PopupComponent: React.FC<PopupComponentProps> = ({
                                   sx={{
                                     display: "flex",
                                     justifyContent: "center",
-                                    paddingBottom: "4px",
+                                    paddingBottom: "1px",
                                   }}
                                 >
                                   <Box
@@ -342,15 +342,22 @@ export const PopupComponent: React.FC<PopupComponentProps> = ({
                                     ? "#9A9797 !important"
                                     : ""
                                 }
-                                style={{
-                                  whiteSpace: "nowrap",
+                                sx={{
+                                  whiteSpace: "normal",
                                   overflow: "hidden",
                                   textOverflow: "ellipsis",
                                   maxWidth: "100%",
                                   display: "block",
+                                  wordBreak: "break-word",
+                                  lineHeight: "1.1",
                                 }}
                               >
-                                {alert.info![0].event}
+                                {alert.info![0].event.length > 30
+                                  ? `${alert.info![0].event.substring(
+                                      0,
+                                      30
+                                    )}...`
+                                  : alert.info![0].event}
                               </Typography>
                               <Typography
                                 variant="h5"

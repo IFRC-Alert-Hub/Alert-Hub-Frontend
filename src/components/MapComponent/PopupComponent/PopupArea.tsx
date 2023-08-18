@@ -3,6 +3,7 @@ import {
   Box,
   Button,
   Card,
+  Divider,
   FormControl,
   IconButton,
   MenuItem,
@@ -112,8 +113,8 @@ export const PopupArea = ({
           type: "fill",
           source: sourceID,
           paint: {
-            "fill-color": "#f6333f",
-            "fill-opacity": 1,
+            "fill-color": "black",
+            "fill-opacity": 0.6,
           },
         });
         console.log(mapRef.current?.getStyle().layers);
@@ -189,7 +190,7 @@ export const PopupArea = ({
         data &&
         combinedShapes !== null &&
         combinedShapes.length > 0 && (
-          <Card sx={{ padding: "5px" }}>
+          <>
             <Box display="flex" alignItems="center">
               <Typography
                 variant="h5"
@@ -199,7 +200,6 @@ export const PopupArea = ({
               >
                 See on the map:
               </Typography>
-
               <FormControl
                 sx={{
                   display: "flex",
@@ -215,7 +215,7 @@ export const PopupArea = ({
                   onChange={handleShapeChange}
                   style={{ marginTop: "10px", marginRight: "10px" }}
                   sx={{
-                    width: 210, // Increased width to accommodate the close button
+                    width: 160, // Increased width to accommodate the close button
                     backgroundColor: "#f4f4f4",
                     fontSize: "0.75rem",
                     position: "relative", // Required for positioning the close button
@@ -231,31 +231,24 @@ export const PopupArea = ({
                     );
                   })}
                 </Select>
-                <IconButton
-                  aria-label="close"
-                  size="small"
-                  onClick={() => {
-                    if (mapRef.current?.getSource(sourceID)) {
-                      mapRef.current?.removeLayer(layerID);
-                      mapRef.current?.removeSource(sourceID);
-                    }
-                    handleShapeChange({
-                      target: {
-                        value: -1,
-                      },
-                    });
-                  }}
-                  sx={{
-                    position: "absolute",
-                    right: "4px", // Adjust this value to position the close button
-                    top: "50%", // Vertically aligns the button
-                    transform: "translateY(-50%)", // Centers the button vertically
-                    backgroundColor: "#f4f4f4",
-                  }}
-                >
-                  <CloseIcon />
-                </IconButton>
               </FormControl>
+              {/* <IconButton
+                aria-label="close"
+                size="small"
+                onClick={() => {
+                  if (mapRef.current?.getSource(sourceID)) {
+                    mapRef.current?.removeLayer(layerID);
+                    mapRef.current?.removeSource(sourceID);
+                  }
+                  handleShapeChange({
+                    target: {
+                      value: -1,
+                    },
+                  });
+                }}
+              >
+                <CloseIcon />
+              </IconButton> */}
               <Button
                 variant="contained"
                 color="success"
@@ -267,12 +260,52 @@ export const PopupArea = ({
                   color: "#fff",
                   outline: "red",
                   marginLeft: "8px",
+                  marginRight: "8px",
+
                   textTransform: "capitalize",
                   padding: "4px ",
                   backgroundColor: "#f5333f",
                   "&:hover": {
                     backgroundColor: "#f5333f",
                   },
+                  display: selectedIndex !== -1 ? "block" : "none",
+                  fontSize: "10px",
+                }}
+                onClick={() => {
+                  if (mapRef.current?.getSource(sourceID)) {
+                    mapRef.current?.removeLayer(layerID);
+                    mapRef.current?.removeSource(sourceID);
+                  }
+                  handleShapeChange({
+                    target: {
+                      value: -1,
+                    },
+                  });
+                }}
+              >
+                Remove Polygon
+              </Button>
+
+              <Button
+                variant="contained"
+                color="success"
+                disableTouchRipple
+                disableRipple
+                disableElevation
+                disableFocusRipple
+                sx={{
+                  color: "#fff",
+                  outline: "red",
+                  textTransform: "capitalize",
+                  padding: "4px ",
+                  backgroundColor: "#f5333f",
+                  "&:hover": {
+                    backgroundColor: "#f5333f",
+                  },
+                  fontSize: "10px",
+                  marginLeft: "8px",
+                  marginRight: "8px",
+
                   display: selectedIndex !== -1 ? "block" : "none",
                 }}
                 onClick={() => {
@@ -301,7 +334,7 @@ export const PopupArea = ({
                 Fly to Polygon
               </Button>
             </Box>
-          </Card>
+          </>
         )}
     </>
   );
