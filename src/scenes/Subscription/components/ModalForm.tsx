@@ -218,7 +218,7 @@ const ModalForm = ({
                   error={verifyForm && formErrors.subscriptionName}
                   className="subs-form-title"
                 >
-                  Title
+                  Subscription Name
                 </InputLabel>
                 <TextField
                   id="subscriptionName"

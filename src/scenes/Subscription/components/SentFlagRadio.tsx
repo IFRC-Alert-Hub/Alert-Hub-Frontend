@@ -76,7 +76,7 @@ const SentFlagRadio = ({
           className="subs-form-legend"
           sx={{ "&.Mui-focused": { color: "#000000" } }}
         >
-          Send Interval
+          Notification Interval
         </FormLabel>
       </Box>
       <RadioGroup

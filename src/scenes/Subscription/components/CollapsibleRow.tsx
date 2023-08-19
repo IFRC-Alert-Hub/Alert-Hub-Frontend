@@ -208,7 +208,7 @@ const CollapsibleRow = ({
                 component="div"
                 sx={{ fontWeight: 600, mb: 1 }}
               >
-                Subscription Detail
+                Subscription Details
               </Typography>
               <Typography
                 variant="h6"
@@ -216,7 +216,7 @@ const CollapsibleRow = ({
                 component="div"
                 sx={{ fontWeight: 400 }}
               >
-                <span style={{ color: "gray" }}>Title:</span>{" "}
+                <span style={{ color: "gray" }}>Subscription Name:</span>{" "}
                 {row.subscriptionName}
               </Typography>
               <Typography
@@ -279,7 +279,7 @@ const CollapsibleRow = ({
                 component="div"
                 sx={{ fontWeight: 400 }}
               >
-                <span style={{ color: "gray" }}>Send Interval:</span>{" "}
+                <span style={{ color: "gray" }}>Notification Interval:</span>{" "}
                 {row.sentFlagName}
               </Typography>
             </Box>

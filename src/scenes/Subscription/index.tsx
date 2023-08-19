@@ -54,7 +54,7 @@ const Subscription = () => {
   };
 
   let tableContent;
-  if (subscriptionLoading && isCountryLoading) {
+  if (subscriptionLoading || isCountryLoading) {
     tableContent = <Progress />;
   } else if (subscriptionError || CountryError) {
     tableContent = (

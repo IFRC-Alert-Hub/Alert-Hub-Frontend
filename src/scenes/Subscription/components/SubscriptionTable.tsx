@@ -92,11 +92,12 @@ const SubscriptionTable = ({
             <TableCell
               align="left"
               sx={{
+                minWidth: "180px",
                 fontSize: "0.875rem",
                 fontWeight: "600",
               }}
             >
-              Title
+              Subscription Name
             </TableCell>
             <TableCell
               align="left"
