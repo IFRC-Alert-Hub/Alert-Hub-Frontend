@@ -1,40 +1,42 @@
 import { Box, Container, Typography } from "@mui/material";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import TitleHeader from "../../components/Layout/TitleHeader";
 import AlertsTable from "./AlertsTable";
-import { useEffect, useState } from "react";
-import { SubscriptionAlertsType } from "../../API/TYPES";
-import axios from "axios";
+import useSubscriptionAlerts from "../../hooks/useSubscriptionAlerts";
+import Progress from "../../components/Layout/Progress";
 
 const SubscriptionAlerts = () => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { id, title, country } = useParams();
+  const navigate = useNavigate();
 
-  const [alertsData, setAlertsData] = useState<SubscriptionAlertsType[] | null>(
-    null
-  );
+  const {
+    data: alertsData,
+    isLoading: isAlertsLoading,
+    error: alertsError,
+  } = useSubscriptionAlerts(id);
 
-  useEffect(() => {
-    axios
-      .get(
-        `https://backend-deploy.azurewebsites.net/subscription_manager/get_subscription_alerts/${id}/`
-      )
-      .then((res) => {
-        setAlertsData(() =>
-          res.data.map((item: any) => ({
-            id: item.id,
-            event: item.event,
-            category: item.category,
-            countryName: item.country_name,
-            admin1s: item.admin1s,
-            sent: item.sent,
-          }))
-        );
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  }, [id]);
+  if (isAlertsLoading) {
+    return (
+      <Container maxWidth={"lg"}>
+        <Box padding={"50px 0 20px 0"} sx={{ textAlign: "center" }}>
+          <Typography
+            variant={"h1"}
+            fontWeight={"600"}
+            sx={{ paddingBottom: "5px", textTransform: "capitalize" }}
+          >
+            {title}
+          </Typography>
+        </Box>
+        <TitleHeader title={`${country} (${alertsData?.length})`} />
+        <Progress />
+      </Container>
+    );
+  }
+
+  if (alertsError) {
+    navigate("/404");
+  }
 
   return (
     <Container maxWidth={"lg"}>
