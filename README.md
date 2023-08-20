@@ -1,3 +1,7 @@
+<div style="display: flex; flex-direction: column; align-items: center;">
+  <img src="https://github.com/IFRC-Alert-Hub/Alert-Hub-Frontend/assets/57798047/9a3647c9-f3ed-4f7d-b7af-bf38c1c36380" width="200" alt="Alert Hub">
+</div>
+
 # IFRC Alert Hub
 
 This repository contains the frontend code for the IFRC Alert Hub. The goal of the IFRC Alert Hub is to ensure that communities everywhere receive the most timely and effective emergency alerting possible, and can thereby take action to safeguard their lives and livelihoods.
