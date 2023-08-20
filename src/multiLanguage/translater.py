@@ -109,7 +109,7 @@ def main():
 
     # Define filenames and paths
     output_filename = f"{target_language_code}.json"
-    localesFolder = './locales/'
+    localesFolder = './../../public/locales/'
     languageCodes = './LanguageCodes/LanguageCodes.json'
     supportedLanguages = './locales/supportedLanguages.json'
 
