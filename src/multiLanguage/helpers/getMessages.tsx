@@ -1,21 +1,21 @@
-// import en from "./../locales/en.json";
-// import fr from "./../locales/fr.json";
-// export const messages = { en: en, fr: fr };
+// Load supported languages from supportedLanguages.json
 import languages from "./../locales/supportedLanguages.json";
+type Language = {
+  code: string;
+  name: string;
+};
 
 // Define a type for your messages
 type MessageObject = {
-  // Define the structure of your messages here
-  // For example: home: { title: string; ... }
   [key: string]: any;
 };
 
 async function loadLocaleMessages(localeCode: string): Promise<MessageObject> {
   try {
-    const { default: jsonObject } = await import(
-      `./../locales/${localeCode}.json`
+    const response = await fetch(
+      `${process.env.PUBLIC_URL}/locales/${localeCode}.json`
     );
-
+    const jsonObject: MessageObject = await response.json();
     return jsonObject;
   } catch (error) {
     console.error(`Error loading messages for locale '${localeCode}':`, error);
@@ -24,9 +24,9 @@ async function loadLocaleMessages(localeCode: string): Promise<MessageObject> {
 }
 
 async function fetchAndLoadMessages() {
-  const messages: Record<string, MessageObject> = {}; // Annotate messages object with its type
+  const messages: Record<string, MessageObject> = {};
 
-  for (const language of languages) {
+  for (const language of languages as Language[]) {
     const loadedMessages = await loadLocaleMessages(language.code);
     messages[language.code] = loadedMessages;
   }
