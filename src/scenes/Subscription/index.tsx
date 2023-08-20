@@ -1,10 +1,8 @@
 import { Button, Container, Grid, Typography } from "@mui/material";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useQuery } from "@apollo/client";
-import axios from "axios";
 import { subscription_module } from "../../API/API_Links";
 import {
-  CountryOptionsType,
   SubscriptionForm,
   SubscriptionItem,
   SubscriptionQueryResult,
@@ -14,6 +12,7 @@ import SubscriptionTable from "./components/SubscriptionTable";
 import ModalForm from "./components/ModalForm";
 import Progress from "../../components/Layout/Progress";
 import { RADIO_OPTIONS } from "./components/SentFlagRadio";
+import useAdmin1s from "../../hooks/useAdmin1s";
 
 const INIT_ROW: SubscriptionForm = {
   subscriptionName: "",
@@ -30,9 +29,6 @@ const Subscription = () => {
   const [formType, setFormType] = useState("");
   const [modalOpen, setModalOpen] = useState(false);
   const [selectedRow, setSelectedRow] = useState<SubscriptionForm>(INIT_ROW);
-  const [countryData, setCountryData] = useState<CountryOptionsType[] | null>(
-    null
-  );
 
   const {
     loading: subscriptionLoading,
@@ -42,16 +38,11 @@ const Subscription = () => {
     client: subscription_module,
   });
 
-  useEffect(() => {
-    axios
-      .get("https://alert-manager.azurewebsites.net/admin1s/")
-      .then((res) => {
-        setCountryData(res.data.countries);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  }, []);
+  const {
+    isLoading: isCountryLoading,
+    error: CountryError,
+    data: countryData,
+  } = useAdmin1s();
 
   const handleModalOpen = () => {
     setModalOpen(true);
@@ -63,15 +54,15 @@ const Subscription = () => {
   };
 
   let tableContent;
-  if (subscriptionLoading) {
+  if (subscriptionLoading || isCountryLoading) {
     tableContent = <Progress />;
-  } else if (subscriptionError) {
+  } else if (subscriptionError || CountryError) {
     tableContent = (
       <Typography variant="h5" textAlign={"center"} color={"gray"} mt={10}>
         Something error! Please contact the application administrator.
       </Typography>
     );
-  } else if (subscriptionData && countryData && countryData.length > 0) {
+  } else if (subscriptionData && countryData) {
     const tableDetail = subscriptionData.listAllSubscription.map(
       (item: SubscriptionItem) => {
         const countryNames = item.countryIds.map((id: number) => {
@@ -102,12 +93,6 @@ const Subscription = () => {
         setFormType={setFormType}
         setSelectedRow={setSelectedRow}
       />
-    );
-  } else {
-    tableContent = (
-      <Typography variant="h5" textAlign={"center"} color={"gray"} mt={10}>
-        Something error! Please contact the application administrator.
-      </Typography>
     );
   }
 

@@ -34,6 +34,7 @@ const CountryAutocomplete = ({
   const initOption = countryList.filter(
     (country) => Number(country.id) === selectedRow.countryIds[0]
   );
+
   const [seleciton, setSelection] = useState<CountryOptionsType | null>(
     initOption.length > 0 ? initOption[0] : null
   );
@@ -70,7 +71,10 @@ const CountryAutocomplete = ({
         disablePortal
         id="tags-outlined"
         size="small"
-        options={countryList}
+        options={countryList.sort(
+          (a, b) => -b.name[0].localeCompare(a.name[0])
+        )}
+        groupBy={(option) => option.name[0]}
         getOptionLabel={(option) => option.name}
         value={seleciton}
         onChange={handleChange}
