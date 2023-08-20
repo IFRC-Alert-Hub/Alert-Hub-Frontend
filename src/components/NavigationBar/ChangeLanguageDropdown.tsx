@@ -1,8 +1,12 @@
 import { useEffect, useState } from "react";
-import { getLanguage, setLanguage, Language } from "../helpers/useLanguage";
+import {
+  getLanguage,
+  setLanguage,
+  Language,
+} from "../../multiLanguage/helpers/useLanguage";
 import { Box, Button, Menu, MenuItem, Typography } from "@mui/material";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
-import supportedLanguages from "./../locales/supportedLanguages.json";
+
 const ChangeLanguageDropdown = () => {
   const language = getLanguage();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -25,8 +29,15 @@ const ChangeLanguageDropdown = () => {
     window.location.reload();
   }
 
-  return supportedLanguages.length > 1 ? (
-    <Box display="inline">
+  return (
+    <Box display={"inline"}>
+      {/* <select
+        value={currentLanguage}
+        onChange={(event) => handleChangeLanguage(event.target.value)}
+      >
+        <option value="en">EN</option>
+        <option value="fr">FR</option>
+      </select> */}
       <Button
         id="language-button"
         aria-controls={open ? "language-menu" : undefined}
@@ -55,18 +66,10 @@ const ChangeLanguageDropdown = () => {
           "aria-labelledby": "language-button",
         }}
       >
-        {supportedLanguages.map((lang) => (
-          <MenuItem
-            key={lang.code}
-            onClick={() => handleChangeLanguage(lang.code)}
-          >
-            {lang.name}
-          </MenuItem>
-        ))}
+        <MenuItem onClick={() => handleChangeLanguage("en")}>English</MenuItem>
+        <MenuItem onClick={() => handleChangeLanguage("fr")}>French</MenuItem>
       </Menu>
     </Box>
-  ) : (
-    <></>
   );
 };
 

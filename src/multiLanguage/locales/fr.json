@@ -1,8 +1,10 @@
 {
   "home.title": "IFRC Alert Hub",
   "home.subtitle": "IFRC Alert Hub fournit des alertes d'urgence mondiales, permettant aux communautés de protéger des vies et des moyens de subsistance.",
+
   "about.title": "Le but",
   "about.subtitle": "L'objectif de la plateforme d'alerte de la FICR est de veiller à ce que les communautés du monde entier reçoivent les alertes d'urgence les plus rapides et les plus efficaces possibles, et puissent ainsi prendre des mesures pour protéger leurs vies et leurs moyens de subsistance.",
+
   "about.problem.titleHeader": "Le problème",
   "about.problem1": "Chaque année, des millions de personnes sont tuées, blessées, déplacées ou appauvries par des aléas naturels dont les impacts auraient pu être évités ou réduits. Une trop grande partie de cette perte est due à des avertissements publics inefficaces : des alertes d'urgence qui ne sont pas suffisamment opportunes, difficiles à comprendre ou qui ne parviennent pas à atteindre toutes les personnes à risque.",
   "about.problem2": "Cette incapacité à atteindre les gens est due à un certain nombre de facteurs, notamment:",
@@ -10,16 +12,20 @@
   "about.problem.listitem2": "Messages trop compliqués, riches en données, qui ne sont ni contextuellement appropriés ni compréhensibles par le grand public;",
   "about.problem.listitem3": "Un manque de conseils pratiques que les gens peuvent comprendre et auxquels ils peuvent faire confiance sur la façon de rester en sécurité;",
   "about.problem.listitem4": "Diffusion limitée des alertes de danger sur trop peu de canaux de communication.",
+
   "about.solution.titleHeader": "La solution",
   "about.solution1": "Le centre d'alerte de la FICR vise à remédier à cette situation en tirant parti des technologies de communication modernes et des normes internationales éprouvées pour accroître la diffusion d'alertes d'urgence fiables et exploitables et encourager l'action anticipée des personnes en danger.",
   "about.solution2": "Cela se fera par:",
   "about.solution.listitem1": "accroître l'accès des médias et des réseaux en ligne aux alertes gouvernementales officielles publiées à l'aide du protocole d'alerte commun (CAP), un format numérique d'échange d'alertes d'urgence, qui permet de diffuser simultanément un message d'alerte cohérent sur plusieurs voies de communication;",
   "about.solution.listitem2": "faciliter l'appariement des alertes de danger CAP avec des messages de sensibilisation et d'éducation du public contextualisés et exploitables au niveau local qui ont été élaborés et acceptés par les gouvernements nationaux et les organisations de gestion des urgences.",
+
   "about.disclaimer.titleHeader": "Désistement",
   "about.disclaimer": "L'IFRC Alert Hub publie uniquement les alertes officielles émises par des agences d'alerte gouvernementales reconnues. Les alertes ne sont pas émises ou publiées par la FICR ou ses Sociétés nationales membres de la Croix-Rouge et du Croissant-Rouge. La FICR n'assume aucune responsabilité pour les informations contenues dans les alertes, qui relèvent de la seule responsabilité de l'organisme émetteur. La FICR s'efforce d'identifier les flux d'alertes gouvernementaux défectueux et de mettre ces informations en évidence pour les utilisateurs de l'Alert Hub. Cependant, la FICR ne surveille pas 24 heures sur 24 et 7 jours sur 7 l'état des flux gouvernementaux et il incombe aux utilisateurs d'Alert Hub d'identifier les sources redondantes d'informations sur les alertes de danger.",
+
   "ALL_ONGOING_ALERTS": "Toutes les alertes EN COURS",
   "VIEW_ALL_SOURCES": "Afficher toutes les alertes",
   "ALL_ALERTS": "Toutes les alertes",
+
   "login.pageTitle": "Connexion",
   "login.authTitle": "Content de te revoir",
   "login.authSubtitle": "Si vous êtes membre du personnel, membre ou bénévole du Mouvement Croix-Rouge/Croissant (Sociétés nationales, FICR et CICR), connectez-vous avec votre adresse e-mail et votre mot de passe.",
@@ -29,6 +35,7 @@
   "login.loginBtn": "Connexion",
   "login.formLabel.emailaddress": "Adresse e-mail",
   "login.formLabel.password": "Mot de passe",
+
   "forgetPassword.pageTitle": "Mot de passe oublié",
   "forgetPassword.authTitle": "Mot de passe oublié",
   "forgetPassword.authSubtitle": "Veuillez utiliser l'adresse e-mail associée à votre compte lors de l'inscription pour lancer le processus de changement de mot de passe.",
@@ -37,29 +44,38 @@
   "forgetPassword.formLabel.password": "Mot de passe",
   "forgetPassword.formLabel.confirmPassword": "Confirmez le mot de passe",
   "forgetPassword.recoverBtn": "Récupérer",
+
   "firstNavBarItem.about": "À propos",
   "firstNavBarItem.resources": "Resources",
+
   "secondNavBarItems.home": "Maison",
+
   "RegionsDropdownItems.africa": "Afrique",
   "RegionsDropdownItems.america": "Amérique",
   "RegionsDropdownItems.asiaPacific": "Asie-Pacifique",
   "RegionsDropdownItems.europe": "L'Europe",
   "RegionsDropdownItems.middleEastNorthEast": "Moyen-Orient et Nord-Est",
+
   "navbar.mySubscriptions": "Mes abonnements",
   "navbar.regions": "Régions",
+
   "navbar.loginbtn": "Connexion",
+
   "home.heroCard.title1": "Ajouter un abonnement pour recevoir des alertes à temps",
   "home.heroCard.subtitle1": "Grâce à la surveillance en temps réel des risques potentiels et des événements d'urgence, recevez des alertes précises et en temps opportun.",
   "home.heroCard.btnTitle1": "Abonnez-vous Alertes",
+
   "home.heroCard.title2": "Utiliser l'API pour rediffuser les alertes CAP",
   "home.heroCard.subtitle2": "Avec des points de terminaison d'API simples mais puissants, vous pouvez personnaliser les alertes en fonction des besoins de vos utilisateurs.",
   "home.heroCard.btnTitle2": "Référence API",
+
   "passwordComponent.password": "Mot de passe",
   "passwordComponent.confirmPassword": "Confirmez le mot de passe",
   "passwordComponent.rule1": "Au moins une lettre majuscule",
   "passwordComponent.rule2": "Au moins un numéro",
   "passwordComponent.rule3": "Au moins un caractère spécial [?!@#$%^&*()]",
   "passwordComponent.rule4": "Au moins 8 caractères",
+
   "footer.title": "À propos d'Alert Hub",
   "footer.aims": "L'objectif d'IFRC Alert Hub est de fournir des alertes d'urgence rapides et efficaces aux communautés du monde entier, leur permettant de protéger leurs vies et leurs moyens de subsistance.",
   "footer.copyright": "© IFRC Alert Hub 2023 v1",
@@ -72,11 +88,9 @@
   "footer.API": "Documentation API",
   "footer.otherResources": "Autres ressources",
   "footer.contactUs": "Contactez-nous",
+
   "mapfilters.urgencyLabel": "Urgence",
   "mapfilters.severityLabel": "Gravité",
   "mapfilters.certaintyLabel": "Certitude",
-  "mapfilters.search": "recherche",
-  "register.pageTitle": "Registre",
-  "register.authTitle": "Créer un compte",
-  "register.authSubtitle": "Le personnel, les membres et les volontaires du Mouvement de la Croix-Rouge et du Croissant-Rouge (Sociétés nationales, FICR et CICR) sont invités à créer un compte utilisateur sur GO, afin d'accéder aux informations relatives aux membres. Les autres intervenants et les membres du public peuvent parcourir les zones publiques du site sans créer de compte."
+  "mapfilters.search": "recherche"
 }
