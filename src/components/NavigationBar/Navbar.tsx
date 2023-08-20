@@ -24,11 +24,11 @@ import LoginButton from "./LoginButton";
 import TimeComponent from "./TimeComponent";
 import { useContext, useState } from "react";
 import AvatarDropdown from "./AvatarDropdown";
-import ChangeLanguageDropdown from "./ChangeLanguageDropdown";
 import { ExpandLess, ExpandMore } from "@mui/icons-material";
 import { UserContext } from "../../context/UserContext";
 import NavItems from "./NavItemItems";
 import { useIntl } from "react-intl";
+import ChangeLanguageDropdown from "../../multiLanguage/dropdown/ChangeLanguageDropdown";
 
 const NavbarComponent = (props: any) => {
   const { formatMessage } = useIntl();
