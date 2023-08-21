@@ -95,10 +95,9 @@ The Alert Hub project supports internationalisation to make the application acce
 To install the required dependencies, run the following command in your terminal:
 
    ```bash
-   pip install -r requirements.txt
+   pip install googletrans==3.1.0a0
    ```
 This will install the necessary packages required for the translation script.
-
 
 ### Running the Translation Script
 
