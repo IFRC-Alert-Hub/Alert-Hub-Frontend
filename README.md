@@ -11,6 +11,10 @@
     Find out more on the <a href="https://alert-hub-frontend.azurewebsites.net/">project website</a>.
   </p>
 
+<p align="center">
+   This project was developed in collaboration with the <a href="https://www.ifrc.org/">International Federation of Red Cross and Red Crescent Societies (IFRC)</a> as a part of the <a href="https://www.ucl.ac.uk/computer-science/collaborate/ucl-industry-exchange-network-ucl-ixn">University College London (UCL) Industry Exchange Network (IXN)</a>. This frontend was developed by <a href="https://github.com/piraveenankirupakaran">Piraveenan Kirupakaran</a> and <a href="https://github.com/yizhou-lee">Yizhou Li</a> from <a href="https://www.ucl.ac.uk/">University College London (UCL)</a>.
+</p>
+
   <p align="center">
     <a href="https://www.codefactor.io/repository/github/ifrc-alert-hub/alert-hub-frontend"><img src="https://www.codefactor.io/repository/github/ifrc-alert-hub/alert-hub-frontend/badge" alt="CodeFactor" /></a>
     <a href="https://github.com/IFRC-Alert-Hub/Alert-Hub-Frontend/issues">
