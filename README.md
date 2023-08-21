@@ -26,6 +26,23 @@
 </p>
 
 
+## Table of Contents
+- [UI Designs](#ui-designs)
+- [Prerequisites](#prerequisites)
+- [Technologies](#technologies)
+- [Dependencies](#dependencies)
+- [Contact](#contact)
+- [Installation](#installation)
+- [Testing](#testing)
+- [Build and Deployment](#build-and-deployment)
+  - [Local Builds](#local-builds)
+  - [Building and Running Docker Images](#building-and-running-the-docker-images)
+  - [Azure Setup](#azure-setup)
+- [Contributing](#contributing)
+- [Acknowledgements](#acknowledgements)
+- [License](#license)
+
+
 ## UI Designs
 
 We have ensured that the UI designs are in accordance with the [IFRC GO&#39;s Brand Design &amp; Guidelines](https://go-user-library.ifrc.org/brand-design/). By closely following these guidelines, we have maintained consistency and reinforced the brand identity throughout the application.
