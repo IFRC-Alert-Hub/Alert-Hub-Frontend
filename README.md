@@ -1,10 +1,30 @@
-<div style="display: flex; flex-direction: column; align-items: center;">
-  <img src="https://github.com/IFRC-Alert-Hub/Alert-Hub-Frontend/assets/57798047/9a3647c9-f3ed-4f7d-b7af-bf38c1c36380" width="200" alt="Alert Hub">
-</div>
+<p align="center">
+  <img width="300" alt="AlertHub logo" src="https://github.com/IFRC-Alert-Hub/Alert-Hub-Frontend/assets/57798047/9a3647c9-f3ed-4f7d-b7af-bf38c1c36380">
+     <img src="https://github.com/IFRC-Alert-Hub/Alert-Hub-Frontend/assets/57798047/8060122e-df4f-4e77-9a7a-f537fea7f080" width="200" alt="UCL">
 
-# IFRC Alert Hub
+  <h2 align="center"> IFRC Alert Hub </h2>
+  <p align="center">
+    This repository contains the frontend code for the IFRC Alert Hub. The goal of the IFRC Alert Hub is to ensure that communities everywhere receive the most timely and effective emergency alerting possible, and can thereby take action to safeguard their lives and livelihoods.
+  </p>
+  
+  <p align="center">
+    Find out more on the <a href="https://alert-hub-frontend.azurewebsites.net/">project website</a>.
+  </p>
 
-This repository contains the frontend code for the IFRC Alert Hub. The goal of the IFRC Alert Hub is to ensure that communities everywhere receive the most timely and effective emergency alerting possible, and can thereby take action to safeguard their lives and livelihoods.
+  <p align="center">
+    <a href="https://www.codefactor.io/repository/github/ifrc-alert-hub/alert-hub-frontend"><img src="https://www.codefactor.io/repository/github/ifrc-alert-hub/alert-hub-frontend/badge" alt="CodeFactor" /></a>
+    <a href="https://github.com/IFRC-Alert-Hub/Alert-Hub-Frontend/issues">
+      <img alt="GitHub issues" src="https://img.shields.io/github/issues/IFRC-Alert-Hub/Alert-Hub-Frontend">
+    </a>
+    <a href="https://github.com/IFRC-Alert-Hub/Alert-Hub-Frontend/pulls">
+      <img alt="GitHub closed pull requests" src="https://img.shields.io/github/issues-pr-closed/IFRC-Alert-Hub/Alert-Hub-Frontend">
+    </a>
+     <a href="https://github.com/IFRC-Alert-Hub/Alert-Hub-Frontend/pulls">
+        <img alt="GitHub pull requests" src="https://img.shields.io/github/issues-pr/IFRC-Alert-Hub/Alert-Hub-Frontend">
+    </a>
+  </p>
+</p>
+
 
 ## UI Designs
 
@@ -151,7 +171,7 @@ docker-compose up
 
 ```
 
-# Azure setup
+## Azure setup
 
 ```bash
 ## Azure Setup
@@ -204,3 +224,13 @@ If you'd like to contribute to _IFRC GO Alert Hub_, please follow these steps:
 3. Make your changes and commit them with a clear and concise commit message.
 4. Push your changes to your forked repository.
    Create a pull request and describe the changes you've made.
+
+## Acknowledgements
+
+Built at [University College London](https://www.ucl.ac.uk/) in cooperation with [IFRC](https://www.ifrc.org/). 
+
+Academic supervision: Dr Emmanuel Letier
+
+## License
+
+
