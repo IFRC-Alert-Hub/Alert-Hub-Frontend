@@ -20,7 +20,7 @@ const Resources = () => {
         the International Federation of Red Cross and Red Crescent Societies
         (IFRC) as a part of the University College London (UCL) Industry
         Exchange Network (IXN). You can find all the source code and
-        instructions under the following four repositories.
+        instructions under the following repositories.
       </Typography>
       <Box mt={"2rem"}>
         {resourceData.map((data) => (
