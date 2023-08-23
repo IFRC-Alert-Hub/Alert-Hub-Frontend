@@ -77,7 +77,7 @@
   "passwordComponent.confirmPassword": "Confirm Password",
   "passwordComponent.rule1": "At least one uppercase letter",
   "passwordComponent.rule2": "At least one number",
-  "passwordComponent.rule3": "At least one special character [?!@#$%^&*()]",
+  "passwordComponent.rule3": "At least one special character [#?!@$%^&*-]",
   "passwordComponent.rule4": "At least 8 characters",
 
   "footer.title": "About Alert Hub",
