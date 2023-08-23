@@ -15,6 +15,11 @@ interface PasswordComponentProps {
   formik: any;
 }
 
+const passwordRegex = /^(?=.*?[#?!@$%^&*-]).*$/;
+
+const strengthRegex =
+  /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/;
+
 const PasswordComponent: React.FC<PasswordComponentProps> = ({ formik }) => {
   const [passwordStrength, setPasswordStrength] = useState(0);
   const [showPassword, setShowPassword] = useState(false);
@@ -23,8 +28,6 @@ const PasswordComponent: React.FC<PasswordComponentProps> = ({ formik }) => {
   const { formatMessage } = useIntl();
 
   const calculatePasswordStrength = (password: string) => {
-    const strengthRegex =
-      /^(?=.[A-Z])(?=.[0-9])(?=.[?!@#$%^&()])[a-zA-Z0-9!@#$%^&()]{8,}$/;
     if (password.length === 0) {
       return 0;
     } else if (strengthRegex.test(password)) {
@@ -33,7 +36,7 @@ const PasswordComponent: React.FC<PasswordComponentProps> = ({ formik }) => {
       const factors = [
         { regex: /[A-Z]/, factor: 20 },
         { regex: /[0-9]/, factor: 15 },
-        { regex: /[?!@#$%^&()]/, factor: 15 },
+        { regex: passwordRegex, factor: 15 },
       ];
       const lengthFactor = Math.min(password.length / 8, 1) * 50;
       let totalFactor = lengthFactor;
@@ -120,11 +123,7 @@ const PasswordComponent: React.FC<PasswordComponentProps> = ({ formik }) => {
               color="primary"
               disabled
               className={
-                /^(?=.*[A-Z])(?=.*[0-9])(?=.*[?!@#$%^&*()])[a-zA-Z0-9!?@#$%^&*()]{8,}$/.test(
-                  formik.values.password
-                )
-                  ? "fulfilled"
-                  : ""
+                strengthRegex.test(formik.values.password) ? "fulfilled" : ""
               }
             />
           }
@@ -137,11 +136,7 @@ const PasswordComponent: React.FC<PasswordComponentProps> = ({ formik }) => {
               color="primary"
               disabled
               className={
-                /^(?=.*[A-Z])(?=.*[0-9])(?=.*[?!@#$%^&*()])[a-zA-Z0-9!?@#$%^&*()]{8,}$/.test(
-                  formik.values.password
-                )
-                  ? "fulfilled"
-                  : ""
+                strengthRegex.test(formik.values.password) ? "fulfilled" : ""
               }
             />
           }
@@ -150,15 +145,11 @@ const PasswordComponent: React.FC<PasswordComponentProps> = ({ formik }) => {
         <FormControlLabel
           control={
             <Checkbox
-              checked={/[?!@#$%^&()]/.test(formik.values.password)}
+              checked={passwordRegex.test(formik.values.password)}
               color="primary"
               disabled
               className={
-                /^(?=.*[A-Z])(?=.*[0-9])(?=.*[?!@#$%^&*()])[a-zA-Z0-9!?@#$%^&*()]{8,}$/.test(
-                  formik.values.password
-                )
-                  ? "fulfilled"
-                  : ""
+                strengthRegex.test(formik.values.password) ? "fulfilled" : ""
               }
             />
           }
@@ -171,11 +162,7 @@ const PasswordComponent: React.FC<PasswordComponentProps> = ({ formik }) => {
               color="primary"
               disabled
               className={
-                /^(?=.*[A-Z])(?=.*[0-9])(?=.*[?!@#$%^&*()])[a-zA-Z0-9!?@#$%^&*()]{8,}$/.test(
-                  formik.values.password
-                )
-                  ? "fulfilled"
-                  : ""
+                strengthRegex.test(formik.values.password) ? "fulfilled" : ""
               }
             />
           }

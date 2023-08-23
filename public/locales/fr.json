@@ -58,7 +58,7 @@
   "passwordComponent.confirmPassword": "Confirmez le mot de passe",
   "passwordComponent.rule1": "Au moins une lettre majuscule",
   "passwordComponent.rule2": "Au moins un numéro",
-  "passwordComponent.rule3": "Au moins un caractère spécial [?!@#$%^&*()]",
+  "passwordComponent.rule3": "Au moins un caractère spécial [#?!@$%^&*-]",
   "passwordComponent.rule4": "Au moins 8 caractères",
   "footer.title": "À propos d'Alert Hub",
   "footer.aims": "L'objectif d'IFRC Alert Hub est de fournir des alertes d'urgence rapides et efficaces aux communautés du monde entier, leur permettant de protéger leurs vies et leurs moyens de subsistance.",
