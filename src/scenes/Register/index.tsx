@@ -234,7 +234,7 @@ const Register = () => {
 
             <PasswordComponent formik={formik} />
 
-            <Box
+            {/* <Box
               sx={{
                 display: "flex",
                 justifyContent: "center",
@@ -253,7 +253,7 @@ const Register = () => {
                   theme: "light",
                 }}
               />
-            </Box>
+            </Box> */}
             <Button
               type="submit"
               fullWidth
@@ -269,7 +269,7 @@ const Register = () => {
                 },
                 fontSize: "14px",
               }}
-              disabled={!formik.isValid || !formik.dirty || !isCaptchaVerified}
+              disabled={!formik.isValid || !formik.dirty}
             >
               Register
             </Button>
