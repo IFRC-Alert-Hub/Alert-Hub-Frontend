@@ -19,8 +19,6 @@ import { Turnstile } from "@marsidev/react-turnstile";
 
 const Register = () => {
   const [isCaptchaVerified, setIsCaptchaVerified] = useState(false);
-
-  const [isSendClicked, setIsSendClicked] = useState(false);
   const [isSendEnabled, setIsSendEnabled] = useState<boolean>(false);
   const [isEmailSent, setIsEmailSent] = useState(false);
   const [emailError, setEmailError] = useState("");
@@ -36,13 +34,13 @@ const Register = () => {
   });
 
   useEffect(() => {
-    if (isSendClicked) {
+    if (isEmailSent) {
       const timer = setInterval(() => {
         setTimeLeft((prevTime) => {
           if (prevTime > 0) {
             return prevTime - 1;
           } else {
-            setIsSendClicked(false);
+            setIsEmailSent(false);
             clearInterval(timer);
             return 60;
           }
@@ -53,7 +51,7 @@ const Register = () => {
         clearInterval(timer);
       };
     }
-  }, [isSendClicked]);
+  }, [isEmailSent]);
 
   const [register] = useMutation(REGISTER, {
     client: auth_system,
@@ -77,7 +75,6 @@ const Register = () => {
       } else {
         setIsEmailSent(false);
         setEmailError(errors.email);
-        console.log(errors.email);
       }
     } catch (error) {
       alert(error);
@@ -86,7 +83,6 @@ const Register = () => {
   };
 
   const handleSendClick = () => {
-    setIsSendClicked(true);
     const { email } = formik.values;
     sendEmail(email);
   };
@@ -189,7 +185,7 @@ const Register = () => {
                       <Button
                         variant="text"
                         disableRipple
-                        disabled={isSendClicked}
+                        disabled={isEmailSent}
                         sx={{
                           color: "#d30210",
                           p: "0px 0px 0px 10px",
@@ -199,7 +195,7 @@ const Register = () => {
                         }}
                         onClick={isSendEnabled ? handleSendClick : undefined}
                       >
-                        {isSendClicked && timeLeft > 0 ? (
+                        {isEmailSent && timeLeft > 0 ? (
                           <span>{timeLeft}s</span>
                         ) : (
                           <span>Send</span>
