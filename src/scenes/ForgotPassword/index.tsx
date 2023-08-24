@@ -112,7 +112,7 @@ const ForgotPassword = () => {
       password: Yup.string()
         .required("Required")
         .matches(
-          /^(?=.*[A-Z])(?=.*[0-9])(?=.*[?!@#$%^&*()])[a-zA-Z0-9!?@#$%^&*()]{8,}$/,
+          /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/,
           "Password must contain at least one uppercase letter, one number, and one special character"
         ),
       confirmPassword: Yup.string()
