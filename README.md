@@ -237,14 +237,14 @@ docker-compose up
 
 This guide provides step-by-step instructions to deploy a Docker container to Azure Web App for Containers using Azure Container Registry.
 
-# Part 1: Set Up Azure Container Registry
+## Part 1: Set Up Azure Container Registry
 
-## Step 1: Create Azure Container Registry
+### Step 1: Create Azure Container Registry
 In this guide, we'll assume the name of the registry is `registryName`.
 
 1. **Enable Access Key**: In your Azure Container Registry settings, enable access keys to authenticate Docker with the registry. Remember to save the username and password, as you'll need them for future steps.
 
-## Step 2: Prepare and Push Your Docker Container
+### Step 2: Prepare and Push Your Docker Container
 
 1. **Build and Run Docker Container Locally**:
 
@@ -265,9 +265,9 @@ Once the container is running, you can access it locally by opening your browser
 After pushing, verify that the Docker container image is available in your Azure Container Registry under the repository named alert-hub-frontend.
 
 
-# Part 2: Deploy Docker Container to Azure Web App for Containers
+## Part 2: Deploy Docker Container to Azure Web App for Containers
 
-## Step 1: Create Azure Web App for Containers
+### Step 1: Create Azure Web App for Containers
 1. In the Azure portal, navigate to the "Create a resource" section.
 2. Search for "Web App for Containers" and select it.
 3. Choose a unique name for your web app.
@@ -275,12 +275,12 @@ After pushing, verify that the Docker container image is available in your Azure
 5. Under "Configure container," choose "Azure Container Registry" as the image source.
 6. Provide the registry details and the image path (e.g., `registryName.azurecr.io/alert-hub-frontend:latest`).
 
-## Step 4: Enable Continuous Deployment
+### Step 4: Enable Continuous Deployment
 1. In your Azure Web App's settings, navigate to the "Deployment Center" section.
 2. Turn on Continuous Deployment (CD) and select the appropriate source repository (e.g., GitHub).
 3. Configure the deployment settings as needed, ensuring automatic deployments are triggered upon repository changes.
 
-## Step 5: Finalise and Test
+### Step 5: Finalise and Test
 1. Save the configurations and let the CD process deploy your Docker container to the Azure Web App.
 2. Once deployed, navigate to the URL of your Azure Web App to access the containerised application.
 
