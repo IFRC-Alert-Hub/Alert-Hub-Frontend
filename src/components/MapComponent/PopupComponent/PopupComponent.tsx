@@ -502,6 +502,7 @@ export const PopupComponent: React.FC<PopupComponentProps> = ({
                 height: "600px",
                 overflowY: "scroll",
                 display: "flex",
+                width: "100%",
               }}
               ref={tabPanelRef}
             >
