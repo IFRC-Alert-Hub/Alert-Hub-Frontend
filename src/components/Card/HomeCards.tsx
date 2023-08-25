@@ -103,7 +103,7 @@ const HomeSubscriptionCard = () => {
                 color="error"
                 variant="outlined"
                 sx={{ borderRadius: "20px", textTransform: "capitalize" }}
-                href="https://github.com/IFRC-Alert-Hub/Alert-Hub-CAP-Aggregator#api-documentation"
+                href="https://github.com/IFRC-Alert-Hub/Alert-Hub-Alert-Manager#api-documentation"
                 target="_blank"
               >
                 {formatMessage({ id: "home.heroCard.btnTitle2" })}
