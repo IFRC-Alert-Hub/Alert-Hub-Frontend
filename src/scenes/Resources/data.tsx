@@ -11,7 +11,7 @@ export const resourceData = [
     title: "Alert Hub APIs",
     content:
       "Alert Hub APIs enable third-party developers and rebroadcasters to access alerts and alert feed.",
-    link: "https://github.com/IFRC-Alert-Hub/Alert-Hub-CAP-Aggregator#api-documentation",
+    link: "https://github.com/IFRC-Alert-Hub/Alert-Hub-Alert-Manager#api-documentation",
   },
   {
     title: "Alert Hub Frontend",

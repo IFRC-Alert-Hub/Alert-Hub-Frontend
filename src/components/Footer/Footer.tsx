@@ -128,7 +128,7 @@ const Footer = () => {
               className="footer-section-link"
               target="_blank"
               underline="hover"
-              href="https://github.com/IFRC-Alert-Hub/Alert-Hub-CAP-Aggregator#api-documentation"
+              href="https://github.com/IFRC-Alert-Hub/Alert-Hub-Alert-Manager#api-documentation"
             >
               <Typography
                 variant="h6"
