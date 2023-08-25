@@ -99,15 +99,15 @@ const HomeSubscriptionCard = () => {
               </Typography>
             </CardContent>
             <Box sx={{ display: "flex", alignItems: "center", pl: 3, pb: 3 }}>
-              <Link to="/">
-                <Button
-                  color="error"
-                  variant="outlined"
-                  sx={{ borderRadius: "20px", textTransform: "capitalize" }}
-                >
-                  {formatMessage({ id: "home.heroCard.btnTitle2" })}
-                </Button>
-              </Link>
+              <Button
+                color="error"
+                variant="outlined"
+                sx={{ borderRadius: "20px", textTransform: "capitalize" }}
+                href="https://github.com/IFRC-Alert-Hub/Alert-Hub-CAP-Aggregator#api-documentation"
+                target="_blank"
+              >
+                {formatMessage({ id: "home.heroCard.btnTitle2" })}
+              </Button>
             </Box>
           </Box>
           <Box
