@@ -233,50 +233,58 @@ It's important to note that the practical deployment strategy makes use of Docke
 docker-compose up
 
 ```
+# Azure Setup
 
-## Azure setup
+This guide provides step-by-step instructions to deploy a Docker container to Azure Web App for Containers using Azure Container Registry.
 
-```bash
-## Azure Setup
+# Part 1: Set Up Azure Container Registry
 
-This project is designed to be deployed to an Azure Web App using a Docker container. Follow these steps to set up an Azure Web App for your project:
+## Step 1: Create Azure Container Registry
+In this guide, we'll assume the name of the registry is `registryName`.
 
-1. Sign in to the [Azure Portal](https://portal.azure.com/) with your Azure account.
+1. **Enable Access Key**: In your Azure Container Registry settings, enable access keys to authenticate Docker with the registry. Remember to save the username and password, as you'll need them for future steps.
 
-2. In the left-hand menu, click on "Create a resource."
+## Step 2: Prepare and Push Your Docker Container
 
-3. In the search bar, type "Web App" and select the "Web App" option from the results.
+1. **Build and Run Docker Container Locally**:
 
-4. Click the "Create" button to begin configuring your Web App.
+   ```bash
+   docker build -t registryName.azurecr.io/alert-hub-frontend:latest .
+   docker run --name test2 -d -p 80:80 registryName.azurecr.io/alert-hub-frontend:latest
 
-5. Fill in the following details for your Web App:
+Once the container is running, you can access it locally by opening your browser and navigating to http://localhost.
 
-   - Subscription: Select your desired Azure subscription.
-   - Resource Group: Create a new resource group or use an existing one.
-   - Name: Choose a unique name for your Web App (e.g., `yourprojectname-webapp`).
-   - Operating System: Select "Linux".
-   - Publish: Choose "Docker Container".
-   - Region: Select a region close to your target users for better performance.
-   - App Service Plan: Create a new plan or use an existing one, and select the desired pricing tier.
+2. Push Docker Image to Azure Container Registry:
+   
+    ```bash
+    docker login registryName.azurecr.io # Enter your username and password (from step 1)
+    docker push registryName.azurecr.io/alert-hub-frontend:latest
 
-6. Click the "Next: Docker" button to configure your container settings.
+3. Check the Pushed Image:
 
-7. Choose "Single Container" as your container type.
+After pushing, verify that the Docker container image is available in your Azure Container Registry under the repository named alert-hub-frontend.
 
-8. Select "GitHub Container Registry (ghcr.io)" as your registry.
 
-9. Enter the image name and tag in the "Image and tag" field (e.g., `ghcr.io/yourusername/yourprojectname:latest`).
+# Part 2: Deploy Docker Container to Azure Web App for Containers
 
-10. Click "Review + create" to review your Web App settings.
+## Step 1: Create Azure Web App for Containers
+1. In the Azure portal, navigate to the "Create a resource" section.
+2. Search for "Web App for Containers" and select it.
+3. Choose a unique name for your web app.
+4. Configure the necessary settings such as the resource group, operating system, and app service plan.
+5. Under "Configure container," choose "Azure Container Registry" as the image source.
+6. Provide the registry details and the image path (e.g., `registryName.azurecr.io/alert-hub-frontend:latest`).
 
-11. After reviewing, click "Create" to deploy your Web App.
+## Step 4: Enable Continuous Deployment
+1. In your Azure Web App's settings, navigate to the "Deployment Center" section.
+2. Turn on Continuous Deployment (CD) and select the appropriate source repository (e.g., GitHub).
+3. Configure the deployment settings as needed, ensuring automatic deployments are triggered upon repository changes.
 
-12. Once your Web App is created, navigate to the "Deployment Center" in your Web App's settings.
+## Step 5: Finalise and Test
+1. Save the configurations and let the CD process deploy your Docker container to the Azure Web App.
+2. Once deployed, navigate to the URL of your Azure Web App to access the containerised application.
 
-13. Choose "GitHub Actions" as your deployment method and follow the instructions to configure the GitHub Actions workflow.
-
-Make sure to update the `env.AZURE_WEBAPP_NAME` value in your GitHub Actions workflow file (`.github/workflows/main.yml`) with the name you chose for your Web App.
-```
+Remember to replace "registryName" with your actual Azure Container Registry name.
 
 ## Contributing
 
@@ -293,7 +301,4 @@ If you'd like to contribute to _IFRC GO Alert Hub_, please follow these steps:
 Built at [University College London](https://www.ucl.ac.uk/) in cooperation with [IFRC](https://www.ifrc.org/). 
 
 Academic supervision: Dr Emmanuel Letier
-
-## License
-
 
