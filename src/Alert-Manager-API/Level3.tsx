@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { Admin1_Alert_Data } from "./types";
-import { Autocomplete, TextField } from "@mui/material";
 
 type ResponseAlertType = {
   id: number;
@@ -123,7 +122,6 @@ export const useLevel3Data = () => {
 
           setLoading(false);
         } catch (error: any) {
-          console.error("Error fetching data:", error.message);
           setError(error.message);
           setLoading(false);
         }
@@ -134,98 +132,98 @@ export const useLevel3Data = () => {
 
   return { data, loading, error, refetch, setFilters };
 };
-const urgencyOptions: string[] = [
-  "Immediate",
-  "Expected",
-  "Future",
-  "Past",
-  "Unknown",
-];
+// const urgencyOptions: string[] = [
+//   "Immediate",
+//   "Expected",
+//   "Future",
+//   "Past",
+//   "Unknown",
+// ];
 
-const Level3: React.FC = () => {
-  const [admin1ID, setAdmin1ID] = useState<number>(1765);
-  const { data, loading, error, refetch, setFilters } = useLevel3Data();
+// const Level3: React.FC = () => {
+//   const [admin1ID, setAdmin1ID] = useState<number>(1765);
+//   const { data, loading, error, refetch, setFilters } = useLevel3Data();
 
-  const handleFetch = () => {
-    if (admin1ID) {
-      refetch(admin1ID);
-    }
-  };
+//   const handleFetch = () => {
+//     if (admin1ID) {
+//       refetch(admin1ID);
+//     }
+//   };
 
-  const [selectedUrgency, setSelectedUrgency] = useState<string>("");
+//   const [selectedUrgency, setSelectedUrgency] = useState<string>("");
 
-  const handleUrgencyChange = (
-    event: React.ChangeEvent<{}>,
-    value: string | null
-  ) => {
-    setSelectedUrgency(value || "");
-    setFilters({
-      urgency: value || "",
-      severity: "",
-      certainty: "",
-    });
-  };
+//   const handleUrgencyChange = (
+//     event: React.ChangeEvent<{}>,
+//     value: string | null
+//   ) => {
+//     setSelectedUrgency(value || "");
+//     setFilters({
+//       urgency: value || "",
+//       severity: "",
+//       certainty: "",
+//     });
+//   };
 
-  return (
-    <div>
-      <label>
-        Admin1 ID:
-        <input
-          type="number"
-          value={admin1ID}
-          onChange={(e) => setAdmin1ID(Number(e.target.value))}
-        />
-      </label>
-      <button onClick={handleFetch}>Fetch Data</button>
+//   return (
+//     <div>
+//       <label>
+//         Admin1 ID:
+//         <input
+//           type="number"
+//           value={admin1ID}
+//           onChange={(e) => setAdmin1ID(Number(e.target.value))}
+//         />
+//       </label>
+//       <button onClick={handleFetch}>Fetch Data</button>
 
-      {loading && <p>Loading...</p>}
-      {!loading && !error && data && (
-        <>
-          <Autocomplete
-            disablePortal
-            id="combo-box-urgency"
-            options={urgencyOptions}
-            getOptionLabel={(option) => option}
-            sx={{
-              width: 170,
-              backgroundColor: "#f4f4f4",
-              "& .MuiAutocomplete-input": {
-                padding: "4px",
-              },
-              marginRight: "20px",
-            }}
-            renderInput={(params) => (
-              <TextField
-                {...params}
-                label="Urgency"
-                size="small"
-                sx={{
-                  "& .MuiInputLabel-root": {
-                    color: "#8D8D8D",
-                    fontSize: "12px",
-                  },
-                }}
-              />
-            )}
-            onChange={handleUrgencyChange}
-            value={selectedUrgency}
-            isOptionEqualToValue={(option: any, value: any) => {
-              if (option === null || value === null) {
-                return option === value;
-              }
-              return option.value === value.value;
-            }}
-          />
-          <ul>
-            {data.alerts?.map((alert) => (
-              <li key={alert.id}>Alert ID: {alert.id}</li>
-            ))}
-          </ul>
-        </>
-      )}
-      {error && <p>{error}</p>}
-    </div>
-  );
-};
+//       {loading && <p>Loading...</p>}
+//       {!loading && !error && data && (
+//         <>
+//           <Autocomplete
+//             disablePortal
+//             id="combo-box-urgency"
+//             options={urgencyOptions}
+//             getOptionLabel={(option) => option}
+//             sx={{
+//               width: 170,
+//               backgroundColor: "#f4f4f4",
+//               "& .MuiAutocomplete-input": {
+//                 padding: "4px",
+//               },
+//               marginRight: "20px",
+//             }}
+//             renderInput={(params) => (
+//               <TextField
+//                 {...params}
+//                 label="Urgency"
+//                 size="small"
+//                 sx={{
+//                   "& .MuiInputLabel-root": {
+//                     color: "#8D8D8D",
+//                     fontSize: "12px",
+//                   },
+//                 }}
+//               />
+//             )}
+//             onChange={handleUrgencyChange}
+//             value={selectedUrgency}
+//             isOptionEqualToValue={(option: any, value: any) => {
+//               if (option === null || value === null) {
+//                 return option === value;
+//               }
+//               return option.value === value.value;
+//             }}
+//           />
+//           <ul>
+//             {data.alerts?.map((alert) => (
+//               <li key={alert.id}>Alert ID: {alert.id}</li>
+//             ))}
+//           </ul>
+//         </>
+//       )}
+//       {error && <p>{error}</p>}
+//     </div>
+//   );
+// };
 
-export default Level3;
+// export default Level3;

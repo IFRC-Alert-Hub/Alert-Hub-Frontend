@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { Country_Admin1s_Data, admin1 } from "./types";
-import { Autocomplete, TextField } from "@mui/material";
+import { Country_Admin1s_Data } from "./types";
 
 type ResponseAdmin1Type = {
   id: number;
@@ -114,108 +113,108 @@ export const useLevel2Data = () => {
   }, [countryID, filters]);
   return { data, loading, error, refetch, setFilters };
 };
-const urgencyOptions: string[] = [
-  "Immediate",
-  "Expected",
-  "Future",
-  "Past",
-  "Unknown",
-];
-const Level2: React.FC = () => {
-  const [countryID, setCountryID] = useState<number>(161);
-  const { data, loading, error, refetch, setFilters } = useLevel2Data();
+// const urgencyOptions: string[] = [
+//   "Immediate",
+//   "Expected",
+//   "Future",
+//   "Past",
+//   "Unknown",
+// ];
+// const Level2: React.FC = () => {
+//   const [countryID, setCountryID] = useState<number>(161);
+//   const { data, loading, error, refetch, setFilters } = useLevel2Data();
 
-  const handleFetch = () => {
-    if (countryID) {
-      refetch(countryID);
-    }
-  };
-  const [selectedUrgency, setSelectedUrgency] = useState<string>("");
+//   const handleFetch = () => {
+//     if (countryID) {
+//       refetch(countryID);
+//     }
+//   };
+//   const [selectedUrgency, setSelectedUrgency] = useState<string>("");
 
-  const handleUrgencyChange = (
-    event: React.ChangeEvent<{}>,
-    value: string | null
-  ) => {
-    setSelectedUrgency(value || "");
-    setFilters({
-      urgency: value || "",
-      severity: "",
-      certainty: "",
-    });
-  };
-  return (
-    <div>
-      <label>
-        Country ID:
-        <input
-          type="number"
-          value={countryID}
-          onChange={(e) => setCountryID(Number(e.target.value))}
-        />
-      </label>
-      <button onClick={handleFetch}>Fetch Data</button>
+//   const handleUrgencyChange = (
+//     event: React.ChangeEvent<{}>,
+//     value: string | null
+//   ) => {
+//     setSelectedUrgency(value || "");
+//     setFilters({
+//       urgency: value || "",
+//       severity: "",
+//       certainty: "",
+//     });
+//   };
+//   return (
+//     <div>
+//       <label>
+//         Country ID:
+//         <input
+//           type="number"
+//           value={countryID}
+//           onChange={(e) => setCountryID(Number(e.target.value))}
+//         />
+//       </label>
+//       <button onClick={handleFetch}>Fetch Data</button>
 
-      {loading && <p>Loading...</p>}
-      {!loading && !error && data && (
-        <>
-          {" "}
-          <Autocomplete
-            disablePortal
-            id="combo-box-urgency"
-            options={urgencyOptions}
-            getOptionLabel={(option) => option}
-            sx={{
-              width: 170,
-              backgroundColor: "#f4f4f4",
-              "& .MuiAutocomplete-input": {
-                padding: "4px",
-              },
-              marginRight: "20px",
-            }}
-            renderInput={(params) => (
-              <TextField
-                {...params}
-                label="Urgency"
-                size="small"
-                sx={{
-                  "& .MuiInputLabel-root": {
-                    color: "#8D8D8D",
-                    fontSize: "12px",
-                  },
-                }}
-              />
-            )}
-            onChange={handleUrgencyChange}
-            value={selectedUrgency}
-            isOptionEqualToValue={(option: any, value: any) => {
-              if (option === null || value === null) {
-                return option === value;
-              }
-              return option.value === value.value;
-            }}
-          />{" "}
-          <ul>
-            <li key={data.country_id}>
-              {data.country_name}
-              <ul>
-                {data.admin1s?.map((admin1: admin1) => (
-                  <li key={admin1.id}>
-                    {admin1.name}
-                    <ul>
-                      <li>URGENCY: {admin1.filters.urgency}</li>
-                      <li>SEVERITY: {admin1.filters.severity}</li>
-                      <li>CERTAINTY: {admin1.filters.certainty}</li>
-                    </ul>
-                  </li>
-                ))}
-              </ul>
-            </li>
-          </ul>
-        </>
-      )}
-      {error && <p>{error}</p>}
-    </div>
-  );
-};
+//       {loading && <p>Loading...</p>}
+//       {!loading && !error && data && (
+//         <>
+//           {" "}
+//           <Autocomplete
+//             disablePortal
+//             id="combo-box-urgency"
+//             options={urgencyOptions}
+//             getOptionLabel={(option) => option}
+//             sx={{
+//               width: 170,
+//               backgroundColor: "#f4f4f4",
+//               "& .MuiAutocomplete-input": {
+//                 padding: "4px",
+//               },
+//               marginRight: "20px",
+//             }}
+//             renderInput={(params) => (
+//               <TextField
+//                 {...params}
+//                 label="Urgency"
+//                 size="small"
+//                 sx={{
+//                   "& .MuiInputLabel-root": {
+//                     color: "#8D8D8D",
+//                     fontSize: "12px",
+//                   },
+//                 }}
+//               />
+//             )}
+//             onChange={handleUrgencyChange}
+//             value={selectedUrgency}
+//             isOptionEqualToValue={(option: any, value: any) => {
+//               if (option === null || value === null) {
+//                 return option === value;
+//               }
+//               return option.value === value.value;
+//             }}
+//           />{" "}
+//           <ul>
+//             <li key={data.country_id}>
+//               {data.country_name}
+//               <ul>
+//                 {data.admin1s?.map((admin1: admin1) => (
+//                   <li key={admin1.id}>
+//                     {admin1.name}
+//                     <ul>
+//                       <li>URGENCY: {admin1.filters.urgency}</li>
+//                       <li>SEVERITY: {admin1.filters.severity}</li>
+//                       <li>CERTAINTY: {admin1.filters.certainty}</li>
+//                     </ul>
+//                   </li>
+//                 ))}
+//               </ul>
+//             </li>
+//           </ul>
+//         </>
+//       )}
+//       {error && <p>{error}</p>}
+//     </div>
+//   );
+// };
 
-export default Level2;
+// export default Level2;

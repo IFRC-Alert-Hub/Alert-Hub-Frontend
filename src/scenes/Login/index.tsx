@@ -29,7 +29,7 @@ const Login = () => {
   });
 
   const getTokenData = async (loginData: any) => {
-    console.log("Login Data: ", loginData);
+    // console.log("Login Data: ", loginData);
     try {
       const result = await login({ variables: loginData });
       return result;
