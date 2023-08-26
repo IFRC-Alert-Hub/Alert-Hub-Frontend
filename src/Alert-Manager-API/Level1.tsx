@@ -1,8 +1,7 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { convertCoordinates } from "./helperFunctions";
-import { Country, CountryRegionData } from "./types";
-import { Autocomplete, TextField } from "@mui/material";
+import { CountryRegionData } from "./types";
 
 type ResponseFiltersType = {
   urgency?: string[];
@@ -148,98 +147,98 @@ export const useLevel1Data = () => {
   return { data, loading, error, setFilters };
 };
 
-const urgencyOptions: string[] = [
-  "Immediate",
-  "Expected",
-  "Future",
-  "Past",
-  "Unknown",
-];
+// const urgencyOptions: string[] = [
+//   "Immediate",
+//   "Expected",
+//   "Future",
+//   "Past",
+//   "Unknown",
+// ];
 
-const Level1: React.FC = () => {
-  const { data, loading, error, setFilters } = useLevel1Data();
-  const [selectedUrgency, setSelectedUrgency] = useState<string>("");
+// const Level1: React.FC = () => {
+//   const { data, loading, error, setFilters } = useLevel1Data();
+//   const [selectedUrgency, setSelectedUrgency] = useState<string>("");
 
-  const handleUrgencyChange = (
-    event: React.ChangeEvent<{}>,
-    value: string | null
-  ) => {
-    setSelectedUrgency(value || "");
-    setFilters({
-      urgency: value || "",
-      severity: "",
-      certainty: "",
-    });
-  };
+//   const handleUrgencyChange = (
+//     event: React.ChangeEvent<{}>,
+//     value: string | null
+//   ) => {
+//     setSelectedUrgency(value || "");
+//     setFilters({
+//       urgency: value || "",
+//       severity: "",
+//       certainty: "",
+//     });
+//   };
 
-  return (
-    <div>
-      {loading && <p>Loading...</p>}
-      {error && <p>{error}</p>}
+//   return (
+//     <div>
+//       {loading && <p>Loading...</p>}
+//       {error && <p>{error}</p>}
 
-      {!loading && !error && (
-        <>
-          <Autocomplete
-            disablePortal
-            id="combo-box-urgency"
-            options={urgencyOptions}
-            getOptionLabel={(option) => option}
-            sx={{
-              width: 170,
-              backgroundColor: "#f4f4f4",
-              "& .MuiAutocomplete-input": {
-                padding: "4px",
-              },
-              marginRight: "20px",
-            }}
-            renderInput={(params) => (
-              <TextField
-                {...params}
-                label="Urgency"
-                size="small"
-                sx={{
-                  "& .MuiInputLabel-root": {
-                    color: "#8D8D8D",
-                    fontSize: "12px",
-                  },
-                }}
-              />
-            )}
-            onChange={handleUrgencyChange}
-            value={selectedUrgency}
-            isOptionEqualToValue={(option: any, value: any) => {
-              if (option === null || value === null) {
-                return option === value;
-              }
-              return option.value === value.value;
-            }}
-          />
-          <ul>
-            {data.map((region: CountryRegionData) => (
-              <li key={region.id}>
-                {region.name}
-                <ul>
-                  {region.countries?.map((country: Country) => (
-                    <>
-                      {" "}
-                      <div key={country.id}>
-                        <li>{country.name}</li>
-                        <ul>
-                          <li>URGENCY: {country.filters.urgency}</li>
-                          <li>SEVERITY: {country.filters.severity}</li>
-                          <li>CERTAINTY: {country.filters.certainty}</li>
-                        </ul>
-                      </div>
-                    </>
-                  ))}
-                </ul>
-              </li>
-            ))}
-          </ul>
-        </>
-      )}
-    </div>
-  );
-};
+//       {!loading && !error && (
+//         <>
+//           <Autocomplete
+//             disablePortal
+//             id="combo-box-urgency"
+//             options={urgencyOptions}
+//             getOptionLabel={(option) => option}
+//             sx={{
+//               width: 170,
+//               backgroundColor: "#f4f4f4",
+//               "& .MuiAutocomplete-input": {
+//                 padding: "4px",
+//               },
+//               marginRight: "20px",
+//             }}
+//             renderInput={(params) => (
+//               <TextField
+//                 {...params}
+//                 label="Urgency"
+//                 size="small"
+//                 sx={{
+//                   "& .MuiInputLabel-root": {
+//                     color: "#8D8D8D",
+//                     fontSize: "12px",
+//                   },
+//                 }}
+//               />
+//             )}
+//             onChange={handleUrgencyChange}
+//             value={selectedUrgency}
+//             isOptionEqualToValue={(option: any, value: any) => {
+//               if (option === null || value === null) {
+//                 return option === value;
+//               }
+//               return option.value === value.value;
+//             }}
+//           />
+//           <ul>
+//             {data.map((region: CountryRegionData) => (
+//               <li key={region.id}>
+//                 {region.name}
+//                 <ul>
+//                   {region.countries?.map((country: Country) => (
+//                     <>
+//                       {" "}
+//                       <div key={country.id}>
+//                         <li>{country.name}</li>
+//                         <ul>
+//                           <li>URGENCY: {country.filters.urgency}</li>
+//                           <li>SEVERITY: {country.filters.severity}</li>
+//                           <li>CERTAINTY: {country.filters.certainty}</li>
+//                         </ul>
+//                       </div>
+//                     </>
+//                   ))}
+//                 </ul>
+//               </li>
+//             ))}
+//           </ul>
+//         </>
+//       )}
+//     </div>
+//   );
+// };
 
-export default Level1;
+// export default Level1;

@@ -1,9 +1,7 @@
-import { useMemo, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import axios from "axios";
 import { Alert, AlertInfo } from "./types";
 
-import React from "react";
-import { useParams } from "react-router-dom";
 import { convertCoordinates } from "./helperFunctions";
 
 interface ResponseType {
@@ -74,23 +72,23 @@ export const GetAlertInfoByAlertID = () => {
   return { data, loading, error, refetch };
 };
 
-export const AlertInfoTest = () => {
-  const { id } = useParams<{ id: string }>();
-  const { data, loading, error, refetch } = GetAlertInfoByAlertID();
+// export const AlertInfoTest = () => {
+//   const { id } = useParams<{ id: string }>();
+//   const { data, loading, error, refetch } = GetAlertInfoByAlertID();
 
-  useMemo(() => {
-    refetch(Number(id));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [id]);
+//   useMemo(() => {
+//     refetch(Number(id));
+//     // eslint-disable-next-line react-hooks/exhaustive-deps
+//   }, [id]);
 
-  return (
-    <>
-      {error && <h1>Error</h1>}
-      {data && !loading && !error && (
-        <div>
-          <h1>{data.id}</h1>
-        </div>
-      )}
-    </>
-  );
-};
+//   return (
+//     <>
+//       {error && <h1>Error</h1>}
+//       {data && !loading && !error && (
+//         <div>
+//           <h1>{data.id}</h1>
+//         </div>
+//       )}
+//     </>
+//   );
+// };

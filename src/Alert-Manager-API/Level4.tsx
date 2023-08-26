@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import axios from "axios";
 import { convertCoordinates } from "./helperFunctions";
 import { AlertInfoArea } from "./types";
@@ -109,7 +109,7 @@ export const useLevel4Data = () => {
           setData(response.data as any);
           setLoading(false);
         } catch (error: any) {
-          console.error("Error fetching data:", error.message);
+          // console.error("Error fetching data:", error.message);
           setError(error.message);
           setLoading(false);
         }
@@ -122,42 +122,42 @@ export const useLevel4Data = () => {
   return { data, loading, error, refetch };
 };
 
-const Level4: React.FC = () => {
-  const [admin1ID, setAdmin1ID] = useState<number>(78698);
-  const { data, loading, error, refetch } = useLevel4Data();
+// const Level4: React.FC = () => {
+//   const [admin1ID, setAdmin1ID] = useState<number>(78698);
+//   const { data, loading, error, refetch } = useLevel4Data();
 
-  useEffect(() => {
-    handleFetch();
-  });
-  const handleFetch = () => {
-    if (admin1ID) {
-      refetch(admin1ID);
-    }
-  };
+//   useEffect(() => {
+//     handleFetch();
+//   });
+//   const handleFetch = () => {
+//     if (admin1ID) {
+//       refetch(admin1ID);
+//     }
+//   };
 
-  return (
-    <div>
-      <label>
-        Admin1 ID:
-        <input
-          type="number"
-          value={admin1ID}
-          onChange={(e) => setAdmin1ID(Number(e.target.value))}
-        />
-      </label>
-      <button onClick={handleFetch}>Fetch Data</button>
+//   return (
+//     <div>
+//       <label>
+//         Admin1 ID:
+//         <input
+//           type="number"
+//           value={admin1ID}
+//           onChange={(e) => setAdmin1ID(Number(e.target.value))}
+//         />
+//       </label>
+//       <button onClick={handleFetch}>Fetch Data</button>
 
-      {loading && <p>Loading...</p>}
-      {!loading && !error && data && (
-        <ul>
-          {data.areas?.map((area) => (
-            <li key={area.id}>Area ID: {area.id}</li>
-          ))}
-        </ul>
-      )}
-      {error && <p>{error}</p>}
-    </div>
-  );
-};
+//       {loading && <p>Loading...</p>}
+//       {!loading && !error && data && (
+//         <ul>
+//           {data.areas?.map((area) => (
+//             <li key={area.id}>Area ID: {area.id}</li>
+//           ))}
+//         </ul>
+//       )}
+//       {error && <p>{error}</p>}
+//     </div>
+//   );
+// };
 
-export default Level4;
+// export default Level4;

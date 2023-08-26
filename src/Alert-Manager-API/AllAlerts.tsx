@@ -37,23 +37,23 @@ export const GetAllAlerts = () => {
   return { data, loading, error };
 };
 
-const AllAlertsComponent: React.FC = () => {
-  const { data, loading, error } = GetAllAlerts();
+// const AllAlertsComponent: React.FC = () => {
+//   const { data, loading, error } = GetAllAlerts();
 
-  return (
-    <div>
-      {loading && <p>Loading...</p>}
-      {error && <p>{error}</p>}
+//   return (
+//     <div>
+//       {loading && <p>Loading...</p>}
+//       {error && <p>{error}</p>}
 
-      {!loading && !error && (
-        <ul>
-          {data.map((alert: Alert) => (
-            <li key={alert.id}>{alert.url}</li>
-          ))}
-        </ul>
-      )}
-    </div>
-  );
-};
+//       {!loading && !error && (
+//         <ul>
+//           {data.map((alert: Alert) => (
+//             <li key={alert.id}>{alert.url}</li>
+//           ))}
+//         </ul>
+//       )}
+//     </div>
+//   );
+// };
 
-export default AllAlertsComponent;
+// export default AllAlertsComponent;
