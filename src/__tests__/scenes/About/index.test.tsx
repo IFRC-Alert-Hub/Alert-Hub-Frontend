@@ -4,7 +4,7 @@ import About from "../../../scenes/About";
 
 import { IntlProvider } from "react-intl"; // Import IntlProvider
 import { MemoryRouter } from "react-router-dom";
-import Provider from "../../IntlProvider/Provider";
+import Provider from "../../../IntlProvider/Provider";
 
 describe("About Component", () => {
   it("renders the component without errors", () => {

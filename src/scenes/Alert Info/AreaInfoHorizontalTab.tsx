@@ -4,7 +4,7 @@ import Tab from "@mui/material/Tab";
 import Box from "@mui/material/Box";
 
 import SingleAreaView from "./SingleAreaView";
-import { AlertInfo, Area } from "../../Alert-Manager-API/types";
+import { AlertInfo, Area } from "../../APIs/Alert-Manager-API/types";
 
 interface TabPanelProps {
   children?: React.ReactNode;

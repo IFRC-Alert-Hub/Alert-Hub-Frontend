@@ -1,12 +1,12 @@
 import React, { ReactNode } from "react";
 import { IntlProvider } from "react-intl";
 import { MemoryRouter } from "react-router-dom";
-import en from "./../../../public/locales/en.json";
-import fr from "./../../../public/locales/fr.json";
-import es from "./../../../public/locales/es.json";
-import ar from "./../../../public/locales/ar.json";
+import en from "../../public/locales/en.json";
+import fr from "../../public/locales/fr.json";
+import es from "../../public/locales/es.json";
+import ar from "../../public/locales/ar.json";
 
-import { getLanguage } from "../../multiLanguage/helpers/useLanguage";
+import { getLanguage } from "../multiLanguage/helpers/useLanguage";
 
 interface ProviderProps {
   children: ReactNode;

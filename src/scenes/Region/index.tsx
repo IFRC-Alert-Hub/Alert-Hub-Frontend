@@ -1,7 +1,7 @@
 import { Box, Container, Tab, Tabs, Typography } from "@mui/material";
 import { Navigate, useParams } from "react-router-dom";
 import { useMemo, useState } from "react";
-import { GetRegionData } from "../../Alert-Manager-API/Region";
+import { GetRegionData } from "../../APIs/Alert-Manager-API/Region";
 import MapComponentWithFilter from "../../components/MapComponent/MapComponentWithFilter";
 import TitleHeader from "../../components/Layout/TitleHeader";
 import { useIntl } from "react-intl";

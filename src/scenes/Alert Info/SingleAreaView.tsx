@@ -5,7 +5,7 @@ import { Card, Typography } from "@mui/material";
 import { AlertInfoText } from "./AlertInfoText";
 // import AlertInfoMap from "./AlertInfoMap";
 import { AreaPolygonCircle } from "./AreaPolygonCircle";
-import { Area, AreaGeocodes } from "../../Alert-Manager-API/types";
+import { Area, AreaGeocodes } from "../../APIs/Alert-Manager-API/types";
 
 // const infoSets = [
 //   {

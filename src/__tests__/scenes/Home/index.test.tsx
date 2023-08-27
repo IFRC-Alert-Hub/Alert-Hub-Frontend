@@ -3,7 +3,7 @@ import { render, screen } from "@testing-library/react";
 
 import Home from "../../../scenes/Home";
 import HomeSubscriptionCard from "../../../components/Card/HomeCards";
-import Provider from "../../IntlProvider/Provider";
+import Provider from "../../../IntlProvider/Provider";
 
 describe("Home Component", () => {
   it("renders the component without errors", () => {

@@ -1,15 +1,13 @@
 import { useEffect, useState } from "react";
-import { CountryOptionsType } from "../API/TYPES";
+import { SubscriptionAlertsType } from "../../API/TYPES";
 import axios from "axios";
 
 interface ResponseType {
-  data: {
-    countries?: CountryOptionsType[];
-  };
+  data: SubscriptionAlertsType[];
 }
 
-const useAdmin1s = () => {
-  const [data, setData] = useState<CountryOptionsType[]>();
+const useSubscriptionAlerts = (id: string | undefined) => {
+  const [data, setData] = useState<SubscriptionAlertsType[] | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -17,14 +15,9 @@ const useAdmin1s = () => {
     const fetchData = async () => {
       try {
         const response: ResponseType = await axios.get(
-          "https://alert-manager.azurewebsites.net/admin1s/"
+          `https://backend-deploy.azurewebsites.net/subscription_manager/get_subscription_alerts/${id}/`
         );
-
-        if (!response.data || Object.keys(response.data).length === 0) {
-          throw new Error("Currently no country data is added.");
-        }
-
-        setData(response.data.countries as CountryOptionsType[]);
+        setData(response.data as SubscriptionAlertsType[]);
         setIsLoading(false);
       } catch (error: any) {
         setError(error.message);
@@ -32,9 +25,9 @@ const useAdmin1s = () => {
       }
     };
     fetchData();
-  }, []);
+  }, [id]);
 
   return { data, isLoading, error };
 };
 
-export default useAdmin1s;
+export default useSubscriptionAlerts;

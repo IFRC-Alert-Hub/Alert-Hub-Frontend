@@ -6,7 +6,7 @@ import Box from "@mui/material/Box";
 import {
   Admin1_Alert_Data,
   AlertInfoArea,
-} from "../../../Alert-Manager-API/types";
+} from "../../../APIs/Alert-Manager-API/types";
 import DisabledByDefaultIcon from "@mui/icons-material/DisabledByDefault";
 import PopupTabPanel from "./PopupTabPanel";
 import {

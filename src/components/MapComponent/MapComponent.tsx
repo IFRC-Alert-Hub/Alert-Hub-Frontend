@@ -25,10 +25,10 @@ import {
   Country,
   CountryRegionData,
   Country_Admin1s_Data,
-} from "../../Alert-Manager-API/types";
-import { useLevel2Data } from "../../Alert-Manager-API/Level2";
-import { useLevel3Data } from "../../Alert-Manager-API/Level3";
-import { useLevel4Data } from "../../Alert-Manager-API/Level4";
+} from "../../APIs/Alert-Manager-API/types";
+import { useLevel2Data } from "../../APIs/Alert-Manager-API/Level2";
+import { useLevel3Data } from "../../APIs/Alert-Manager-API/Level3";
+import { useLevel4Data } from "../../APIs/Alert-Manager-API/Level4";
 import { feature } from "@turf/turf";
 import * as turf from "@turf/turf";
 
@@ -117,8 +117,9 @@ const MapComponent: React.FC<MapProps> = ({
 
   useEffect(() => {
     if (!mapRef.current || admin1Error || admin1Loading) return;
-
+    // console.log("inside");
     const loadAdmin1Data = () => {
+      // console.log("safafsa:", admin1Data);
       const sourceId = countryIDs![0];
       const layerId = countryIDs![1];
       const Country_ID = sourceId.match(/\d+/g)?.map(Number);
@@ -135,8 +136,11 @@ const MapComponent: React.FC<MapProps> = ({
             }
             const admin1SourceID = `${sourceId}-admin1-${admin1.id}`;
             const admin1LayerID = `${layerId}-admin1-${admin1.id}`;
+            // console.log("admin1: ", admin1);
+            // console.log("admin1SourceID: ", admin1SourceID);
 
             if (!mapRef.current?.getSource(admin1SourceID)) {
+              // console.log("afasfa");
               mapRef.current?.addSource(admin1SourceID, {
                 type: "geojson",
                 data: {
@@ -148,6 +152,7 @@ const MapComponent: React.FC<MapProps> = ({
                   properties: {},
                 },
               });
+
               mapRef.current?.addLayer({
                 id: `${admin1LayerID}-border`,
                 type: "line",
@@ -203,6 +208,8 @@ const MapComponent: React.FC<MapProps> = ({
                   "text-color": "#000000",
                 },
               });
+
+              console.log("map styles: ", mapRef.current?.getStyle());
 
               mapRef.current?.on(
                 "click",

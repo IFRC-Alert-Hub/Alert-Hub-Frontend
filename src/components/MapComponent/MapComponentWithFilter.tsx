@@ -2,7 +2,7 @@ import React, { useRef, useState } from "react";
 import mapboxgl from "mapbox-gl";
 
 import { useIntl } from "react-intl";
-import { Bbox, CountryRegionData } from "../../Alert-Manager-API/types";
+import { Bbox, CountryRegionData } from "../../APIs/Alert-Manager-API/types";
 import MapComponent from "./MapComponent";
 import { Autocomplete, Box, Button, TextField } from "@mui/material";
 
