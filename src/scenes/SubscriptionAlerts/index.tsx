@@ -2,7 +2,7 @@ import { Box, Container, Typography } from "@mui/material";
 import { useNavigate, useParams } from "react-router-dom";
 import TitleHeader from "../../components/Layout/TitleHeader";
 import AlertsTable from "./AlertsTable";
-import useSubscriptionAlerts from "../../hooks/useSubscriptionAlerts";
+import useSubscriptionAlerts from "../../APIs/Subscription-API/useSubscriptionAlerts";
 import Progress from "../../components/Layout/Progress";
 
 const SubscriptionAlerts = () => {

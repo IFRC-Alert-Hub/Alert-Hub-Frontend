@@ -5,8 +5,8 @@ import { AlertInfoText } from "./AlertInfoText";
 import AlertInfoTitleHeader from "./AlertInfoTitleHeader";
 import { InfoSetsHorizontalTabs } from "./InfoSetsHorizontalTabs";
 import { useParams } from "react-router-dom";
-import { GetAlertInfoByAlertID } from "../../Alert-Manager-API/AlertInfo";
-import { Alert } from "../../Alert-Manager-API/types";
+import { GetAlertInfoByAlertID } from "../../APIs/Alert-Manager-API/AlertInfo";
+import { Alert } from "../../APIs/Alert-Manager-API/types";
 import Progress from "../../components/Layout/Progress";
 import { useNavigate } from "react-router-dom"; // Import useHistory
 

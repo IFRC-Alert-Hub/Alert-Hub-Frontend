@@ -1,4 +1,4 @@
-import { convertCoordinates } from "../../Alert-Manager-API/helperFunctions";
+import { convertCoordinates } from "../../../APIs/Alert-Manager-API/helperFunctions";
 
 test("convertCoordinates correctly parses coordinates string", () => {
   const coordinatesString = "12.34,56.78 90.12,34.56 78.90,12.34";

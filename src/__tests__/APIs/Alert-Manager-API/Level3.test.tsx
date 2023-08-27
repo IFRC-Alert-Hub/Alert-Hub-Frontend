@@ -1,7 +1,7 @@
 import axios from "axios";
 import { renderHook, act } from "@testing-library/react-hooks";
 
-import { useLevel3Data } from "../../Alert-Manager-API/Level3";
+import { useLevel3Data } from "../../../APIs/Alert-Manager-API/Level3";
 
 jest.mock("axios");
 const mockedAxios = axios as jest.Mocked<typeof axios>;

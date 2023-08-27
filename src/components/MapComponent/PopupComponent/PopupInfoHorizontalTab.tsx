@@ -5,7 +5,10 @@ import Box from "@mui/material/Box";
 import { ExtremeThreatColour, ModerateThreatColour } from "../MapComponent";
 import { PopupContentText } from "./PopupContentText";
 import { CustomTabPanel, a11yProps, modifyDateTime } from "./helper";
-import { AlertInfo, AlertInfoArea } from "../../../Alert-Manager-API/types";
+import {
+  AlertInfo,
+  AlertInfoArea,
+} from "../../../APIs/Alert-Manager-API/types";
 import { LngLatLike, Map as MapboxMap } from "mapbox-gl";
 import { PopupArea } from "./PopupArea";
 

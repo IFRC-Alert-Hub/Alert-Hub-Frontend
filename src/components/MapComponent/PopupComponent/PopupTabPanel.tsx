@@ -5,7 +5,7 @@ import { PopupCard } from "./PopupCard";
 import EmailIcon from "@mui/icons-material/Email";
 import DateRangeIcon from "@mui/icons-material/DateRange";
 import { PopupContentText } from "./PopupContentText";
-import { Alert, AlertInfoArea } from "../../../Alert-Manager-API/types";
+import { Alert, AlertInfoArea } from "../../../APIs/Alert-Manager-API/types";
 import { TabPanelProps, modifyDateTime } from "./helper";
 import { PopupInfoHorizontalTab } from "./PopupInfoHorizontalTab";
 import { LngLatLike, Map as MapboxMap } from "mapbox-gl";

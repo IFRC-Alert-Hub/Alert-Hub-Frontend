@@ -6,8 +6,8 @@ import FilterableTableComponent from "./Table/TableComponent";
 import TitleHeader from "../../components/Layout/TitleHeader";
 import { useIntl } from "react-intl";
 import Progress from "../../components/Layout/Progress";
-import { GetAllAlerts } from "../../Alert-Manager-API/AllAlerts";
-import { Alert } from "../../Alert-Manager-API/types";
+import { GetAllAlerts } from "../../APIs/Alert-Manager-API/AllAlerts";
+import { Alert } from "../../APIs/Alert-Manager-API/types";
 
 interface AllAlertsProps {
   selectedFilter?: string;

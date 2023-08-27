@@ -6,7 +6,7 @@ import { Grid, Typography } from "@mui/material";
 import { AlertInfoText } from "./AlertInfoText";
 import { Card } from "@mui/material";
 
-import { AlertInfo, InfoParameter } from "../../Alert-Manager-API/types";
+import { AlertInfo, InfoParameter } from "../../APIs/Alert-Manager-API/types";
 import { AreaInfoHorizontalTab } from "./AreaInfoHorizontalTab";
 
 interface TabPanelProps {

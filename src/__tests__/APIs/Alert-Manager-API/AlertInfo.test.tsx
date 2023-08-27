@@ -1,5 +1,5 @@
 import axios from "axios";
-import { GetAlertInfoByAlertID } from "../../Alert-Manager-API/AlertInfo";
+import { GetAlertInfoByAlertID } from "../../../APIs/Alert-Manager-API/AlertInfo";
 import { renderHook, act } from "@testing-library/react-hooks";
 
 jest.mock("axios");

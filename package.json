@@ -43,7 +43,7 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --transformIgnorePatterns 'node_modules/(?!axios)/'",
-    "coverage": "react-scripts test --coverage --transformIgnorePatterns 'node_modules/(?!axios)/'",
+    "coverage": "react-scripts test --coverage --watchAll --transformIgnorePatterns 'node_modules/(?!axios)/' 'src/__test__'",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {

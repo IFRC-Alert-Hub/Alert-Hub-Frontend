@@ -3,11 +3,11 @@ import { useIntl } from "react-intl";
 
 import MapComponentWithFilter from "../../components/MapComponent/MapComponentWithFilter";
 import HomeCards from "../../components/Card/HomeCards";
-import { useLevel1Data } from "../../Alert-Manager-API/Level1";
+import { useLevel1Data } from "../../APIs/Alert-Manager-API/Level1";
 import { useState } from "react";
 import TitleHeader from "../../components/Layout/TitleHeader";
 import AllAlerts from "../AllAlerts";
-import { GetAllAlerts } from "../../Alert-Manager-API/AllAlerts";
+import { GetAllAlerts } from "../../APIs/Alert-Manager-API/AllAlerts";
 
 const Home = () => {
   const { formatMessage } = useIntl();

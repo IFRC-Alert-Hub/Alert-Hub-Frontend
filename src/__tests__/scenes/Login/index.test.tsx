@@ -3,7 +3,7 @@ import { render, screen } from "@testing-library/react";
 import "@testing-library/jest-dom/extend-expect"; // For additional matchers
 import Login from "../../../scenes/Login";
 
-import Provider from "../../IntlProvider/Provider";
+import Provider from "../../../IntlProvider/Provider";
 
 describe("Login", () => {
   it("renders the login button correctly", async () => {

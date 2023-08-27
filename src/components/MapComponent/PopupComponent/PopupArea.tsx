@@ -9,7 +9,7 @@ import {
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { Map as MapboxMap, LngLatBoundsLike, LngLatLike } from "mapbox-gl";
-import { AlertInfoArea } from "../../../Alert-Manager-API/types";
+import { AlertInfoArea } from "../../../APIs/Alert-Manager-API/types";
 import turfCircle from "@turf/circle";
 import turfBbox from "@turf/bbox";
 // const coordinatesArray = [

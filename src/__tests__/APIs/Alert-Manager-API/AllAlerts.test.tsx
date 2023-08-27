@@ -1,6 +1,6 @@
 import axios from "axios";
 import { renderHook, act } from "@testing-library/react-hooks";
-import { GetAllAlerts } from "../../Alert-Manager-API/AllAlerts";
+import { GetAllAlerts } from "../../../APIs/Alert-Manager-API/AllAlerts";
 
 jest.mock("axios");
 const mockedAxios = axios as jest.Mocked<typeof axios>;

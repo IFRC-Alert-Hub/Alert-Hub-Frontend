@@ -1,6 +1,6 @@
 import { Box, Card, Typography } from "@mui/material";
 import React, { ReactNode } from "react";
-import { Alert } from "../../../Alert-Manager-API/types";
+import { Alert } from "../../../APIs/Alert-Manager-API/types";
 type PopupCardProps = {
   alerts?: Alert[];
   iconComponent?: ReactNode;

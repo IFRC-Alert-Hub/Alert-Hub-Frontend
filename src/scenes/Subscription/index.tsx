@@ -12,7 +12,7 @@ import SubscriptionTable from "./components/SubscriptionTable";
 import ModalForm from "./components/ModalForm";
 import Progress from "../../components/Layout/Progress";
 import { RADIO_OPTIONS } from "./components/SentFlagRadio";
-import useAdmin1s from "../../hooks/useAdmin1s";
+import useAdmin1s from "../../APIs/Alert-Manager-API/useAdmin1s";
 
 const INIT_ROW: SubscriptionForm = {
   subscriptionName: "",
