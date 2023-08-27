@@ -79,7 +79,7 @@ const SubscriptionAlerts = () => {
         <AlertsTable country={country} alertsData={alertsData} />
       ) : (
         <>
-          <TitleHeader title={`${country}`} />
+          <TitleHeader title={`${country} (0)`} />
           <Typography
             variant="h5"
             textAlign={"center"}
