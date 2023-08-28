@@ -77,7 +77,6 @@ export type SubscriptionAlertsType = {
   id: number;
   event: string;
   category: string;
-  countryName: string;
-  admin1s: string[];
+  admin1: string[];
   sent: string;
 };

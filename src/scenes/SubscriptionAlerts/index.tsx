@@ -14,6 +14,7 @@ const SubscriptionAlerts = () => {
     data: alertsData,
     isLoading: isAlertsLoading,
     error: alertsError,
+    statusCodes,
   } = useSubscriptionAlerts(id);
 
   if (isAlertsLoading) {
@@ -28,7 +29,7 @@ const SubscriptionAlerts = () => {
             {title}
           </Typography>
         </Box>
-        <TitleHeader title={`${country} (${alertsData?.length})`} />
+        <TitleHeader title={`${country}`} />
         <Progress />
       </Container>
     );
@@ -36,6 +37,31 @@ const SubscriptionAlerts = () => {
 
   if (alertsError) {
     navigate("/404");
+  }
+
+  if (statusCodes === 202) {
+    return (
+      <Container maxWidth={"lg"}>
+        <Box padding={"50px 0 20px 0"} sx={{ textAlign: "center" }}>
+          <Typography
+            variant={"h1"}
+            fontWeight={"600"}
+            sx={{ paddingBottom: "5px", textTransform: "capitalize" }}
+          >
+            {title}
+          </Typography>
+        </Box>
+        <TitleHeader title={`${country}`} />
+        <Typography
+          variant="h5"
+          textAlign={"center"}
+          padding={"50px"}
+          color={"gray"}
+        >
+          Still matching alerts, please come back later or refresh the page.
+        </Typography>
+      </Container>
+    );
   }
 
   return (
@@ -49,19 +75,21 @@ const SubscriptionAlerts = () => {
           {title}
         </Typography>
       </Box>
-      <TitleHeader title={`${country} (${alertsData?.length})`} />
-      {alertsData && alertsData.length > 0 ? (
-        <AlertsTable alertsData={alertsData} />
+      {alertsData && country && alertsData.length > 0 ? (
+        <AlertsTable country={country} alertsData={alertsData} />
       ) : (
-        <Typography
-          variant="h6"
-          textAlign={"center"}
-          padding={"50px"}
-          color={"gray"}
-        >
-          {" "}
-          No alerts happen in subscription admin1s now.
-        </Typography>
+        <>
+          <TitleHeader title={`${country} (0)`} />
+          <Typography
+            variant="h5"
+            textAlign={"center"}
+            padding={"50px"}
+            color={"gray"}
+          >
+            {" "}
+            No alerts happen in subscription admin1s now.
+          </Typography>
+        </>
       )}
     </Container>
   );

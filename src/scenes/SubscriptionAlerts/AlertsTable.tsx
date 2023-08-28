@@ -10,23 +10,24 @@ import { useState } from "react";
 import { SubscriptionAlertsType } from "../../API/TYPES";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import { Link } from "react-router-dom";
+import TitleHeader from "../../components/Layout/TitleHeader";
 
 type PropsType = {
+  country: string;
   alertsData: SubscriptionAlertsType[];
 };
 
 const ITEM_HEIGHT = 48;
 
-const AlertsTable = ({ alertsData }: PropsType) => {
+const AlertsTable = ({ country, alertsData }: PropsType) => {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [location, setLocation] = useState("All Locations");
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
 
-  // get the location options
   const uniqueLocations = alertsData.reduce((locations: string[], item) => {
-    item.admin1s.forEach((admin1) => {
+    item.admin1.forEach((admin1) => {
       if (!locations.includes(admin1)) {
         locations.push(admin1);
       }
@@ -37,7 +38,7 @@ const AlertsTable = ({ alertsData }: PropsType) => {
   const locationOptions = ["All Locations", ...uniqueLocations];
 
   const filteredAlerts = alertsData.filter((item) =>
-    item.admin1s.includes(location)
+    item.admin1.includes(location)
   );
 
   const shownData = location === "All Locations" ? alertsData : filteredAlerts;
@@ -50,6 +51,7 @@ const AlertsTable = ({ alertsData }: PropsType) => {
   };
   const handleChooseLocation = (event: any) => {
     setLocation(event.target.textContent);
+    setPage(0);
     handleClose();
   };
   const handleChangePage = (event: unknown, newPage: number) => {
@@ -63,141 +65,144 @@ const AlertsTable = ({ alertsData }: PropsType) => {
   };
 
   return (
-    <Paper sx={{ width: "100%" }}>
-      <TableContainer>
-        <Table sx={{ minWidth: 650 }} aria-label="alerts table">
-          <TableHead>
-            <TableRow>
-              <TableCell sx={{ fontSize: "0.875rem", fontWeight: 600 }}>
-                Event
-              </TableCell>
-              <TableCell
-                align="left"
-                sx={{ fontSize: "0.875rem", fontWeight: 600 }}
-              >
-                <div>
-                  <Button
-                    id="basic-button"
-                    aria-controls={open ? "basic-menu" : undefined}
-                    aria-haspopup="true"
-                    aria-expanded={open ? "true" : undefined}
-                    sx={{
-                      m: 0,
-                      p: 0,
-                      minWidth: 0,
-                      fontSize: "0.875rem",
-                      fontWeight: 600,
-                      color: "black",
-                      textTransform: "capitalize",
-                    }}
-                    disableRipple
-                    onClick={handleClick}
-                    endIcon={<KeyboardArrowDownIcon />}
-                  >
-                    {location}
-                  </Button>
-                  <Menu
-                    id="basic-menu"
-                    anchorEl={anchorEl}
-                    open={open}
-                    onClose={handleClose}
-                    MenuListProps={{
-                      "aria-labelledby": "basic-button",
-                    }}
-                    PaperProps={{
-                      style: {
-                        maxHeight: ITEM_HEIGHT * 4.5,
-                      },
-                    }}
-                  >
-                    {locationOptions.map((option) => (
-                      <MenuItem key={option} onClick={handleChooseLocation}>
-                        {option}
-                      </MenuItem>
-                    ))}
-                  </Menu>
-                </div>
-              </TableCell>
-              <TableCell
-                align="left"
-                sx={{ fontSize: "0.875rem", fontWeight: 600 }}
-              >
-                Event Category
-              </TableCell>
-              <TableCell
-                align="left"
-                sx={{ fontSize: "0.875rem", fontWeight: 600 }}
-              >
-                Sent Time
-              </TableCell>
-              <TableCell
-                align="left"
-                sx={{ fontSize: "0.875rem", fontWeight: 600 }}
-              >
-                Operation
-              </TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {shownData
-              .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-              .map((row) => (
-                <TableRow key={row.id} hover>
-                  <TableCell
-                    component="th"
-                    scope="row"
-                    sx={{ fontSize: "0.875rem" }}
-                  >
-                    {row.event}
-                  </TableCell>
-                  <TableCell align="left" sx={{ fontSize: "0.875rem" }}>
-                    {row.admin1s.join(", ")}
-                  </TableCell>
-                  <TableCell align="left" sx={{ fontSize: "0.875rem" }}>
-                    {row.category}
-                  </TableCell>
-                  <TableCell align="left" sx={{ fontSize: "0.875rem" }}>
-                    {row.sent}
-                  </TableCell>
-                  <TableCell align="left" sx={{ fontSize: "0.875rem" }}>
-                    <Link
-                      to={`/alerts/${row.id}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
+    <>
+      <TitleHeader title={`${country} (${shownData?.length})`} />
+      <Paper sx={{ width: "100%" }}>
+        <TableContainer>
+          <Table sx={{ minWidth: 650 }} aria-label="alerts table">
+            <TableHead>
+              <TableRow>
+                <TableCell sx={{ fontSize: "0.875rem", fontWeight: 600 }}>
+                  Event
+                </TableCell>
+                <TableCell
+                  align="left"
+                  sx={{ fontSize: "0.875rem", fontWeight: 600 }}
+                >
+                  <div>
+                    <Button
+                      id="basic-button"
+                      aria-controls={open ? "basic-menu" : undefined}
+                      aria-haspopup="true"
+                      aria-expanded={open ? "true" : undefined}
+                      sx={{
+                        m: 0,
+                        p: 0,
+                        minWidth: 0,
+                        fontSize: "0.875rem",
+                        fontWeight: 600,
+                        color: "black",
+                        textTransform: "capitalize",
+                      }}
+                      disableRipple
+                      onClick={handleClick}
+                      endIcon={<KeyboardArrowDownIcon />}
                     >
-                      <Button
-                        variant="text"
-                        size="small"
-                        sx={{
-                          color: "red",
-                          minWidth: 0,
-                          p: 0,
-                          fontSize: "0.875rem",
-                          textTransform: "capitalize",
-                          "&:hover": {
-                            opacity: "0.7",
-                          },
-                        }}
+                      {location}
+                    </Button>
+                    <Menu
+                      id="basic-menu"
+                      anchorEl={anchorEl}
+                      open={open}
+                      onClose={handleClose}
+                      MenuListProps={{
+                        "aria-labelledby": "basic-button",
+                      }}
+                      PaperProps={{
+                        style: {
+                          maxHeight: ITEM_HEIGHT * 4.5,
+                        },
+                      }}
+                    >
+                      {locationOptions.map((option) => (
+                        <MenuItem key={option} onClick={handleChooseLocation}>
+                          {option}
+                        </MenuItem>
+                      ))}
+                    </Menu>
+                  </div>
+                </TableCell>
+                <TableCell
+                  align="left"
+                  sx={{ fontSize: "0.875rem", fontWeight: 600 }}
+                >
+                  Event Category
+                </TableCell>
+                <TableCell
+                  align="left"
+                  sx={{ fontSize: "0.875rem", fontWeight: 600 }}
+                >
+                  Sent Time
+                </TableCell>
+                <TableCell
+                  align="left"
+                  sx={{ fontSize: "0.875rem", fontWeight: 600 }}
+                >
+                  Operation
+                </TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {shownData
+                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                .map((row) => (
+                  <TableRow key={row.id} hover>
+                    <TableCell
+                      component="th"
+                      scope="row"
+                      sx={{ fontSize: "0.875rem" }}
+                    >
+                      {row.event}
+                    </TableCell>
+                    <TableCell align="left" sx={{ fontSize: "0.875rem" }}>
+                      {row.admin1.join(", ")}
+                    </TableCell>
+                    <TableCell align="left" sx={{ fontSize: "0.875rem" }}>
+                      {row.category}
+                    </TableCell>
+                    <TableCell align="left" sx={{ fontSize: "0.875rem" }}>
+                      {row.sent}
+                    </TableCell>
+                    <TableCell align="left" sx={{ fontSize: "0.875rem" }}>
+                      <Link
+                        to={`/alerts/${row.id}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
                       >
-                        View Alert Info
-                      </Button>
-                    </Link>{" "}
-                  </TableCell>
-                </TableRow>
-              ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
-      <TablePagination
-        rowsPerPageOptions={[5, 10, 25]}
-        component="div"
-        count={shownData.length}
-        rowsPerPage={rowsPerPage}
-        page={page}
-        onPageChange={handleChangePage}
-        onRowsPerPageChange={handleChangeRowsPerPage}
-      />
-    </Paper>
+                        <Button
+                          variant="text"
+                          size="small"
+                          sx={{
+                            color: "red",
+                            minWidth: 0,
+                            p: 0,
+                            fontSize: "0.875rem",
+                            textTransform: "capitalize",
+                            "&:hover": {
+                              opacity: "0.7",
+                            },
+                          }}
+                        >
+                          View Alert Info
+                        </Button>
+                      </Link>{" "}
+                    </TableCell>
+                  </TableRow>
+                ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+        <TablePagination
+          rowsPerPageOptions={[5, 10, 25]}
+          component="div"
+          count={shownData.length}
+          rowsPerPage={rowsPerPage}
+          page={page}
+          onPageChange={handleChangePage}
+          onRowsPerPageChange={handleChangeRowsPerPage}
+        />
+      </Paper>
+    </>
   );
 };
 
