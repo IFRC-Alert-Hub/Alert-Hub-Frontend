@@ -48,7 +48,6 @@
   - [Azure Setup](#azure-setup)
 - [Contributing](#contributing)
 - [Acknowledgements](#acknowledgements)
-- [License](#license)
 
 
 ## UI Designs
@@ -180,9 +179,12 @@ Follow these steps to set up and run IFRC GO Make Maps Frontend:
 git clone https://github.com/IFRC-Alert-Hub/Alert-Hub-Frontend.git
 ```
 
-2. Install the dependencies:
-
+2. Install the dependencies and ensure compatibility by enabling legacy peer dependencies:
+This step is crucial due to the potential compatibility issues with certain packages. By setting the legacy-peer-deps option to true, you ensure smooth installation of dependencies, especially for testing-library/react-hooks version 8.0.1:
 ```bash
+npm config set legacy-peer-deps true
+
+
 yarn install
 # OR
 npm install
