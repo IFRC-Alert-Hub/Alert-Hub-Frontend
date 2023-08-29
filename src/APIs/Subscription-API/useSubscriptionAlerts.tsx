@@ -21,23 +21,26 @@ const useSubscriptionAlerts = (id: string | undefined) => {
         } else {
           const alertsIds = response.data;
 
-          const requests = alertsIds.map(async (alertId: number) => {
-            try {
-              const alertResponse = await axios.get(
-                `https://alert-manager.azurewebsites.net/alerts/${alertId}/summary/`
-              );
-              return alertResponse.data;
-            } catch (error) {
-              console.error(error);
-              return null;
-            }
-          });
+          try {
+            let data = {
+              alert_ids: JSON.stringify(alertsIds),
+              csrfmiddlewaretoken: "csrfToken",
+            };
+            const alertResponse = await axios.post(
+              `https://alert-manager.azurewebsites.net/alerts/summary/`,
+              new URLSearchParams(data).toString()
+            );
+            const responses = JSON.parse(alertResponse.data);
 
-          const responses = await Promise.all(requests);
-          const alertsData = responses.filter((alert) => alert !== null);
-          setData(alertsData);
-          setIsLoading(false);
-          setStatusCodes(200);
+            const alertsData = responses.filter(
+              (alert: any) => Object.keys(alert).length !== 0
+            );
+            setData(alertsData);
+            setIsLoading(false);
+            setStatusCodes(200);
+          } catch (error) {
+            console.error(error);
+          }
         }
       } catch (error: any) {
         setError(error.message);
