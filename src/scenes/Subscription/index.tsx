@@ -1,13 +1,13 @@
 import { Button, Container, Grid, Typography } from "@mui/material";
 import { useState } from "react";
 import { useQuery } from "@apollo/client";
-import { subscription_module } from "../../API/API_Links";
+import { subscription_module } from "../../GraphQL API/API_Links";
 import {
   SubscriptionForm,
   SubscriptionItem,
   SubscriptionQueryResult,
-} from "../../API/TYPES";
-import { GET_SUBSCRIPTIONS } from "../../API/ALL_QUERIES";
+} from "../../GraphQL API/TYPES";
+import { GET_SUBSCRIPTIONS } from "../../GraphQL API/ALL_QUERIES";
 import SubscriptionTable from "./components/SubscriptionTable";
 import ModalForm from "./components/ModalForm";
 import Progress from "../../components/Layout/Progress";

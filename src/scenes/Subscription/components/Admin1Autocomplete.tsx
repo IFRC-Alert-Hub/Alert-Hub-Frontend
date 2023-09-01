@@ -12,7 +12,10 @@ import {
   Tooltip,
 } from "@mui/material";
 import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
-import { Admin1OptionsType, SubscriptionForm } from "../../../API/TYPES";
+import {
+  Admin1OptionsType,
+  SubscriptionForm,
+} from "../../../GraphQL API/TYPES";
 import React, { useEffect, useState } from "react";
 
 interface FormErrors {

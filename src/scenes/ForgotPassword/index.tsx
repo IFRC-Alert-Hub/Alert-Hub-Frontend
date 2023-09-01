@@ -8,12 +8,12 @@ import TextField from "@mui/material/TextField";
 import Link from "@mui/material/Link";
 import Box from "@mui/material/Box";
 import { useMutation } from "@apollo/client";
-import { auth_system } from "../../API/API_Links";
+import { auth_system } from "../../GraphQL API/API_Links";
 import { useNavigate } from "react-router-dom";
 import {
   RESET_PASSWORD,
   RESET_PASSWORD_CONFIRM,
-} from "../../API/mutations/authMutations";
+} from "../../GraphQL API/mutations/authMutations";
 import AuthComponent from "../../components/Authentication/AuthComponent";
 import PasswordComponent from "../../components/Authentication/PasswordComponent";
 import { useIntl } from "react-intl";

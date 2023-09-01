@@ -9,7 +9,10 @@ import {
   Tooltip,
 } from "@mui/material";
 import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
-import { CountryOptionsType, SubscriptionForm } from "../../../API/TYPES";
+import {
+  CountryOptionsType,
+  SubscriptionForm,
+} from "../../../GraphQL API/TYPES";
 import { useState } from "react";
 
 interface FormErrors {

@@ -10,7 +10,10 @@ import {
 } from "@mui/material";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
-import { SubscriptionForm, UpdatedSubscriptionItem } from "../../../API/TYPES";
+import {
+  SubscriptionForm,
+  UpdatedSubscriptionItem,
+} from "../../../GraphQL API/TYPES";
 import { useNavigate } from "react-router-dom";
 
 type PropsType = {

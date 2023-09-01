@@ -1,6 +1,4 @@
-import { gql, useQuery } from "@apollo/client";
-import { CircularProgress } from "@mui/material";
-import { cap_aggregator } from "./API_Links";
+import { gql } from "@apollo/client";
 
 export const ALL_ALERTS_QUERY_1 = gql`
   query MyQuery($regionId: String, $iso3: String, $continentId: String) {
@@ -174,23 +172,3 @@ export const GET_ALL_REGIONS = gql`
     }
   }
 `;
-
-export default function TestPerformance() {
-  const { loading, error } = useQuery(GET_COUNTRY_BY_ISO3, {
-    client: cap_aggregator,
-    fetchPolicy: "no-cache",
-    variables: {
-      iso3: "USA",
-    },
-  });
-  return (
-    <>
-      {" "}
-      {loading && (
-        <CircularProgress sx={{ textAlign: "center" }} color="secondary" />
-      )}
-      {error && <p>Error: {error.message}</p>}
-      {!loading && !error && <h1>afafsafsa</h1>}
-    </>
-  );
-}
