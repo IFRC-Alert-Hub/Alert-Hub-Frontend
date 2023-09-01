@@ -13,16 +13,16 @@ import { useMutation } from "@apollo/client";
 import {
   ADD_SUBSCRIPTION,
   UPDATE_SUBSCRIPTION,
-} from "../../../API/mutations/subscriptionMutations";
+} from "../../../GraphQL API/mutations/subscriptionMutations";
 
-import { subscription_module } from "../../../API/API_Links";
+import { subscription_module } from "../../../GraphQL API/API_Links";
 import CountryAutocomplete from "./CountryAutocomplete";
-import { GET_SUBSCRIPTIONS } from "../../../API/ALL_QUERIES";
+import { GET_SUBSCRIPTIONS } from "../../../GraphQL API/ALL_QUERIES";
 import {
   CountryOptionsType,
   Admin1OptionsType,
   SubscriptionForm,
-} from "../../../API/TYPES";
+} from "../../../GraphQL API/TYPES";
 import Admin1Autocomplete from "./Admin1Autocomplete";
 import SentFlagRadio from "./SentFlagRadio";
 

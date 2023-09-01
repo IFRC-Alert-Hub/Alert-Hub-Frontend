@@ -15,8 +15,8 @@
 
 import { Outlet, Navigate } from "react-router-dom";
 import { useMutation } from "@apollo/client";
-import { auth_system } from "../API/API_Links";
-import { VERIFY_TOKEN } from "../API/mutations/authMutations";
+import { auth_system } from "../GraphQL API/API_Links";
+import { VERIFY_TOKEN } from "../GraphQL API/mutations/authMutations";
 import { useContext, useEffect, useState } from "react";
 import { UserContext } from "../context/UserContext";
 

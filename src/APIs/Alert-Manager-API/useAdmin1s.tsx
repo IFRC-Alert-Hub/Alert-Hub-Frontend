@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { CountryOptionsType } from "../../API/TYPES";
+import { CountryOptionsType } from "../../GraphQL API/TYPES";
 import axios from "axios";
 
 interface ResponseType {

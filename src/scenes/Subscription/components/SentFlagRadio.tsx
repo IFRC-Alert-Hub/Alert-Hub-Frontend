@@ -8,7 +8,7 @@ import {
   Radio,
   RadioGroup,
 } from "@mui/material";
-import { SubscriptionForm } from "../../../API/TYPES";
+import { SubscriptionForm } from "../../../GraphQL API/TYPES";
 
 export const RADIO_OPTIONS = [
   {

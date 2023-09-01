@@ -1,8 +1,4 @@
 import { ApolloClient, InMemoryCache, createHttpLink } from "@apollo/client";
-export const cap_aggregator = new ApolloClient({
-  uri: "https://cap-aggregator.azurewebsites.net/graphql/",
-  cache: new InMemoryCache(),
-});
 
 export const auth_system = new ApolloClient({
   link: createHttpLink({

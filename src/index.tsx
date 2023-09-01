@@ -11,11 +11,7 @@ import { ApolloProvider } from "@apollo/client";
 import { IntlProvider } from "react-intl";
 import { getLanguage } from "./multiLanguage/helpers/useLanguage";
 
-import {
-  auth_system,
-  cap_aggregator,
-  subscription_module,
-} from "./API/API_Links";
+import { auth_system, subscription_module } from "./GraphQL API/API_Links";
 import fetchAndLoadMessages from "./multiLanguage/helpers/getMessages";
 
 const language = getLanguage();
@@ -39,13 +35,11 @@ async function setupApp() {
           console.log("Error: ", error);
         }}
       >
-        <ApolloProvider client={cap_aggregator}>
-          <ApolloProvider client={auth_system}>
-            <ApolloProvider client={subscription_module}>
-              <BrowserRouter>
-                <App />
-              </BrowserRouter>
-            </ApolloProvider>
+        <ApolloProvider client={auth_system}>
+          <ApolloProvider client={subscription_module}>
+            <BrowserRouter>
+              <App />
+            </BrowserRouter>
           </ApolloProvider>
         </ApolloProvider>
       </IntlProvider>

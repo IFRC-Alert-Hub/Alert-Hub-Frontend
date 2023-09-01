@@ -6,13 +6,13 @@ import * as yup from "yup";
 import MessageModal from "./MessageModal";
 import ModalButton from "./ModalButton";
 import { useMutation } from "@apollo/client";
-import { auth_system } from "../../../API/API_Links";
-import { LOGOUT } from "../../../API/mutations/authMutations";
+import { auth_system } from "../../../GraphQL API/API_Links";
+import { LOGOUT } from "../../../GraphQL API/mutations/authMutations";
 import { UserContext } from "../../../context/UserContext";
 import {
   NEW_EMAIL_CONFIRM,
   SEND_NEW_VEIRFY_EMAIL,
-} from "../../../API/mutations/authMutations";
+} from "../../../GraphQL API/mutations/authMutations";
 
 type PropsType = {
   isVerified: boolean;

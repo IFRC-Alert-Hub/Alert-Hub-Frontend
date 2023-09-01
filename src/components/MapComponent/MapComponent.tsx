@@ -127,7 +127,7 @@ const MapComponent: React.FC<MapProps> = ({
       const unknownSourceID = `${sourceId}-admin1--${Country_ID}`;
       if (mapRef.current?.isStyleLoaded()) {
         if (admin1Data?.admin1s.length! > 0) {
-          // console.log(admin1Data?.admin1s);
+          console.log(admin1Data?.admin1s);
           admin1Data?.admin1s.forEach((admin1, index) => {
             if (admin1.id < 0) {
               admin1.coordinates =
@@ -136,11 +136,11 @@ const MapComponent: React.FC<MapProps> = ({
             }
             const admin1SourceID = `${sourceId}-admin1-${admin1.id}`;
             const admin1LayerID = `${layerId}-admin1-${admin1.id}`;
-            // console.log("admin1: ", admin1);
-            // console.log("admin1SourceID: ", admin1SourceID);
+            console.log("admin1: ", admin1);
+            console.log("admin1SourceID: ", admin1SourceID);
 
             if (!mapRef.current?.getSource(admin1SourceID)) {
-              // console.log("afasfa");
+              console.log("Inside");
               mapRef.current?.addSource(admin1SourceID, {
                 type: "geojson",
                 data: {
@@ -508,6 +508,7 @@ const MapComponent: React.FC<MapProps> = ({
                 certainty: selectedCertainty,
               });
               refetchAdmin1(country.id);
+              console.log("Made Request for", country.id);
             }
           );
         });
@@ -523,7 +524,6 @@ const MapComponent: React.FC<MapProps> = ({
         });
       }
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     CountryRegionData,
     error,
@@ -540,6 +540,7 @@ const MapComponent: React.FC<MapProps> = ({
     selectedSeverity,
     selectedCertainty,
     setCountrySelected,
+    isRegion,
   ]);
   const countryControlChange = () => {
     currentCountryBoundingBox.current = null;

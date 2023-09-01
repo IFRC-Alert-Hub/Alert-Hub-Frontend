@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { SubscriptionAlertsType } from "../../API/TYPES";
+import { SubscriptionAlertsType } from "../../GraphQL API/TYPES";
 import axios from "axios";
 
 const useSubscriptionAlerts = (id: string | undefined) => {

@@ -7,7 +7,7 @@ import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import { Button, Menu, MenuItem, TablePagination } from "@mui/material";
 import { useState } from "react";
-import { SubscriptionAlertsType } from "../../API/TYPES";
+import { SubscriptionAlertsType } from "../../GraphQL API/TYPES";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import { Link } from "react-router-dom";
 import TitleHeader from "../../components/Layout/TitleHeader";

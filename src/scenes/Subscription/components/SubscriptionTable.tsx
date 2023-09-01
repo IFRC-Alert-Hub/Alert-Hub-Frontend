@@ -18,10 +18,13 @@ import {
 } from "@mui/material";
 
 import { useMutation } from "@apollo/client";
-import { DELETE_SUBSCRIPTION } from "../../../API/mutations/subscriptionMutations";
-import { subscription_module } from "../../../API/API_Links";
-import { GET_SUBSCRIPTIONS } from "../../../API/ALL_QUERIES";
-import { SubscriptionForm, UpdatedSubscriptionItem } from "../../../API/TYPES";
+import { DELETE_SUBSCRIPTION } from "../../../GraphQL API/mutations/subscriptionMutations";
+import { subscription_module } from "../../../GraphQL API/API_Links";
+import { GET_SUBSCRIPTIONS } from "../../../GraphQL API/ALL_QUERIES";
+import {
+  SubscriptionForm,
+  UpdatedSubscriptionItem,
+} from "../../../GraphQL API/TYPES";
 import CollapsibleRow from "./CollapsibleRow";
 
 type PropsType = {
