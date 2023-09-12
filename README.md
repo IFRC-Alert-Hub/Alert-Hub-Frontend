@@ -49,6 +49,9 @@
 - [Contributing](#contributing)
 - [Acknowledgements](#acknowledgements)
 
+## Alert Hub Demo
+We also provide a collection of short videos to showcase our designs from the user’s perspective. This can be seen in the link below: 
+https://www.youtube.com/playlist?list=PL4btLGFFcA_ordYZKnoVNt2Ky0rM4bqXv
 
 ## UI Designs
 
